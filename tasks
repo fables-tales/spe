@@ -1,7 +1,7 @@
 -- some tasks --
 --- frontend ---
 rendering
-transport
+websockets
 message bus
 style
 algorithms
