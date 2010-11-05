@@ -1,0 +1,13 @@
+-- some tasks --
+--- frontend ---
+rendering
+transport
+message bus
+style
+algorithms
+layout
+
+--- backend ---
+operational transform
+database
+sockets listening
