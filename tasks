@@ -6,6 +6,7 @@ message bus
 style
 algorithms
 layout
+image recognition
 
 --- backend ---
 operational transform
