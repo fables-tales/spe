@@ -1,15 +1,16 @@
 -- some tasks --
 --- frontend ---
-rendering
-websockets
-message bus
-style
-algorithms
-layout
-image recognition
-user interface
+rendering,1
+websockets,2
+message bus,2
+style,3
+algorithms,continuous
+simulation,3
+layout,3
+image recognition,5
+user interface,1
 
 --- backend ---
-operational transform
-database
-sockets listening
+operational transform,4
+database,2
+sockets listening,2
