@@ -1,0 +1,6 @@
+*.class
+bin/
+reports/
+war/WEB-INF
+.classpath
+.project
