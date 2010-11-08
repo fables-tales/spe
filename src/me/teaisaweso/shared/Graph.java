@@ -4,8 +4,8 @@ import java.util.List;
 
 public interface Graph {
 	/**
-	 * returns the edges in this graph
-	 * @return
+	 * the edges in this graph
+	 * @return the edges in this graph
 	 */
 	public List<Edge> getEdges();
 }
