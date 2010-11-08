@@ -41,8 +41,8 @@ public class Edge {
      * @return true if this edge exits v, else false
      */
     public boolean exits(Vertex v) {
-        if (mDir == VertexDirection.both && (v == mVertex1 || v == mVertex2)) return true;
-        else return v == ((mDir == VertexDirection.fromTo) ? mVertex1 : mVertex2);
+        if (mDir == VertexDirection.both && (v.equals(mVertex1) || v.equals(mVertex2))) return true;
+        else return v.equals((mDir == VertexDirection.fromTo) ? mVertex1 : mVertex2);
     }
 
     /**
@@ -53,8 +53,8 @@ public class Edge {
      * @return true if this edge enters v, else false
      */
     public boolean enters(Vertex v) {
-        if (mDir == VertexDirection.both && (v == mVertex1 || v == mVertex2)) return true;
-        else return v == ((mDir == VertexDirection.toFrom) ? mVertex1 : mVertex2);
+        if (mDir == VertexDirection.both && (v.equals(mVertex1) || v.equals(mVertex2))) return true;
+        else return v.equals((mDir == VertexDirection.toFrom) ? mVertex1 : mVertex2);
     }
 
 }
