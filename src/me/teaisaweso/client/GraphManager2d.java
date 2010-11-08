@@ -1,5 +1,7 @@
 package me.teaisaweso.client;
 
+import java.util.List;
+
 import me.teaisaweso.shared.Graph;
 import me.teaisaweso.shared.Vertex;
 import me.teaisaweso.shared.VertexDirection;
@@ -73,4 +75,12 @@ public interface GraphManager2d {
      */
     public void addEdge(Vertex v1, Vertex v2, VertexDirection dir);
 
+    /**
+     * generates a list of drawable vertices
+     * 
+     * @return a list of VertexDrawable objects representing the vertices in
+     *         this graph
+     */
+    public List<VertexDrawable> getVertexDrawables();
+    
 }
