@@ -5,6 +5,12 @@ public class Edge {
     private Vertex mVertex2;
     private VertexDirection mDir;
 
+    /**
+     * creates an edge
+     * @param v1 the "from" vertex
+     * @param v2 the "to" vertex
+     * @param dir the edge direction
+     */
     public Edge(Vertex v1, Vertex v2, VertexDirection dir) {
         mVertex1 = v1;
         mVertex2 = v2;
