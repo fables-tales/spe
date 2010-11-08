@@ -15,9 +15,9 @@ public class VertexTest extends TestCase {
             Vertex v = new Vertex(s);
             Assert.assertEquals(s, v.getLabel());
         }
-        
+
     }
-    
+
     /**
      * test that vertex equality works and is reflexive (if a == b then b == a)
      */
@@ -26,15 +26,14 @@ public class VertexTest extends TestCase {
             for (String s2 : sTestLabels) {
                 boolean assertCheck = false;
                 if (s1.equals(s2)) assertCheck = true;
-                
+
                 Assert.assertEquals(assertCheck, new Vertex(s1).equals(new Vertex(s2)));
                 Assert.assertEquals(assertCheck, new Vertex(s2).equals(new Vertex(s1)));
-                    
-                
+
             }
-            
+
         }
-        
+
     }
 
 }
