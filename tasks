@@ -1,6 +1,7 @@
-rendering,1
-high level design,1
-buttons and interaction,1
+rendering,1,mike + max
+high level design,1,john
+buttons and interaction,1,ed + ben
+graph manager,1,sam
 websockets,2
 message bus,2
 message bus integration of past components,2
