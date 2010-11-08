@@ -95,7 +95,7 @@ public class EdgeDrawable {
      * 
      * @return true if the line needs an arrow at the end else false
      */
-    public boolean getNeedsArrow() {
+    public boolean needsArrow() {
         return mArrow;
     }
 
