@@ -14,7 +14,7 @@ public class Edge {
      *            the "to" vertex
      */
     public Edge(Vertex v1, Vertex v2) {
-        this(v1, v2, both);
+        this(v1, v2, VertexDirection.both);
     }
 
     /**
