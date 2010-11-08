@@ -1,1 +1,5 @@
 this is grapheme, it does some things
+
+you need gwt to build grapheme, put it in your GWT environment variable
+
+run the tests with ant test.dev
