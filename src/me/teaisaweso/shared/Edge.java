@@ -6,6 +6,18 @@ public class Edge {
     private VertexDirection mDir;
 
     /**
+     * creates an edge without direction
+     * 
+     * @param v1
+     *            the "from" vertex
+     * @param v2
+     *            the "to" vertex
+     */
+    public Edge(Vertex v1, Vertex v2) {
+        this(v1, v2, both);
+    }
+
+    /**
      * creates an edge
      * 
      * @param v1
