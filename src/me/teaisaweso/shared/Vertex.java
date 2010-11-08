@@ -18,4 +18,9 @@ public class Vertex {
 	public String getLabel() {
 	    return mLabel;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+	    return (o instanceof Vertex && ((Vertex)o).getLabel().equals(mLabel));
+	}
 }
