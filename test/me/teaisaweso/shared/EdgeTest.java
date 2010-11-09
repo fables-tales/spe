@@ -57,4 +57,20 @@ public class EdgeTest extends TestCase {
 		Assert.assertEquals(false, e1.exits(mV3));
 	}
 
+	/**
+	 * tests a to-from edge has the right properties with an explicit
+	 * constructor
+	 */
+	public void testToFromEdgeExplicit() {
+		Edge e1 = new Edge(mV2, mV1, VertexDirection.toFrom);
+		Assert.assertEquals(true, e1.exits(mV1));
+		Assert.assertEquals(true, e1.enters(mV2));
+
+		Assert.assertEquals(false, e1.exits(mV2));
+		Assert.assertEquals(false, e1.enters(mV1));
+
+		Assert.assertEquals(false, e1.enters(mV3));
+		Assert.assertEquals(false, e1.exits(mV3));
+	}
+
 }
