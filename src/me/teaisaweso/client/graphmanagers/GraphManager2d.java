@@ -1,6 +1,6 @@
 package me.teaisaweso.client.graphmanagers;
 
-import java.util.List;
+import java.util.Collection;
 
 import me.teaisaweso.client.EdgeDrawable;
 import me.teaisaweso.client.VertexDrawable;
@@ -83,7 +83,7 @@ public interface GraphManager2d {
      * @return a list of VertexDrawable objects representing the vertices in
      *         this graph
      */
-	public List<VertexDrawable> getVertexDrawables();
+	public Collection<VertexDrawable> getVertexDrawables();
 
     /**
      * generates a list of drawable edges
@@ -91,6 +91,6 @@ public interface GraphManager2d {
      * @return a list of EdgeDrawable objects representing the edges in this
      *         graph
      */
-    public List<EdgeDrawable> getEdgeDrawables();
+    public Collection<EdgeDrawable> getEdgeDrawables();
 
 }
