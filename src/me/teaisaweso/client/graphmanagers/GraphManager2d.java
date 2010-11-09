@@ -83,7 +83,7 @@ public interface GraphManager2d {
      * @return a list of VertexDrawable objects representing the vertices in
      *         this graph
      */
-    public List<VertexDrawable> getVertexDrawables();
+	public List<VertexDrawable> getVertexDrawables();
 
     /**
      * generates a list of drawable edges
