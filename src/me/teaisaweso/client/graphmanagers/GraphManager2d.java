@@ -1,7 +1,9 @@
-package me.teaisaweso.client;
+package me.teaisaweso.client.graphmanagers;
 
 import java.util.List;
 
+import me.teaisaweso.client.EdgeDrawable;
+import me.teaisaweso.client.VertexDrawable;
 import me.teaisaweso.shared.Graph;
 import me.teaisaweso.shared.Vertex;
 import me.teaisaweso.shared.VertexDirection;
