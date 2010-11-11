@@ -23,6 +23,10 @@ public class GraphManager2dTest extends TestCase {
 		mManager = GraphManager2dFactory.getInstance().makeDefaultGraphManager();
 	}
 
+	public void tearDown() {
+		mManager = null;
+	}
+
 	/**
 	 * tests that adding vertices works
 	 */
