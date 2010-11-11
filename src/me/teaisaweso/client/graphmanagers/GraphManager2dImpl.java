@@ -25,8 +25,7 @@ public class GraphManager2dImpl implements GraphManager2d {
 
 	@Override
 	public Graph getUnderlyingGraph() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Graph(mEdges, mVertices);
 	}
 
 	@Override
