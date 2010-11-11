@@ -32,7 +32,8 @@ public class GraphManager2dTest extends TestCase {
 		Assert.assertEquals(true, underlying.getVertices().contains(new Vertex("hi")));
 		Collection<VertexDrawable> drawables = mManager.getVertexDrawables();
 		Assert.assertEquals(1, drawables.size());
-		VertexDrawable[] vds = drawables.toArray(new VertexDrawable[]{new VertexDrawable(0, 0, 0, 0, "")});
+		VertexDrawable[] vds = drawables.toArray(new VertexDrawable[] { new VertexDrawable(0, 0, 0,
+				0, "") });
 		Assert.assertEquals(0, vds[0].getCenterX());
 		Assert.assertEquals(-5, vds[0].getLeft());
 		Assert.assertEquals(-3, vds[0].getCenterY());
