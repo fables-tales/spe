@@ -63,7 +63,7 @@ public class Edge {
 
 	/**
 	 * gets the from vertex of this edge
-	 *
+	 * 
 	 * @return
 	 */
 	public Vertex getFromVertex() {
@@ -72,11 +72,20 @@ public class Edge {
 
 	/**
 	 * gets the to vertex of this edge
-	 *
+	 * 
 	 * @return
 	 */
 	public Vertex getToVertex() {
 		return mVertex2;
+	}
+
+	/**
+	 * determines if an edge has a direction
+	 * 
+	 * @return
+	 */
+	public boolean hasDirection() {
+		return mDir != VertexDirection.both;
 	}
 
 }
