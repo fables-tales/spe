@@ -72,5 +72,46 @@ public class EdgeTest extends TestCase {
 		Assert.assertEquals(false, e1.enters(mV3));
 		Assert.assertEquals(false, e1.exits(mV3));
 	}
-
+	
+	/**
+	 * tests that from vertex works
+	 */
+	public void testGetFromVertex() {
+		Edge e1 = new Edge(mV1, mV2);
+		Assert.assertEquals(mV1, e1.getFromVertex());
+		e1 = new Edge(mV2, mV1);
+		Assert.assertEquals(mV2, e1.getFromVertex());
+		e1 = new Edge(mV3, mV3);
+		Assert.assertEquals(mV3, e1.getFromVertex());
+	}
+	
+	/**
+	 * tests that to vertex works
+	 */
+	public void testGetToVertex() {
+		Edge e1 = new Edge(mV1, mV3);
+		Assert.assertEquals(mV3, e1.getToVertex());
+		e1 = new Edge(mV1, mV2);
+		Assert.assertEquals(mV2, e1.getToVertex());
+		e1 = new Edge(mV1, mV1);
+		Assert.assertEquals(mV1, e1.getToVertex());
+	}
+	
+	/**
+	 * tests the edge direction method
+	 */
+	public void testEdgeDirection() {
+		Edge e1 = new Edge(mV1, mV2);
+		Assert.assertEquals(false, e1.hasDirection());
+		e1 = new Edge(mV1, mV1);
+		Assert.assertEquals(false, e1.hasDirection());
+		e1 = new Edge(mV1, mV1, VertexDirection.fromTo);
+		Assert.assertEquals(true, e1.hasDirection());
+		e1 = new Edge(mV1, mV2, VertexDirection.fromTo);
+		Assert.assertEquals(true, e1.hasDirection());
+		e1 = new Edge(mV3, mV1, VertexDirection.toFrom);
+		Assert.assertEquals(true, e1.hasDirection());
+		e1 = new Edge(mV3, mV2, VertexDirection.toFrom);
+		Assert.assertEquals(true, e1.hasDirection());
+	}
 }
