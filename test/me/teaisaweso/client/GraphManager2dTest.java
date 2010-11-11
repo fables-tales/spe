@@ -30,7 +30,7 @@ public class GraphManager2dTest extends TestCase {
 	/**
 	 * tests that adding vertices works
 	 */
-	public void testAddVertex() {
+	public void testAddVertex_single() {
 		mManager.addVertex(new Vertex("hi"), 0, -3, 10);
 		Graph underlying = mManager.getUnderlyingGraph();
 		Assert.assertEquals(true, underlying.getVertices().contains(new Vertex("hi")));
