@@ -75,4 +75,22 @@ public class VertexDrawable {
 		return mLabel;
 	}
 
+	/**
+	 * updates the bounding rectangle of the drawable
+	 *
+	 * @param left
+	 *            the left of the bounding rectangle
+	 * @param top
+	 *            the right of the bounding rectangle
+	 * @param width
+	 *            the width of the bounding rectangle
+	 * @param height
+	 *            the height of the bounding rectangle
+	 */
+	public void updateBoundingRectangle(int left, int top, int width, int height) {
+		mHeight = height;
+		mWidth = width;
+		mTop = top;
+		mLeft = left;
+	}
 }
