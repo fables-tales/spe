@@ -61,4 +61,22 @@ public class Edge {
 			return v.equals((mDir == VertexDirection.toFrom) ? mVertex1 : mVertex2);
 	}
 
+	/**
+	 * gets the from vertex of this edge
+	 *
+	 * @return
+	 */
+	public Vertex getFromVertex() {
+		return mVertex1;
+	}
+
+	/**
+	 * gets the to vertex of this edge
+	 *
+	 * @return
+	 */
+	public Vertex getToVertex() {
+		return mVertex2;
+	}
+
 }
