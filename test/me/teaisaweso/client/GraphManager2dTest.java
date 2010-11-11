@@ -14,10 +14,16 @@ import me.teaisaweso.shared.Vertex;
 public class GraphManager2dTest extends TestCase {
 	private GraphManager2d mManager;
 
+	/**
+	 * runs test setup, creates a graphmanager instance
+	 */
 	public void setUp() {
 		mManager = GraphManager2dFactory.getInstance().makeDefaultGraphManager();
 	}
 
+	/**
+	 * tests that adding vertices works
+	 */
 	public void testAddVertex() {
 		mManager.addVertex(new Vertex("hi"), 0, 0, 10);
 		Graph underlying = mManager.getUnderlyingGraph();
