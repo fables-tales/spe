@@ -89,6 +89,19 @@ public class GraphManager2dImpl implements GraphManager2d {
 			int l2 = v2.getCenterX();
 			int t1 = v1.getCenterY();
 			int t2 = v2.getCenterY();
+
+			// swap l1 and t1 with l2 and t2 if we're entering the "from" node
+			// NOTE: that's an in place swap algorithm using xor
+			if (e.enters(e.getFromVertex())) {
+				l1 ^= l2;
+				l2 ^= l1;
+				l1 ^= l2;
+
+				t1 ^= t2;
+				t2 ^= t1;
+				t1 ^= t2;
+			}
+
 			result.add(new EdgeDrawable(l1, t1, l2, t2, e.hasDirection()));
 		}
 
