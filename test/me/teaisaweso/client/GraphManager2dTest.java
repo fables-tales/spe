@@ -46,4 +46,18 @@ public class GraphManager2dTest extends TestCase {
 		Assert.assertEquals(10, vds[0].getHeight());
 		Assert.assertEquals("hi", vds[0].getLabel());
 	}
+
+	public void testAddVertex_multiple() {
+		mManager.addVertex(new Vertex("bees"), 100, 17, 2);
+		mManager.addVertex(new Vertex("cheese"), 0, 0, 2);
+
+		Graph underlying = mManager.getUnderlyingGraph();
+		Assert.assertEquals(2, underlying.getVertices().size());
+		Assert.assertEquals(true, underlying.getVertices().contains(new Vertex("bees")));
+		Assert.assertEquals(true, underlying.getVertices().contains(new Vertex("cheese")));
+
+		VertexDrawable[] vds = mManager.getVertexDrawables().toArray(new VertexDrawable[] {});
+		Assert.assertEquals(2, vds.length);
+	}
+
 }
