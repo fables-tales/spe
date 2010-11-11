@@ -1,5 +1,7 @@
 package me.teaisaweso.client;
 
+import java.util.Collection;
+
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import me.teaisaweso.client.graphmanagers.GraphManager2d;
@@ -25,8 +27,18 @@ public class GraphManager2dTest extends TestCase {
 	 * tests that adding vertices works
 	 */
 	public void testAddVertex() {
-		mManager.addVertex(new Vertex("hi"), 0, 0, 10);
+		mManager.addVertex(new Vertex("hi"), 0, -3, 10);
 		Graph underlying = mManager.getUnderlyingGraph();
 		Assert.assertEquals(true, underlying.getVertices().contains(new Vertex("hi")));
+		Collection<VertexDrawable> drawables = mManager.getVertexDrawables();
+		Assert.assertEquals(1, drawables.size());
+		VertexDrawable[] vds = drawables.toArray(new VertexDrawable[]{new VertexDrawable(0, 0, 0, 0, "")});
+		Assert.assertEquals(0, vds[0].getCenterX());
+		Assert.assertEquals(-5, vds[0].getLeft());
+		Assert.assertEquals(-3, vds[0].getCenterY());
+		Assert.assertEquals(-8, vds[0].getTop());
+		Assert.assertEquals(10, vds[0].getWidth());
+		Assert.assertEquals(10, vds[0].getHeight());
+		Assert.assertEquals("hi", vds[0].getLabel());
 	}
 }
