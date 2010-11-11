@@ -78,4 +78,36 @@ public interface GraphManager2d {
 	 */
 	public void addEdge(Vertex v1, Vertex v2, VertexDirection dir);
 
+	/**
+	 * removes an edge from the graphmanager
+	 * 
+	 * @param e
+	 *            the edge to be removed
+	 */
+	public void removeEdge(Edge e);
+
+	/**
+	 * removes all the edges between v1 and v2
+	 * 
+	 * @param v1
+	 * @param v2
+	 */
+	public void removeAllEdges(Vertex v1, Vertex v2);
+
+	/**
+	 * generates a list of drawable vertices
+	 * 
+	 * @return a list of VertexDrawable objects representing the vertices in
+	 *         this graph
+	 */
+	public Collection<VertexDrawable> getVertexDrawables();
+
+	/**
+	 * generates a list of drawable edges
+	 * 
+	 * @return a list of EdgeDrawable objects representing the edges in this
+	 *         graph
+	 */
+	public Collection<EdgeDrawable> getEdgeDrawables();
+
 }
