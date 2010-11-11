@@ -77,7 +77,7 @@ public class VertexDrawable {
 
 	/**
 	 * updates the bounding rectangle of the drawable
-	 *
+	 * 
 	 * @param left
 	 *            the left of the bounding rectangle
 	 * @param top
@@ -93,4 +93,13 @@ public class VertexDrawable {
 		mTop = top;
 		mLeft = left;
 	}
+
+	public int getCenterX() {
+		return mLeft + mWidth / 2;
+	}
+
+	public int getCenterY() {
+		return mTop + mHeight / 2;
+	}
+
 }
