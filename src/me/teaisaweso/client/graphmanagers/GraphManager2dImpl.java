@@ -1,15 +1,29 @@
 package me.teaisaweso.client.graphmanagers;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import me.teaisaweso.client.EdgeDrawable;
 import me.teaisaweso.client.VertexDrawable;
+import me.teaisaweso.shared.Edge;
 import me.teaisaweso.shared.Graph;
 import me.teaisaweso.shared.Vertex;
 import me.teaisaweso.shared.VertexDirection;
 
 public class GraphManager2dImpl implements GraphManager2d {
-	
+
+	private List<Vertex> mVertices = new ArrayList<Vertex>();
+	private List<Edge> mEdges = new ArrayList<Edge>();
+	private Map<Vertex, VertexDrawable> mVertexRenderMap = new HashMap<Vertex, VertexDrawable>();
+
+	protected GraphManager2dImpl() {
+
+	}
+
 	@Override
 	public Graph getUnderlyingGraph() {
 		// TODO Auto-generated method stub
@@ -18,44 +32,85 @@ public class GraphManager2dImpl implements GraphManager2d {
 
 	@Override
 	public void addVertex(Vertex v, int xPosition, int yPosition, int size) {
-		// TODO Auto-generated method stub
+		mVertices.add(v);
+		// left and top are x and y - size/2
+		int halfSize = size / 2;
+		int left = xPosition - halfSize;
+		int top = yPosition - halfSize;
+
+		mVertexRenderMap.put(v, new VertexDrawable(left, top, size, size, v.getLabel()));
 
 	}
 
 	@Override
 	public void removeVertex(Vertex v) {
-		// TODO Auto-generated method stub
-
+		mVertices.remove(v);
+		mVertexRenderMap.remove(v);
 	}
 
 	@Override
 	public void moveVertexTo(Vertex v, int xPosition, int yPosition) {
-		// TODO Auto-generated method stub
+		VertexDrawable vd = mVertexRenderMap.get(v);
+		int halfWidth = vd.getWidth() / 2;
+		int halfHeight = vd.getHeight() / 2;
+		int left = xPosition - halfWidth;
+		int top = yPosition - halfHeight;
+		vd.updateBoundingRectangle(left, top, vd.getWidth(), vd.getHeight());
 
 	}
 
 	@Override
 	public void scaleVertex(Vertex v, int newSize) {
-		// TODO Auto-generated method stub
-
+		VertexDrawable vd = mVertexRenderMap.get(v);
+		int newLeft = vd.getLeft() - newSize / 2;
+		int newTop = vd.getTop() - newSize / 2;
+		int newWidth = newSize;
+		int newHeight = newSize;
+		vd.updateBoundingRectangle(newLeft, newTop, newWidth, newHeight);
 	}
 
 	@Override
 	public void addEdge(Vertex v1, Vertex v2, VertexDirection dir) {
-		// TODO Auto-generated method stub
-
+		mEdges.add(new Edge(v1, v2, dir));
 	}
 
 	@Override
-	public List<VertexDrawable> getVertexDrawables() {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<VertexDrawable> getVertexDrawables() {
+		return mVertexRenderMap.values();
 	}
 
 	@Override
-	public List<EdgeDrawable> getEdgeDrawables() {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<EdgeDrawable> getEdgeDrawables() {
+		List<EdgeDrawable> result = new ArrayList<EdgeDrawable>(mEdges.size());
+
+		for (Edge e : mEdges) {
+			VertexDrawable v1 = mVertexRenderMap.get(e.getFromVertex());
+			VertexDrawable v2 = mVertexRenderMap.get(e.getToVertex());
+			int l1 = v1.getCenterX();
+			int l2 = v2.getCenterX();
+			int t1 = v1.getCenterY();
+			int t2 = v2.getCenterY();
+			result.add(new EdgeDrawable(l1, t1, l2, t2, e.hasDirection()));
+		}
+
+		return result;
 	}
 
+	@Override
+	public void removeEdge(Edge e) {
+		mEdges.remove(e);
+	}
+
+	@Override
+	public void removeAllEdges(Vertex v1, Vertex v2) {
+		List<Edge> toDelete = new ArrayList<Edge>();
+
+		for (Edge e : mEdges) {
+			if ((e.enters(v1) || e.exits(v1)) && (e.enters(v2) || e.exits(v2))) {
+				toDelete.add(e);
+			}
+		}
+
+		mEdges.removeAll(toDelete);
+	}
 }
