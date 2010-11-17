@@ -128,8 +128,14 @@ public class GraphManager2dImpl implements GraphManager2d {
 	}
 
     @Override
+    public void addRedrawCallBack(Runnable r) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
     public void init(GWTCanvas canvas) {
         // TODO Auto-generated method stub
-
+        
     }
 }
