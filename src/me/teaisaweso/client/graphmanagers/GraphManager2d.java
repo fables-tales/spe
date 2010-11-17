@@ -9,6 +9,8 @@ import me.teaisaweso.shared.Graph;
 import me.teaisaweso.shared.Vertex;
 import me.teaisaweso.shared.VertexDirection;
 
+import com.google.gwt.widgetideas.graphics.client.GWTCanvas;
+
 public interface GraphManager2d {
 
     /**
