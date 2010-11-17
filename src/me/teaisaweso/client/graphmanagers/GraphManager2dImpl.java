@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.widgetideas.graphics.client.GWTCanvas;
+
 import me.teaisaweso.client.EdgeDrawable;
 import me.teaisaweso.client.VertexDrawable;
 import me.teaisaweso.shared.Edge;
@@ -124,4 +126,10 @@ public class GraphManager2dImpl implements GraphManager2d {
 
 		mEdges.removeAll(toDelete);
 	}
+
+    @Override
+    public void init(GWTCanvas canvas) {
+        // TODO Auto-generated method stub
+
+    }
 }
