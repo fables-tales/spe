@@ -1,4 +1,4 @@
-package com.mytestproject.drawing.client;
+package me.teaisaweso.client;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,6 +36,7 @@ public class Drawing implements EntryPoint {
     RootPanel.get("graph_panel").add(canvas);
     
   }
+  // Draws a single vertex, currently only draws circular nodes
   
   private void drawVertex(VertexDrawable vertex, GWTCanvas canvas) {
 	  double centreX = vertex.getLeft() + 0.5*vertex.getWidth();
@@ -50,6 +51,7 @@ public class Drawing implements EntryPoint {
       canvas.fill();
   }
   
+ // Draws a line from coordinates to other coordinates
  private void drawEdge(EdgeDrawable edge, GWTCanvas canvas) { 
 	double startX = edge.getStartX();
 	double startY = edge.getStartY();
@@ -63,6 +65,7 @@ public class Drawing implements EntryPoint {
     canvas.stroke();
  }
  
+ // Takes collections of edges and vertices and draws a graph on a specified canvas.
  private void drawGraph(Collection<EdgeDrawable> edges, Collection<VertexDrawable> vertices, GWTCanvas canvas) {
 	 for (EdgeDrawable thisEdge : edges) {
 		drawEdge(thisEdge, canvas);
