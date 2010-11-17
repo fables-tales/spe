@@ -14,6 +14,7 @@ public class Drawing implements EntryPoint {
   public void onModuleLoad() {
 
     GWTCanvas canvas = new GWTCanvas(400,400);
+    // Testing data, tests drawing function
     Collection<VertexDrawable> collection1 = new ArrayList<VertexDrawable>();
     Collection<EdgeDrawable> collection2 = new ArrayList<EdgeDrawable>();
     VertexDrawable v1 = new VertexDrawable(10,10,10,10,"v1");
@@ -28,11 +29,16 @@ public class Drawing implements EntryPoint {
     EdgeDrawable e2 = new EdgeDrawable(100, 100, 150, 250);
     collection2.add(e1);
     collection2.add(e2);
+    // End of test function
+    
+    // Set style of canvas
     canvas.setLineWidth(1);
     canvas.setStrokeStyle(Color.BLACK);
     canvas.setFillStyle(Color.BLACK);
     canvas.setBackgroundColor(Color.WHITE);
     drawGraph(collection2, collection1, canvas);
+    
+    //Adds to div specified on html
     RootPanel.get("graph_panel").add(canvas);
     
   }
