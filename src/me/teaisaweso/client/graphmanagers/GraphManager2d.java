@@ -110,4 +110,18 @@ public interface GraphManager2d {
      */
     public Collection<EdgeDrawable> getEdgeDrawables();
 
+    /**
+     * initialises the graph manager with a canvas
+     * 
+     * @param canvas
+     */
+    public void init(GWTCanvas canvas);
+
+    /**
+     * adds a callback for when the graph needs to be redrawn
+     * 
+     * @param r
+     */
+    public void addRedrawCallBack(Runnable r);
+
 }
