@@ -9,11 +9,10 @@ import com.google.gwt.widgetideas.graphics.client.Color;
 import com.google.gwt.widgetideas.graphics.client.GWTCanvas;
 
 
-public class Drawing implements EntryPoint {
+public class Drawing {
 
-  public void onModuleLoad() {
+  public void renderGraph (GWTCanvas mCanvas) {
 
-    GWTCanvas canvas = new GWTCanvas(400,400);
     // Testing data, tests drawing function
     Collection<VertexDrawable> collection1 = new ArrayList<VertexDrawable>();
     Collection<EdgeDrawable> collection2 = new ArrayList<EdgeDrawable>();
@@ -32,47 +31,47 @@ public class Drawing implements EntryPoint {
     // End of test function
     
     // Set style of canvas
-    canvas.setLineWidth(1);
-    canvas.setStrokeStyle(Color.BLACK);
-    canvas.setFillStyle(Color.BLACK);
-    canvas.setBackgroundColor(Color.WHITE);
-    drawGraph(collection2, collection1, canvas);
+    mCanvas.setLineWidth(1);
+    mCanvas.setStrokeStyle(Color.BLACK);
+    mCanvas.setFillStyle(Color.BLACK);
+    mCanvas.setBackgroundColor(Color.WHITE);
+    drawGraph(collection2, collection1, mCanvas);
     
     //Adds to div specified on html
-    RootPanel.get("graph_panel").add(canvas);
+    RootPanel.get("graph_panel").add(mCanvas);
     
   }
   // Draws a single vertex, currently only draws circular nodes
   
-  private void drawVertex(VertexDrawable vertex, GWTCanvas canvas) {
-	  double centreX = vertex.getLeft() + 0.5*vertex.getWidth();
-	  double centreY = vertex.getTop() + 0.5*vertex.getHeight();
-	  double radius = 0.5*vertex.getWidth();
+  private void drawVertex(VertexDrawable mVertex, GWTCanvas mCanvas) {
+	  double centreX = mVertex.getLeft() + 0.5*mVertex.getWidth();
+	  double centreY = mVertex.getTop() + 0.5*mVertex.getHeight();
+	  double radius = 0.5*mVertex.getWidth();
 	  
-	  canvas.moveTo(centreX, centreY);
-      canvas.beginPath();
-      canvas.arc(centreX,centreY,radius,0,360,false);
-      canvas.closePath();
-      canvas.stroke();
-      canvas.fill();
+	  mCanvas.moveTo(centreX, centreY);
+      mCanvas.beginPath();
+      mCanvas.arc(centreX,centreY,radius,0,360,false);
+      mCanvas.closePath();
+      mCanvas.stroke();
+      mCanvas.fill();
   }
   
  // Draws a line from coordinates to other coordinates
- private void drawEdge(EdgeDrawable edge, GWTCanvas canvas) { 
-	double startX = edge.getStartX();
-	double startY = edge.getStartY();
-	double endX = edge.getEndX();
-	double endY = edge.getEndY();
+ private void drawEdge(EdgeDrawable mEdge, GWTCanvas mCanvas) { 
+	double mStartX = mEdge.getStartX();
+	double mStartY = mEdge.getStartY();
+	double mEndX = mEdge.getEndX();
+	double mEndY = mEdge.getEndY();
 	
-    canvas.beginPath();
-    canvas.moveTo(startX,startY);
-    canvas.lineTo(endX,endY);
-    canvas.closePath();
-    canvas.stroke();
+    mCanvas.beginPath();
+    mCanvas.moveTo(mStartX,mStartY);
+    mCanvas.lineTo(mEndX,mEndY);
+    mCanvas.closePath();
+    mCanvas.stroke();
  }
  
  // Takes collections of edges and vertices and draws a graph on a specified canvas.
- private void drawGraph(Collection<EdgeDrawable> edges, Collection<VertexDrawable> vertices, GWTCanvas canvas) {
+ private void drawGraph(Collection<EdgeDrawable> mEdges, Collection<VertexDrawable> mVertices, GWTCanvas canvas) {
 	 for (EdgeDrawable thisEdge : edges) {
 		drawEdge(thisEdge, canvas);
 	}
