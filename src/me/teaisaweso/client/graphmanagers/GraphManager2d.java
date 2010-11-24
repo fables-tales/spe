@@ -9,105 +9,121 @@ import me.teaisaweso.shared.Graph;
 import me.teaisaweso.shared.Vertex;
 import me.teaisaweso.shared.VertexDirection;
 
+import com.google.gwt.widgetideas.graphics.client.GWTCanvas;
+
 public interface GraphManager2d {
 
-	/**
-	 * gets the underlying graph for this 2d representation
-	 * 
-	 * @return a new graph instance
-	 */
-	public Graph getUnderlyingGraph();
+    /**
+     * gets the underlying graph for this 2d representation
+     * 
+     * @return a new graph instance
+     */
+    public Graph getUnderlyingGraph();
 
-	/**
-	 * adds a vertex to the graph
-	 * 
-	 * the vertex may not be centered at the passed location
-	 * 
-	 * @param v
-	 *            the vertex to be added
-	 * @param xPosition
-	 *            the center x position of the vertex
-	 * @param yPosition
-	 *            the center y position of the vertex
-	 */
-	public void addVertex(Vertex v, int xPosition, int yPosition, int size);
+    /**
+     * adds a vertex to the graph
+     * 
+     * the vertex may not be centered at the passed location
+     * 
+     * @param v
+     *            the vertex to be added
+     * @param xPosition
+     *            the center x position of the vertex
+     * @param yPosition
+     *            the center y position of the vertex
+     */
+    public void addVertex(Vertex v, int xPosition, int yPosition, int size);
 
-	/**
-	 * removes a vertex from the graph
-	 * 
-	 * @param v
-	 *            the vertex to be removed
-	 */
-	public void removeVertex(Vertex v);
+    /**
+     * removes a vertex from the graph
+     * 
+     * @param v
+     *            the vertex to be removed
+     */
+    public void removeVertex(Vertex v);
 
-	/**
-	 * moves a vertex to a given position
-	 * 
-	 * the vertex may not be centered at the passed location
-	 * 
-	 * @param v
-	 *            the vertex to be moved
-	 * @param xPosition
-	 *            the new center x position of the vertex
-	 * @param yPosition
-	 *            the new center y position of the vertex
-	 */
-	public void moveVertexTo(Vertex v, int xPosition, int yPosition);
+    /**
+     * moves a vertex to a given position
+     * 
+     * the vertex may not be centered at the passed location
+     * 
+     * @param v
+     *            the vertex to be moved
+     * @param xPosition
+     *            the new center x position of the vertex
+     * @param yPosition
+     *            the new center y position of the vertex
+     */
+    public void moveVertexTo(Vertex v, int xPosition, int yPosition);
 
-	/**
-	 * changes the size of a vertex
-	 * 
-	 * may displace this or other vertices
-	 * 
-	 * @param v
-	 *            the vertex to have it's size changed
-	 * @param newSize
-	 *            the new size of the vertex in pixels
-	 */
-	public void scaleVertex(Vertex v, int newSize);
+    /**
+     * changes the size of a vertex
+     * 
+     * may displace this or other vertices
+     * 
+     * @param v
+     *            the vertex to have it's size changed
+     * @param newSize
+     *            the new size of the vertex in pixels
+     */
+    public void scaleVertex(Vertex v, int newSize);
 
-	/**
-	 * adds an edge between two vertices
-	 * 
-	 * @param v1
-	 *            the "from" vertex
-	 * @param v2
-	 *            the "to" vertex
-	 * @param dir
-	 *            the edge direction
-	 */
-	public void addEdge(Vertex v1, Vertex v2, VertexDirection dir);
+    /**
+     * adds an edge between two vertices
+     * 
+     * @param v1
+     *            the "from" vertex
+     * @param v2
+     *            the "to" vertex
+     * @param dir
+     *            the edge direction
+     */
+    public void addEdge(Vertex v1, Vertex v2, VertexDirection dir);
 
-	/**
-	 * removes an edge from the graphmanager
-	 * 
-	 * @param e
-	 *            the edge to be removed
-	 */
-	public void removeEdge(Edge e);
+    /**
+     * removes an edge from the graphmanager
+     * 
+     * @param e
+     *            the edge to be removed
+     */
+    public void removeEdge(Edge e);
 
-	/**
-	 * removes all the edges between v1 and v2
-	 * 
-	 * @param v1
-	 * @param v2
-	 */
-	public void removeAllEdges(Vertex v1, Vertex v2);
+    /**
+     * removes all the edges between v1 and v2
+     * 
+     * @param v1
+     * @param v2
+     */
+    public void removeAllEdges(Vertex v1, Vertex v2);
 
-	/**
-	 * generates a list of drawable vertices
-	 * 
-	 * @return a list of VertexDrawable objects representing the vertices in
-	 *         this graph
-	 */
-	public Collection<VertexDrawable> getVertexDrawables();
+    /**
+     * generates a list of drawable vertices
+     * 
+     * @return a list of VertexDrawable objects representing the vertices in
+     *         this graph
+     */
+    public Collection<VertexDrawable> getVertexDrawables();
 
-	/**
-	 * generates a list of drawable edges
-	 * 
-	 * @return a list of EdgeDrawable objects representing the edges in this
-	 *         graph
-	 */
-	public Collection<EdgeDrawable> getEdgeDrawables();
+    /**
+     * generates a list of drawable edges
+     * 
+     * @return a list of EdgeDrawable objects representing the edges in this
+     *         graph
+     */
+    public Collection<EdgeDrawable> getEdgeDrawables();
+
+    /**
+     * initialises the graph manager with a canvas
+     * 
+     * @param canvas
+     */
+    public void init(GWTCanvas canvas);
+
+    /**
+     * adds a callback for when the graph needs to be redrawn
+     * 
+     * @param r
+     */
+    public void addRedrawCallBack(Runnable r);
 
 }

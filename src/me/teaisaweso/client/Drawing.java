@@ -19,4 +19,5 @@ public interface Drawing {
      *            the collection of edges to be drawn
      */
     public void renderGraph (GWTCanvas canvas, Collection<EdgeDrawable> edges, Collection<VertexDrawable> vertices);
+
 }

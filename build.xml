@@ -135,5 +135,18 @@
     <delete dir="war/grapheme" failonerror="false" />
   </target>
 
+  <target name="doc" description="JavaDOC">
+  <javadoc packagenames="me.teaisaweso.*"
+           sourcepath="src"
+           excludepackagenames="com.google.*"
+           defaultexcludes="yes"
+           destdir="docs/api"
+           author="true"
+           version="true"
+           use="true"
+           classpathref="project.class.path"
+           windowtitle="Grapheme api"/>
+  </target>
+
 </project>
 
