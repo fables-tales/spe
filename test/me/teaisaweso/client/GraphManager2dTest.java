@@ -83,5 +83,12 @@ public class GraphManager2dTest extends TestCase {
         mManager.addVertex(new Vertex("bees"), 0, 0, 10);
         Assert.assertEquals(true, mCalled);
     }
+    
+    public void testInvalidate_removeVertex() {
+        mManager.addVertex(new Vertex("faces"), 0, 0, 10);
+        mManager.addRedrawCallback(mCheckCalled);
+        mManager.removeVertex(new Vertex("faces"));
+        Assert.assertEquals(true, mCalled);
+    }
 
 }
