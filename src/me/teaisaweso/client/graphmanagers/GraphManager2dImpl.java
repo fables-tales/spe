@@ -163,7 +163,9 @@ public class GraphManager2dImpl implements GraphManager2d {
     @Override
     public VertexDrawable getDrawableAt(int x, int y) {
         for (VertexDrawable vd : mVertexRenderMap.values()) {
-            if (vd.contains(x, y)) return true;
+            if (vd.contains(x, y)) return vd;
         }
+        
+        return null;
     }
 }
