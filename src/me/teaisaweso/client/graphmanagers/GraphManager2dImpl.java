@@ -162,7 +162,8 @@ public class GraphManager2dImpl implements GraphManager2d {
 
     @Override
     public VertexDrawable getDrawableAt(int x, int y) {
-        // TODO Auto-generated method stub
-        return null;
+        for (VertexDrawable vd : mVertexRenderMap.values()) {
+            if (vd.contains(x, y)) return true;
+        }
     }
 }
