@@ -21,6 +21,7 @@ public class GraphManager2dImpl implements GraphManager2d {
     private List<Edge> mEdges = new ArrayList<Edge>();
     private Map<Vertex, VertexDrawable> mVertexRenderMap = new HashMap<Vertex, VertexDrawable>();
     private GWTCanvas mCanvas;
+    private List<Runnable> mRedrawCallbacks = new ArrayList<Runnable>();
 
     protected GraphManager2dImpl() {
 
@@ -130,7 +131,7 @@ public class GraphManager2dImpl implements GraphManager2d {
 
     @Override
     public void addRedrawCallback(Runnable r) {
-
+        mRedrawCallbacks.add(r);
     }
 
     @Override
