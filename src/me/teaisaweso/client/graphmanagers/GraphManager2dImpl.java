@@ -138,7 +138,7 @@ public class GraphManager2dImpl implements GraphManager2d {
     public void init(GWTCanvas canvas) {
         mCanvas = canvas;
     }
-    
+
     private void invalidate() {
         for (Runnable r : mRedrawCallbacks) {
             r.run();
