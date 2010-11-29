@@ -85,6 +85,8 @@ public class GraphManager2dTest extends TestCase {
 
     public void testInvalidate_addEdge() {
         mManager.addRedrawCallback(mCheckCalled);
+        mManager.addVertex(new Vertex("a"), 0, 0, 10);
+        mManager.addVertex(new Vertex("b"), 3, 7, 10);
         mManager.addEdge(new Vertex("a"), new Vertex("b"), VertexDirection.fromTo);
         Assert.assertEquals(true, mCalled);
     }
