@@ -59,6 +59,17 @@ public class GraphManager2dTest extends TestCase {
         Assert.assertEquals("hi", vds[0].getLabel());
     }
 
+    public void testAddEdge_singleBothDir() {
+        mManager.addVertex(new Vertex("cake"), 0, -1, 0);
+        mManager.addVertex(new Vertex("faces"), 100, 17, 0);
+        mManager.addEdge(new Vertex("faces"), new Vertex("cake"), VertexDirection.both);
+        EdgeDrawable e = mManager.getEdgeDrawables().toArray(new EdgeDrawable[0])[0];
+        Assert.assertEquals(0, e.getStartX());
+        Assert.assertEquals(-1, e.getStartY());
+        Assert.assertEquals(100, e.getEndX());
+        Assert.assertEquals(17, e.getEndY());
+    }
+
     public void testAddVertex_multiple() {
         mManager.addVertex(new Vertex("bees"), 100, 17, 2);
         mManager.addVertex(new Vertex("cheese"), 0, 0, 2);
