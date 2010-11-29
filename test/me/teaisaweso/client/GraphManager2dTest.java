@@ -8,6 +8,7 @@ import me.teaisaweso.client.graphmanagers.GraphManager2d;
 import me.teaisaweso.client.graphmanagers.GraphManager2dFactory;
 import me.teaisaweso.shared.Graph;
 import me.teaisaweso.shared.Vertex;
+import me.teaisaweso.shared.VertexDirection;
 
 /**
  * NOTE: this class relies on the GraphManager2d factory working, if it isn't
@@ -15,16 +16,27 @@ import me.teaisaweso.shared.Vertex;
  */
 public class GraphManager2dTest extends TestCase {
 	private GraphManager2d mManager;
+	private boolean mCalled = false;
+	private Runnable mCheckCalled = new Runnable() {
+        
+        @Override
+        public void run() {
+            GraphManager2dTest.this.mCalled = true;
+            
+        }
+    };
 
 	/**
 	 * runs test setup, creates a graphmanager instance
 	 */
 	public void setUp() {
 		mManager = GraphManager2dFactory.getInstance().makeDefaultGraphManager();
+		mCalled = false;
 	}
 
 	public void tearDown() {
 		mManager = null;
+		mCalled = false;
 	}
 
 	/**
@@ -58,6 +70,12 @@ public class GraphManager2dTest extends TestCase {
 
 		VertexDrawable[] vds = mManager.getVertexDrawables().toArray(new VertexDrawable[] {});
 		Assert.assertEquals(2, vds.length);
+	}
+	
+	public void testInvalidate_addEdge() {
+	    mManager.addRedrawCallback(mCheckCalled);
+	    mManager.addEdge(new Vertex("a"), new Vertex("b"), VertexDirection.fromTo);
+	    Assert.assertEquals(true, mCalled);
 	}
 
 }
