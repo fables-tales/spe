@@ -125,5 +125,13 @@ public interface GraphManager2d {
      * @param r
      */
     public void addRedrawCallback(Runnable r);
+    
+    /**
+     * gets the drawable at a specific position
+     * @param x
+     * @param y
+     * @return the vertex at the location
+     */
+    public VertexDrawable getDrawableAt(int x, int y);
 
 }
