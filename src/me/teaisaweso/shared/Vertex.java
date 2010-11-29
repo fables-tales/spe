@@ -3,7 +3,12 @@ package me.teaisaweso.shared;
 public class Vertex {
 	private String mLabel;
 
-	/**
+	@Override
+    public int hashCode() {
+        return mLabel.hashCode();
+    }
+
+    /**
 	 * creates a vertex with a label
 	 * 
 	 * @param label
@@ -30,4 +35,5 @@ public class Vertex {
 
 		return (o instanceof Vertex && ((Vertex) o).getLabel().equals(mLabel));
 	}
+	
 }
