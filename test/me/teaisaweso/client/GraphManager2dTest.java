@@ -77,5 +77,10 @@ public class GraphManager2dTest extends TestCase {
 	    mManager.addEdge(new Vertex("a"), new Vertex("b"), VertexDirection.fromTo);
 	    Assert.assertEquals(true, mCalled);
 	}
+	public void testInvalidate_addVertex() {
+        mManager.addRedrawCallback(mCheckCalled);
+        mManager.addVertex(new Vertex("bees"), 0, 0, 10);
+        Assert.assertEquals(true, mCalled);
+    }
 
 }
