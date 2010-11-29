@@ -110,5 +110,14 @@ public class VertexDrawable {
         return mTop + mHeight / 2;
     }
 
+    /**
+     * determines if a vd contains a specific co-ordinate 
+     * @param x
+     * @param y
+     * @return
+     */
+    public boolean contains(int x, int y) {
+        return x >= mLeft && x <= mLeft + mWidth && x >= mTop && x <= mTop + mHeight;
+    }
 
 }
