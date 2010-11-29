@@ -20,6 +20,7 @@ public class GraphManager2dImpl implements GraphManager2d {
     private List<Vertex> mVertices = new ArrayList<Vertex>();
     private List<Edge> mEdges = new ArrayList<Edge>();
     private Map<Vertex, VertexDrawable> mVertexRenderMap = new HashMap<Vertex, VertexDrawable>();
+    private GWTCanvas mCanvas;
 
     protected GraphManager2dImpl() {
 
@@ -134,7 +135,6 @@ public class GraphManager2dImpl implements GraphManager2d {
 
     @Override
     public void init(GWTCanvas canvas) {
-        // TODO Auto-generated method stub
-
+        mCanvas = canvas;
     }
 }
