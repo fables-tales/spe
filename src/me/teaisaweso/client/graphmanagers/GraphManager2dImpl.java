@@ -41,13 +41,14 @@ public class GraphManager2dImpl implements GraphManager2d {
         int top = yPosition - halfSize;
 
         mVertexRenderMap.put(v, new VertexDrawable(left, top, size, size, v.getLabel()));
-
+        this.invalidate();
     }
 
     @Override
     public void removeVertex(Vertex v) {
         mVertices.remove(v);
         mVertexRenderMap.remove(v);
+        this.invalidate();
     }
 
     @Override
@@ -58,6 +59,7 @@ public class GraphManager2dImpl implements GraphManager2d {
         int left = xPosition - halfWidth;
         int top = yPosition - halfHeight;
         vd.updateBoundingRectangle(left, top, vd.getWidth(), vd.getHeight());
+        this.invalidate();
 
     }
 
@@ -69,11 +71,13 @@ public class GraphManager2dImpl implements GraphManager2d {
         int newWidth = newSize;
         int newHeight = newSize;
         vd.updateBoundingRectangle(newLeft, newTop, newWidth, newHeight);
+        this.invalidate();
     }
 
     @Override
     public void addEdge(Vertex v1, Vertex v2, VertexDirection dir) {
         mEdges.add(new Edge(v1, v2, dir));
+        this.invalidate();
     }
 
     @Override
@@ -127,6 +131,7 @@ public class GraphManager2dImpl implements GraphManager2d {
         }
 
         mEdges.removeAll(toDelete);
+        this.invalidate();
     }
 
     @Override
