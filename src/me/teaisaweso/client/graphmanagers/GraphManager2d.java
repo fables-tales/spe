@@ -124,6 +124,6 @@ public interface GraphManager2d {
      * 
      * @param r
      */
-    public void addRedrawCallBack(Runnable r);
+    public void addRedrawCallback(Runnable r);
 
 }
