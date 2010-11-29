@@ -91,4 +91,12 @@ public class GraphManager2dTest extends TestCase {
         Assert.assertEquals(true, mCalled);
     }
 
+    public void testInvalidate_removeAllEdges() {
+        mManager.addVertex(new Vertex("faces"), 0, 0, 10);
+        mManager.addVertex(new Vertex("bees"), 0, 0, 10);
+        mManager.addEdge(new Vertex("bees"), new Vertex("faces"), VertexDirection.both);
+        mManager.addRedrawCallback(mCheckCalled);
+        mManager.removeAllEdges(new Vertex("faces"), new Vertex("bees"));
+        Assert.assertEquals(true, mCalled);
+    }
 }
