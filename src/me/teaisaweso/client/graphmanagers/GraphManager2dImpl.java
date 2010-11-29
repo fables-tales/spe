@@ -2,6 +2,7 @@ package me.teaisaweso.client.graphmanagers;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,7 +83,7 @@ public class GraphManager2dImpl implements GraphManager2d {
 
     @Override
     public Collection<VertexDrawable> getVertexDrawables() {
-        return mVertexRenderMap.values();
+        return Collections.unmodifiableCollection(mVertexRenderMap.values());
     }
 
     @Override
