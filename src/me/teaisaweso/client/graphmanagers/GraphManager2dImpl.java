@@ -23,6 +23,7 @@ public class GraphManager2dImpl implements GraphManager2d {
     private Map<Vertex, VertexDrawable> mVertexRenderMap = new HashMap<Vertex, VertexDrawable>();
     private GWTCanvas mCanvas;
     private List<Runnable> mRedrawCallbacks = new ArrayList<Runnable>();
+    private Map<Vertex, List<Edge>> mVertexEdgeMap = new HashMap<Vertex, List<Edge>>();
 
     protected GraphManager2dImpl() {
 
@@ -42,6 +43,7 @@ public class GraphManager2dImpl implements GraphManager2d {
         int top = yPosition - halfSize;
 
         mVertexRenderMap.put(v, new VertexDrawable(left, top, size, size, v.getLabel()));
+        mVertexEdgeMap.put(v, new ArrayList<Edge>());
         this.invalidate();
     }
 
@@ -49,6 +51,7 @@ public class GraphManager2dImpl implements GraphManager2d {
     public void removeVertex(Vertex v) {
         mVertices.remove(v);
         mVertexRenderMap.remove(v);
+        mVertexEdgeMap.get(v).clear();
         this.invalidate();
     }
 
@@ -77,7 +80,9 @@ public class GraphManager2dImpl implements GraphManager2d {
 
     @Override
     public void addEdge(Vertex v1, Vertex v2, VertexDirection dir) {
-        mEdges.add(new Edge(v1, v2, dir));
+        Edge e = new Edge(v1, v2, dir);
+        mEdges.add(e);
+        mVertexEdgeMap.get(v1).add(e);
         this.invalidate();
     }
 
@@ -119,6 +124,8 @@ public class GraphManager2dImpl implements GraphManager2d {
     @Override
     public void removeEdge(Edge e) {
         mEdges.remove(e);
+        mVertexEdgeMap.get(e.getFromVertex()).remove(e);
+        mVertexEdgeMap.get(e.getToVertex()).remove(e);
     }
 
     @Override
@@ -130,8 +137,10 @@ public class GraphManager2dImpl implements GraphManager2d {
                 toDelete.add(e);
             }
         }
-
+        
         mEdges.removeAll(toDelete);
+        mVertexEdgeMap.get(v1).clear();
+        mVertexEdgeMap.get(v2).clear();
         this.invalidate();
     }
 
