@@ -1,0 +1,7 @@
+app-global	langpack-en@firefox-3.6.ubuntu.com	rel%langpack-en@firefox-3.6.ubuntu.com	1289831981	
+app-global	langpack-en-CA@firefox-3.6.ubuntu.com	rel%langpack-en-CA@firefox-3.6.ubuntu.com	1289831981	
+app-global	langpack-en-AU@firefox-3.6.ubuntu.com	rel%langpack-en-AU@firefox-3.6.ubuntu.com	1289831981	
+app-global	langpack-en-GB@firefox-3.6.ubuntu.com	rel%langpack-en-GB@firefox-3.6.ubuntu.com	1289831981	
+app-global	{972ce4c6-7e08-4474-a285-3208198ce6fd}	rel%{972ce4c6-7e08-4474-a285-3208198ce6fd}	1289830597	
+app-system-share	ubufox@ubuntu.com	rel%ubufox@ubuntu.com	1289834568	
+app-profile	gwt-dev-plugin@google.com	rel%gwt-dev-plugin@google.com	1291133235	
