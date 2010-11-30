@@ -13,6 +13,7 @@
     <fileset dir="${gwt.sdk}" includes="gwt-dev*.jar"/>
     <!-- Add any additional non-server libs (such as JUnit) -->
     <fileset dir="war/WEB-INF/lib" includes="**/*.jar"/>
+    <fileset dir="depends" includes="**/*.jar" />
   </path>
 
   <target name="libs" description="Copy libs to WEB-INF/lib">
@@ -82,6 +83,7 @@
       <classpath>
         <pathelement location="src" />
         <pathelement location="test" />
+        <pathelement location="depends" />
         <path refid="project.class.path" />
         <pathelement location="depends/junit-4.8.2.jar" />
       </classpath>
