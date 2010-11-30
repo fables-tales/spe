@@ -57,7 +57,7 @@
       </classpath>
       <jvmarg value="-Xmx256M"/>
       <arg value="-startupUrl"/>
-      <arg value="grapheme.html"/>
+      <arg value="index.html"/>
       <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
       <arg line="${gwt.args}"/>
       <arg value="me.teaisaweso.grapheme"/>
