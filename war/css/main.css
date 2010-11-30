@@ -1,0 +1,201 @@
+/*reset*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+margin: 0;
+padding: 0;
+border: 0;
+outline: 0;
+font-size: 100%;
+vertical-align: baseline;
+background: transparent;
+}
+body {
+line-height: 1;
+}
+ol, ul {
+list-style: none;
+}
+blockquote, q {
+quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+content: '';
+content: none;
+}
+
+/* remember to define focus styles! */
+:focus {
+outline: 0;
+}
+
+/* remember to highlight inserts somehow! */
+ins {
+text-decoration: none;
+}
+del {
+text-decoration: line-through;
+}
+
+/* tables still need 'cellspacing="0"' in the markup */
+table {
+border-collapse: collapse;
+border-spacing: 0;
+}
+
+/*end of reset*/
+
+.clr{
+clear:both;
+}
+
+/*site-specific*/
+/*grapheme main css*/
+/*10/11/10*/
+
+html {
+background: #ffffff;
+font-family:"Verdana", Verdana, Arial;
+line-height: 1.2;
+color: #0f116d;
+height: 100%;
+}
+
+body{
+height: 100%;
+}
+
+#minwidth {
+width: 1000px;
+}
+
+#container {
+width: 95%;
+margin: 0px auto;
+height: 100%;
+}
+
+#header {
+width: 100%;
+	position:relative; /* needed for footer positioning*/
+	background:#f0f0f0;
+	
+	height:auto !important; /* real browsers */
+	min-height:100%; /* real browsers */
+}
+
+div#footer {
+	position:absolute;
+	width:100%;
+	bottom:0; /* stick to bottom */
+	}
+
+#nav ul{
+float: right;
+padding-right: 10px;
+}
+
+img, #title{
+float: left;
+}
+
+#nav li {
+float: left;
+margin-left: -20px;
+width: 150px;
+height: 35px; /*58 - 23*/
+background-image: url('../images/tab.png');
+text-align: center;
+padding-top: 23px;
+}
+
+#nav li a {
+text-decoration: none;
+color: black;
+}
+
+#nav li:hover {
+background-image: url('../images/tabdown.png');
+}
+
+#title {
+position: absolute;
+left: 250px;
+display: inline;
+z-index: -1;
+}
+
+#title h2 {
+color: #111111;
+padding-top: 15px;
+text-shadow: 0px 2px 2px #cccccc;
+}
+
+#title h3 {
+padding-top: 2px;
+font-weight: normal;
+color: #bbbbbb;
+font-size: 12px;
+}
+
+#body {
+position: relative;
+top: 58px;
+background-color: #c6d1df;
+width: 100%;
+height: 100%;
+-moz-border-radius: 8px;
+border-radius: 8px;
+}
+
+#toolbar {
+position: absolute;
+left: 10px;
+top: 10px;
+height: 45px;
+}
+
+#body ul {
+float: left;
+margin-left: 10px;
+border: 1px black solid;
+background-image: url('../images/toolgrad.png');
+}
+
+#body li {
+display: inline;
+float: left;
+text-align: center;
+}
+
+#body li img {
+display: block;
+}
+
+#body li p{
+float: left;
+font-size: 8px;
+}
+
+#body img:hover{
+background: #dddddd;
+}
+
+#body li { 
+    display: inline; 
+} 
+#body li:before { 
+	float: left;
+    content: url(../images/toolsep.png); 
+} 
+#body li:first-child:before { 
+    content: ""; 
+} 
