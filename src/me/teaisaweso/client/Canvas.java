@@ -4,12 +4,12 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseUpEvent;
-import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.widgetideas.graphics.client.GWTCanvas;
 
 /**
  * Class used to handle clicks on canvas.
@@ -34,7 +34,7 @@ public class Canvas extends Composite{
 	public Graphemeui parent;
 	public int x1, x2, y1, y2;
 	@UiField
-	FocusPanel canvasPanel;	
+	CanvasWrapper canvasPanel;	
 
 	public Canvas(Graphemeui parent) {
 		initWidget(uiBinder.createAndBindUi(this));
