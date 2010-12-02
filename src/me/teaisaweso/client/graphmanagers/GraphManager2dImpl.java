@@ -151,14 +151,6 @@ public class GraphManager2dImpl implements GraphManager2d {
         mRedrawCallbacks.add(r);
     }
 
-    @Override
-    public void init(GWTCanvas canvas) {
-        mCanvas = canvas;
-        Drawing d = new DrawingImpl();
-        // TODO: the drawing guys need to implement callback
-        // this.addRedrawCallback();
-    }
-
     private void invalidate() {
         for (Runnable r : mRedrawCallbacks) {
             r.run();
@@ -170,7 +162,7 @@ public class GraphManager2dImpl implements GraphManager2d {
         for (VertexDrawable vd : mVertexRenderMap.values()) {
             if (vd.contains(x, y)) return vd;
         }
-        
+
         return null;
     }
 }
