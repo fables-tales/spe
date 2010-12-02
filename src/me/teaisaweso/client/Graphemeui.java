@@ -44,6 +44,8 @@ public class Graphemeui implements EntryPoint {
 		canvas = new Canvas(this);
 		graphManagerFactory = GraphManager2dFactory.getInstance();
 		graphManager = graphManagerFactory.makeDefaultGraphManager();
+		graphManager.init(canvas.canvasPanel);
+		
 	}
 	
 	/**
