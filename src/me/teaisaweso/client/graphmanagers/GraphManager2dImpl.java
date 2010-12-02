@@ -7,14 +7,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.widgetideas.graphics.client.GWTCanvas;
-
+import me.teaisaweso.client.Drawing;
+import me.teaisaweso.client.DrawingImpl;
 import me.teaisaweso.client.EdgeDrawable;
 import me.teaisaweso.client.VertexDrawable;
 import me.teaisaweso.shared.Edge;
 import me.teaisaweso.shared.Graph;
 import me.teaisaweso.shared.Vertex;
 import me.teaisaweso.shared.VertexDirection;
+
+import com.google.gwt.widgetideas.graphics.client.GWTCanvas;
 
 public class GraphManager2dImpl implements GraphManager2d {
 
@@ -137,7 +139,7 @@ public class GraphManager2dImpl implements GraphManager2d {
                 toDelete.add(e);
             }
         }
-        
+
         mEdges.removeAll(toDelete);
         mVertexEdgeMap.get(v1).clear();
         mVertexEdgeMap.get(v2).clear();
@@ -152,6 +154,9 @@ public class GraphManager2dImpl implements GraphManager2d {
     @Override
     public void init(GWTCanvas canvas) {
         mCanvas = canvas;
+        Drawing d = new DrawingImpl();
+        // TODO: the drawing guys need to implement callback
+        // this.addRedrawCallback();
     }
 
     private void invalidate() {
