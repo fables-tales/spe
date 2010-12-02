@@ -34,7 +34,7 @@ public class Canvas extends Composite{
 	public Graphemeui parent;
 	public int x1, x2, y1, y2;
 	@UiField
-	CanvasWrapper canvasPanel;	
+	public CanvasWrapper canvasPanel;	
 
 	public Canvas(Graphemeui parent) {
 		initWidget(uiBinder.createAndBindUi(this));
