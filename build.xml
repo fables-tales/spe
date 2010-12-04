@@ -13,6 +13,7 @@
     <fileset dir="${gwt.sdk}" includes="gwt-dev*.jar"/>
     <!-- Add any additional non-server libs (such as JUnit) -->
     <fileset dir="war/WEB-INF/lib" includes="**/*.jar"/>
+    <fileset dir="depends" includes="**/*.jar" />
   </path>
 
   <target name="libs" description="Copy libs to WEB-INF/lib">
@@ -57,7 +58,7 @@
       </classpath>
       <jvmarg value="-Xmx256M"/>
       <arg value="-startupUrl"/>
-      <arg value="grapheme.html"/>
+      <arg value="index.html"/>
       <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
       <arg line="${gwt.args}"/>
       <arg value="me.teaisaweso.grapheme"/>
@@ -82,6 +83,7 @@
       <classpath>
         <pathelement location="src" />
         <pathelement location="test" />
+        <pathelement location="depends" />
         <path refid="project.class.path" />
         <pathelement location="depends/junit-4.8.2.jar" />
       </classpath>
