@@ -1,6 +1,6 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	xmlns:g="urn:import:me.teaisaweso.client">
 	<ui:style>
 		.canvas {
 			width: 400px;
@@ -9,6 +9,6 @@
 			border-width: 1px;
 		}
 	</ui:style>
-	<g:FocusPanel styleName='{style.canvas}' ui:field="canvasPanel">
-	</g:FocusPanel>
+	<g:CanvasWrapper styleName='{style.canvas}' ui:field="canvasPanel">
+	</g:CanvasWrapper>
 </ui:UiBinder>

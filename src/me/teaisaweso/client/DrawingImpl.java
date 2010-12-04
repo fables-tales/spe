@@ -37,9 +37,6 @@ public class DrawingImpl implements Drawing {
         canvas.setBackgroundColor(Color.WHITE);
         drawGraph(edges, vertices, canvas);
         
-        //Adds to div specified on html
-        RootPanel.get("graph_panel").add(canvas);
-        
     }
     
     // Draws a single vertex, currently only draws circular nodes  
