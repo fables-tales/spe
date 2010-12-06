@@ -1,5 +1,17 @@
 this is grapheme, it does some things
 
-you need gwt to build grapheme, put it in your GWT environment variable
+SETUP
+1) download the google web toolkit and set up an environment variable 
+   GWT=/path/to/your/gwt/install
 
-run the tests with ant test.dev
+2) download the selenium jars from here 
+  http://code.google.com/p/selenium/downloads/list
+  and extract into the depends directory
+
+
+DEVMODE
+in order to get a dev mode server just type "ant devmode" and marvel at the
+thing that appears before your eyes
+
+TESTING
+we have some unit tests which can be run with "ant test.dev"
