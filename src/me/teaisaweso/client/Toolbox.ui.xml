@@ -3,41 +3,82 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style>
-		.button {
-			width: 150px;
-		}
+        .button {
+            width: 150px;
+        }
+        
+        .buttonadv {
+            width: 35px;
+            height: 28px;
+            color: transparent;
+            margin: 0;
+            border: 0;
+            background: url(images/addvert.png) no-repeat;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        
+        .buttonade {
+            width: 35px;
+            height: 28px;
+            color: transparent;
+            margin: 0;
+            border: 0;
+            background: url(images/addedge.png) no-repeat;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        
+        .buttonremv {
+            width: 35px;
+            height: 28px;
+            color: transparent;
+            margin: 0;
+            border: 0;
+            background: url(images/remvert.png) no-repeat;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        
+        .buttonreme {
+            width: 35px;
+            height: 28px;
+            color: transparent;
+            margin: 0;
+            border: 0;
+            background: url(images/remedge.png) no-repeat;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        
+        .stack {
+            background: #BBDAF0;
+        }
 		
-		.stack {
-			background: #BBDAF0;
-			border: 1px solid #587780;
-		}
+        .horizPanel {
+            margin-left: 25px;
+            margin-top: 15px;
+            height: 35px;
+            background: url(toolgrad.png);
+            border: 1px black solid;
+            overflow: hidden;
+        }
+        
+        .header {
+            font-weight: bold;
+        }
 		
-		.verticalPanel {
-			height: 100px;
-			border-top: 1px solid #99BDD1;
-			border-left: 1px solid #99BDD1;
-			border-right: 1px solid #99BDD1;
-		}
+        .header2 {
+            font-weight: bold;
+        }
+    </ui:style>
+    <g:HorizontalPanel styleName='{style.horizPanel}' ui:field="tools">
+                <g:Button styleName='{style.buttonadv}' ui:field="button1" >Add Vertex</g:Button>
+                <g:Button styleName='{style.buttonade}' ui:field="button2" >Add Edge</g:Button>
+                <g:Button styleName='{style.buttonremv}' ui:field="button3" >Remove Vertex</g:Button>
+                <g:Button styleName='{style.buttonreme}' ui:field="button4" >Remove Edge</g:Button>
 		
-		.header {
-			border-top: 1px solid #99BDD1;
-			border-left: 1px solid #99BDD1;
-			border-right: 1px solid #99BDD1;
-			font-weight: bold;
-		}
-		
-		.header2 {
-			border: 1px solid #99BDD1;
-			font-weight: bold;
-		}
-	</ui:style>
-	<g:HorizontalPanel styleName='{style.verticalPanel}' ui:field="tools">
-				<g:Button styleName='{style.button}' ui:field="button1" >Add Vertex</g:Button>
-				<g:Button styleName='{style.button}' ui:field="button2" >Add Edge</g:Button>
-				<g:Button styleName='{style.button}' ui:field="button3" >Remove Vertex</g:Button>
-				<g:Button styleName='{style.button}' ui:field="button4" >Remove Edge</g:Button>
-		
-				<g:HorizontalPanel ui:field="options"/>
-	</g:HorizontalPanel>
+                <g:HorizontalPanel ui:field="options"/>
+    </g:HorizontalPanel>
 
 </ui:UiBinder>
