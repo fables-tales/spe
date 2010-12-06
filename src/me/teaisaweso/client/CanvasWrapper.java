@@ -1,5 +1,9 @@
 package me.teaisaweso.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.gwt.dev.ui.UiEvent.Type;
 import com.google.gwt.event.dom.client.HasMouseDownHandlers;
 import com.google.gwt.event.dom.client.HasMouseMoveHandlers;
 import com.google.gwt.event.dom.client.HasMouseUpHandlers;
@@ -11,13 +15,16 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.widgetideas.graphics.client.GWTCanvas;
 
-public class CanvasWrapper extends GWTCanvas implements MouseDownHandler, MouseUpHandler, MouseMoveHandler, HasMouseDownHandlers, HasMouseMoveHandlers, HasMouseUpHandlers {
+public class CanvasWrapper extends GWTCanvas implements MouseDownHandler, MouseUpHandler,
+        MouseMoveHandler, HasMouseDownHandlers, HasMouseMoveHandlers, HasMouseUpHandlers {
 
     public CanvasWrapper() {
         super();
         sinkEvents(Event.MOUSEEVENTS);
+        this.createHandlerManager();
     }
 
     public CanvasWrapper(int coordX, int coordY, int pixelX, int pixelY) {
@@ -32,39 +39,32 @@ public class CanvasWrapper extends GWTCanvas implements MouseDownHandler, MouseU
 
     @Override
     public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
-        // TODO Auto-generated method stub
-        return null;
+        return addHandler(handler, MouseUpEvent.getType());
     }
 
     @Override
     public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
-        // TODO Auto-generated method stub
-        return null;
+        return addHandler(handler, MouseMoveEvent.getType());
     }
 
     @Override
     public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
-        // TODO Auto-generated method stub
-        return null;
+        return addHandler(handler, MouseDownEvent.getType());
     }
 
     @Override
     public void onMouseMove(MouseMoveEvent event) {
-        // TODO Auto-generated method stub
-        
+        Window.alert("death");
     }
 
     @Override
     public void onMouseUp(MouseUpEvent event) {
-        // TODO Auto-generated method stub
-        
+        Window.alert("death");
     }
 
     @Override
     public void onMouseDown(MouseDownEvent event) {
-        // TODO Auto-generated method stub
-        
+        Window.alert("death");
     }
-    
-    
+
 }

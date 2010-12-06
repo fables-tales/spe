@@ -15,7 +15,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class EdgeDialog extends VerticalPanel{
+public class EdgeDialog extends HorizontalPanel{
 	public int v1Index, v2Index, edgeIndex;
 	public boolean isOpen;
 	public Graphemeui parent;
@@ -71,7 +71,7 @@ public class EdgeDialog extends VerticalPanel{
 			}
 	    });
 	    
-	    VerticalPanel v = new VerticalPanel();
+	    HorizontalPanel v = new HorizontalPanel();
 	    HorizontalPanel buttons = new HorizontalPanel();
 	    if(type == 0){
 	    	if(toVertices.getItemCount() == 0) ok.setEnabled(false);

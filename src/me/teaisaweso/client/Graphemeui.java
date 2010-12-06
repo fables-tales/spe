@@ -50,7 +50,7 @@ public class Graphemeui implements EntryPoint {
             @Override
             public void run() {
                 d.renderGraph(canvas.canvasPanel, graphManager.getEdgeDrawables(),
-                        graphManager.getVertexDrawables());
+                        graphManager.getVertexDrawables());//graph goes here! 
             }
         });
     }
@@ -67,22 +67,18 @@ public class Graphemeui implements EntryPoint {
             EdgeDialog ed = new EdgeDialog(graphManager.getUnderlyingGraph(), 3, this);
             ed.setPoint(x1, y1);
             tools.getOptionsPanel().add(ed);
-            tools.getStack().showWidget(1);
         } else if (tool == 2) {
             // add edge tool
             EdgeDialog ed = new EdgeDialog(graphManager.getUnderlyingGraph(), 0, this);
             tools.getOptionsPanel().add(ed);
-            tools.getStack().showWidget(1);
         } else if (tool == 3) {
             // remove node tool
             EdgeDialog ed = new EdgeDialog(graphManager.getUnderlyingGraph(), 1, this);
             tools.getOptionsPanel().add(ed);
-            tools.getStack().showWidget(1);
         } else if (tool == 4) {
             // remove edge tool
             EdgeDialog ed = new EdgeDialog(graphManager.getUnderlyingGraph(), 2, this);
             tools.getOptionsPanel().add(ed);
-            tools.getStack().showWidget(1);
         }
     }
 
@@ -121,7 +117,6 @@ public class Graphemeui implements EntryPoint {
 
     public void removeOptions(EdgeDialog ed) {
         tools.getOptionsPanel().remove(ed);
-        tools.getStack().showWidget(0);
     }
 
 }

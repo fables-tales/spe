@@ -7,8 +7,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.StackLayoutPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 
@@ -20,9 +19,7 @@ public class Toolbox extends Composite {
 	interface UiBinderToolbox extends UiBinder<Widget, Toolbox> {}
 
 	@UiField
-	StackLayoutPanel stackPanel;
-	@UiField
-	FlowPanel options;
+	HorizontalPanel options, tools;
 	@UiField
 	Button button1, button2, button3, button4;
 	Graphemeui parent;
@@ -63,11 +60,11 @@ public class Toolbox extends Composite {
 		}
 	}
 	
-	public FlowPanel getOptionsPanel(){
+	public HorizontalPanel getOptionsPanel(){
 		return options;
 	}
 	
-	public StackLayoutPanel getStack(){
-		return stackPanel;
+	public HorizontalPanel getToolsPanel(){
+		return tools;
 	}
 }

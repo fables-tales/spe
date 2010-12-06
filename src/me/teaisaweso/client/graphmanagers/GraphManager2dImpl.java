@@ -53,7 +53,11 @@ public class GraphManager2dImpl implements GraphManager2d {
     public void removeVertex(Vertex v) {
         mVertices.remove(v);
         mVertexRenderMap.remove(v);
-        mVertexEdgeMap.get(v).clear();
+        
+        for (Edge e : mVertexEdgeMap.get(v)) {
+            mEdges.remove(e);
+        }
+        
         this.invalidate();
     }
 
@@ -128,6 +132,7 @@ public class GraphManager2dImpl implements GraphManager2d {
         mEdges.remove(e);
         mVertexEdgeMap.get(e.getFromVertex()).remove(e);
         mVertexEdgeMap.get(e.getToVertex()).remove(e);
+        this.invalidate();
     }
 
     @Override
