@@ -132,6 +132,7 @@ public class GraphManager2dImpl implements GraphManager2d {
         mEdges.remove(e);
         mVertexEdgeMap.get(e.getFromVertex()).remove(e);
         mVertexEdgeMap.get(e.getToVertex()).remove(e);
+        this.invalidate();
     }
 
     @Override
