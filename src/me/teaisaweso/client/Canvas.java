@@ -9,7 +9,6 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.widgetideas.graphics.client.GWTCanvas;
 
 /**
  * Class used to handle clicks on canvas.
