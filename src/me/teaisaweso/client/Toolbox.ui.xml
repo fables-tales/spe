@@ -3,9 +3,9 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style>
-		.button {
-			width: 150px;
-		}
+        .button {
+            width: 150px;
+        }
         
         .buttonadv {
             width: 35px;
@@ -50,35 +50,35 @@
             cursor: pointer;
             margin-right: 10px;
         }
+        
+        .stack {
+            background: #BBDAF0;
+        }
 		
-		.stack {
-			background: #BBDAF0;
-		}
+        .horizPanel {
+            margin-left: 25px;
+            margin-top: 15px;
+            height: 35px;
+            background: url(toolgrad.png);
+            border: 1px black solid;
+            overflow: hidden;
+        }
+        
+        .header {
+            font-weight: bold;
+        }
 		
-		.horizPanel {
-		    margin-left: 25px;
-		    margin-top: 15px;
-			height: 35px;
-			background: url(toolgrad.png);
-			border: 1px black solid;
-			overflow: hidden;
-		}
+        .header2 {
+            font-weight: bold;
+        }
+    </ui:style>
+    <g:HorizontalPanel styleName='{style.horizPanel}' ui:field="tools">
+                <g:Button styleName='{style.buttonadv}' ui:field="button1" >Add Vertex</g:Button>
+                <g:Button styleName='{style.buttonade}' ui:field="button2" >Add Edge</g:Button>
+                <g:Button styleName='{style.buttonremv}' ui:field="button3" >Remove Vertex</g:Button>
+                <g:Button styleName='{style.buttonreme}' ui:field="button4" >Remove Edge</g:Button>
 		
-		.header {
-			font-weight: bold;
-		}
-		
-		.header2 {
-			font-weight: bold;
-		}
-	</ui:style>
-	<g:HorizontalPanel styleName='{style.horizPanel}' ui:field="tools">
-				<g:Button styleName='{style.buttonadv}' ui:field="button1" >Add Vertex</g:Button>
-				<g:Button styleName='{style.buttonade}' ui:field="button2" >Add Edge</g:Button>
-				<g:Button styleName='{style.buttonremv}' ui:field="button3" >Remove Vertex</g:Button>
-				<g:Button styleName='{style.buttonreme}' ui:field="button4" >Remove Edge</g:Button>
-		
-				<g:HorizontalPanel ui:field="options"/>
-	</g:HorizontalPanel>
+                <g:HorizontalPanel ui:field="options"/>
+    </g:HorizontalPanel>
 
 </ui:UiBinder>
