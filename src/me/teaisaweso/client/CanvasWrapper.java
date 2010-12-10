@@ -1,9 +1,5 @@
 package me.teaisaweso.client;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.google.gwt.dev.ui.UiEvent.Type;
 import com.google.gwt.event.dom.client.HasMouseDownHandlers;
 import com.google.gwt.event.dom.client.HasMouseMoveHandlers;
 import com.google.gwt.event.dom.client.HasMouseUpHandlers;

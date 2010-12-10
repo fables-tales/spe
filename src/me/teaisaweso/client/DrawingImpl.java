@@ -3,7 +3,6 @@ package me.teaisaweso.client;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.widgetideas.graphics.client.Color;
 import com.google.gwt.widgetideas.graphics.client.GWTCanvas;
 
