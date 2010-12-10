@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import me.teaisaweso.client.Drawing;
-import me.teaisaweso.client.DrawingImpl;
 import me.teaisaweso.client.EdgeDrawable;
 import me.teaisaweso.client.VertexDrawable;
 import me.teaisaweso.shared.Edge;
@@ -16,14 +14,11 @@ import me.teaisaweso.shared.Graph;
 import me.teaisaweso.shared.Vertex;
 import me.teaisaweso.shared.VertexDirection;
 
-import com.google.gwt.widgetideas.graphics.client.GWTCanvas;
-
 public class GraphManager2dImpl implements GraphManager2d {
 
     private List<Vertex> mVertices = new ArrayList<Vertex>();
     private List<Edge> mEdges = new ArrayList<Edge>();
     private Map<Vertex, VertexDrawable> mVertexRenderMap = new HashMap<Vertex, VertexDrawable>();
-    private GWTCanvas mCanvas;
     private List<Runnable> mRedrawCallbacks = new ArrayList<Runnable>();
     private Map<Vertex, List<Edge>> mVertexEdgeMap = new HashMap<Vertex, List<Edge>>();
 
