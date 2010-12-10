@@ -1,11 +1,13 @@
 package me.teaisaweso.client;
 
+import me.teaisaweso.client.communications.ServerChannel;
 import me.teaisaweso.client.graphmanagers.GraphManager2d;
 import me.teaisaweso.client.graphmanagers.GraphManager2dFactory;
 import me.teaisaweso.shared.Vertex;
 import me.teaisaweso.shared.VertexDirection;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -28,6 +30,8 @@ public class Graphemeui implements EntryPoint {
         Graphemeui gui = new Graphemeui();
         RootPanel.get("toolbox").add(gui.getToolBox());
         RootPanel.get("canvas").add(gui.getCanvas());
+        ServerChannel sc = ServerChannel.getInstance();
+        sc.init();
     }
 
     private Widget getToolBox() {
