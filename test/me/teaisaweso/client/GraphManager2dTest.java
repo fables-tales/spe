@@ -6,6 +6,7 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 import me.teaisaweso.client.graphmanagers.GraphManager2d;
 import me.teaisaweso.client.graphmanagers.GraphManager2dFactory;
+import me.teaisaweso.shared.Edge;
 import me.teaisaweso.shared.Graph;
 import me.teaisaweso.shared.Vertex;
 import me.teaisaweso.shared.VertexDirection;
@@ -57,6 +58,56 @@ public class GraphManager2dTest extends TestCase {
         Assert.assertEquals(10, vds[0].getWidth());
         Assert.assertEquals(10, vds[0].getHeight());
         Assert.assertEquals("hi", vds[0].getLabel());
+    }
+    
+    public void testRemoveVertex_single_noEdges() {
+        mManager.addVertex(new Vertex("bees"), 0, 0, 10);
+        mManager.removeVertex(new Vertex("bees"));
+        Assert.assertEquals(false, mManager.getUnderlyingGraph().getVertices().contains(new Vertex("bees")));
+    }
+    
+    public void testRemoveVertex_double_edges() {
+        Vertex v1 = new Vertex("bees");
+        Vertex v2 = new Vertex("cheese");
+        mManager.addVertex(v1, 0, 0, 10);
+        mManager.addVertex(v2, 0, 0, 10);
+        mManager.addEdge(v1, v2, VertexDirection.both);
+        mManager.removeVertex(new Vertex("bees"));
+        Assert.assertEquals(false, mManager.getUnderlyingGraph().getVertices().contains(new Vertex("bees")));
+        Assert.assertEquals(0, mManager.getUnderlyingGraph().getEdges().size());
+    }
+    
+    public void testRemoveVertex_triple_line() {
+        Vertex v1 = new Vertex("bees");
+        Vertex v2 = new Vertex("cheese");
+        Vertex v3 = new Vertex("cake");
+        mManager.addVertex(v1, 0, 0, 10);
+        mManager.addVertex(v2, 0, 0, 10);
+        mManager.addVertex(v3, 0, 0, 10);
+        mManager.addEdge(v1, v2, VertexDirection.both);
+        mManager.addEdge(v2, v3, VertexDirection.both);
+        mManager.removeVertex(v3);
+        Assert.assertEquals(false, mManager.getUnderlyingGraph().getVertices().contains(v3));
+        for (Edge e : mManager.getUnderlyingGraph().getEdges()) {
+            Assert.assertEquals(false, e.enters(v3) || e.exits(v3));
+        }
+    }
+    
+    public void testRemoveVertex_triple_complete() {
+        Vertex v1 = new Vertex("bees");
+        Vertex v2 = new Vertex("cheese");
+        Vertex v3 = new Vertex("cake");
+        mManager.addVertex(v1, 0, 0, 10);
+        mManager.addVertex(v2, 0, 0, 10);
+        mManager.addVertex(v3, 0, 0, 10);
+        mManager.addEdge(v1, v2, VertexDirection.both);
+        mManager.addEdge(v2, v3, VertexDirection.both);
+        mManager.addEdge(v1, v3, VertexDirection.both);
+        mManager.removeVertex(v3);
+        Assert.assertEquals(false, mManager.getUnderlyingGraph().getVertices().contains(v3));
+        for (Edge e : mManager.getUnderlyingGraph().getEdges()) {
+            Assert.assertEquals(false, e.enters(v3) || e.exits(v3));
+        }
     }
 
     public void testAddEdge_singleBothDir() {
