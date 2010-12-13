@@ -53,6 +53,7 @@ public class GraphManager2dImpl implements GraphManager2d {
             mEdges.remove(e);
         }
         
+        mVertexEdgeMap.remove(v);
         this.invalidate();
     }
 
@@ -84,6 +85,7 @@ public class GraphManager2dImpl implements GraphManager2d {
         Edge e = new Edge(v1, v2, dir);
         mEdges.add(e);
         mVertexEdgeMap.get(v1).add(e);
+        mVertexEdgeMap.get(v2).add(e);
         this.invalidate();
     }
 
