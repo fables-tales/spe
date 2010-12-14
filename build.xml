@@ -46,7 +46,7 @@
       <jvmarg value="-Xmx256M"/>
       <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
       <arg line="${gwt.args}"/>
-      <arg value="me.teaisaweso.grapheme"/>
+      <arg value="uk.me.graphe.grapheme"/>
     </java>
   </target>
 
@@ -61,7 +61,7 @@
       <arg value="index.html"/>
       <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
       <arg line="${gwt.args}"/>
-      <arg value="me.teaisaweso.grapheme"/>
+      <arg value="uk.me.graphe.grapheme"/>
     </java>
   </target>
 
@@ -138,7 +138,7 @@
   </target>
 
   <target name="doc" description="JavaDOC">
-  <javadoc packagenames="me.teaisaweso.*"
+  <javadoc packagenames="uk.me.graphe.*"
            sourcepath="src"
            excludepackagenames="com.google.*"
            defaultexcludes="yes"
