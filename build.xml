@@ -37,6 +37,7 @@
   </target>
 
   <target name="gwtc" depends="javac" description="GWT compile to JavaScript (production mode)">
+    <mkdir dir="depends"/>
     <java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
       <classpath>
         <pathelement location="src"/>
