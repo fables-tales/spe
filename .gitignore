@@ -4,3 +4,6 @@ reports/
 war/WEB-INF
 .classpath
 .project
+.settings
+war/WEB-INF/classes
+war/grapheme
