@@ -7,3 +7,4 @@ war/WEB-INF
 .settings
 war/WEB-INF/classes
 war/grapheme
+docs/*
