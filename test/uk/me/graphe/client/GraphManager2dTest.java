@@ -4,8 +4,8 @@ import java.util.Collection;
 
 import uk.me.graphe.client.EdgeDrawable;
 import uk.me.graphe.client.VertexDrawable;
-import uk.me.graphe.client.graphmanagers.GraphManager2d;
-import uk.me.graphe.client.graphmanagers.GraphManager2dFactory;
+import uk.me.graphe.graphmanagers.GraphManager2d;
+import uk.me.graphe.graphmanagers.GraphManager2dFactory;
 import uk.me.graphe.shared.Edge;
 import uk.me.graphe.shared.Graph;
 import uk.me.graphe.shared.Vertex;

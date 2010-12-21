@@ -1,4 +1,4 @@
-package uk.me.graphe.client.graphmanagers;
+package uk.me.graphe.graphmanagers;
 
 public class GraphManager2dFactory {
 	private static GraphManager2dFactory sInstance = null;

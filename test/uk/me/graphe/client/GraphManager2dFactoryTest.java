@@ -1,7 +1,7 @@
 package uk.me.graphe.client;
 
-import uk.me.graphe.client.graphmanagers.GraphManager2d;
-import uk.me.graphe.client.graphmanagers.GraphManager2dFactory;
+import uk.me.graphe.graphmanagers.GraphManager2d;
+import uk.me.graphe.graphmanagers.GraphManager2dFactory;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 

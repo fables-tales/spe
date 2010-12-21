@@ -1,4 +1,4 @@
-package uk.me.graphe.client.graphmanagers;
+package uk.me.graphe.graphmanagers;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,19 +17,28 @@ import uk.me.graphe.shared.VertexDirection;
 
 public class GraphManager2dImpl implements GraphManager2d {
 
-    private List<Vertex> mVertices = new ArrayList<Vertex>();
     private List<Edge> mEdges = new ArrayList<Edge>();
-    private Map<Vertex, VertexDrawable> mVertexRenderMap = new HashMap<Vertex, VertexDrawable>();
     private List<Runnable> mRedrawCallbacks = new ArrayList<Runnable>();
     private Map<Vertex, List<Edge>> mVertexEdgeMap = new HashMap<Vertex, List<Edge>>();
+    private Map<Vertex, VertexDrawable> mVertexRenderMap = new HashMap<Vertex, VertexDrawable>();
+    private List<Vertex> mVertices = new ArrayList<Vertex>();
 
     protected GraphManager2dImpl() {
 
     }
 
     @Override
-    public Graph getUnderlyingGraph() {
-        return new Graph(mEdges, mVertices);
+    public void addEdge(Vertex v1, Vertex v2, VertexDirection dir) {
+        Edge e = new Edge(v1, v2, dir);
+        mEdges.add(e);
+        mVertexEdgeMap.get(v1).add(e);
+        mVertexEdgeMap.get(v2).add(e);
+        this.invalidate();
+    }
+
+    @Override
+    public void addRedrawCallback(Runnable r) {
+        mRedrawCallbacks.add(r);
     }
 
     @Override
@@ -46,53 +55,12 @@ public class GraphManager2dImpl implements GraphManager2d {
     }
 
     @Override
-    public void removeVertex(Vertex v) {
-        mVertices.remove(v);
-        mVertexRenderMap.remove(v);
-        
-        for (Edge e : mVertexEdgeMap.get(v)) {
-            mEdges.remove(e);
+    public VertexDrawable getDrawableAt(int x, int y) {
+        for (VertexDrawable vd : mVertexRenderMap.values()) {
+            if (vd.contains(x, y)) return vd;
         }
-        
-        mVertexEdgeMap.remove(v);
-        this.invalidate();
-    }
 
-    @Override
-    public void moveVertexTo(Vertex v, int xPosition, int yPosition) {
-        VertexDrawable vd = mVertexRenderMap.get(v);
-        int halfWidth = vd.getWidth() / 2;
-        int halfHeight = vd.getHeight() / 2;
-        int left = xPosition - halfWidth;
-        int top = yPosition - halfHeight;
-        vd.updateBoundingRectangle(left, top, vd.getWidth(), vd.getHeight());
-        this.invalidate();
-
-    }
-
-    @Override
-    public void scaleVertex(Vertex v, int newSize) {
-        VertexDrawable vd = mVertexRenderMap.get(v);
-        int newLeft = vd.getLeft() - newSize / 2;
-        int newTop = vd.getTop() - newSize / 2;
-        int newWidth = newSize;
-        int newHeight = newSize;
-        vd.updateBoundingRectangle(newLeft, newTop, newWidth, newHeight);
-        this.invalidate();
-    }
-
-    @Override
-    public void addEdge(Vertex v1, Vertex v2, VertexDirection dir) {
-        Edge e = new Edge(v1, v2, dir);
-        mEdges.add(e);
-        mVertexEdgeMap.get(v1).add(e);
-        mVertexEdgeMap.get(v2).add(e);
-        this.invalidate();
-    }
-
-    @Override
-    public Collection<VertexDrawable> getVertexDrawables() {
-        return Collections.unmodifiableCollection(mVertexRenderMap.values());
+        return null;
     }
 
     @Override
@@ -126,11 +94,25 @@ public class GraphManager2dImpl implements GraphManager2d {
     }
 
     @Override
-    public void removeEdge(Edge e) {
-        mEdges.remove(e);
-        mVertexEdgeMap.get(e.getFromVertex()).remove(e);
-        mVertexEdgeMap.get(e.getToVertex()).remove(e);
+    public Graph getUnderlyingGraph() {
+        return new Graph(mEdges, mVertices);
+    }
+
+    @Override
+    public Collection<VertexDrawable> getVertexDrawables() {
+        return Collections.unmodifiableCollection(mVertexRenderMap.values());
+    }
+
+    @Override
+    public void moveVertexTo(Vertex v, int xPosition, int yPosition) {
+        VertexDrawable vd = mVertexRenderMap.get(v);
+        int halfWidth = vd.getWidth() / 2;
+        int halfHeight = vd.getHeight() / 2;
+        int left = xPosition - halfWidth;
+        int top = yPosition - halfHeight;
+        vd.updateBoundingRectangle(left, top, vd.getWidth(), vd.getHeight());
         this.invalidate();
+
     }
 
     @Override
@@ -150,22 +132,40 @@ public class GraphManager2dImpl implements GraphManager2d {
     }
 
     @Override
-    public void addRedrawCallback(Runnable r) {
-        mRedrawCallbacks.add(r);
+    public void removeEdge(Edge e) {
+        mEdges.remove(e);
+        mVertexEdgeMap.get(e.getFromVertex()).remove(e);
+        mVertexEdgeMap.get(e.getToVertex()).remove(e);
+        this.invalidate();
+    }
+
+    @Override
+    public void removeVertex(Vertex v) {
+        mVertices.remove(v);
+        mVertexRenderMap.remove(v);
+        
+        for (Edge e : mVertexEdgeMap.get(v)) {
+            mEdges.remove(e);
+        }
+        
+        mVertexEdgeMap.remove(v);
+        this.invalidate();
+    }
+
+    @Override
+    public void scaleVertex(Vertex v, int newSize) {
+        VertexDrawable vd = mVertexRenderMap.get(v);
+        int newLeft = vd.getLeft() - newSize / 2;
+        int newTop = vd.getTop() - newSize / 2;
+        int newWidth = newSize;
+        int newHeight = newSize;
+        vd.updateBoundingRectangle(newLeft, newTop, newWidth, newHeight);
+        this.invalidate();
     }
 
     private void invalidate() {
         for (Runnable r : mRedrawCallbacks) {
             r.run();
         }
-    }
-
-    @Override
-    public VertexDrawable getDrawableAt(int x, int y) {
-        for (VertexDrawable vd : mVertexRenderMap.values()) {
-            if (vd.contains(x, y)) return vd;
-        }
-
-        return null;
     }
 }

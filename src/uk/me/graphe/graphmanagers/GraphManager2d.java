@@ -1,4 +1,4 @@
-package uk.me.graphe.client.graphmanagers;
+package uk.me.graphe.graphmanagers;
 
 import java.util.Collection;
 
