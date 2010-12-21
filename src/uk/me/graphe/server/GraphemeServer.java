@@ -20,6 +20,8 @@ public class GraphemeServer extends Thread {
     private boolean mRunning = false;
 
     private ServerSocketChannel mServerSocketChannel;
+    
+    private ClientManager mClientManager = ClientManager.getInstance();
 
     private GraphemeServer() {
         try {
@@ -50,7 +52,9 @@ public class GraphemeServer extends Thread {
                 // accept incoming connections and let the client message
                 // handler know about them
                 SocketChannel clientSock = mServerSocketChannel.accept();
-                mClientMessageHandler.addClient(clientSock);
+                Client client = new Client(clientSock);
+                mClientManager.addClient(client);
+                mClientMessageHandler.addClient(client);
             } catch (IOException e) {
                 e.printStackTrace();
             }
