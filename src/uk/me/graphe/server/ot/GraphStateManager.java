@@ -1,6 +1,5 @@
 package uk.me.graphe.server.ot;
 
-import uk.me.graphe.graphmanagers.GraphManager2d;
 import uk.me.graphe.graphmanagers.OTGraphManager2d;
 import uk.me.graphe.server.GraphKey;
 

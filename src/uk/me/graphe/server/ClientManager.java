@@ -67,5 +67,20 @@ public class ClientManager {
 
         return s;
     }
+    
+    public void disconnect(Client c) {
+    	mReadableSocketsSelector.wakeup();
+        mWritableSocketsSelector.wakeup();
+        c.getChannel().keyFor(mReadableSocketsSelector).cancel();
+        c.getChannel().keyFor(mWritableSocketsSelector).cancel();
+        
+        try {
+			c.getChannel().close();
+		} catch (IOException e) {
+			throw new Error(e);
+		}
+		
+		mClientMap.remove(c.getChannel());
+    }
 
 }

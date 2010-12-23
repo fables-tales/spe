@@ -33,7 +33,7 @@ public class GraphemeServer extends Thread {
 
             // start a new client message handler: it's going to accept incoming
             // data from clients
-            mClientMessageHandler = new ClientMessageHandler();
+            mClientMessageHandler = ClientMessageHandler.getInstance();
             mClientMessageHandler.start();
         } catch (IOException e) {
             throw new Error("couldn't start server", e);
@@ -54,7 +54,6 @@ public class GraphemeServer extends Thread {
                 SocketChannel clientSock = mServerSocketChannel.accept();
                 Client client = new Client(clientSock);
                 mClientManager.addClient(client);
-                mClientMessageHandler.addClient(client);
             } catch (IOException e) {
                 e.printStackTrace();
             }
