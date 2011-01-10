@@ -87,4 +87,8 @@ public class Client {
         return mSelectedGraphId;
     }
 
+    public void setCurrentGraphId(int id) {
+        mSelectedGraphId = id;
+    }
+
 }
