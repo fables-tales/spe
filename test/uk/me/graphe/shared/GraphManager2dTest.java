@@ -1,4 +1,4 @@
-package uk.me.graphe.client;
+package uk.me.graphe.shared;
 
 import java.util.Collection;
 
