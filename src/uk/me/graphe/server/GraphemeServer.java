@@ -7,7 +7,7 @@ import java.nio.channels.SocketChannel;
 
 public class GraphemeServer extends Thread {
 
-    public static final int GAPHEME_PORT = 6689;
+    public static final int GRAPHEME_PORT = 6689;
     private static GraphemeServer sInstance = null;
 
     public static GraphemeServer getInstance() {
@@ -25,7 +25,7 @@ public class GraphemeServer extends Thread {
         try {
             // sets up a server socket listening on the grapheme port
             mServerSocketChannel = ServerSocketChannel.open();
-            mServerSocketChannel.socket().bind(new InetSocketAddress(GAPHEME_PORT));
+            mServerSocketChannel.socket().bind(new InetSocketAddress(GRAPHEME_PORT));
             // let's make sure for certain we're up and running
             assert mServerSocketChannel.isOpen();
 
