@@ -7,8 +7,10 @@ import java.util.Set;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import uk.me.graphe.graphmanagers.OTGraphManager2d;
 import uk.me.graphe.server.messages.Message;
 import uk.me.graphe.server.messages.MessageFactory;
+import uk.me.graphe.server.messages.OpenGraphMessage;
 
 /**
  * reads messages from clients, and validates them. Sends client message pairs
@@ -22,6 +24,7 @@ public class ClientMessageHandler extends Thread {
 	private ClientManager mClientManager = ClientManager.getInstance();
 	private boolean mShutDown = false;
 	private MessageProcessor mProcessor;
+	private HeartbeatManager mHbm = new HeartbeatManager();
 
 	private static ClientMessageHandler sInstance = null;
 
@@ -47,9 +50,24 @@ public class ClientMessageHandler extends Thread {
 				// malformed json == disconect
 				try {
 					ops = MessageFactory.makeOperationsFromJson(jsos);
-					for (Message operation : ops) mProcessor.submit(c, operation);
+					for (Message message : ops) {
+					    if (message.getMessage().equals("heartbeat")) {
+					        mHbm.beatWhenPossible(c);
+					    } else if (message.getMessage().equals("makegraph")) {
+					        int id = DataManager.create();
+					        c.setCurrentGraphId(id);
+					        ClientMessageSender.getInstance().sendMessage(c, new OpenGraphMessage(id));
+					    } else if (message.isOperation()) {
+					        mProcessor.submit(c, message);
+					    } else {
+					        throw new Error("got unexpected message from client");
+					    }
+					}
 				} catch (JSONException e) {
 					mClientManager.disconnect(c);
+				} catch (InterruptedException e) {
+				    mClientManager.disconnect(c);
+				    throw new Error(e);
 				}
 				
 			}
