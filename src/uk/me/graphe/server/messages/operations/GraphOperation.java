@@ -47,5 +47,10 @@ public abstract class GraphOperation extends Message {
     public boolean isNoOperation() {
         return false;
     }
+    
+    @Override
+    public boolean isOperation() {
+        return true;
+    }
 
 }
