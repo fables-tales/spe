@@ -25,4 +25,9 @@ public class HeartbeatMessage extends Message {
         return sRepr;
     }
 
+    @Override
+    public String getMessage() {
+        return "heartbeat";
+    }
+
 }
