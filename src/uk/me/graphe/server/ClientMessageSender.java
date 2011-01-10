@@ -5,8 +5,8 @@ import java.nio.ByteBuffer;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-import uk.me.graphe.server.operations.HeartbeatOp;
-import uk.me.graphe.server.operations.Operation;
+import uk.me.graphe.server.messages.HeartbeatMessage;
+import uk.me.graphe.server.messages.Message;
 
 import com.google.gwt.dev.util.Pair;
 
@@ -15,9 +15,9 @@ import com.google.gwt.dev.util.Pair;
 public class ClientMessageSender extends Thread {
     private static ClientMessageSender sInstance = null;
     
-    private Operation mHeartbeat = new HeartbeatOp(); 
+    private Message mHeartbeat = new HeartbeatMessage(); 
     
-    private BlockingQueue<Pair<Client, Operation>> mQueue = new ArrayBlockingQueue<Pair<Client,Operation>>(1024);
+    private BlockingQueue<Pair<Client, Message>> mQueue = new ArrayBlockingQueue<Pair<Client,Message>>(1024);
 
     private boolean mShutDown;
     
@@ -30,12 +30,16 @@ public class ClientMessageSender extends Thread {
         mQueue.put(Pair.create(c, mHeartbeat));
     }
     
+    public void sendMessage(Client c, Message m) throws InterruptedException {
+        mQueue.put(Pair.create(c, m));
+    }
+    
     
     @Override
     public void run() {
         while (!mShutDown) {
             try {
-				Pair<Client, Operation> clOp = mQueue.take();
+				Pair<Client, Message> clOp = mQueue.take();
 				String s = clOp.right.toJson() + "\0";
 				Client c = clOp.left;
 				if (c.isConnected()) clOp.left.getChannel().write(ByteBuffer.wrap(s.getBytes()));

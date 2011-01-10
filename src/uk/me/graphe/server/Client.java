@@ -18,9 +18,10 @@ import java.util.List;
 public class Client {
 
 	private SocketChannel mChannel;
-	private GraphKey mCurrentGraph;
 	private ByteBuffer mReadBuffer = ByteBuffer.allocate(1024);
 	private boolean mConnected = true;
+    private int mSelectedGraphId;
+    private int mSelectedStateId;
 
 	public Client(SocketChannel clientSock) {
 		mChannel = clientSock;
@@ -84,5 +85,10 @@ public class Client {
 	public void disconnect() {
 		mConnected = false;
 	}
+
+    public int getCurrentGraphId() {
+        return mSelectedGraphId;
+    }
+
 
 }

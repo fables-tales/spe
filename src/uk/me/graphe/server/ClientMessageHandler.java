@@ -7,8 +7,8 @@ import java.util.Set;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import uk.me.graphe.server.operations.Operation;
-import uk.me.graphe.server.ot.GraphProcessor;
+import uk.me.graphe.server.messages.Message;
+import uk.me.graphe.server.messages.MessageFactory;
 
 /**
  * reads messages from clients, and validates them. Sends client message pairs
@@ -21,7 +21,7 @@ public class ClientMessageHandler extends Thread {
 
 	private ClientManager mClientManager = ClientManager.getInstance();
 	private boolean mShutDown = false;
-	private GraphProcessor mProcessor;
+	private MessageProcessor mProcessor;
 
 	private static ClientMessageHandler sInstance = null;
 
@@ -42,12 +42,12 @@ public class ClientMessageHandler extends Thread {
 				if (jsos == null)
 					mClientManager.disconnect(c);
 
-				List<Operation> ops;
+				List<Message> ops;
 
 				// malformed json == disconect
 				try {
-					ops = Operation.makeOperationsFromJson(jsos);
-					for (Operation operation : ops) mProcessor.submit(c, operation);
+					ops = MessageFactory.makeOperationsFromJson(jsos);
+					for (Message operation : ops) mProcessor.submit(c, operation);
 				} catch (JSONException e) {
 					mClientManager.disconnect(c);
 				}
