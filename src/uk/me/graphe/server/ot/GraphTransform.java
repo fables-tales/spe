@@ -12,6 +12,7 @@ public class GraphTransform {
 
     public static GraphOperation transform(GraphOperation toApply,
             CompositeOperation historyDelta) {
+        
         if (toApply.isNodeOperation()) {
             NodeOperation no = toApply.asNodeOperation();
             Vertex effectedNode = no.getNode();

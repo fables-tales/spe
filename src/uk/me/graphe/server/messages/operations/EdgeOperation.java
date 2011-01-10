@@ -4,6 +4,22 @@ import uk.me.graphe.shared.Edge;
 
 public abstract class EdgeOperation extends GraphOperation {
 
+    @Override
+    public EdgeOperation asEdgeOperation() {
+        return this;
+    }
+
+    @Override
+    public boolean isEdgeOperation() {
+        return true;
+    }
+
+    @Override
+    public String toJson() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
     private Edge mEdge;
     
     public EdgeOperation(Edge e) {

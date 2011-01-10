@@ -8,5 +8,10 @@ public class NoOperation extends GraphOperation {
         // TODO Auto-generated method stub
         return null;
     }
+    
+    @Override
+    public boolean isNoOperation() {
+        return true;
+    }
 
 }

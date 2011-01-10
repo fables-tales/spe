@@ -46,4 +46,12 @@ public class AddNodeOperation extends NodeOperation {
     public boolean isNodeOperation() {
         return true;
     }
+
+    public int getX() {
+        return mNodeX;
+    }
+    
+    public int getY() {
+        return mNodeY;
+    }
 }

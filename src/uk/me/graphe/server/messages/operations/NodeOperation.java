@@ -14,6 +14,11 @@ public abstract class NodeOperation extends GraphOperation {
     public boolean isNodeOperation() {
         return true;
     }
+    
+    @Override
+    public NodeOperation asNodeOperation() {
+        return this;
+    }
 
     public Vertex getNode() {
         return mNode;
@@ -34,4 +39,5 @@ public abstract class NodeOperation extends GraphOperation {
     public boolean movesNode(Vertex effectedNode) {
         return false;
     }
+
 }

@@ -83,5 +83,9 @@ public class Edge {
     public boolean hasDirection() {
         return mDir != VertexDirection.both;
     }
+    
+    public VertexDirection getDirection() {
+        return mDir;
+    }
 
 }

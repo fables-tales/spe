@@ -37,12 +37,15 @@ public abstract class GraphOperation extends Message {
     }
 
     public EdgeOperation asEdgeOperation() {
-        // TODO Auto-generated method stub
         return null;
     }
     
     public void setApplyOn(int id) {
         mApplyOn = id;
+    }
+
+    public boolean isNoOperation() {
+        return false;
     }
 
 }
