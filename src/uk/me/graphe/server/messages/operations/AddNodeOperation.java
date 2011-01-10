@@ -61,4 +61,10 @@ public class AddNodeOperation extends NodeOperation {
     public int getY() {
         return mNodeY;
     }
+
+    @Override
+    public String getMessage() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

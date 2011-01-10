@@ -44,4 +44,10 @@ public class MoveNodeOperation extends NodeOperation {
         return mToY;
     }
 
+    @Override
+    public String getMessage() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

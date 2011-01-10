@@ -47,4 +47,10 @@ public class CompositeOperation extends GraphOperation {
         return Collections.unmodifiableList(mOperations);
     }
 
+    @Override
+    public String getMessage() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
