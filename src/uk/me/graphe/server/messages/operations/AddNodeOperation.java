@@ -35,6 +35,8 @@ public class AddNodeOperation extends NodeOperation {
 
     @Override
     public boolean createsNode(Vertex effectedNode) {
+        System.out.println(effectedNode);
+        System.out.println(this.getNode());
         return effectedNode.getLabel().equals(this.getNode().getLabel());
     }
 
@@ -45,6 +47,11 @@ public class AddNodeOperation extends NodeOperation {
     @Override
     public boolean isNodeOperation() {
         return true;
+    }
+    
+    @Override
+    public NodeOperation asNodeOperation() {
+        return this;
     }
 
     public int getX() {

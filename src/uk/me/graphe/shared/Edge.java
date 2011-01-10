@@ -87,5 +87,13 @@ public class Edge {
     public VertexDirection getDirection() {
         return mDir;
     }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Edge) {
+            Edge cmp = (Edge)o;
+            return cmp.mVertex1 == mVertex1 && cmp.mVertex2 == mVertex2 && cmp.mDir == mDir;
+        } else return false;
+    }
 
 }

@@ -1,6 +1,7 @@
 package uk.me.graphe.server.messages.operations;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import uk.me.graphe.shared.Edge;
@@ -8,7 +9,7 @@ import uk.me.graphe.shared.Vertex;
 
 public class CompositeOperation extends GraphOperation {
 
-    List<GraphOperation> mOperations;
+    private List<GraphOperation> mOperations;
 
     public CompositeOperation(List<GraphOperation> subList) {
         mOperations = new ArrayList<GraphOperation>(subList);
@@ -40,6 +41,10 @@ public class CompositeOperation extends GraphOperation {
         }
 
         return false;
+    }
+    
+    public List<GraphOperation> asIndividualOperations() {
+        return Collections.unmodifiableList(mOperations);
     }
 
 }

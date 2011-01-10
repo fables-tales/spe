@@ -7,7 +7,7 @@ public abstract class NodeOperation extends GraphOperation {
     private Vertex mNode;
     
     public NodeOperation(Vertex v) {
-        v = mNode;
+        mNode = v;
     }
     
     @Override

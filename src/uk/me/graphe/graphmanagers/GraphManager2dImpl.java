@@ -14,7 +14,6 @@ import uk.me.graphe.shared.Graph;
 import uk.me.graphe.shared.Vertex;
 import uk.me.graphe.shared.VertexDirection;
 
-
 public class GraphManager2dImpl implements GraphManager2d {
 
     private List<Edge> mEdges = new ArrayList<Edge>();
@@ -49,7 +48,8 @@ public class GraphManager2dImpl implements GraphManager2d {
         int left = xPosition - halfSize;
         int top = yPosition - halfSize;
 
-        mVertexRenderMap.put(v, new VertexDrawable(left, top, size, size, v.getLabel()));
+        mVertexRenderMap.put(v, new VertexDrawable(left, top, size, size, v
+                .getLabel()));
         mVertexEdgeMap.put(v, new ArrayList<Edge>());
         this.invalidate();
     }
@@ -143,12 +143,14 @@ public class GraphManager2dImpl implements GraphManager2d {
     public void removeVertex(Vertex v) {
         mVertices.remove(v);
         mVertexRenderMap.remove(v);
-        
-        for (Edge e : mVertexEdgeMap.get(v)) {
-            mEdges.remove(e);
+        if (mVertexEdgeMap.containsKey(v)) {
+            for (Edge e : mVertexEdgeMap.get(v)) {
+                mEdges.remove(e);
+            }
+            
+            mVertexEdgeMap.remove(v);
         }
-        
-        mVertexEdgeMap.remove(v);
+
         this.invalidate();
     }
 

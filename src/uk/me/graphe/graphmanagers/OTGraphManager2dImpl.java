@@ -27,8 +27,11 @@ public class OTGraphManager2dImpl extends GraphManager2dImpl implements
 
     @Override
     public void applyOperation(GraphOperation graphOperation) {
-        if (graphOperation.isNoOperation()) return;
-        else if (graphOperation.isEdgeOperation()) {
+        if (graphOperation.isNoOperation()) {
+            this.mStateId++;
+            return;
+            
+        } else if (graphOperation.isEdgeOperation()) {
             EdgeOperation eo = graphOperation.asEdgeOperation();
             if (eo.createsEdge(eo.getEdge())) {
                 Edge e = eo.getEdge();
