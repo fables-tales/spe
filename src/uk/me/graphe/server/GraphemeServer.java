@@ -18,20 +18,21 @@ public class GraphemeServer extends Thread {
     }
 
     private ClientMessageHandler mClientMessageHandler;
-    
-    private ClientMessageSender mClientMessageSender;    
+
+    private ClientMessageSender mClientMessageSender;
 
     private boolean mRunning = false;
 
     private ServerSocketChannel mServerSocketChannel;
-    
+
     private ClientManager mClientManager = ClientManager.getInstance();
 
     private GraphemeServer() {
         try {
             // sets up a server socket listening on the grapheme port
             mServerSocketChannel = ServerSocketChannel.open();
-            mServerSocketChannel.socket().bind(new InetSocketAddress(GAPHEME_PORT));
+            mServerSocketChannel.socket().bind(
+                    new InetSocketAddress(GAPHEME_PORT));
             // let's make sure for certain we're up and running
             assert mServerSocketChannel.isOpen();
 
@@ -40,7 +41,7 @@ public class GraphemeServer extends Thread {
             mClientMessageHandler = ClientMessageHandler.getInstance();
             mClientMessageSender = ClientMessageSender.getInstance();
             GraphProcessor.getInstance().start();
-            
+
             mClientMessageHandler.start();
             mClientMessageSender.start();
         } catch (IOException e) {
@@ -72,12 +73,31 @@ public class GraphemeServer extends Thread {
 
     public void shutDown() {
         mRunning = false;
+        mClientMessageHandler.shutDown();
+        mClientMessageSender.shutDown();
+        GraphProcessor.getInstance().shutDown();
+        this.interrupt();
     }
 
     @Override
     public synchronized void start() {
-        mRunning = true;
-        super.start();
+        if (!this.mRunning) {
+            mRunning = true;
+            super.start();
+        }
+    }
+
+    public void waitTornDown() {
+        while (mClientMessageHandler.isAlive()
+                || mClientMessageSender.isAlive()
+                || GraphProcessor.getInstance().isAlive() || this.isAlive()) {
+            System.err.println("cmh: " + mClientMessageHandler.isAlive());
+            System.err.println("cms: " + mClientMessageSender.isAlive());
+            System.err.println("gp: " + GraphProcessor.getInstance().isAlive());
+            System.err.println("this: " + this.isAlive());
+
+        }
+
     }
 
 }
