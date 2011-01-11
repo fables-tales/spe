@@ -51,7 +51,7 @@ public class GraphProcessor extends Thread {
                 ClientMessageSender.getInstance().sendMessage(c, new StateIdMessage(c.getCurrentGraphId(), serverStateId));
                 DataManager.save(graph);
             } catch (InterruptedException e) {
-                throw new Error(e);
+                return;
             }
         }
     }
@@ -63,6 +63,11 @@ public class GraphProcessor extends Thread {
         } catch (InterruptedException e) {
             throw new Error(e);
         }
+    }
+
+    public void shutDown() {
+           mShutdown = true;
+           this.interrupt();
     }
 
 }
