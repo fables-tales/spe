@@ -1,17 +1,33 @@
 package uk.me.graphe.server.messages;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class StateIdMessage extends Message {
 
+    private int mGraph, mState;
+    
+    public StateIdMessage(int graph, int state) {
+        mState = state;
+        mGraph = graph;
+    }
+    
     @Override
     public String toJson() {
-        // TODO Auto-generated method stub
-        return null;
+        JSONObject jso = new JSONObject();
+        try {
+            jso.put("message", this.getMessage());
+            jso.put("graph", mGraph);
+            jso.put("state", mState);
+            return jso.toString();
+        } catch (JSONException jse) {
+            throw new Error(jse);
+        }
     }
 
     @Override
     public String getMessage() {
-        // TODO Auto-generated method stub
-        return null;
+        return "updateStateId";
     }
 
 }
