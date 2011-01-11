@@ -10,6 +10,8 @@ import org.json.JSONObject;
 import uk.me.graphe.server.messages.Message;
 import uk.me.graphe.server.messages.MessageFactory;
 import uk.me.graphe.server.messages.OpenGraphMessage;
+import uk.me.graphe.server.messages.operations.GraphOperation;
+import uk.me.graphe.server.ot.GraphProcessor;
 
 /**
  * reads messages from clients, and validates them. Sends client message pairs
@@ -22,9 +24,8 @@ public class ClientMessageHandler extends Thread {
 
     private ClientManager mClientManager = ClientManager.getInstance();
     private boolean mShutDown = false;
-    private MessageProcessor mProcessor;
     private HeartbeatManager mHbm = new HeartbeatManager();
-
+    private GraphProcessor mProcessor = GraphProcessor.getInstance();
     private static ClientMessageHandler sInstance = null;
 
     public ClientMessageHandler() {}
@@ -56,7 +57,7 @@ public class ClientMessageHandler extends Thread {
                             ClientMessageSender.getInstance().sendMessage(c,
                                     new OpenGraphMessage(id));
                         } else if (message.isOperation()) {
-                            mProcessor.submit(c, message);
+                            mProcessor.submit(c, (GraphOperation)message);
                         } else {
                             throw new Error(
                                     "got unexpected message from client");
