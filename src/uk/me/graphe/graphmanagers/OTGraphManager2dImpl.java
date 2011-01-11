@@ -68,7 +68,7 @@ public class OTGraphManager2dImpl extends GraphManager2dImpl implements
 
     @Override
     public CompositeOperation getOperationDelta(int historyId) {
-        return new CompositeOperation(mHistory.subList(historyId, mHistory.size()-1));
+        return new CompositeOperation(mHistory.subList(historyId, mHistory.size()));
     }
 
     @Override
