@@ -14,12 +14,6 @@ public abstract class EdgeOperation extends GraphOperation {
         return true;
     }
 
-    @Override
-    public String toJson() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
     private Edge mEdge;
     
     public EdgeOperation(Edge e) {

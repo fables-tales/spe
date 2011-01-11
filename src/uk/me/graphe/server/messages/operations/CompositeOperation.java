@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import uk.me.graphe.shared.Edge;
 import uk.me.graphe.shared.Vertex;
 
@@ -17,8 +20,18 @@ public class CompositeOperation extends GraphOperation {
 
     @Override
     public String toJson() {
-        // TODO Auto-generated method stub
-        return null;
+        JSONObject result = new JSONObject();
+        try {
+            result.put("message", this.getMessage());
+
+            for (GraphOperation o : mOperations) {
+                result.append("values", o.toJson());
+            }
+
+            return result.toString();
+        } catch (JSONException jse) {
+            throw new Error(jse);
+        }
     }
 
     public boolean deletesNode(Vertex effectedNode) {
@@ -42,15 +55,14 @@ public class CompositeOperation extends GraphOperation {
 
         return false;
     }
-    
+
     public List<GraphOperation> asIndividualOperations() {
         return Collections.unmodifiableList(mOperations);
     }
 
     @Override
     public String getMessage() {
-        // TODO Auto-generated method stub
-        return null;
+        return "composite";
     }
 
 }

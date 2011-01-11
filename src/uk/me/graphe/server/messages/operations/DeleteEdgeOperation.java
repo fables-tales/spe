@@ -32,8 +32,7 @@ public class DeleteEdgeOperation extends EdgeOperation {
 
     @Override
     public String getMessage() {
-        // TODO Auto-generated method stub
-        return null;
+        return "delEdge";
     }
 
 }

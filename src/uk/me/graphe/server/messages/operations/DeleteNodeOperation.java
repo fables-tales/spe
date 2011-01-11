@@ -26,16 +26,14 @@ public class DeleteNodeOperation extends NodeOperation {
         } catch (JSONException e) {
             throw new Error(e);
         }
-        return repr.toString();
         
+        return repr.toString();
+
     }
 
     @Override
     public String getMessage() {
-        // TODO Auto-generated method stub
-        return null;
+        return "delNode";
     }
 
-    
-    
 }

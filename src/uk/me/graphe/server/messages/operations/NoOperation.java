@@ -1,12 +1,20 @@
 package uk.me.graphe.server.messages.operations;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class NoOperation extends GraphOperation {
 
     @Override
     public String toJson() {
-        // TODO Auto-generated method stub
-        return null;
+        JSONObject jso = new JSONObject();
+        try {
+            jso.put("message", this.getMessage());
+            return jso.toString();
+        } catch (JSONException e) {
+            throw new Error(e);
+        }
     }
     
     @Override
@@ -16,8 +24,7 @@ public class NoOperation extends GraphOperation {
 
     @Override
     public String getMessage() {
-        // TODO Auto-generated method stub
-        return null;
+        return "noOp";
     }
 
 }
