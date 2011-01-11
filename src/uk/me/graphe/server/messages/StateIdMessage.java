@@ -30,4 +30,12 @@ public class StateIdMessage extends Message {
         return "updateStateId";
     }
 
+    public int getGraphId() {
+        return mGraph;
+    }
+    
+    public int getState() {
+        return mState;
+    }
+
 }
