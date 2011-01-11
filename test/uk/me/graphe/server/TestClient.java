@@ -33,6 +33,7 @@ public class TestClient {
     public void sendMessage(Message m) {
         try {
             mSock.getOutputStream().write((m.toJson() + "\0").getBytes());
+            mSock.getOutputStream().flush();
         } catch (IOException e) {
             throw new Error(e);
         }
@@ -45,8 +46,13 @@ public class TestClient {
             is = mSock.getInputStream();
 
             do {
-                sb.append((char) is.read());
+                int i = is.read();
+                if (i == -1) throw new Error("disconnected");
+                sb.append((char) i);
+                
             } while (sb.charAt(sb.length()-1) != '\0');
+            
+            System.err.println(sb.toString());
             
             JSONObject jso = new JSONObject(sb.toString().substring(0,sb.length()-1));
             List<JSONObject> jsos = new ArrayList<JSONObject>();
@@ -58,5 +64,13 @@ public class TestClient {
         } catch (JSONException e) {
             throw new Error(e);
         }
+    }
+
+    public void shutDownServer() {
+        GraphemeServer.getInstance().shutDown();
+    }
+
+    public void waitTornDown() {
+        GraphemeServer.getInstance().waitTornDown();
     }
 }
