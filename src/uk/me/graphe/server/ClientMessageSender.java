@@ -44,12 +44,18 @@ public class ClientMessageSender extends Thread {
 				Client c = clOp.left;
 				if (c.isConnected()) clOp.left.getChannel().write(ByteBuffer.wrap(s.getBytes()));
 			} catch (InterruptedException e) {
-				throw new Error(e);
+				return;
 			} catch (IOException ioe) {
 				throw new Error(ioe);
 			}
         }
         
+    }
+
+    public void shutDown() {
+        mShutDown = true;
+        this.interrupt();
+        ClientManager.getInstance().wakeUp();
     }
     
 }
