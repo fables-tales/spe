@@ -1,4 +1,4 @@
-package uk.me.grapheme.server;
+package uk.me.graphe.server;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
