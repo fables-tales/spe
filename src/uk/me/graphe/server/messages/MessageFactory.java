@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import uk.me.graphe.server.messages.factories.AddEdgeFactory;
 import uk.me.graphe.server.messages.factories.AddNodeFactory;
+import uk.me.graphe.server.messages.factories.CompositeFactory;
 import uk.me.graphe.server.messages.factories.ConversionFactory;
 import uk.me.graphe.server.messages.factories.DeleteEdgeFactory;
 import uk.me.graphe.server.messages.factories.DeleteNodeFactory;
@@ -17,6 +18,9 @@ import uk.me.graphe.server.messages.factories.HeartbeatFactory;
 import uk.me.graphe.server.messages.factories.MakeGraphFactory;
 import uk.me.graphe.server.messages.factories.MoveNodeFactory;
 import uk.me.graphe.server.messages.factories.NoSuchGraphFactory;
+import uk.me.graphe.server.messages.factories.OpenGraphFactory;
+import uk.me.graphe.server.messages.factories.RequestGraphFactory;
+import uk.me.graphe.server.messages.factories.StateIdFactory;
 
 public abstract class MessageFactory {
     private static Map<String, ConversionFactory> sOpFactoryMap = null;
