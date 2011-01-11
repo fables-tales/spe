@@ -26,5 +26,9 @@ public class DataManager {
         sGraphs.put(id, OTGraphManagerFactory.newInstance(id));
         return id;
     }
+    
+    public static void flush() {
+        sGraphs = new HashMap<Integer, OTGraphManager2d>();
+    }
 
 }
