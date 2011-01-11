@@ -5,6 +5,8 @@ import java.net.InetSocketAddress;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 
+import uk.me.graphe.server.ot.GraphProcessor;
+
 public class GraphemeServer extends Thread {
 
     public static final int GAPHEME_PORT = 6689;
@@ -37,6 +39,8 @@ public class GraphemeServer extends Thread {
             // data from clients
             mClientMessageHandler = ClientMessageHandler.getInstance();
             mClientMessageSender = ClientMessageSender.getInstance();
+            GraphProcessor.getInstance().start();
+            
             mClientMessageHandler.start();
             mClientMessageSender.start();
         } catch (IOException e) {
