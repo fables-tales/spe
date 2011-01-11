@@ -21,7 +21,7 @@ public class Graphemeui implements EntryPoint {
     public GraphManager2dFactory graphManagerFactory;
     public GraphManager2d graphManager;
     public int nodes;
-    public int VERTEX_SIZE = 50;
+    public static final int VERTEX_SIZE = 10;
 
     /**
      * This is the entry point method.

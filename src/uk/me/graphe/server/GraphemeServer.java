@@ -16,10 +16,14 @@ public class GraphemeServer extends Thread {
     }
 
     private ClientMessageHandler mClientMessageHandler;
+    
+    private ClientMessageSender mClientMessageSender;    
 
     private boolean mRunning = false;
 
     private ServerSocketChannel mServerSocketChannel;
+    
+    private ClientManager mClientManager = ClientManager.getInstance();
 
     private GraphemeServer() {
         try {
@@ -31,8 +35,10 @@ public class GraphemeServer extends Thread {
 
             // start a new client message handler: it's going to accept incoming
             // data from clients
-            mClientMessageHandler = new ClientMessageHandler();
+            mClientMessageHandler = ClientMessageHandler.getInstance();
+            mClientMessageSender = ClientMessageSender.getInstance();
             mClientMessageHandler.start();
+            mClientMessageSender.start();
         } catch (IOException e) {
             throw new Error("couldn't start server", e);
         }
@@ -50,7 +56,8 @@ public class GraphemeServer extends Thread {
                 // accept incoming connections and let the client message
                 // handler know about them
                 SocketChannel clientSock = mServerSocketChannel.accept();
-                mClientMessageHandler.addClient(clientSock);
+                Client client = new Client(clientSock);
+                mClientManager.addClient(client);
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -1,4 +1,4 @@
-package uk.me.graphe.client;
+package uk.me.graphe.shared;
 
 import uk.me.graphe.graphmanagers.GraphManager2d;
 import uk.me.graphe.graphmanagers.GraphManager2dFactory;
