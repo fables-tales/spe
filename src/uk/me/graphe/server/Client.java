@@ -46,12 +46,17 @@ public class Client {
                 // get messages
                 StringBuilder sb = new StringBuilder();
                 while (read == 1024) {
-                    sb.append(mReadBuffer.array());
+                    sb.append(new String(mReadBuffer.array()));
                     mReadBuffer.clear();
                     read = mChannel.read(mReadBuffer);
                 }
 
-                sb.append(mReadBuffer.array());
+                
+                
+                sb.append(new String(mReadBuffer.array(), 0, read));
+                System.err.println(sb.length());
+                System.err.println("ponies: " + sb.toString());
+
                 return processMessages(sb);
             }
 
@@ -64,12 +69,14 @@ public class Client {
     private List<String> processMessages(StringBuilder sb) {
         int start = 0;
         List<String> result = new ArrayList<String>();
-
+        
         while (start < sb.length()) {
             int nullIndex = sb.indexOf("\0", start);
-            String ss = sb.substring(0, nullIndex - 1);
+            String ss = sb.substring(0, nullIndex);
             result.add(ss);
             start = nullIndex + 1;
+            System.err.println(sb.length());
+            System.err.println(nullIndex + 1);
         }
 
         return result;
