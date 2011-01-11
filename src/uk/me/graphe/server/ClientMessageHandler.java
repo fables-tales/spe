@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import uk.me.graphe.server.messages.Message;
 import uk.me.graphe.server.messages.MessageFactory;
 import uk.me.graphe.server.messages.OpenGraphMessage;
+import uk.me.graphe.server.messages.StateIdMessage;
 import uk.me.graphe.server.messages.operations.GraphOperation;
 import uk.me.graphe.server.ot.GraphProcessor;
 
@@ -38,42 +39,56 @@ public class ClientMessageHandler extends Thread {
                     .waitOnReadableClients();
             for (Client c : availableClients) {
                 List<String> messages = c.readNextMessages();
+                System.err.println("len messages:" + messages.size());
                 // if this returns null we disconnect the client for sending bad
                 // messages
                 List<JSONObject> jsos = validateAndParse(messages);
-                if (jsos == null) mClientManager.disconnect(c);
-
-                List<Message> ops;
-
-                // malformed json == disconect
-                try {
-                    ops = MessageFactory.makeOperationsFromJson(jsos);
-                    for (Message message : ops) {
-                        if (message.getMessage().equals("heartbeat")) {
-                            mHbm.beatWhenPossible(c);
-                        } else if (message.getMessage().equals("makegraph")) {
-                            int id = DataManager.create();
-                            c.setCurrentGraphId(id);
-                            ClientMessageSender.getInstance().sendMessage(c,
-                                    new OpenGraphMessage(id));
-                        } else if (message.isOperation()) {
-                            mProcessor.submit(c, (GraphOperation)message);
-                        } else {
-                            throw new Error(
-                                    "got unexpected message from client");
-                        }
-                    }
-                } catch (JSONException e) {
+                
+                if (jsos == null) {
+                    System.err.println("disconnecting");
                     mClientManager.disconnect(c);
-                } catch (InterruptedException e) {
-                    mClientManager.disconnect(c);
-                    throw new Error(e);
+                } else {
+                    processRequest(c, jsos);
                 }
-
+                
             }
 
         }
 
+    }
+
+    private void processRequest(Client c, List<JSONObject> jsos)
+            throws Error {
+        List<Message> ops;
+        // malformed json == disconect
+        try {
+            ops = MessageFactory.makeOperationsFromJson(jsos);
+            for (Message message : ops) {
+                if (message.getMessage().equals("heartbeat")) {
+                    mHbm.beatWhenPossible(c);
+                } else if (message.getMessage().equals("makeGraph")) {
+                    int id = DataManager.create();
+                    c.setCurrentGraphId(id);
+                    ClientMessageSender.getInstance().sendMessage(
+                            c, new OpenGraphMessage(id));
+
+                    int stateId = DataManager.getGraph(id)
+                            .getStateId();
+                    ClientMessageSender.getInstance().sendMessage(
+                            c, new StateIdMessage(id, stateId));
+                } else if (message.isOperation()) {
+                    mProcessor.submit(c, (GraphOperation) message);
+                } else {
+                    throw new Error(
+                            "got unexpected message from client");
+                }
+            }
+        } catch (JSONException e) {
+            mClientManager.disconnect(c);
+        } catch (InterruptedException e) {
+            mClientManager.disconnect(c);
+            throw new Error(e);
+        }
     }
 
     private List<JSONObject> validateAndParse(List<String> messages) {
