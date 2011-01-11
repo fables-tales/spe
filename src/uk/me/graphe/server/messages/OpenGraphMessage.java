@@ -13,14 +13,14 @@ public class OpenGraphMessage extends Message {
 
     @Override
     public String getMessage() {
-        return "opengraph";
+        return "openGraph";
     }
 
     @Override
     public String toJson() {
         JSONObject repr = new JSONObject();
         try {
-            repr.put("message", getMessage());
+            repr.put("message", this.getMessage());
             repr.put("id", mId);
         } catch (JSONException jse) {
             throw new Error(jse);
