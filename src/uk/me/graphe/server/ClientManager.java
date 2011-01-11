@@ -119,4 +119,11 @@ public class ClientManager {
 
     }
 
+    public void wakeUp() {
+        this.blockSelection();
+        this.mReadableSocketsSelector.wakeup();
+        this.mWritableSocketsSelector.wakeup();
+        this.unblockSelection();
+    }
+
 }
