@@ -28,4 +28,8 @@ public class OpenGraphMessage extends Message {
         return repr.toString();
     }
 
+    public int getId() {
+        return mId;
+    }
+
 }
