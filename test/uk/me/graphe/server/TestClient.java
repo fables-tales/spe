@@ -6,12 +6,11 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import uk.me.graphe.server.GraphemeServer;
-import uk.me.graphe.server.messages.Message;
-import uk.me.graphe.server.messages.MessageFactory;
+import uk.me.graphe.shared.jsonwrapper.JSONException;
+import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
+import uk.me.graphe.shared.jsonwrapper.JSONObject;
+import uk.me.graphe.shared.messages.Message;
+import uk.me.graphe.shared.messages.MessageFactory;
 
 public class TestClient {
 
@@ -54,7 +53,7 @@ public class TestClient {
             
             System.err.println(sb.toString());
             
-            JSONObject jso = new JSONObject(sb.toString().substring(0,sb.length()-1));
+            JSONObject jso = JSONImplHolder.make(sb.toString().substring(0,sb.length()-1));
             List<JSONObject> jsos = new ArrayList<JSONObject>();
             jsos.add(jso);
             return MessageFactory.makeOperationsFromJson(jsos).get(0);

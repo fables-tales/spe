@@ -4,19 +4,19 @@ import java.util.List;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import uk.me.graphe.graphmanagers.OTGraphManager2d;
-import uk.me.graphe.graphmanagers.OTGraphManagerFactory;
-import uk.me.graphe.server.messages.MakeGraphMessage;
-import uk.me.graphe.server.messages.Message;
-import uk.me.graphe.server.messages.NoSuchGraphMessage;
-import uk.me.graphe.server.messages.OpenGraphMessage;
-import uk.me.graphe.server.messages.RequestGraphMessage;
-import uk.me.graphe.server.messages.StateIdMessage;
-import uk.me.graphe.server.messages.operations.AddNodeOperation;
-import uk.me.graphe.server.messages.operations.CompositeOperation;
-import uk.me.graphe.server.messages.operations.GraphOperation;
 import uk.me.graphe.shared.Graph;
 import uk.me.graphe.shared.Vertex;
+import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
+import uk.me.graphe.shared.graphmanagers.OTGraphManagerFactory;
+import uk.me.graphe.shared.messages.MakeGraphMessage;
+import uk.me.graphe.shared.messages.Message;
+import uk.me.graphe.shared.messages.NoSuchGraphMessage;
+import uk.me.graphe.shared.messages.OpenGraphMessage;
+import uk.me.graphe.shared.messages.RequestGraphMessage;
+import uk.me.graphe.shared.messages.StateIdMessage;
+import uk.me.graphe.shared.messages.operations.AddNodeOperation;
+import uk.me.graphe.shared.messages.operations.CompositeOperation;
+import uk.me.graphe.shared.messages.operations.GraphOperation;
 
 public class DataManagerNetworkTest extends TestCase {
 

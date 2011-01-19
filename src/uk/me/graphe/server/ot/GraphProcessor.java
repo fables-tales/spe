@@ -3,13 +3,13 @@ package uk.me.graphe.server.ot;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-import uk.me.graphe.graphmanagers.OTGraphManager2d;
 import uk.me.graphe.server.Client;
 import uk.me.graphe.server.ClientMessageSender;
 import uk.me.graphe.server.DataManager;
-import uk.me.graphe.server.messages.StateIdMessage;
-import uk.me.graphe.server.messages.operations.CompositeOperation;
-import uk.me.graphe.server.messages.operations.GraphOperation;
+import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
+import uk.me.graphe.shared.messages.StateIdMessage;
+import uk.me.graphe.shared.messages.operations.CompositeOperation;
+import uk.me.graphe.shared.messages.operations.GraphOperation;
 
 import com.google.gwt.dev.util.Pair;
 

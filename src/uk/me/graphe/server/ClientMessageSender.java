@@ -5,8 +5,8 @@ import java.nio.ByteBuffer;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-import uk.me.graphe.server.messages.HeartbeatMessage;
-import uk.me.graphe.server.messages.Message;
+import uk.me.graphe.shared.messages.HeartbeatMessage;
+import uk.me.graphe.shared.messages.Message;
 
 import com.google.gwt.dev.util.Pair;
 

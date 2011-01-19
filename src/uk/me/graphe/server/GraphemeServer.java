@@ -5,7 +5,9 @@ import java.net.InetSocketAddress;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 
+import uk.me.graphe.server.org.json.wrapper.JSONWrapperFactory;
 import uk.me.graphe.server.ot.GraphProcessor;
+import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
 
 public class GraphemeServer extends Thread {
 
@@ -30,6 +32,7 @@ public class GraphemeServer extends Thread {
     private GraphemeServer() {
         try {
             // sets up a server socket listening on the grapheme port
+            JSONImplHolder.initialise(new JSONWrapperFactory());
             mServerSocketChannel = ServerSocketChannel.open();
             mServerSocketChannel.socket().bind(
                     new InetSocketAddress(GAPHEME_PORT));

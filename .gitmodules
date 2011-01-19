@@ -1,0 +1,3 @@
+[submodule "JSON-java"]
+	path = src/org/json
+	url = git://github.com/douglascrockford/JSON-java.git

@@ -2,8 +2,8 @@ package uk.me.graphe.server;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import uk.me.graphe.server.messages.HeartbeatMessage;
-import uk.me.graphe.server.messages.Message;
+import uk.me.graphe.shared.messages.HeartbeatMessage;
+import uk.me.graphe.shared.messages.Message;
 
 public class HeartbeatTest extends TestCase {
     

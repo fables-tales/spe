@@ -4,19 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import uk.me.graphe.graphmanagers.OTGraphManager2d;
-import uk.me.graphe.server.messages.Message;
-import uk.me.graphe.server.messages.MessageFactory;
-import uk.me.graphe.server.messages.NoSuchGraphMessage;
-import uk.me.graphe.server.messages.OpenGraphMessage;
-import uk.me.graphe.server.messages.RequestGraphMessage;
-import uk.me.graphe.server.messages.StateIdMessage;
-import uk.me.graphe.server.messages.operations.CompositeOperation;
-import uk.me.graphe.server.messages.operations.GraphOperation;
 import uk.me.graphe.server.ot.GraphProcessor;
+import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
+import uk.me.graphe.shared.jsonwrapper.JSONException;
+import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
+import uk.me.graphe.shared.jsonwrapper.JSONObject;
+import uk.me.graphe.shared.messages.Message;
+import uk.me.graphe.shared.messages.MessageFactory;
+import uk.me.graphe.shared.messages.NoSuchGraphMessage;
+import uk.me.graphe.shared.messages.OpenGraphMessage;
+import uk.me.graphe.shared.messages.RequestGraphMessage;
+import uk.me.graphe.shared.messages.StateIdMessage;
+import uk.me.graphe.shared.messages.operations.CompositeOperation;
+import uk.me.graphe.shared.messages.operations.GraphOperation;
+
 
 /**
  * reads messages from clients, and validates them. Sends client message pairs
@@ -119,7 +120,7 @@ public class ClientMessageHandler extends Thread {
         for (String s : messages) {
             try {
                 System.err.println(s);
-                JSONObject o = new JSONObject(s);
+                JSONObject o = JSONImplHolder.make(s);
                 result.add(o);
             } catch (JSONException e) {
                 return null;

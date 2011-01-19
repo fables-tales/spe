@@ -1,9 +1,9 @@
 package uk.me.graphe.shared;
 
-import uk.me.graphe.graphmanagers.OTGraphManager2d;
-import uk.me.graphe.graphmanagers.OTGraphManagerFactory;
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
+import uk.me.graphe.shared.graphmanagers.OTGraphManagerFactory;
 
 public class OTGraphManagerFactoryTest extends TestCase {
 

@@ -3,8 +3,8 @@ package uk.me.graphe.server;
 import java.util.HashMap;
 import java.util.Map;
 
-import uk.me.graphe.graphmanagers.OTGraphManager2d;
-import uk.me.graphe.graphmanagers.OTGraphManagerFactory;
+import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
+import uk.me.graphe.shared.graphmanagers.OTGraphManagerFactory;
 
 public class DataManager {
 

@@ -2,10 +2,9 @@ package uk.me.graphe.server;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import uk.me.graphe.graphmanagers.OTGraphManager2d;
-import uk.me.graphe.graphmanagers.OTGraphManagerFactory;
-import uk.me.graphe.server.DataManager;
-import uk.me.graphe.server.messages.operations.NoOperation;
+import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
+import uk.me.graphe.shared.graphmanagers.OTGraphManagerFactory;
+import uk.me.graphe.shared.messages.operations.NoOperation;
 
 public class DataManagerTest extends TestCase {
     public void testCreate_single() {

@@ -2,17 +2,12 @@ package uk.me.graphe.shared;
 
 import java.util.Collection;
 
-import uk.me.graphe.client.EdgeDrawable;
-import uk.me.graphe.client.VertexDrawable;
-import uk.me.graphe.graphmanagers.GraphManager2d;
-import uk.me.graphe.graphmanagers.GraphManager2dFactory;
-import uk.me.graphe.shared.Edge;
-import uk.me.graphe.shared.Graph;
-import uk.me.graphe.shared.Vertex;
-import uk.me.graphe.shared.VertexDirection;
-
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import uk.me.graphe.client.EdgeDrawable;
+import uk.me.graphe.client.VertexDrawable;
+import uk.me.graphe.shared.graphmanagers.GraphManager2d;
+import uk.me.graphe.shared.graphmanagers.GraphManager2dFactory;
 
 /**
  * NOTE: this class relies on the GraphManager2d factory working, if it isn't
