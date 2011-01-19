@@ -1,13 +1,13 @@
 package uk.me.graphe.client;
-
 import uk.me.graphe.shared.Edge;
 import uk.me.graphe.shared.Graph;
 import uk.me.graphe.shared.Vertex;
 
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 
 public class EdgeDialog extends HorizontalPanel{
+    public final TextBox tb = new TextBox();
 	public int v1Index, v2Index, edgeIndex;
 	public boolean isOpen;
 	public Graphemeui parent;
@@ -53,43 +54,44 @@ public class EdgeDialog extends HorizontalPanel{
 	    Label l3 = new Label("Select Edge: ");
 	    Label l4 = new Label("Vertex Name");
 	    
-	    final TextBox tb = new TextBox();
 	    tb.setWidth("150");
 
 	    final Button ok = new Button("OK");
 	    final Button cancel = new Button("Cancel");
 	    
-	    tb.addChangeHandler(new ChangeHandler(){
-			public void onChange(ChangeEvent event) {
-				if(tb.getText().length() > 0){
-					ok.setEnabled(true);
-				}
-				else {
-					ok.setEnabled(false);
-				}
+	    tb.addKeyUpHandler(new KeyUpHandler() {
+	        public void onKeyUp(KeyUpEvent e) {
+	        	if(tb.getText().trim().length() > 0){
+	        		ok.setEnabled(true);
+	        	}else{
+	        		ok.setEnabled(false);
+	        	}
+	        	if(e.getNativeKeyCode() == KeyCodes.KEY_ENTER){
+	        		ok.click();
+	        	}
 			}
 	    });
 	    
 	    HorizontalPanel v = new HorizontalPanel();
 	    HorizontalPanel buttons = new HorizontalPanel();
-	    if(type == 0){
+	    if(type == 2){
 	    	if(toVertices.getItemCount() == 0) ok.setEnabled(false);
 	    	v.add(l);
 	    	v.add(fromVertices);
 	    	v.add(l2);
 	    	v.add(toVertices);
 	    }
-	    if(type == 1){
+	    if(type == 3){
 	    	if(fromVertices.getItemCount() == 0) ok.setEnabled(false);
 	    	v.add(l);
 	    	v.add(fromVertices);
 	    }
-	    if(type == 2){
+	    if(type == 4){
 	    	if(edges.getItemCount() == 0) ok.setEnabled(false);
 	    	v.add(l3);
 	    	v.add(edges);
 	    }
-	    if(type == 3){
+	    if(type == 1){
 	    	ok.setEnabled(false);
 	    	v.add(l4);
 	    	v.add(tb);
@@ -98,13 +100,13 @@ public class EdgeDialog extends HorizontalPanel{
 	    ok.addClickHandler(new ClickHandler() {
 	    	@Override
 			public void onClick(ClickEvent event) {
-	    		if(type == 0 || type == 1){
+	    		if(type == 2 || type == 3){
 	    			v1Index = fromVertices.getSelectedIndex();
 	    		}
-				if(type == 0){
+				if(type == 2){
 					v2Index = toVertices.getSelectedIndex();
 				}
-				if(type == 2){
+				if(type == 4){
 					edgeIndex = edges.getSelectedIndex();
 				}
 				parent.addElement(type, v1Index, v2Index, edgeIndex, tb.getText(), EdgeDialog.this);
@@ -120,6 +122,10 @@ public class EdgeDialog extends HorizontalPanel{
 	    buttons.add(cancel);
 	    v.add(buttons);
 	    add(v);
+	}
+	
+	public TextBox getTextBox(){
+		return tb;
 	}
 	
 	public void setPoint(int x, int y){
