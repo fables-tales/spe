@@ -32,11 +32,13 @@ public class Canvas extends Composite{
 	
 	public Graphemeui parent;
 	public int x1, x2, y1, y2;
+	public boolean pressed;
 	@UiField
 	public CanvasWrapper canvasPanel;	
 
 	public Canvas(Graphemeui parent) {
 		initWidget(uiBinder.createAndBindUi(this));
+		pressed = false;
 		this.parent = parent;
 	}
 	
@@ -44,17 +46,28 @@ public class Canvas extends Composite{
 	void onMouseDown(MouseDownEvent e){
 		x1 = e.getX();
 		y1 = e.getY();
+		pressed = true;
+		
 	}
 	
 	@UiHandler("canvasPanel")
 	void onMouseMove(MouseMoveEvent e){
 		x2 = e.getX();
-		y2 = e.getX();
+		y2 = e.getY();
+		if (parent.tools.getTool() == 5 && pressed) {
+			parent.move(x1, y1, x2, y2);
+		}
 	}
 	
 	@UiHandler("canvasPanel")
 	void onMouseUp(MouseUpEvent e){
-		if(parent.tools.getTool() == 1){
+		pressed = false;
+		parent.moving = false;
+		parent.movingVertex = null;
+		if (parent.tools.getOptionsPanel().getWidgetCount() != 0) {
+			parent.tools.getOptionsPanel().remove(0);
+		}
+		if (parent.tools.getTool() == 1) {
 			parent.initOptions(x1, y1, x2, y2);
 		}
 	}
