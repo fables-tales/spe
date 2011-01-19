@@ -117,7 +117,7 @@ public class VertexDrawable {
      * @return
      */
     public boolean contains(int x, int y) {
-        return x >= mLeft && x <= mLeft + mWidth && x >= mTop && x <= mTop + mHeight;
+        return x >= mLeft && x <= mLeft + mWidth && y >= mTop && y <= mTop + mHeight;
     }
 
 }
