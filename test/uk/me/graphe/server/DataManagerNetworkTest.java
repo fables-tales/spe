@@ -15,6 +15,7 @@ import uk.me.graphe.server.messages.StateIdMessage;
 import uk.me.graphe.server.messages.operations.AddNodeOperation;
 import uk.me.graphe.server.messages.operations.CompositeOperation;
 import uk.me.graphe.server.messages.operations.GraphOperation;
+import uk.me.graphe.shared.Graph;
 import uk.me.graphe.shared.Vertex;
 
 public class DataManagerNetworkTest extends TestCase {
@@ -39,8 +40,9 @@ public class DataManagerNetworkTest extends TestCase {
         Assert.assertNotNull(DataManager.getGraph(ogr.getId()));
         
         //we should get a state id message after this
+        assertNullCompositeOperation();
         m = mClient.readNextMessage();
-        Assert.assertEquals(new StateIdMessage(0, 0).getMessage(), m.getMessage());
+        Assert.assertEquals("updateStateId", m.getMessage());
         StateIdMessage sim = (StateIdMessage)m;
         Assert.assertEquals(ogr.getId(), sim.getGraphId());
     }
@@ -68,11 +70,16 @@ public class DataManagerNetworkTest extends TestCase {
         Assert.assertEquals(cliGraph.getStateId(), g.getStateId());
     }
     
-    public void testAddNode() {
+    public void testAddNode_nostate() {
         mClient.sendMessage(new MakeGraphMessage());
         Message m = mClient.readNextMessage();
         OpenGraphMessage ogr = (OpenGraphMessage)m;
         OTGraphManager2d g = OTGraphManagerFactory.newInstance(ogr.getId());
+        
+        //pump off the composite operation
+        assertNullCompositeOperation();
+        
+        
         m = mClient.readNextMessage();
         Assert.assertEquals("updateStateId", m.getMessage());
         StateIdMessage sm = (StateIdMessage)m;
@@ -81,8 +88,53 @@ public class DataManagerNetworkTest extends TestCase {
         OTGraphManager2d gServer = DataManager.getGraph(ogr.getId());
         Assert.assertEquals(0, gServer.getUnderlyingGraph().getVertices().size());
         mClient.sendMessage(new AddNodeOperation(new Vertex("faces"), 37, 14));
+        
+        //pump off the composite operation
+        assertNullCompositeOperation();
+        
         m = mClient.readNextMessage();
-        System.err.println(m.getMessage());
+        Assert.assertEquals("updateStateId", m.getMessage());
+        Assert.assertEquals(1, ((StateIdMessage)m).getState());
+        
+    }
+    
+    public void testAddNode_somestate() {
+        mClient.sendMessage(new MakeGraphMessage());
+        Message m = mClient.readNextMessage();
+        OpenGraphMessage ogr = (OpenGraphMessage)m;
+        OTGraphManager2d g = OTGraphManagerFactory.newInstance(ogr.getId());
+        assertNullCompositeOperation();
+        
+        m = mClient.readNextMessage();
+        Assert.assertEquals("updateStateId", m.getMessage());
+        StateIdMessage sim = (StateIdMessage)m;
+        Assert.assertEquals(ogr.getId(), sim.getGraphId());
+        
+        OTGraphManager2d serverGraph = DataManager.getGraph(ogr.getId());
+        serverGraph.applyOperation(new AddNodeOperation(new Vertex("faces"), 37, 84));
+        mClient.sendMessage(new RequestGraphMessage(ogr.getId(), sim.getState()));
+        m = mClient.readNextMessage();
+        Assert.assertEquals("composite", m.getMessage());
+        CompositeOperation co = (CompositeOperation)m;
+        
+        for (GraphOperation o : co.asIndividualOperations()) {
+            g.applyOperation(o);
+        }
+        
+        Assert.assertEquals(g.getStateId(), serverGraph.getStateId());
+        Graph underLyingCli = g.getUnderlyingGraph();
+        Graph underLyingSrv = serverGraph.getUnderlyingGraph();
+        Assert.assertEquals(underLyingCli.getVertices(), underLyingSrv.getVertices());
+        
+    }
+
+
+    private void assertNullCompositeOperation() {
+        Message m;
+        m = mClient.readNextMessage();
+        Assert.assertEquals("composite", m.getMessage());
+        CompositeOperation co = (CompositeOperation)m;
+        Assert.assertEquals(0, co.asIndividualOperations().size());
     }
     
     @Override

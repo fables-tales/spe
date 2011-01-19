@@ -22,21 +22,25 @@ public class CompositeFactory implements ConversionFactory {
 
         JSONArray values;
         try {
-            values = o.getJSONArray("values");
-            System.err.println(values.length());
-            for (int i = 0; i < values.length(); i++) {
-                String s = values.get(i).toString();
-                messages.add(new JSONObject(s));
-            }
-            
-            List<Message> objs = MessageFactory.makeOperationsFromJson(messages);
             List<GraphOperation> op = new ArrayList<GraphOperation>();
-            for (Message m : objs) {
-                op.add((GraphOperation)m);
+            if (o.has("values")) {
+                values = o.getJSONArray("values");
+                System.err.println(values.length());
+                for (int i = 0; i < values.length(); i++) {
+                    String s = values.get(i).toString();
+                    messages.add(new JSONObject(s));
+                }
+
+                List<Message> objs = MessageFactory
+                        .makeOperationsFromJson(messages);
+
+                for (Message m : objs) {
+                    op.add((GraphOperation) m);
+                }
             }
-            
+
             return new CompositeOperation(op);
-            
+
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

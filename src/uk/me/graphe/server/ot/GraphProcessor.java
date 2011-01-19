@@ -40,15 +40,18 @@ public class GraphProcessor extends Thread {
                 
                 //get the graph and get the history delta
                 OTGraphManager2d graph = DataManager.getGraph(mGraphId);
-                CompositeOperation historyDelta = graph.getOperationDelta(operation.getHistoryId());
+                CompositeOperation historyDelta = graph.getOperationDelta(c.getCurrentStateId());
                 
                 //transform and apply the new operation
                 GraphOperation newOp = GraphTransform.transform(operation, historyDelta);
                 graph.applyOperation(newOp);
                 
+                
                 //send update to client
                 int serverStateId = graph.getStateId();
+                ClientMessageSender.getInstance().sendMessage(c, historyDelta);
                 ClientMessageSender.getInstance().sendMessage(c, new StateIdMessage(c.getCurrentGraphId(), serverStateId));
+                c.updateStateId(graph.getStateId());
                 DataManager.save(graph);
             } catch (InterruptedException e) {
                 return;

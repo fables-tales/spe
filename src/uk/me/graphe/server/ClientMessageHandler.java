@@ -47,22 +47,21 @@ public class ClientMessageHandler extends Thread {
                 // if this returns null we disconnect the client for sending bad
                 // messages
                 List<JSONObject> jsos = validateAndParse(messages);
-                
+
                 if (jsos == null) {
                     System.err.println("disconnecting");
                     mClientManager.disconnect(c);
                 } else {
                     processRequest(c, jsos);
                 }
-                
+
             }
 
         }
 
     }
 
-    private void processRequest(Client c, List<JSONObject> jsos)
-            throws Error {
+    private void processRequest(Client c, List<JSONObject> jsos) throws Error {
         List<Message> ops;
         // malformed json == disconect
         try {
@@ -84,28 +83,33 @@ public class ClientMessageHandler extends Thread {
         } else if (message.getMessage().equals("makeGraph")) {
             int id = DataManager.create();
             c.setCurrentGraphId(id);
-            ClientMessageSender.getInstance().sendMessage(
-                    c, new OpenGraphMessage(id));
+            ClientMessageSender.getInstance().sendMessage(c,
+                    new OpenGraphMessage(id));
 
-            int stateId = DataManager.getGraph(id)
-                    .getStateId();
-            ClientMessageSender.getInstance().sendMessage(
-                    c, new StateIdMessage(id, stateId));
+            int stateId = DataManager.getGraph(id).getStateId();
+            ClientMessageSender.getInstance().sendMessage(c,
+                    new CompositeOperation(new ArrayList<GraphOperation>()));
+            ClientMessageSender.getInstance().sendMessage(c,
+                    new StateIdMessage(id, stateId));
+            c.updateStateId(stateId);
         } else if (message.getMessage().equals("requestGraph")) {
             System.err.println("got rgm");
-            RequestGraphMessage rgm = (RequestGraphMessage)message;
+            RequestGraphMessage rgm = (RequestGraphMessage) message;
             OTGraphManager2d g = DataManager.getGraph(rgm.getGraphId());
             c.setCurrentGraphId(rgm.getGraphId());
-            if (g == null) ClientMessageSender.getInstance().sendMessage(c, new NoSuchGraphMessage());
+            if (g == null) ClientMessageSender.getInstance().sendMessage(c,
+                    new NoSuchGraphMessage());
             else {
                 CompositeOperation delta = g.getOperationDelta(rgm.getSince());
                 ClientMessageSender.getInstance().sendMessage(c, delta);
+                ClientMessageSender.getInstance().sendMessage(c,
+                        new StateIdMessage(rgm.getGraphId(), g.getStateId()));
+                c.updateStateId(rgm.getSince());
             }
         } else if (message.isOperation()) {
             mProcessor.submit(c, (GraphOperation) message);
         } else {
-            throw new Error(
-                    "got unexpected message from client");
+            throw new Error("got unexpected message from client");
         }
     }
 

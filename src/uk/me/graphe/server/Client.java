@@ -21,6 +21,7 @@ public class Client {
     private ByteBuffer mReadBuffer = ByteBuffer.allocate(1024);
     private boolean mConnected = true;
     private int mSelectedGraphId;
+    private int mStateId;
 
     public Client(SocketChannel clientSock) {
         mChannel = clientSock;
@@ -99,6 +100,14 @@ public class Client {
 
     public void setCurrentGraphId(int id) {
         mSelectedGraphId = id;
+    }
+
+    public int getCurrentStateId() {
+        return mStateId;
+    }
+
+    public void updateStateId(int stateId) {
+        mStateId = stateId;
     }
 
 }
