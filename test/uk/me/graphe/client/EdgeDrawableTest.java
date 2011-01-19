@@ -2,8 +2,6 @@ package uk.me.graphe.client;
 
 import java.util.Random;
 
-import uk.me.graphe.client.EdgeDrawable;
-
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
