@@ -6,6 +6,11 @@ import uk.me.graphe.shared.jsonwrapper.JSONObject;
 
 public class JSONObjectWrapper extends JSONObject {
 
+    @Override
+    public String toString() {
+        return mObject.toString();
+    }
+
     private org.json.JSONObject mObject;
 
     public JSONObjectWrapper(String s) throws org.json.JSONException {
