@@ -3,6 +3,7 @@ package uk.me.graphe.client;
 import uk.me.graphe.client.communications.ServerChannel;
 import uk.me.graphe.client.graphmanagers.GraphManager2d;
 import uk.me.graphe.client.graphmanagers.GraphManager2dFactory;
+import uk.me.graphe.shared.Graph;
 import uk.me.graphe.shared.Vertex;
 import uk.me.graphe.shared.VertexDirection;
 
@@ -24,6 +25,7 @@ public class Graphemeui implements EntryPoint {
     public boolean moving;
     public Vertex movingVertex;
     public static final int VERTEX_SIZE = 10;
+    public final Drawing d = new DrawingImpl();
 
     /**
 	* This is the entry point method.
@@ -52,9 +54,8 @@ public class Graphemeui implements EntryPoint {
         canvas = new Canvas(this);
         graphManagerFactory = GraphManager2dFactory.getInstance();
         graphManager = graphManagerFactory.makeDefaultGraphManager();
-        final Drawing d = new DrawingImpl();
+        d.setOffset(0, 0);
         graphManager.addRedrawCallback(new Runnable() {
-
             @Override
             public void run() {
                 d.renderGraph(canvas.canvasPanel, graphManager.getEdgeDrawables(),
@@ -69,14 +70,51 @@ public class Graphemeui implements EntryPoint {
 	 * up a dialog box in the options stack.
 	 */
     public void initOptions(int x1, int y1, int x2, int y2) {
+    	
+    	//find out which tool is selected
         int tool = tools.getTool();
+        
+        //create appropriate dialog box
         EdgeDialog ed = new EdgeDialog(graphManager.getUnderlyingGraph(), tool, this);
+        
+        //keep record of first point when adding nodes
         if (tool == 1) {
-            // add node tool
             ed.setPoint(x1, y1);
         }
+        
+        //show dialog
         tools.getOptionsPanel().add(ed);
+        
+        //put focus on dialog text box 
+        //(allows for quick typing when naming nodes)
         ed.getTextBox().setFocus(true);
+    }
+    
+    public void move (int x1, int y1, int panx, int pany, int x2, int y2){
+    	//if not already moving a node
+    	if(!moving){
+    		//get vertex at point clicked at first
+    		VertexDrawable vd = graphManager.getDrawableAt(x1, y1);
+    		//if it exists user wants to move node
+    		if(vd != null){
+    			//move the node
+    			moving = true;
+    			movingVertex = graphManager.getVertexFromDrawable(vd);
+    			moveNode(movingVertex, x2, y2);
+    		} 
+    		//otherwise user must want to pan
+    		else {
+    			//pan
+    			int left = x2 - panx;
+    			int top = y2 - pany;
+    			pan(left, top);
+    		}
+    	}
+    	//otherwise continue moving node
+    	else {
+    		
+    		moveNode(movingVertex, x2, y2);
+    	}
     }
     
     public void moveNode(Vertex v, int x, int y){
@@ -85,17 +123,14 @@ public class Graphemeui implements EntryPoint {
     	}
     }
     
-    public void move (int x1, int y1, int x2, int y2){
-    	if(!moving){
-    		VertexDrawable vd = graphManager.getDrawableAt(x1, y1);
-    		if(vd != null){
-    			moving = true;
-    			movingVertex = graphManager.getVertexFromDrawable(vd);
-    			moveNode(movingVertex, x2, y2);
-    		}
-    	}else {
-    		moveNode(movingVertex, x2, y2);
-    	}
+    public void pan(int left, int top){
+    	
+    	//update offsets in drawing and canvas
+    	d.setOffset(d.getOffsetX() + left, d.getOffsetY() + top);
+    	canvas.setOffset(canvas.getOffsetX() + left, canvas.getOffsetY() + top);
+    	
+    	//redraw ////////////NEEDS TO CHANGE
+    	graphManager.invalidate();
     }
 
     /**
@@ -115,14 +150,14 @@ public class Graphemeui implements EntryPoint {
 	* afterwards)
 	*/
     public void addElement(int type, int v1, int v2, int edge, String label, EdgeDialog ed) {
+    	Graph g = graphManager.getUnderlyingGraph();
         if (type == 4) {
-            graphManager.removeEdge(graphManager.getUnderlyingGraph().getEdges().get(edge));
+            graphManager.removeEdge(g.getEdges().get(edge));
         } else if (type == 3) {
-            graphManager.removeVertex(graphManager.getUnderlyingGraph().getVertices().get(v1));
+            graphManager.removeVertex(g.getVertices().get(v1));
         } else if (type == 2) {
-            graphManager
-                    .addEdge(graphManager.getUnderlyingGraph().getVertices().get(v1), graphManager
-                            .getUnderlyingGraph().getVertices().get(v2), VertexDirection.fromTo);
+            graphManager.addEdge(g.getVertices().get(v1), 
+            		g.getVertices().get(v2), VertexDirection.fromTo);
         } else if (type == 1) {
             Vertex v = new Vertex(label);
             int[] coords = ed.getPoint();
