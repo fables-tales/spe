@@ -1,12 +1,12 @@
 package uk.me.graphe.server.ot;
 
-import uk.me.graphe.server.messages.operations.CompositeOperation;
-import uk.me.graphe.server.messages.operations.EdgeOperation;
-import uk.me.graphe.server.messages.operations.GraphOperation;
-import uk.me.graphe.server.messages.operations.NoOperation;
-import uk.me.graphe.server.messages.operations.NodeOperation;
 import uk.me.graphe.shared.Edge;
 import uk.me.graphe.shared.Vertex;
+import uk.me.graphe.shared.messages.operations.CompositeOperation;
+import uk.me.graphe.shared.messages.operations.EdgeOperation;
+import uk.me.graphe.shared.messages.operations.GraphOperation;
+import uk.me.graphe.shared.messages.operations.NoOperation;
+import uk.me.graphe.shared.messages.operations.NodeOperation;
 
 public class GraphTransform {
 

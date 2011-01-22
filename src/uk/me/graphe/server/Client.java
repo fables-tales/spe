@@ -21,6 +21,7 @@ public class Client {
     private ByteBuffer mReadBuffer = ByteBuffer.allocate(1024);
     private boolean mConnected = true;
     private int mSelectedGraphId;
+    private int mStateId;
 
     public Client(SocketChannel clientSock) {
         mChannel = clientSock;
@@ -46,12 +47,17 @@ public class Client {
                 // get messages
                 StringBuilder sb = new StringBuilder();
                 while (read == 1024) {
-                    sb.append(mReadBuffer.array());
+                    sb.append(new String(mReadBuffer.array()));
                     mReadBuffer.clear();
                     read = mChannel.read(mReadBuffer);
                 }
 
-                sb.append(mReadBuffer.array());
+                
+                
+                sb.append(new String(mReadBuffer.array(), 0, read));
+                System.err.println(sb.length());
+                System.err.println("ponies: " + sb.toString());
+                mReadBuffer.clear();
                 return processMessages(sb);
             }
 
@@ -64,12 +70,17 @@ public class Client {
     private List<String> processMessages(StringBuilder sb) {
         int start = 0;
         List<String> result = new ArrayList<String>();
-
+        System.err.println(sb.toString());
+        System.err.println(sb.length());
         while (start < sb.length()) {
             int nullIndex = sb.indexOf("\0", start);
-            String ss = sb.substring(0, nullIndex - 1);
+            if (nullIndex == -1) nullIndex = sb.length();
+            String ss = sb.substring(start, nullIndex);
             result.add(ss);
             start = nullIndex + 1;
+            System.err.println(start);
+            System.err.println(sb.length());
+            System.err.println(nullIndex + 1);
         }
 
         return result;
@@ -89,6 +100,14 @@ public class Client {
 
     public void setCurrentGraphId(int id) {
         mSelectedGraphId = id;
+    }
+
+    public int getCurrentStateId() {
+        return mStateId;
+    }
+
+    public void updateStateId(int stateId) {
+        mStateId = stateId;
     }
 
 }

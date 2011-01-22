@@ -5,8 +5,8 @@ import java.nio.ByteBuffer;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-import uk.me.graphe.server.messages.HeartbeatMessage;
-import uk.me.graphe.server.messages.Message;
+import uk.me.graphe.shared.messages.HeartbeatMessage;
+import uk.me.graphe.shared.messages.Message;
 
 import com.google.gwt.dev.util.Pair;
 
@@ -44,12 +44,18 @@ public class ClientMessageSender extends Thread {
 				Client c = clOp.left;
 				if (c.isConnected()) clOp.left.getChannel().write(ByteBuffer.wrap(s.getBytes()));
 			} catch (InterruptedException e) {
-				throw new Error(e);
+				return;
 			} catch (IOException ioe) {
 				throw new Error(ioe);
 			}
         }
         
+    }
+
+    public void shutDown() {
+        mShutDown = true;
+        this.interrupt();
+        ClientManager.getInstance().wakeUp();
     }
     
 }

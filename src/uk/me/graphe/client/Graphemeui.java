@@ -1,13 +1,12 @@
 package uk.me.graphe.client;
 
 import uk.me.graphe.client.communications.ServerChannel;
-import uk.me.graphe.graphmanagers.GraphManager2d;
-import uk.me.graphe.graphmanagers.GraphManager2dFactory;
 import uk.me.graphe.shared.Vertex;
 import uk.me.graphe.shared.VertexDirection;
+import uk.me.graphe.shared.graphmanagers.GraphManager2d;
+import uk.me.graphe.shared.graphmanagers.GraphManager2dFactory;
 
 import com.google.gwt.core.client.EntryPoint;
-//import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 

@@ -1,9 +1,9 @@
 package uk.me.graphe.shared;
 
-import uk.me.graphe.graphmanagers.GraphManager2d;
-import uk.me.graphe.graphmanagers.GraphManager2dFactory;
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import uk.me.graphe.shared.graphmanagers.GraphManager2d;
+import uk.me.graphe.shared.graphmanagers.GraphManager2dFactory;
 
 public class GraphManager2dFactoryTest extends TestCase {
 	/**

@@ -5,14 +5,14 @@ import java.util.List;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import uk.me.graphe.client.VertexDrawable;
-import uk.me.graphe.graphmanagers.OTGraphManager2d;
-import uk.me.graphe.graphmanagers.OTGraphManagerFactory;
-import uk.me.graphe.server.messages.operations.AddEdgeOperation;
-import uk.me.graphe.server.messages.operations.AddNodeOperation;
-import uk.me.graphe.server.messages.operations.DeleteEdgeOperation;
-import uk.me.graphe.server.messages.operations.DeleteNodeOperation;
-import uk.me.graphe.server.messages.operations.MoveNodeOperation;
-import uk.me.graphe.server.messages.operations.NoOperation;
+import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
+import uk.me.graphe.shared.graphmanagers.OTGraphManagerFactory;
+import uk.me.graphe.shared.messages.operations.AddEdgeOperation;
+import uk.me.graphe.shared.messages.operations.AddNodeOperation;
+import uk.me.graphe.shared.messages.operations.DeleteEdgeOperation;
+import uk.me.graphe.shared.messages.operations.DeleteNodeOperation;
+import uk.me.graphe.shared.messages.operations.MoveNodeOperation;
+import uk.me.graphe.shared.messages.operations.NoOperation;
 
 public class OTGraphManagerTest extends TestCase {
 

@@ -3,8 +3,8 @@ package uk.me.graphe.server;
 import java.util.HashMap;
 import java.util.Map;
 
-import uk.me.graphe.graphmanagers.OTGraphManager2d;
-import uk.me.graphe.graphmanagers.OTGraphManagerFactory;
+import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
+import uk.me.graphe.shared.graphmanagers.OTGraphManagerFactory;
 
 public class DataManager {
 
@@ -25,6 +25,10 @@ public class DataManager {
         int id = ++sHighestId;
         sGraphs.put(id, OTGraphManagerFactory.newInstance(id));
         return id;
+    }
+    
+    public static void flush() {
+        sGraphs = new HashMap<Integer, OTGraphManager2d>();
     }
 
 }
