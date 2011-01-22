@@ -1,18 +1,18 @@
 package uk.me.graphe.server.database;
 
-import uk.me.graphe.shared.Graph;
+import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
 
 public interface Database {
     
     /**
-     * stores the given graph into the database
+     * stores the given graphmanager into the database
      * 
      * @param graph 
      *      the graph to be stored
      * 
      * @return a key to retrieve the graph
      */  
-    public int store (Graph graph);
+    public int store (OTGraphManager2d manager);
     
     /**
      * retrieves the graph with matching key
@@ -22,10 +22,10 @@ public interface Database {
      * 
      * @return the requested graph
      */  
-    public Graph retrieve (int key);
+    public OTGraphManager2d retrieve (int key);
     
     /**
-     * deletes the graph with matching key
+     * deletes the graphmanager with matching key
      * 
      * @param key
      *      the id of the graph to be deleted
