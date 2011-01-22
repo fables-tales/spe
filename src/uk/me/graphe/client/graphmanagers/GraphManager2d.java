@@ -133,4 +133,8 @@ public interface GraphManager2d {
      */
     public Vertex getVertexFromDrawable(VertexDrawable vd);
 
+    /**
+     * forces graph to be redrawn
+     */
+	public void invalidate();
 }

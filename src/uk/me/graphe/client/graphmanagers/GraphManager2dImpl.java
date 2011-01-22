@@ -175,7 +175,7 @@ public class GraphManager2dImpl implements GraphManager2d {
 		return null;
 	}
 
-	private void invalidate() {
+	public void invalidate() {
 		for (Runnable r : mRedrawCallbacks) {
 			r.run();
 		}
