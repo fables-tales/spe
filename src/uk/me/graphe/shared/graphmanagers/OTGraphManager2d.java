@@ -23,4 +23,6 @@ public interface OTGraphManager2d extends GraphManager2d {
     public int getStateId();
 
     public int getGraphId();
+    
+    public CompositeOperation getCompleteHistory();
 }

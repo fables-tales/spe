@@ -76,4 +76,9 @@ public class OTGraphManager2dImpl extends GraphManager2dImpl implements
         return mStateId;
     }
 
+    @Override
+    public CompositeOperation getCompleteHistory() {
+        return this.getOperationDelta(0);
+    }
+
 }
