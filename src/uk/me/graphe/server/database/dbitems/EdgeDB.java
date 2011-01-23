@@ -32,7 +32,7 @@ public abstract class EdgeDB extends GraphDB {
         return false;
     }
 
-    public boolean createsEdge(Edge effectedEdge) {
+    public boolean createsEdge(DBEdge effectedEdge) {
         return false;
     }
 

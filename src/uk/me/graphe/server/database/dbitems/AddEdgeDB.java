@@ -9,7 +9,7 @@ import uk.me.graphe.shared.Edge;
 public class AddEdgeDB extends EdgeDB {
 
     @Override
-    public boolean createsEdge(Edge effectedEdge) {
+    public boolean createsEdge(DBEdge effectedEdge) {
         return effectedEdge.equals(this.getEdge());
     }
 
