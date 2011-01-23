@@ -84,4 +84,9 @@ public class OTGraphManager2dImpl extends GraphManager2dImpl implements
         return this.getOperationDelta(0);
     }
 
+    @Override
+    public void setHistory(List<GraphOperation> h) {
+       mHistory = h;
+    }
+
 }

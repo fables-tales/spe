@@ -1,5 +1,7 @@
 package uk.me.graphe.shared.graphmanagers;
 
+import java.util.List;
+
 import uk.me.graphe.shared.messages.operations.CompositeOperation;
 import uk.me.graphe.shared.messages.operations.GraphOperation;
 
@@ -27,4 +29,6 @@ public interface OTGraphManager2d extends GraphManager2d {
     public void setStateId(int m);
     
     public CompositeOperation getCompleteHistory();
+
+    public void setHistory(List<GraphOperation> h);
 }
