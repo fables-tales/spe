@@ -1,5 +1,8 @@
 package uk.me.graphe.server.database.dbitems;
 
+import com.google.code.morphia.annotations.Embedded;
+
+@Embedded
 public abstract class GraphDB {
 
     /**

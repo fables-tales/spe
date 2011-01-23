@@ -1,12 +1,14 @@
 package uk.me.graphe.server.database.dbitems;
 
-import uk.me.graphe.shared.Vertex;
+import com.google.code.morphia.annotations.Embedded;
 
+@Embedded
 public abstract class NodeDB extends GraphDB {
 
-    private Vertex mNode;
+    @Embedded
+    private DBVertex mNode;
     
-    public NodeDB(Vertex v) {
+    public NodeDB(DBVertex v) {
         mNode = v;
     }
     
@@ -20,23 +22,23 @@ public abstract class NodeDB extends GraphDB {
         return this;
     }
 
-    public Vertex getNode() {
+    public DBVertex getNode() {
         return mNode;
     }
     
-    public void setNode(Vertex nodeName) {
+    public void setNode(DBVertex nodeName) {
         mNode = nodeName;
     }
 
-    public boolean deletesNode(Vertex effectedNode) {
+    public boolean deletesNode(DBVertex effectedNode) {
         return false;
     }
 
-    public boolean createsNode(Vertex effectedNode) {
+    public boolean createsNode(DBVertex effectedNode) {
         return false;
     }
 
-    public boolean movesNode(Vertex effectedNode) {
+    public boolean movesNode(DBVertex effectedNode) {
         return false;
     }
 

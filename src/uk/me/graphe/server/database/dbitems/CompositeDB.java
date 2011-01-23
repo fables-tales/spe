@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import uk.me.graphe.shared.Edge;
-import uk.me.graphe.shared.Vertex;
+import com.google.code.morphia.annotations.Entity;
+import com.google.code.morphia.annotations.Reference;
 
+@Entity
 public class CompositeDB extends GraphDB {
 
+    @Reference
     private List<GraphDB> mOperations;
 
     public CompositeDB(List<GraphDB> subList) {
@@ -16,7 +18,7 @@ public class CompositeDB extends GraphDB {
     }
 
 
-    public boolean deletesNode(Vertex effectedNode) {
+    public boolean deletesNode(DBVertex effectedNode) {
         for (GraphDB o : mOperations) {
             if (o.isNodeOperation()
                     && o.asNodeOperation().deletesNode(effectedNode)) {
@@ -27,7 +29,7 @@ public class CompositeDB extends GraphDB {
         return false;
     }
 
-    public boolean deletesEdge(Edge effectedEdge) {
+    public boolean deletesEdge(DBEdge effectedEdge) {
         for (GraphDB o : mOperations) {
             if (o.isEdgeOperation()
                     && o.asEdgeOperation().deletesEdge(effectedEdge)) {

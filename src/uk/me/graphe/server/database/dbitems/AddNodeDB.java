@@ -1,13 +1,11 @@
 package uk.me.graphe.server.database.dbitems;
 
+import com.google.code.morphia.annotations.Embedded;
 
-import uk.me.graphe.client.Graphemeui;
-import uk.me.graphe.shared.Vertex;
-import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
-
+@Embedded
 public class AddNodeDB extends NodeDB {
 
-    public AddNodeDB(Vertex v, int x, int y) {
+    public AddNodeDB(DBVertex v, int x, int y) {
         super(v);
         mNodeX = x;
         mNodeY = y;
@@ -17,14 +15,10 @@ public class AddNodeDB extends NodeDB {
     private int mNodeY;
 
     @Override
-    public boolean createsNode(Vertex effectedNode) {
+    public boolean createsNode(DBVertex effectedNode) {
         System.out.println(effectedNode);
         System.out.println(this.getNode());
         return effectedNode.getLabel().equals(this.getNode().getLabel());
-    }
-
-    public void apply(OTGraphManager2d g) {
-        g.addVertex(this.getNode(), mNodeX, mNodeY, Graphemeui.VERTEX_SIZE);
     }
 
     @Override

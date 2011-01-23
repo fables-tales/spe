@@ -5,6 +5,7 @@ import java.util.List;
 import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
 import uk.me.graphe.shared.messages.operations.CompositeOperation;
 
+import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Entity;
 
 
@@ -12,12 +13,12 @@ import com.google.code.morphia.annotations.Entity;
 public class OTGraphManager2dStore {
     private int id;
     private int stateid;
+    @Embedded
     private List<GraphDB> mOps;
     
     public OTGraphManager2dStore (OTGraphManager2d graph) {
         id = graph.getGraphId();
         stateid = graph.getStateId();
-        CompositeOperation history = graph.getCompleteHistory();
     }
     
     public OTGraphManager2dStore() {

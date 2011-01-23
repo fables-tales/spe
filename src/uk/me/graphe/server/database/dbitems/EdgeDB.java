@@ -1,7 +1,10 @@
 package uk.me.graphe.server.database.dbitems;
 
+import com.google.code.morphia.annotations.Embedded;
+
 import uk.me.graphe.shared.Edge;
 
+@Embedded
 public abstract class EdgeDB extends GraphDB {
 
     @Override
@@ -14,17 +17,18 @@ public abstract class EdgeDB extends GraphDB {
         return true;
     }
 
-    private Edge mEdge;
+    @Embedded
+    private DBEdge mEdge;
     
-    public EdgeDB(Edge e) {
+    public EdgeDB(DBEdge e) {
         mEdge = e;
     }
     
-    public Edge getEdge() {
+    public DBEdge getEdge() {
         return mEdge;
     }
 
-    public boolean deletesEdge(Edge effectedEdge) {
+    public boolean deletesEdge(DBEdge effectedEdge) {
         return false;
     }
 

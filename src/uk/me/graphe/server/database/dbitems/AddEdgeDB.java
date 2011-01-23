@@ -1,8 +1,11 @@
 package uk.me.graphe.server.database.dbitems;
 
 
+import com.google.code.morphia.annotations.Embedded;
+
 import uk.me.graphe.shared.Edge;
 
+@Embedded
 public class AddEdgeDB extends EdgeDB {
 
     @Override
@@ -10,7 +13,7 @@ public class AddEdgeDB extends EdgeDB {
         return effectedEdge.equals(this.getEdge());
     }
 
-    public AddEdgeDB(Edge e) {
+    public AddEdgeDB(DBEdge e) {
         super(e);
     }
 

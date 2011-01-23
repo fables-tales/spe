@@ -1,20 +1,20 @@
 package uk.me.graphe.server.database.dbitems;
 
+import com.google.code.morphia.annotations.Embedded;
 
-import uk.me.graphe.shared.Vertex;
-
+@Embedded
 public class MoveNodeDB extends NodeDB {
 
     @Override
-    public boolean movesNode(Vertex effectedNode) {
+    public boolean movesNode(DBVertex effectedNode) {
         return this.getNode().equals(effectedNode);
     }
 
     private int mToX;
     private int mToY;
     
-    public MoveNodeDB(Vertex v, int toX, int toY) {
-        super(v);
+    public MoveNodeDB(DBVertex storeVertex, int toX, int toY) {
+        super(storeVertex);
         mToX = toX;
         mToY = toY;
     }

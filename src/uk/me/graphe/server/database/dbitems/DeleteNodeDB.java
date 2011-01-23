@@ -1,16 +1,16 @@
 package uk.me.graphe.server.database.dbitems;
 
+import com.google.code.morphia.annotations.Embedded;
 
-import uk.me.graphe.shared.Vertex;
-
+@Embedded
 public class DeleteNodeDB extends NodeDB {
 
-    public DeleteNodeDB(Vertex v) {
+    public DeleteNodeDB(DBVertex v) {
         super(v);
     }
 
     @Override
-    public boolean deletesNode(Vertex effectedNode) {
+    public boolean deletesNode(DBVertex effectedNode) {
         return effectedNode.equals(this.getNode());
     }
 

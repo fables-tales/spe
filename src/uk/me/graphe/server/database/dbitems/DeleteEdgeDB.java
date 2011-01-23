@@ -1,17 +1,17 @@
 package uk.me.graphe.server.database.dbitems;
 
+import com.google.code.morphia.annotations.Embedded;
 
-import uk.me.graphe.shared.Edge;
-
+@Embedded
 public class DeleteEdgeDB extends EdgeDB {
 
     @Override
-    public boolean deletesEdge(Edge effectedEdge) {
+    public boolean deletesEdge(DBEdge effectedEdge) {
         return effectedEdge.equals(this.getEdge());
     }
 
-    public DeleteEdgeDB(Edge e) {
-        super(e);
+    public DeleteEdgeDB(DBEdge storeEdge) {
+        super(storeEdge);
     }
 
 }
