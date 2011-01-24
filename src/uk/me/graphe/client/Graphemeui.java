@@ -1,5 +1,8 @@
 package uk.me.graphe.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import uk.me.graphe.client.communications.ReceiveNotificationRunner;
 import uk.me.graphe.client.communications.ServerChannel;
 import uk.me.graphe.client.json.wrapper.JSOFactory;
@@ -7,8 +10,12 @@ import uk.me.graphe.shared.Vertex;
 import uk.me.graphe.shared.VertexDirection;
 import uk.me.graphe.shared.graphmanagers.GraphManager2d;
 import uk.me.graphe.shared.graphmanagers.GraphManager2dFactory;
+import uk.me.graphe.shared.jsonwrapper.JSONException;
 import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
+import uk.me.graphe.shared.jsonwrapper.JSONObject;
 import uk.me.graphe.shared.messages.HeartbeatMessage;
+import uk.me.graphe.shared.messages.Message;
+import uk.me.graphe.shared.messages.MessageFactory;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.DOM;
@@ -40,14 +47,34 @@ public class Graphemeui implements EntryPoint {
         RootPanel.get("toolbox").add(gui.getToolBox());
         RootPanel.get("canvas").add(gui.getCanvas());
         ServerChannel sc = ServerChannel.getInstance();
-        Window.alert(new HeartbeatMessage().toJson());
         sc.init();
         sc.addReceiveNotification(new ReceiveNotificationRunner() {
 
             @Override
             public void run(String s) {
-                DOM.getElementById("heartbeats").setInnerHTML(
-                        "" + mHeartbeats++ + " heartbeats");
+                List<JSONObject> jsos = new ArrayList<JSONObject>();
+                int startIndex = 0;
+                int endIndex;
+                do {
+
+                    endIndex = s.indexOf("\0", startIndex);
+                    if (endIndex == -1) endIndex = s.length();
+                    try {
+                        jsos.add(JSONImplHolder.make(s.substring(startIndex,
+                                endIndex)));
+                    } catch (JSONException e) {
+                        Window.alert("bees");
+                    }
+                    startIndex = endIndex + 1;
+
+                } while (s.indexOf("\0", startIndex) != -1);
+                try {
+                    List<Message> messages = MessageFactory.makeOperationsFromJson(jsos);
+                    
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
         });
         mHeartbeatTimer = new Timer() {
@@ -84,11 +111,11 @@ public class Graphemeui implements EntryPoint {
             public void run() {
                 d.renderGraph(canvas.canvasPanel, graphManager
                         .getEdgeDrawables(), graphManager.getVertexDrawables());// graph
-                                                                                // goes
-                                                                                // here!
+                // goes
+                // here!
             }
         });
-        
+
     }
 
     /**
