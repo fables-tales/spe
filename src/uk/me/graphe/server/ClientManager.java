@@ -6,6 +6,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -124,6 +125,14 @@ public class ClientManager {
         this.mReadableSocketsSelector.wakeup();
         this.mWritableSocketsSelector.wakeup();
         this.unblockSelection();
+    }
+
+    public List<Client> getClientsWith(int graphId) {
+        return null;
+    }
+
+    public int getNumberOfClients() {
+        return this.mClientMap.size();
     }
 
 }
