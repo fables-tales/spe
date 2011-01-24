@@ -74,13 +74,11 @@ public class Client {
         System.err.println(sb.length());
         while (start < sb.length()) {
             int nullIndex = sb.indexOf("\0", start);
+            if (nullIndex == -1) nullIndex = sb.indexOf("u\0000", start); 
             if (nullIndex == -1) nullIndex = sb.length();
             String ss = sb.substring(start, nullIndex);
             result.add(ss);
             start = nullIndex + 1;
-            System.err.println(start);
-            System.err.println(sb.length());
-            System.err.println(nullIndex + 1);
         }
 
         return result;
