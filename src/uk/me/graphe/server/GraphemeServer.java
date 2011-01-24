@@ -66,6 +66,7 @@ public class GraphemeServer extends Thread {
                 SocketChannel clientSock = mServerSocketChannel.accept();
                 Client client = new Client(clientSock);
                 mClientManager.addClient(client);
+                System.err.println("number clients: " + mClientManager.getNumberOfClients());
             } catch (IOException e) {
                 e.printStackTrace();
             }
