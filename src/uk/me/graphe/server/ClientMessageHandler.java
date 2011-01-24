@@ -44,7 +44,7 @@ public class ClientMessageHandler extends Thread {
                     .waitOnReadableClients();
             for (Client c : availableClients) {
                 List<String> messages = c.readNextMessages();
-                System.err.println("len messages:" + messages.size());
+                if (messages != null) System.err.println("len messages:" + messages.size());
                 // if this returns null we disconnect the client for sending bad
                 // messages
                 List<JSONObject> jsos = validateAndParse(messages);
