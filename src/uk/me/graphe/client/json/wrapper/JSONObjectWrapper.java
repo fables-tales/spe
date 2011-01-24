@@ -9,6 +9,11 @@ import uk.me.graphe.shared.jsonwrapper.JSONObject;
 
 public class JSONObjectWrapper extends JSONObject {
 
+    @Override
+    public native String toString() /*-{
+        return JSON.stringify(this.@uk.me.graphe.client.json.wrapper.JSONObjectWrapper::mObj);
+    }-*/;
+
     private JavaScriptObject mObj;
 
     public JSONObjectWrapper(String s) {

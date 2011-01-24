@@ -1,12 +1,23 @@
 package uk.me.graphe.client;
 
+import uk.me.graphe.client.communications.ReceiveNotificationRunner;
 import uk.me.graphe.client.communications.ServerChannel;
+import uk.me.graphe.client.json.wrapper.JSOFactory;
 import uk.me.graphe.shared.Vertex;
 import uk.me.graphe.shared.VertexDirection;
 import uk.me.graphe.shared.graphmanagers.GraphManager2d;
 import uk.me.graphe.shared.graphmanagers.GraphManager2dFactory;
+import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
+import uk.me.graphe.shared.messages.HeartbeatMessage;
+import uk.me.graphe.shared.messages.MakeGraphMessage;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -21,16 +32,39 @@ public class Graphemeui implements EntryPoint {
     public GraphManager2d graphManager;
     public int nodes;
     public static final int VERTEX_SIZE = 10;
+    private Timer mHeartbeatTimer;
+    private int mHeartbeats = 0;
 
     /**
      * This is the entry point method.
      */
     public void onModuleLoad() {
         Graphemeui gui = new Graphemeui();
+        JSONImplHolder.initialise(new JSOFactory());
         RootPanel.get("toolbox").add(gui.getToolBox());
         RootPanel.get("canvas").add(gui.getCanvas());
         ServerChannel sc = ServerChannel.getInstance();
+        Window.alert(new HeartbeatMessage().toJson());
         sc.init();
+        sc.addReceiveNotification(new ReceiveNotificationRunner() {
+
+            @Override
+            public void run(String s) {
+                DOM.getElementById("heartbeats").setInnerHTML(
+                        "" + mHeartbeats++ + " heartbeats");
+            }
+        });
+        mHeartbeatTimer = new Timer() {
+
+            @Override
+            public void run() {
+                ServerChannel.getInstance().send(
+                        new HeartbeatMessage().toJson());
+            }
+        };
+
+        mHeartbeatTimer.scheduleRepeating(500);
+
     }
 
     private Widget getToolBox() {
@@ -52,10 +86,13 @@ public class Graphemeui implements EntryPoint {
 
             @Override
             public void run() {
-                d.renderGraph(canvas.canvasPanel, graphManager.getEdgeDrawables(),
-                        graphManager.getVertexDrawables());//graph goes here! 
+                d.renderGraph(canvas.canvasPanel, graphManager
+                        .getEdgeDrawables(), graphManager.getVertexDrawables());// graph
+                                                                                // goes
+                                                                                // here!
             }
         });
+        
     }
 
     /**
@@ -67,20 +104,24 @@ public class Graphemeui implements EntryPoint {
         int tool = tools.getTool();
         if (tool == 1) {
             // add node tool
-            EdgeDialog ed = new EdgeDialog(graphManager.getUnderlyingGraph(), 3, this);
+            EdgeDialog ed = new EdgeDialog(graphManager.getUnderlyingGraph(),
+                    3, this);
             ed.setPoint(x1, y1);
             tools.getOptionsPanel().add(ed);
         } else if (tool == 2) {
             // add edge tool
-            EdgeDialog ed = new EdgeDialog(graphManager.getUnderlyingGraph(), 0, this);
+            EdgeDialog ed = new EdgeDialog(graphManager.getUnderlyingGraph(),
+                    0, this);
             tools.getOptionsPanel().add(ed);
         } else if (tool == 3) {
             // remove node tool
-            EdgeDialog ed = new EdgeDialog(graphManager.getUnderlyingGraph(), 1, this);
+            EdgeDialog ed = new EdgeDialog(graphManager.getUnderlyingGraph(),
+                    1, this);
             tools.getOptionsPanel().add(ed);
         } else if (tool == 4) {
             // remove edge tool
-            EdgeDialog ed = new EdgeDialog(graphManager.getUnderlyingGraph(), 2, this);
+            EdgeDialog ed = new EdgeDialog(graphManager.getUnderlyingGraph(),
+                    2, this);
             tools.getOptionsPanel().add(ed);
         }
     }
@@ -101,15 +142,18 @@ public class Graphemeui implements EntryPoint {
      *            - the dialog box itself (passed in so we can delete it
      *            afterwards)
      */
-    public void addElement(int type, int v1, int v2, int edge, String label, EdgeDialog ed) {
+    public void addElement(int type, int v1, int v2, int edge, String label,
+            EdgeDialog ed) {
         if (type == 2) {
-            graphManager.removeEdge(graphManager.getUnderlyingGraph().getEdges().get(edge));
+            graphManager.removeEdge(graphManager.getUnderlyingGraph()
+                    .getEdges().get(edge));
         } else if (type == 1) {
-            graphManager.removeVertex(graphManager.getUnderlyingGraph().getVertices().get(v1));
+            graphManager.removeVertex(graphManager.getUnderlyingGraph()
+                    .getVertices().get(v1));
         } else if (type == 0) {
-            graphManager
-                    .addEdge(graphManager.getUnderlyingGraph().getVertices().get(v1), graphManager
-                            .getUnderlyingGraph().getVertices().get(v2), VertexDirection.fromTo);
+            graphManager.addEdge(graphManager.getUnderlyingGraph()
+                    .getVertices().get(v1), graphManager.getUnderlyingGraph()
+                    .getVertices().get(v2), VertexDirection.fromTo);
         } else if (type == 3) {
             Vertex v = new Vertex(label);
             int[] coords = ed.getPoint();

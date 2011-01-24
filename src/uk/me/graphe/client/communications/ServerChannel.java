@@ -3,8 +3,6 @@ package uk.me.graphe.client.communications;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.core.client.JavaScriptObject;
-
 public class ServerChannel {
 
     private static ServerChannel sInstance = null;
@@ -25,26 +23,26 @@ public class ServerChannel {
         $wnd.scInstance = this;
         //setup the callback to the recieve funciton
         $wnd.websocket.onread = function(message) {
-            var jso = eval("(" + message.substring(0,message.length-1) + ")");
-            scInstance.@uk.me.graphe.client.communications.ServerChannel::receive(Lcom/google/gwt/core/client/JavaScriptObject;)(jso);
+            var jso = message.substring(0,message.length-1);
+            scInstance.@uk.me.graphe.client.communications.ServerChannel::receive(Ljava/lang/String;)(jso);
         }
     }-*/;
 
-    public native void send(JavaScriptObject s) /*-{
-        $wnd.orbitedSend(s);
+    public native void send(String s) /*-{
+        $wnd.orbitedSend(s + "\0");
     }-*/;
 
-    public void receive(JavaScriptObject jso) {
-        notifyAllCallbacks(jso);
+    public void receive(String s) {
+        notifyAllCallbacks(s);
     }
 
     public void addReceiveNotification(ReceiveNotificationRunner rn) {
         mNotificationCallbacks.add(rn);
     }
 
-    public void notifyAllCallbacks(JavaScriptObject jso) {
+    public void notifyAllCallbacks(String s) {
         for (ReceiveNotificationRunner rn : mNotificationCallbacks) {
-            rn.run(jso);
+            rn.run(s);
         }
     }
 }
