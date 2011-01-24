@@ -20,7 +20,7 @@ public class Client {
     private SocketChannel mChannel;
     private ByteBuffer mReadBuffer = ByteBuffer.allocate(1024);
     private boolean mConnected = true;
-    private int mSelectedGraphId;
+    private int mSelectedGraphId = -1;
     private int mStateId;
 
     public Client(SocketChannel clientSock) {
@@ -97,7 +97,11 @@ public class Client {
     }
 
     public void setCurrentGraphId(int id) {
+        if (mSelectedGraphId != -1) {
+            ClientManager.getInstance().removeClientGraph(id, this);
+        }
         mSelectedGraphId = id;
+        ClientManager.getInstance().setClientGraph(this, id);
     }
 
     public int getCurrentStateId() {

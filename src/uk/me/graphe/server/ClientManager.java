@@ -5,8 +5,11 @@ import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -19,6 +22,7 @@ public class ClientManager {
     private Selector mReadableSocketsSelector;
     private Selector mWritableSocketsSelector;
     private CountDownLatch mSelectionBlock = new CountDownLatch(0);
+    private Map<Integer, List<Client>> mClientGraphMap = new HashMap<Integer, List<Client>>();
 
     private ClientManager() {
         try {
@@ -133,6 +137,20 @@ public class ClientManager {
 
     public int getNumberOfClients() {
         return this.mClientMap.size();
+    }
+
+    public void setClientGraph(Client c, int i) {
+        if (!mClientGraphMap.containsKey(i)) mClientGraphMap.put(i, new ArrayList<Client>());
+        mClientGraphMap.get(i).add(c);
+    }
+    
+    public List<Client> clientsForGraph(int currentGraphId) {
+        return mClientGraphMap.get(currentGraphId);
+    }
+
+    public void removeClientGraph(int id, Client client) {
+        mClientGraphMap.get(id).remove(client);
+        
     }
 
 }
