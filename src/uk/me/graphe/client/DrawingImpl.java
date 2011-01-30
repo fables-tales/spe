@@ -112,7 +112,7 @@ public class DrawingImpl implements Drawing {
                 if(numSections>33)numSections = 33;
                 if(numSections<5)numSections = 5;
                 var delta_theta = 2.0 * Math.PI / numSections
-                var theta = 0
+                var theta = 0;
                 var coord = new Array(numSections);
                 var pvertices = new Float32Array(numSections*2);
                 for (i = 0; i < numSections ; i++) {
@@ -274,7 +274,7 @@ public class DrawingImpl implements Drawing {
                 
                 
                 var edgesArray=edges.split(",");
-                for(var i=0;i<edgesArray.length;i+=4)
+                for(var i=0;i<edgesArray.length-4;i+=4)
                 {
                     var left1 = parseInt(edgesArray[i]);
                     var top1 = parseInt(edgesArray[i+1]);
@@ -284,7 +284,7 @@ public class DrawingImpl implements Drawing {
                 }
                 
                 var verticesArray=vertices.split(",");
-                for(var i=0;i<verticesArray.length;i+=3)
+                for(var i=0;i<verticesArray.length-3;i+=3)
                 {
                     var left = parseInt(verticesArray[i]);
                     var top = parseInt(verticesArray[i+1]);
