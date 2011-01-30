@@ -9,7 +9,7 @@
         
         .buttonadv {
             width: 35px;
-            height: 28px;
+            height: 33px;
             color: transparent;
             margin: 0;
             border: 0;
@@ -18,9 +18,13 @@
             margin-right: 5px;
         }
         
+        .buttonadv:hover{
+	    background: url(images/addvertd.png);
+        }
+        
         .buttonade {
             width: 35px;
-            height: 28px;
+            height: 33px;
             color: transparent;
             margin: 0;
             border: 0;
@@ -28,10 +32,14 @@
             cursor: pointer;
             margin-right: 5px;
         }
+
+        .buttonade:hover{
+	    background: url(images/addedged.png);
+        }
         
         .buttonremv {
             width: 35px;
-            height: 28px;
+            height: 33px;
             color: transparent;
             margin: 0;
             border: 0;
@@ -39,10 +47,14 @@
             cursor: pointer;
             margin-right: 5px;
         }
+
+        .buttonremv:hover{
+	    background: url(images/remvertd.png);
+        }
         
         .buttonreme {
             width: 35px;
-            height: 28px;
+            height: 33px;
             color: transparent;
             margin: 0;
             border: 0;
@@ -50,16 +62,24 @@
             cursor: pointer;
             margin-right: 10px;
         }
+
+        .buttonreme:hover{
+	    background: url(images/remedged.png);
+        }
         
         .buttonmove {
             width: 35px;
-            height: 28px;
+            height: 33px;
             color: transparent;
             margin: 0;
             border: 0;
             background: url(images/move.png) no-repeat;
             cursor: pointer;
             margin-right: 10px;
+        }
+
+        .buttonmove:hover{
+	    background: url(images/moved.png);
         }
         
         .stack {
@@ -70,9 +90,8 @@
             margin-left: 25px;
             margin-top: 15px;
             height: 35px;
-            background: url(toolgrad.png);
+            background: url(images/toolgrad.png);
             border: 1px black solid;
-            overflow: hidden;
         }
         
         .header {
