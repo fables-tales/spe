@@ -14,7 +14,7 @@ public class DrawingImpl implements Drawing {
 	//used for panning
 	public int offsetX, offsetY;
 
-
+	// JSNI method for webgl, comments omitted because it is one big comment...
     private static native void drawGraph3D(String verticesString, String edgesString) /*-{
             function getPersepctiveMatrix(width, height)
             {
@@ -53,7 +53,7 @@ public class DrawingImpl implements Drawing {
                     top2 = temp2;
                 }
             
-                var width = 5;
+                var width = 2;
                 var length = Math.sqrt(((top2-top1)*(top2-top1))+((left2-left1)*(left2-left1)));
                 var vHeight = top1-top2;
                 var hWidth = left1-left2;
@@ -204,7 +204,7 @@ public class DrawingImpl implements Drawing {
                 canvas1 = document.getElementsByTagName("canvas")[1];
                 canvas1.style.position = "absolute";
                 canvas1.style.zIndex = 10;
-                canvas1.style.opacity = 0.4;
+                canvas1.style.opacity = 0;
                
 
 
