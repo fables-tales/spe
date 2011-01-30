@@ -14,7 +14,7 @@ public class DrawingImpl implements Drawing {
 	//used for panning
 	public int offsetX, offsetY;
 
-
+	// JSNI method for webgl, comments omitted because it is one big comment...
     private static native void drawGraph3D(String verticesString, String edgesString) /*-{
             function getPersepctiveMatrix(width, height)
             {
@@ -53,7 +53,7 @@ public class DrawingImpl implements Drawing {
                     top2 = temp2;
                 }
             
-                var width = 5;
+                var width = 2;
                 var length = Math.sqrt(((top2-top1)*(top2-top1))+((left2-left1)*(left2-left1)));
                 var vHeight = top1-top2;
                 var hWidth = left1-left2;
@@ -112,7 +112,7 @@ public class DrawingImpl implements Drawing {
                 if(numSections>33)numSections = 33;
                 if(numSections<5)numSections = 5;
                 var delta_theta = 2.0 * Math.PI / numSections
-                var theta = 0
+                var theta = 0;
                 var coord = new Array(numSections);
                 var pvertices = new Float32Array(numSections*2);
                 for (i = 0; i < numSections ; i++) {
@@ -204,7 +204,7 @@ public class DrawingImpl implements Drawing {
                 canvas1 = document.getElementsByTagName("canvas")[1];
                 canvas1.style.position = "absolute";
                 canvas1.style.zIndex = 10;
-                canvas1.style.opacity = 0.4;
+                canvas1.style.opacity = 0;
                
 
 
@@ -274,7 +274,7 @@ public class DrawingImpl implements Drawing {
                 
                 
                 var edgesArray=edges.split(",");
-                for(var i=0;i<edgesArray.length;i+=4)
+                for(var i=0;i<edgesArray.length-4;i+=4)
                 {
                     var left1 = parseInt(edgesArray[i]);
                     var top1 = parseInt(edgesArray[i+1]);
@@ -284,7 +284,7 @@ public class DrawingImpl implements Drawing {
                 }
                 
                 var verticesArray=vertices.split(",");
-                for(var i=0;i<verticesArray.length;i+=3)
+                for(var i=0;i<verticesArray.length-3;i+=3)
                 {
                     var left = parseInt(verticesArray[i]);
                     var top = parseInt(verticesArray[i+1]);
