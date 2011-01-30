@@ -1,98 +1,146 @@
 package uk.me.graphe.server;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
+import java.util.Set;
 
+import uk.me.graphe.server.ot.GraphProcessor;
+import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
+import uk.me.graphe.shared.jsonwrapper.JSONException;
+import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
+import uk.me.graphe.shared.jsonwrapper.JSONObject;
+import uk.me.graphe.shared.messages.Message;
+import uk.me.graphe.shared.messages.MessageFactory;
+import uk.me.graphe.shared.messages.NoSuchGraphMessage;
+import uk.me.graphe.shared.messages.OpenGraphMessage;
+import uk.me.graphe.shared.messages.RequestGraphMessage;
+import uk.me.graphe.shared.messages.StateIdMessage;
+import uk.me.graphe.shared.messages.operations.CompositeOperation;
+import uk.me.graphe.shared.messages.operations.GraphOperation;
+
+
+/**
+ * reads messages from clients, and validates them. Sends client message pairs
+ * to the message processor for transformation
+ * 
+ * @author Sam Phippen <samphippen@googlemail.com>
+ * 
+ */
 public class ClientMessageHandler extends Thread {
 
-    private List<SocketChannel> mClientSockets = new ArrayList<SocketChannel>();
+    private ClientManager mClientManager = ClientManager.getInstance();
     private boolean mShutDown = false;
-    // really really don't screw with this unless you know what you're doing
-    private Selector mReadableSocketsSelector;
-    private BlockingQueue<SocketChannel> mScQueue = new ArrayBlockingQueue<SocketChannel>(1024);
+    private HeartbeatManager mHbm = new HeartbeatManager();
+    private GraphProcessor mProcessor = GraphProcessor.getInstance();
+    private static ClientMessageHandler sInstance = null;
 
-    public ClientMessageHandler() throws IOException {
-        // why does this throw an io exception? I mean really
-        mReadableSocketsSelector = Selector.open();
-    }
+    public ClientMessageHandler() {}
 
-    /**
-     * adds a new client socketchannel to the system this way the client's
-     * incoming messages will be read
-     * 
-     * @param sc
-     */
-    public void addClient(SocketChannel sc) {
-        try {
-            mScQueue.put(sc);
-            mReadableSocketsSelector.wakeup();
-        } catch (InterruptedException e) {
-            throw new Error(e);
-        }
-    }
-
-    /**
-     * adds a new client to the message handler
-     * 
-     * @param clientSock
-     *            the socket of the client
-     */
-    private void internalAddClient(SocketChannel sc) {
-        try {
-            // it needs to be nonblocking for selectors to not explode
-            sc.configureBlocking(false);
-            sc.register(mReadableSocketsSelector, SelectionKey.OP_READ);
-        } catch (IOException e) {
-            throw new Error(e);
-        }
-
-    }
-
-    private static ByteBuffer sBb = ByteBuffer.allocate(1024);
-    
     @Override
     public void run() {
-        
+
         while (!mShutDown) {
-            try {
+            Set<Client> availableClients = mClientManager
+                    .waitOnReadableClients();
+            for (Client c : availableClients) {
+                List<String> messages = c.readNextMessages();
+                if (messages != null) System.err.println("len messages:" + messages.size());
+                // if this returns null we disconnect the client for sending bad
+                // messages
+                List<JSONObject> jsos = validateAndParse(messages);
 
-                if (mClientSockets.size() > 0) {
-                    mReadableSocketsSelector.select();
-                    for (SelectionKey s : mReadableSocketsSelector.selectedKeys()) {
-                        sBb.clear();
-
-                        // unsafe cast ahoy!
-                        // TODO: figure out how to make this not an unsafe cast
-                        SocketChannel sc = (SocketChannel) s.channel();
-                        if (sc.read(sBb) == -1) {
-                            s.cancel();
-                            mClientSockets.remove(sc);
-                        } else System.out.println("client bytes:" + new String(sBb.array()));
-
-                    }
-
+                if (jsos == null) {
+                    System.err.println("disconnecting");
+                    mClientManager.disconnect(c);
+                } else {
+                    processRequest(c, jsos);
                 }
 
-                // poll off items that got in before we finished the loop
-                int items = mScQueue.size();
-
-                for (int i = 0; i < items; i++) {
-                    internalAddClient(mScQueue.poll());
-                }
-
-            } catch (IOException e) {
-                throw new Error(e);
             }
 
         }
 
+    }
+
+    private void processRequest(Client c, List<JSONObject> jsos) throws Error {
+        List<Message> ops;
+        // malformed json == disconect
+        try {
+            ops = MessageFactory.makeOperationsFromJson(jsos);
+            for (Message message : ops) {
+                handleMessage(c, message);
+            }
+        } catch (JSONException e) {
+            mClientManager.disconnect(c);
+        } catch (InterruptedException e) {
+            return;
+        }
+    }
+
+    private void handleMessage(Client c, Message message)
+            throws InterruptedException, Error {
+        if (message.getMessage().equals("heartbeat")) {
+            mHbm.beatWhenPossible(c);
+        } else if (message.getMessage().equals("makeGraph")) {
+            int id = DataManager.create();
+            c.setCurrentGraphId(id);
+            ClientMessageSender.getInstance().sendMessage(c,
+                    new OpenGraphMessage(id));
+
+            int stateId = DataManager.getGraph(id).getStateId();
+            ClientMessageSender.getInstance().sendMessage(c,
+                    new CompositeOperation(new ArrayList<GraphOperation>()));
+            ClientMessageSender.getInstance().sendMessage(c,
+                    new StateIdMessage(id, stateId));
+            c.updateStateId(stateId);
+        } else if (message.getMessage().equals("requestGraph")) {
+            System.err.println("got rgm");
+            RequestGraphMessage rgm = (RequestGraphMessage) message;
+            OTGraphManager2d g = DataManager.getGraph(rgm.getGraphId());
+            c.setCurrentGraphId(rgm.getGraphId());
+            if (g == null) ClientMessageSender.getInstance().sendMessage(c,
+                    new NoSuchGraphMessage());
+            else {
+                CompositeOperation delta = g.getOperationDelta(rgm.getSince());
+                ClientMessageSender.getInstance().sendMessage(c, delta);
+                ClientMessageSender.getInstance().sendMessage(c,
+                        new StateIdMessage(rgm.getGraphId(), g.getStateId()));
+                c.updateStateId(rgm.getSince());
+            }
+        } else if (message.isOperation()) {
+            mProcessor.submit(c, (GraphOperation) message);
+        } else {
+            throw new Error("got unexpected message from client");
+        }
+    }
+
+    private List<JSONObject> validateAndParse(List<String> messages) {
+        List<JSONObject> result = new ArrayList<JSONObject>();
+
+        for (String s : messages) {
+            try {
+                System.err.println(s);
+                JSONObject o = JSONImplHolder.make(s);
+                result.add(o);
+            } catch (JSONException e) {
+                return null;
+            }
+
+        }
+
+        return result;
+
+    }
+
+    public static ClientMessageHandler getInstance() {
+        if (sInstance == null) sInstance = new ClientMessageHandler();
+        return sInstance;
+    }
+
+    public void shutDown() {
+        mShutDown = true;
+        this.interrupt();
+        mClientManager.wakeUp();
     }
 
 }

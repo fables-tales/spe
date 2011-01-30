@@ -10,6 +10,9 @@ import com.google.gwt.widgetideas.graphics.client.GWTCanvas;
 
 
 public class DrawingImpl implements Drawing {
+	
+	//used for panning
+	public int offsetX, offsetY;
 
 
     private static native void drawGraph3D(String verticesString, String edgesString) /*-{
@@ -317,15 +320,15 @@ public class DrawingImpl implements Drawing {
             String veticesString = "";
             String separator = ",";
             for (EdgeDrawable thisEdge : edges) {
-                double startX = thisEdge.getStartX();
-                double startY = thisEdge.getStartY();
-                double endX = thisEdge.getEndX();
-                double endY = thisEdge.getEndY();
+                double startX = thisEdge.getStartX() + offsetX;
+                double startY = thisEdge.getStartY() + offsetY;
+                double endX = thisEdge.getEndX() + offsetX;
+                double endY = thisEdge.getEndY() + offsetY;
                 edgesString += startX+separator+startY+separator+endX+separator+endY+separator;
             }
             for (VertexDrawable thisVertex : vertices) {
-                double centreX = thisVertex.getLeft() + 0.5*thisVertex.getWidth();
-                double centreY = thisVertex.getTop() + 0.5*thisVertex.getHeight();
+                double centreX = thisVertex.getLeft() + 0.5*thisVertex.getWidth() + offsetX;
+                double centreY = thisVertex.getTop() + 0.5*thisVertex.getHeight() + offsetY;
                 double width = 0.5*thisVertex.getWidth();
                 veticesString += centreX+separator+centreY+separator+width+separator;
             }
@@ -374,8 +377,8 @@ public class DrawingImpl implements Drawing {
     
     // Draws a single vertex, currently only draws circular nodes  
     private void drawVertex(VertexDrawable vertex, GWTCanvas canvas) {
-        double centreX = vertex.getLeft() + 0.5*vertex.getWidth();
-        double centreY = vertex.getTop() + 0.5*vertex.getHeight();
+        double centreX = vertex.getLeft() + 0.5*vertex.getWidth() + offsetX;
+        double centreY = vertex.getTop() + 0.5*vertex.getHeight() + offsetY;
         double radius = 0.5*vertex.getWidth();
         
         canvas.moveTo(centreX, centreY);
@@ -388,10 +391,10 @@ public class DrawingImpl implements Drawing {
   
     // Draws a line from coordinates to other coordinates  
     private void drawEdge(EdgeDrawable edge, GWTCanvas canvas) { 
-        double startX = edge.getStartX();
-        double startY = edge.getStartY();
-        double endX = edge.getEndX();
-        double endY = edge.getEndY();
+        double startX = edge.getStartX() + offsetX;
+        double startY = edge.getStartY() + offsetY;
+        double endX = edge.getEndX() + offsetX;
+        double endY = edge.getEndY() + offsetY;
         
         canvas.beginPath();
         canvas.moveTo(startX,startY);
@@ -411,6 +414,19 @@ public class DrawingImpl implements Drawing {
         }
     }
 
-   
-
+    
+    //set offset in the event of a pan
+    public void setOffset(int x, int y){
+    	offsetX = x;
+    	offsetY = y;
+    }
+    
+    //getters for offsets
+    public int getOffsetX(){
+    	return offsetX;
+    }
+    
+    public int getOffsetY(){
+    	return offsetY;
+    }
 }

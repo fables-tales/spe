@@ -1,6 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:uk.me.graphe.client">
+	xmlns:g="urn:import:uk.me.graphe.client" 
+	xmlns:w="urn:import:com.google.gwt.user.client.ui" >
 	<ui:style>
 		.canvas {
 			width: 400px;

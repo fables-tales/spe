@@ -51,6 +51,17 @@
             margin-right: 10px;
         }
         
+        .buttonmove {
+            width: 35px;
+            height: 28px;
+            color: transparent;
+            margin: 0;
+            border: 0;
+            background: url(images/move.png) no-repeat;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        
         .stack {
             background: #BBDAF0;
         }
@@ -77,6 +88,7 @@
                 <g:Button styleName='{style.buttonade}' ui:field="button2" >Add Edge</g:Button>
                 <g:Button styleName='{style.buttonremv}' ui:field="button3" >Remove Vertex</g:Button>
                 <g:Button styleName='{style.buttonreme}' ui:field="button4" >Remove Edge</g:Button>
+                <g:Button styleName='{style.buttonmove}' ui:field="button5" >Move Vertex</g:Button>
 		
                 <g:HorizontalPanel ui:field="options"/>
     </g:HorizontalPanel>

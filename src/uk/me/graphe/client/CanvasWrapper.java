@@ -2,11 +2,14 @@ package uk.me.graphe.client;
 
 import com.google.gwt.event.dom.client.HasMouseDownHandlers;
 import com.google.gwt.event.dom.client.HasMouseMoveHandlers;
+import com.google.gwt.event.dom.client.HasMouseOutHandlers;
 import com.google.gwt.event.dom.client.HasMouseUpHandlers;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -14,8 +17,8 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.widgetideas.graphics.client.GWTCanvas;
 
-public class CanvasWrapper extends GWTCanvas implements MouseDownHandler, MouseUpHandler,
-        MouseMoveHandler, HasMouseDownHandlers, HasMouseMoveHandlers, HasMouseUpHandlers {
+public class CanvasWrapper extends GWTCanvas implements MouseOutHandler, MouseDownHandler, MouseUpHandler,
+        MouseMoveHandler, HasMouseDownHandlers, HasMouseMoveHandlers, HasMouseUpHandlers, HasMouseOutHandlers {
 
     public CanvasWrapper() {
         super();
@@ -47,6 +50,11 @@ public class CanvasWrapper extends GWTCanvas implements MouseDownHandler, MouseU
     public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
         return addHandler(handler, MouseDownEvent.getType());
     }
+    
+    @Override
+    public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
+        return addHandler(handler, MouseOutEvent.getType());
+    }
 
     @Override
     public void onMouseMove(MouseMoveEvent event) {
@@ -62,5 +70,10 @@ public class CanvasWrapper extends GWTCanvas implements MouseDownHandler, MouseU
     public void onMouseDown(MouseDownEvent event) {
         Window.alert("death");
     }
+
+	@Override
+	public void onMouseOut(MouseOutEvent arg0) {
+        Window.alert("death");		
+	}
 
 }

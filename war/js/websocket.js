@@ -10,5 +10,5 @@ function orbitedInit() {
 }
 
 function orbitedSend(s) {
-    websocket.send(JSON.stringify(s) + "\0");
+    websocket.send(s);
 }
