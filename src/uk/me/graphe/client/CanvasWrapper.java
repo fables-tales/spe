@@ -21,7 +21,7 @@ public class CanvasWrapper extends GWTCanvas implements MouseOutHandler, MouseDo
         MouseMoveHandler, HasMouseDownHandlers, HasMouseMoveHandlers, HasMouseUpHandlers, HasMouseOutHandlers {
 
     public CanvasWrapper() {
-        super();
+        super(2000, 2000);
         sinkEvents(Event.MOUSEEVENTS);
         this.createHandlerManager();
     }
