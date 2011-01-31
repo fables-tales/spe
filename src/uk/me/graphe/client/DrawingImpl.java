@@ -16,6 +16,7 @@ public class DrawingImpl implements Drawing {
 
 	// JSNI method for webgl, comments omitted because it is one big comment...
     private static native void drawGraph3D(String verticesString, String edgesString) /*-{
+			var coord;
             function getPersepctiveMatrix(width, height)
             {
                 var fieldOfView = 30.0;
@@ -112,36 +113,39 @@ public class DrawingImpl implements Drawing {
                 if(numSections>33)numSections = 33;
                 if(numSections<5)numSections = 5;
                 var delta_theta = 2.0 * Math.PI / numSections
-                var theta = 0;
-                var coord = new Array(numSections);
-                var pvertices = new Float32Array(numSections*2);
-                for (i = 0; i < numSections ; i++) {
-                    coord[i] = new Array(2);
-                    x = (r * Math.cos(theta))+left;
-                    y = (r * Math.sin(theta))+top;
-                    x = Math.round(x*1000)/1000
-                    y = Math.round(y*1000)/1000
-                    coord[i][1] = x;
-                    coord[i][0] = y;
-                    theta += delta_theta
-                }
-                coord.sort(compareXValue);
-                for(var i = 0;i<numSections-1;i++)
+                var theta = 0
+                //alert(coord);
+                if(coord==undefined)
                 {
-                    if(coord[i][0] == coord[i+1][0] && coord[i][1]<coord[i+1][1])
+                    coord = new Array(numSections);
+                    for (i = 0; i < numSections ; i++) {
+                        coord[i] = new Array(2);
+                        x = (r * Math.cos(theta));
+                        y = (r * Math.sin(theta));
+                        x = Math.round(x*1000)/1000
+                        y = Math.round(y*1000)/1000
+                        coord[i][1] = x;
+                        coord[i][0] = y;
+                        theta += delta_theta
+                    }
+                    coord.sort(compareXValue);
+                    for(var i = 0;i<numSections-1;i++)
                     {
-                        temp = coord[i];
-                        coord[i] = coord[i+1];
-                        coord[i+1] = temp;
+                        if(coord[i][0] == coord[i+1][0] && coord[i][1]<coord[i+1][1])
+                        {
+                            temp = coord[i];
+                            coord[i] = coord[i+1];
+                            coord[i+1] = temp;
+                        }
                     }
                 }
                 var j = 0;
-                
+                var pvertices = new Float32Array(numSections*2);
                 for (i=0;i<numSections;i++)
                 {
-                        pvertices[j] = coord[i][1];
+                        pvertices[j] = coord[i][1]+left;
                         j++;
-                        pvertices[j] = coord[i][0];
+                        pvertices[j] = coord[i][0]+top;
                         j++;
                 }
                 drawPolygon(pvertices,canvas.width,canvas.height);
@@ -204,13 +208,13 @@ public class DrawingImpl implements Drawing {
                 canvas1 = document.getElementsByTagName("canvas")[1];
                 canvas1.style.position = "absolute";
                 canvas1.style.zIndex = 10;
-                canvas1.style.opacity = 0;
+                canvas1.style.opacity = 0.5;
                
 
 
                 canvas = document.getElementsByTagName("canvas")[0];
                 canvas.style.zIndex = 0;
-                gl = canvas.getContext("experimental-webgl");
+                gl = canvas.getContext("experimental-webgl", {antialias: true});
                 if(!gl)
                 {
                     alert("There's no WebGL context available.");
