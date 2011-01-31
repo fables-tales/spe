@@ -2,6 +2,7 @@ package uk.me.graphe.shared.messages.operations;
 
 
 import uk.me.graphe.shared.Edge;
+import uk.me.graphe.shared.graphmanagers.GraphManager2d;
 import uk.me.graphe.shared.jsonwrapper.JSONException;
 import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
 import uk.me.graphe.shared.jsonwrapper.JSONObject;
@@ -33,6 +34,11 @@ public class DeleteEdgeOperation extends EdgeOperation {
     @Override
     public String getMessage() {
         return "delEdge";
+    }
+
+    @Override
+    public void applyTo(GraphManager2d mGraph) {
+        mGraph.removeEdge(getEdge());
     }
 
 }
