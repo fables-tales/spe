@@ -36,4 +36,9 @@ public class Vertex {
 		return (o instanceof Vertex && ((Vertex) o).getLabel().equals(mLabel));
 	}
 	
+	@Override
+	public String toString() {
+	    return this.getLabel();
+	}
+	
 }

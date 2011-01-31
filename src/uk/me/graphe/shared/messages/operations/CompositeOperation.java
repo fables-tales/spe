@@ -6,6 +6,7 @@ import java.util.List;
 
 import uk.me.graphe.shared.Edge;
 import uk.me.graphe.shared.Vertex;
+import uk.me.graphe.shared.graphmanagers.GraphManager2d;
 import uk.me.graphe.shared.jsonwrapper.JSONException;
 import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
 import uk.me.graphe.shared.jsonwrapper.JSONObject;
@@ -63,6 +64,13 @@ public class CompositeOperation extends GraphOperation {
     @Override
     public String getMessage() {
         return "composite";
+    }
+
+    @Override
+    public void applyTo(GraphManager2d mGraph) {
+        for (GraphOperation o : mOperations) {
+            o.applyTo(mGraph);
+        }
     }
 
 }

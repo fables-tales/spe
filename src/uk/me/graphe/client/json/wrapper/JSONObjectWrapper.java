@@ -1,11 +1,15 @@
 package uk.me.graphe.client.json.wrapper;
 
-import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.core.client.JsArray;
+
+
+import java.util.ArrayList;
+import java.util.List;
 
 import uk.me.graphe.shared.jsonwrapper.JSONArray;
 import uk.me.graphe.shared.jsonwrapper.JSONException;
 import uk.me.graphe.shared.jsonwrapper.JSONObject;
+
+import com.google.gwt.core.client.JavaScriptObject;
 
 public class JSONObjectWrapper extends JSONObject {
 
@@ -27,6 +31,7 @@ public class JSONObjectWrapper extends JSONObject {
 
     @Override
     public native void append(String string, String json) throws JSONException /*-{
+        if (this.@uk.me.graphe.client.json.wrapper.JSONObjectWrapper::mObj[string] == null || typeof this.@uk.me.graphe.client.json.wrapper.JSONObjectWrapper::mObj[string] == "undefined") this.@uk.me.graphe.client.json.wrapper.JSONObjectWrapper::mObj[string] = [];
         this.@uk.me.graphe.client.json.wrapper.JSONObjectWrapper::mObj[string].push(json);
     }-*/;
 
@@ -35,14 +40,25 @@ public class JSONObjectWrapper extends JSONObject {
         return this.@uk.me.graphe.client.json.wrapper.JSONObjectWrapper::mObj[string];
     }-*/;
     
-    private native JsArray<JavaScriptObject> getArray(String string) /*-{
+    private native String[] getArray(String string) /*-{
         var member = this.@uk.me.graphe.client.json.wrapper.JSONObjectWrapper::mObj[string];
+        //var result = []
+        //for (var i = 0; i < member.length; i++) {
+        //    alert("faces")
+        //    alert(member[i])
+        //    result.push(JSON.stringify(member[i]));
+        //}
         return member;
     }-*/;
     
     @Override
     public JSONArray getJSONArray(String string) throws JSONException {
-        return new JSONArrayWrapper(this.getArray(string));
+        List<JSONObject> thing = new ArrayList<JSONObject>();
+        for (String s : this.getArray(string)) {
+            thing.add(new JSONObjectWrapper(s));
+        }
+        
+        return new JSONArrayWrapper(thing.toArray(new JSONObjectWrapper[]{new JSONObjectWrapper("{}")}));
     }
 
 

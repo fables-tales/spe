@@ -18,7 +18,6 @@ import uk.me.graphe.shared.messages.StateIdMessage;
 import uk.me.graphe.shared.messages.operations.CompositeOperation;
 import uk.me.graphe.shared.messages.operations.GraphOperation;
 
-
 /**
  * reads messages from clients, and validates them. Sends client message pairs
  * to the message processor for transformation
@@ -44,7 +43,8 @@ public class ClientMessageHandler extends Thread {
                     .waitOnReadableClients();
             for (Client c : availableClients) {
                 List<String> messages = c.readNextMessages();
-                if (messages != null) System.err.println("len messages:" + messages.size());
+                if (messages != null)
+                    System.err.println("len messages:" + messages.size());
                 // if this returns null we disconnect the client for sending bad
                 // messages
                 List<JSONObject> jsos = validateAndParse(messages);
@@ -98,9 +98,11 @@ public class ClientMessageHandler extends Thread {
             RequestGraphMessage rgm = (RequestGraphMessage) message;
             OTGraphManager2d g = DataManager.getGraph(rgm.getGraphId());
             c.setCurrentGraphId(rgm.getGraphId());
-            if (g == null) ClientMessageSender.getInstance().sendMessage(c,
-                    new NoSuchGraphMessage());
-            else {
+            if (g == null) {
+                ClientMessageSender.getInstance().sendMessage(c,
+                        new NoSuchGraphMessage());
+                System.err.println("no such graph as the one requested");
+            } else {
                 CompositeOperation delta = g.getOperationDelta(rgm.getSince());
                 ClientMessageSender.getInstance().sendMessage(c, delta);
                 ClientMessageSender.getInstance().sendMessage(c,
@@ -116,7 +118,7 @@ public class ClientMessageHandler extends Thread {
 
     private List<JSONObject> validateAndParse(List<String> messages) {
         List<JSONObject> result = new ArrayList<JSONObject>();
-
+        if (messages == null) return null;
         for (String s : messages) {
             try {
                 System.err.println(s);

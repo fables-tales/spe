@@ -1,10 +1,8 @@
-package uk.me.graphe.server.ot;
+package uk.me.graphe.shared;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.me.graphe.shared.Edge;
-import uk.me.graphe.shared.Vertex;
 import uk.me.graphe.shared.messages.operations.CompositeOperation;
 import uk.me.graphe.shared.messages.operations.EdgeOperation;
 import uk.me.graphe.shared.messages.operations.GraphOperation;

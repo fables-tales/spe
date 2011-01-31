@@ -3,6 +3,7 @@ package uk.me.graphe.shared.messages.operations;
 
 import uk.me.graphe.client.Graphemeui;
 import uk.me.graphe.shared.Vertex;
+import uk.me.graphe.shared.graphmanagers.GraphManager2d;
 import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
 import uk.me.graphe.shared.jsonwrapper.JSONException;
 import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
@@ -65,5 +66,10 @@ public class AddNodeOperation extends NodeOperation {
     @Override
     public String getMessage() {
         return "addNode";
+    }
+
+    @Override
+    public void applyTo(GraphManager2d mGraph) {
+        mGraph.addVertex(getNode(), mNodeX, mNodeY, Graphemeui.VERTEX_SIZE);
     }
 }

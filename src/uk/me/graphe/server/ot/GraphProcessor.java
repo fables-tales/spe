@@ -8,6 +8,7 @@ import uk.me.graphe.server.Client;
 import uk.me.graphe.server.ClientManager;
 import uk.me.graphe.server.ClientMessageSender;
 import uk.me.graphe.server.DataManager;
+import uk.me.graphe.shared.GraphTransform;
 import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
 import uk.me.graphe.shared.messages.StateIdMessage;
 import uk.me.graphe.shared.messages.operations.CompositeOperation;
@@ -41,14 +42,19 @@ public class GraphProcessor extends Thread {
                 int mGraphId = c.getCurrentGraphId();
 
                 // get the graph and get the history delta
+                System.err.println(mGraphId);
                 OTGraphManager2d graph = DataManager.getGraph(mGraphId);
+                System.err.println(graph);
                 CompositeOperation historyDelta = graph.getOperationDelta(c
                         .getCurrentStateId());
 
                 // transform and apply the new operation
                 GraphOperation newOp = GraphTransform.transform(operation,
                         historyDelta);
+                System.err.println("applying: " +  newOp.toString());
                 graph.applyOperation(newOp);
+                System.err.println("nodes:" + graph.getVertexDrawables().size());
+                System.err.println("edges:" + graph.getEdgeDrawables().size());
 
                 // send update to client
                 int serverStateId = graph.getStateId();
@@ -64,7 +70,10 @@ public class GraphProcessor extends Thread {
                         .clientsForGraph(c.getCurrentGraphId());
                 for (Client cl : otherClients) {
                     int state = cl.getCurrentStateId();
+                    System.err.println("updating other clients");
+                    System.err.println(state);
                     CompositeOperation delta = graph.getOperationDelta(state);
+                    System.err.println(delta.asIndividualOperations());
                     ClientMessageSender.getInstance().sendMessage(cl, delta);
                     ClientMessageSender.getInstance().sendMessage(
                             cl,

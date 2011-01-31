@@ -1,5 +1,6 @@
 package uk.me.graphe.shared.messages.operations;
 
+import uk.me.graphe.shared.graphmanagers.GraphManager2d;
 import uk.me.graphe.shared.messages.Message;
 
 public abstract class GraphOperation extends Message {
@@ -45,5 +46,7 @@ public abstract class GraphOperation extends Message {
     public boolean isOperation() {
         return true;
     }
+
+    public abstract void applyTo(GraphManager2d mGraph);
 
 }

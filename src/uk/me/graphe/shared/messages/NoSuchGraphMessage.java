@@ -1,8 +1,7 @@
 package uk.me.graphe.shared.messages;
 
-import uk.me.graphe.shared.messages.operations.GraphOperation;
 
-public class NoSuchGraphMessage extends GraphOperation {
+public class NoSuchGraphMessage extends Message {
 
     @Override
     public String getMessage() {

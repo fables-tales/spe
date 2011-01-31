@@ -2,6 +2,7 @@ package uk.me.graphe.shared.messages.operations;
 
 
 import uk.me.graphe.shared.Vertex;
+import uk.me.graphe.shared.graphmanagers.GraphManager2d;
 import uk.me.graphe.shared.jsonwrapper.JSONException;
 import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
 import uk.me.graphe.shared.jsonwrapper.JSONObject;
@@ -47,6 +48,11 @@ public class MoveNodeOperation extends NodeOperation {
     @Override
     public String getMessage() {
         return "movNode";
+    }
+
+    @Override
+    public void applyTo(GraphManager2d mGraph) {
+        mGraph.moveVertexTo(getNode(), mToY, mToX);
     }
 
 }

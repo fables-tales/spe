@@ -1,28 +1,26 @@
 package uk.me.graphe.client.json.wrapper;
 
-import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.core.client.JsArray;
-
 import uk.me.graphe.shared.jsonwrapper.JSONArray;
 import uk.me.graphe.shared.jsonwrapper.JSONException;
+import uk.me.graphe.shared.jsonwrapper.JSONObject;
 
 public class JSONArrayWrapper extends JSONArray {
 
-    private JsArray<JavaScriptObject> mBack;
+    private JSONObject[] mBack;
     
-    public JSONArrayWrapper(JsArray<JavaScriptObject> array) {
-        mBack = array;
+    public JSONArrayWrapper(JSONObject[] javaScriptObjects) {
+        mBack = javaScriptObjects;
     }
     
 
     @Override
-    public Object get(int i) throws JSONException {
-        return mBack.get(i);
+    public JSONObject get(int i) throws JSONException {
+        return mBack[i];
     }
 
     @Override
     public int length() {
-        return mBack.length();
+        return mBack.length;
     }
 
 }

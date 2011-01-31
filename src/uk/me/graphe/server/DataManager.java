@@ -11,6 +11,10 @@ public class DataManager {
     private static Map<Integer, OTGraphManager2d> sGraphs = new HashMap<Integer, OTGraphManager2d>();
     private static int sHighestId = 0;
     
+    static {
+        create();
+    }
+    
     public static OTGraphManager2d getGraph(int mGraphId) {
         return sGraphs.get(mGraphId);
     }

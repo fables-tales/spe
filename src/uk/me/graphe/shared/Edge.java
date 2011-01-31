@@ -92,7 +92,7 @@ public class Edge {
     public boolean equals(Object o) {
         if (o instanceof Edge) {
             Edge cmp = (Edge)o;
-            return cmp.mVertex1 == mVertex1 && cmp.mVertex2 == mVertex2 && cmp.mDir == mDir;
+            return cmp.mVertex1.equals(mVertex1) && cmp.mVertex2.equals(mVertex2) && cmp.mDir == mDir;
         } else return false;
     }
 
