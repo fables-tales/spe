@@ -1,13 +1,17 @@
 package uk.me.graphe.server.database.dbitems;
 
 import com.google.code.morphia.annotations.Embedded;
+import com.google.code.morphia.annotations.Entity;
 
-@Embedded
+@Embedded("graph")
 public abstract class NodeDB extends GraphDB {
 
     @Embedded
     private DBVertex mNode;
     
+    public NodeDB() {
+        
+    }
     public NodeDB(DBVertex v) {
         mNode = v;
     }

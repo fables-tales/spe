@@ -2,9 +2,13 @@ package uk.me.graphe.server.database.dbitems;
 
 import com.google.code.morphia.annotations.Embedded;
 
-@Embedded
+@Embedded("graph")
 public class DeleteNodeDB extends NodeDB {
 
+    public DeleteNodeDB() {
+        
+    }
+    
     public DeleteNodeDB(DBVertex v) {
         super(v);
     }

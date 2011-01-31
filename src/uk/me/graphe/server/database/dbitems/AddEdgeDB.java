@@ -5,9 +5,12 @@ import com.google.code.morphia.annotations.Embedded;
 
 import uk.me.graphe.shared.Edge;
 
-@Embedded
+@Embedded("graph")
 public class AddEdgeDB extends EdgeDB {
 
+    public AddEdgeDB() {
+        
+    }
     @Override
     public boolean createsEdge(DBEdge effectedEdge) {
         return effectedEdge.equals(this.getEdge());

@@ -1,8 +1,9 @@
 package uk.me.graphe.server.database.dbitems;
 
 import com.google.code.morphia.annotations.Embedded;
+import com.google.code.morphia.annotations.Entity;
 
-@Embedded
+@Embedded("graph")
 public abstract class GraphDB {
 
     /**
@@ -10,6 +11,9 @@ public abstract class GraphDB {
      */
     private int mApplyOn;
 
+    public GraphDB() {
+        
+    }
     public void setHistoryId(int i) {
         mApplyOn = i;
     }

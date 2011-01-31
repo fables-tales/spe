@@ -7,12 +7,16 @@ import java.util.List;
 import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Reference;
 
-@Entity
+@Entity("graph")
 public class CompositeDB extends GraphDB {
 
     @Reference
     private List<GraphDB> mOperations;
 
+    public CompositeDB() {
+        
+    }
+    
     public CompositeDB(List<GraphDB> subList) {
         mOperations = new ArrayList<GraphDB>(subList);
     }

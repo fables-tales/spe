@@ -2,9 +2,13 @@ package uk.me.graphe.server.database.dbitems;
 
 import com.google.code.morphia.annotations.Embedded;
 
-@Embedded
+@Embedded("graph")
 public class AddNodeDB extends NodeDB {
 
+    public AddNodeDB() {
+        
+    }
+    
     public AddNodeDB(DBVertex v, int x, int y) {
         super(v);
         mNodeX = x;

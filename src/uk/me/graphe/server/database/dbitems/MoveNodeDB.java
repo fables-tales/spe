@@ -2,9 +2,12 @@ package uk.me.graphe.server.database.dbitems;
 
 import com.google.code.morphia.annotations.Embedded;
 
-@Embedded
+@Embedded("graph")
 public class MoveNodeDB extends NodeDB {
 
+    public MoveNodeDB() {
+        
+    }
     @Override
     public boolean movesNode(DBVertex effectedNode) {
         return this.getNode().equals(effectedNode);
