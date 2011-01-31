@@ -58,13 +58,17 @@ public class ClientOT {
             @Override
             public void run() {
                 mSc.send(new RequestGraphMessage(1, 0).toJson());
+                Window.alert("SENT OGM");
                 new Timer() {
 
                     @Override
                     public void run() {
                         ClientOT.this.pumpOut();
+                        ServerChannel.getInstance().send(
+                                new RequestGraphMessage(1, 0).toJson());
                     }
                 }.scheduleRepeating(100);
+
             }
         }.schedule(500);
 
@@ -74,7 +78,6 @@ public class ClientOT {
         GraphOperation o = mUnsentOps.poll();
         if (mInited && o != null) {
             mSc.send(o.toJson());
-            mSentUnAcked.add(o);
         }
     }
 
@@ -83,21 +86,18 @@ public class ClientOT {
         List<Message> messages = this.parseMessages(objs);
 
         for (Message m : messages) {
-            Window.alert(m.getMessage());
             if (m.isOperation()) {
                 CompositeOperation graph = (CompositeOperation) messages.get(0);
                 List<GraphOperation> myComposite = new ArrayList<GraphOperation>();
-                myComposite.addAll(mSentUnAcked);
-                myComposite.addAll(mUnsentOps);
                 CompositeOperation me = new CompositeOperation(myComposite);
                 GraphOperation o = GraphTransform.transform(graph, me);
+
                 o.applyTo(mGraph);
                 mServerOperations.add(o);
 
             } else if (m.getMessage().equals(
                     new StateIdMessage(0, 0).getMessage())) {
                 mServerStateId = ((StateIdMessage) m).getState();
-                mServerOperations.addAll(mSentUnAcked);
                 mSentUnAcked.clear();
             }
         }

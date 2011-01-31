@@ -2,6 +2,8 @@ package uk.me.graphe.server;
 
 import java.util.List;
 
+import org.apache.tools.ant.taskdefs.Mkdir;
+
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import uk.me.graphe.shared.Graph;
@@ -23,9 +25,11 @@ import uk.me.graphe.shared.messages.operations.GraphOperation;
 public class DataManagerNetworkTest extends TestCase {
 
     private TestClient mClient = new TestClient();
+    private TestClient mClient2 = new TestClient();
     
     @Override
     protected void setUp() throws Exception {
+       DataManager.flush();
        mClient = new TestClient();
        mClient.bringUpServer();
        mClient.connect();
@@ -144,5 +148,7 @@ public class DataManagerNetworkTest extends TestCase {
         DataManager.flush();
         mClient = null;
     }
+    
+    
 
 }

@@ -42,7 +42,9 @@ public class GraphProcessor extends Thread {
                 int mGraphId = c.getCurrentGraphId();
 
                 // get the graph and get the history delta
+                System.err.println(mGraphId);
                 OTGraphManager2d graph = DataManager.getGraph(mGraphId);
+                System.err.println(graph);
                 CompositeOperation historyDelta = graph.getOperationDelta(c
                         .getCurrentStateId());
 
@@ -68,7 +70,10 @@ public class GraphProcessor extends Thread {
                         .clientsForGraph(c.getCurrentGraphId());
                 for (Client cl : otherClients) {
                     int state = cl.getCurrentStateId();
+                    System.err.println("updating other clients");
+                    System.err.println(state);
                     CompositeOperation delta = graph.getOperationDelta(state);
+                    System.err.println(delta.asIndividualOperations());
                     ClientMessageSender.getInstance().sendMessage(cl, delta);
                     ClientMessageSender.getInstance().sendMessage(
                             cl,

@@ -25,7 +25,7 @@ public class Graphemeui implements EntryPoint {
     public GraphManager2dFactory graphManagerFactory;
     public GraphManager2d graphManager;
     public int nodes;
-    public static final int VERTEX_SIZE = 10;
+    public static final int VERTEX_SIZE = 20;
     private Timer mHeartbeatTimer;
     
     public boolean moving;

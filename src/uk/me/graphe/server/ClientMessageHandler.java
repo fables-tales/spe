@@ -118,7 +118,7 @@ public class ClientMessageHandler extends Thread {
 
     private List<JSONObject> validateAndParse(List<String> messages) {
         List<JSONObject> result = new ArrayList<JSONObject>();
-
+        if (messages == null) return null;
         for (String s : messages) {
             try {
                 System.err.println(s);

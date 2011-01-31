@@ -9,9 +9,7 @@ public class SeverMain {
         Scanner scanner = new Scanner(System.in);
         
         while(true) {
-            System.out.print("> ");
-            String line = scanner.nextLine();
-            if (line.equals("shutdown")) gs.shutDown();
+            
         }
         
     }

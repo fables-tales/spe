@@ -149,7 +149,7 @@ public class ClientManager {
     }
 
     public void removeClientGraph(int id, Client client) {
-        mClientGraphMap.get(id).remove(client);
+        if (mClientGraphMap.get(id) != null) mClientGraphMap.get(id).remove(client);
         
     }
 
