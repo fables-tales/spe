@@ -1,0 +1,22 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:uk.me.graphe.client" 
+	xmlns:w="urn:import:com.google.gwt.user.client.ui" >
+	<ui:style>
+		.canvas {
+			width: 400px;
+			height: 300px;
+			border-style: solid;
+			border-width: 1px;
+		}
+		
+		.console {
+			width: 50px;
+			height: 400px;
+			border-style: solid;
+			border-width: 1px;
+		}
+	</ui:style>
+	<g:CanvasWrapper styleName='{style.canvas}' ui:field="canvasPanel">
+	</g:CanvasWrapper>
+</ui:UiBinder>
