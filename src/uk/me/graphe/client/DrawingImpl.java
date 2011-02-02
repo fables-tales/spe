@@ -2,7 +2,6 @@ package uk.me.graphe.client;
 
 import java.util.Collection;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.widgetideas.graphics.client.Color;
 import com.google.gwt.widgetideas.graphics.client.GWTCanvas;
 
@@ -10,6 +9,7 @@ public class DrawingImpl implements Drawing {
 	
 	//used for panning
 	public int offsetX, offsetY;
+	public double zoom;
 
 	// JSNI method for webgl, comments omitted because it is one big comment...
     private static native void drawGraph3D(String verticesString, String edgesString) /*-{
@@ -369,9 +369,9 @@ public class DrawingImpl implements Drawing {
 
     // Draws a single vertex, currently only draws circular nodes
     private void drawVertex(VertexDrawable vertex, GWTCanvas canvas) {
-        double centreX = vertex.getLeft() + 0.5 * vertex.getWidth() + offsetX;
-        double centreY = vertex.getTop() + 0.5 * vertex.getHeight() + offsetY;
-        double radius = 0.5 * vertex.getWidth();
+        double centreX = (vertex.getLeft() + 0.5 * vertex.getWidth() + offsetX) * zoom;
+        double centreY = (vertex.getTop() + 0.5 * vertex.getHeight() + offsetY) * zoom;
+        double radius = (0.5 * vertex.getWidth()) * zoom;
 
         canvas.moveTo(centreX, centreY);
         canvas.beginPath();
@@ -383,10 +383,10 @@ public class DrawingImpl implements Drawing {
 
     // Draws a line from coordinates to other coordinates
     private void drawEdge(EdgeDrawable edge, GWTCanvas canvas) {
-        double startX = edge.getStartX() + offsetX;
-        double startY = edge.getStartY() + offsetY;
-        double endX = edge.getEndX() + offsetX;
-        double endY = edge.getEndY() + offsetY;
+        double startX = (edge.getStartX() + offsetX)*zoom;
+        double startY = (edge.getStartY() + offsetY)*zoom;
+        double endX = (edge.getEndX() + offsetX)*zoom;
+        double endY = (edge.getEndY() + offsetY)*zoom;
 
         canvas.beginPath();
         canvas.moveTo(startX, startY);
@@ -420,5 +420,14 @@ public class DrawingImpl implements Drawing {
 
     public int getOffsetY() {
         return offsetY;
+    }
+    
+    //set zoom
+    public void setZoom(double z) {
+    	zoom = z;
+    }
+    
+    public double getZoom(){
+    	return zoom;
     }
 }
