@@ -94,7 +94,7 @@
         }
         
         .buttonzoom:hover{
-	    background: url(images/zoom.png) no-repeat;
+	    background: url(images/zoomd.png);
         }
         
         .stack {
