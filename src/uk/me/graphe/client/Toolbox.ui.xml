@@ -82,6 +82,21 @@
 	    background: url(images/moved.png);
         }
         
+        .buttonzoom {
+            width: 35px;
+            height: 33px;
+            color: transparent;
+            margin: 0;
+            border: 0;
+            background: url(images/zoom.png) no-repeat;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        
+        .buttonzoom:hover{
+	    background: url(images/zoom.png) no-repeat;
+        }
+        
         .stack {
             background: #BBDAF0;
         }
@@ -108,6 +123,7 @@
                 <g:Button styleName='{style.buttonremv}' ui:field="button3" >Remove Vertex</g:Button>
                 <g:Button styleName='{style.buttonreme}' ui:field="button4" >Remove Edge</g:Button>
                 <g:Button styleName='{style.buttonmove}' ui:field="button5" >Move Vertex</g:Button>
+                <g:Button styleName='{style.buttonzoom}' ui:field="button6" >Zoom</g:Button>
 		
                 <g:HorizontalPanel ui:field="options"/>
     </g:HorizontalPanel>
