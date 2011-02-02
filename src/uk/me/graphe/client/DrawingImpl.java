@@ -322,19 +322,19 @@ public class DrawingImpl implements Drawing {
             String veticesString = "";
             String separator = ",";
             for (EdgeDrawable thisEdge : edges) {
-                double startX = thisEdge.getStartX() + offsetX;
-                double startY = thisEdge.getStartY() + offsetY;
-                double endX = thisEdge.getEndX() + offsetX;
-                double endY = thisEdge.getEndY() + offsetY;
+                double startX = (thisEdge.getStartX() + offsetX)*zoom;
+                double startY = (thisEdge.getStartY() + offsetY)*zoom;
+                double endX = (thisEdge.getEndX() + offsetX)*zoom;
+                double endY = (thisEdge.getEndY() + offsetY)*zoom;
                 edgesString += startX + separator + startY + separator + endX
                         + separator + endY + separator;
             }
             for (VertexDrawable thisVertex : vertices) {
-                double centreX = thisVertex.getLeft() + 0.5
-                        * thisVertex.getWidth() + offsetX;
-                double centreY = thisVertex.getTop() + 0.5
-                        * thisVertex.getHeight() + offsetY;
-                double width = 0.5 * thisVertex.getWidth();
+                double centreX = (thisVertex.getLeft() + 0.5
+                        * thisVertex.getWidth() + offsetX)*zoom;
+                double centreY = (thisVertex.getTop() + 0.5
+                        * thisVertex.getHeight() + offsetY)*zoom;
+                double width = (0.5 * thisVertex.getWidth())*zoom;
                 veticesString += centreX + separator + centreY + separator
                         + width + separator;
             }
