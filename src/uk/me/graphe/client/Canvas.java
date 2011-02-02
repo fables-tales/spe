@@ -9,7 +9,6 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -37,8 +36,6 @@ public class Canvas extends Composite{
 	public boolean pressed;
 	public double zoom;
 	@UiField
-	public TextArea console;
-	@UiField
 	public CanvasWrapper canvasPanel;
 
 	public Canvas(Graphemeui parent) {
@@ -63,8 +60,6 @@ public class Canvas extends Composite{
 		pany = y1;
 		//user is dragging until mouse up
 		pressed = true;
-		//debug
-		console.setText(console.getText() + "\n" + x1 + ", " + y1);
 	}
 	
 	@UiHandler("canvasPanel")
@@ -101,10 +96,10 @@ public class Canvas extends Composite{
 			parent.initOptions(x1, y1, x2, y2);
 		}
 		if(parent.tools.getTool() == 6){
-			if(!e.isControlKeyDown()){
-				parent.zoom(true, x1, y1);
+			if(e.isControlKeyDown()){
+				parent.zoom(false, x1, y1);
 			} else {
-				parent.zoom(false, x1, x2);
+				parent.zoom(true, x1, y1);
 			}
 		}
 	}

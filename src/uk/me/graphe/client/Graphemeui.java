@@ -26,7 +26,7 @@ public class Graphemeui implements EntryPoint {
     public double zoom;
     public static final int VERTEX_SIZE = 20;
     public static final int CANVAS_HEIGHT = 400, CANVAS_WIDTH = 800;
-    public static final double ZOOM_STRENGTH = 0.5;
+    public static final double ZOOM_STRENGTH = 0.2;
     private int top, left;
     
     public boolean moving;
@@ -145,33 +145,22 @@ public class Graphemeui implements EntryPoint {
     	if(isZoomIn){
     		//work out zoom
     		zoom += ZOOM_STRENGTH;
-    		
-    		//work out where to pan to
-    		top = (x-(int)(CANVAS_WIDTH/(2*zoom)));
-    		left =(y-(int)(CANVAS_HEIGHT/(2*zoom)));
-    		
-        	//scale canvas
-        	canvas.zoom = zoom;
-    		d.setZoom(zoom);
-    		
-    		//move to point
-    		panTo(top, left);
-    	} else if(zoom >= 2*ZOOM_STRENGTH){
-    		//work out pan
-    		top = (x-(int)(CANVAS_WIDTH/(2*zoom)));
-    		left =(y-(int)(CANVAS_HEIGHT/(2*zoom)));
-    		
+    	} else if(zoom >= 2*ZOOM_STRENGTH){  //only zoom out if it won't scale to 0  		
     		//work out zoom
     		zoom -= ZOOM_STRENGTH;
-    		
-    		//move to point
-    		panTo(top, left);
-        	
-    		//scale canvas
-        	canvas.zoom = zoom;
-    		d.setZoom(zoom);
-    	}
+       	}
     	
+    	//work out pan
+		top = (x-(int)(CANVAS_WIDTH/(2*zoom)));
+		left =(y-(int)(CANVAS_HEIGHT/(2*zoom)));
+		
+		//move to point
+		panTo(top, left);
+    	
+		//scale canvas
+    	canvas.zoom = zoom;
+		d.setZoom(zoom);
+		
     	graphManager.invalidate();
     }
     
