@@ -23,6 +23,8 @@ import uk.me.graphe.shared.messages.operations.NodeOperation;
 
 import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
+import com.google.code.morphia.query.Query;
+import com.google.code.morphia.query.UpdateOperations;
 import com.mongodb.Mongo;
 
 public class DatabaseImpl implements Database{
@@ -42,14 +44,13 @@ public class DatabaseImpl implements Database{
 
     @Override
     public void delete(int key) {
-        // TODO Auto-generated method stub
-        
+        mData.delete(mData.createQuery(OTGraphManager2dStore.class).filter("id =", key));
     }
 
     @Override
     public OTGraphManager2d retrieve(int key) {
         //  Extract OtGraphManagerStore from DB
-        List<OTGraphManager2dStore> retrieves = mData.find(OTGraphManager2dStore.class, "id=", key).asList();
+        List<OTGraphManager2dStore> retrieves = mData.find(OTGraphManager2dStore.class, "id =", key).asList();
         if (retrieves.size() != 1)
             throw new Error("Could not locate item");
         OTGraphManager2dStore retrieve = retrieves.get(0);
@@ -102,10 +103,44 @@ public class DatabaseImpl implements Database{
 
     @Override
     public int store(OTGraphManager2d manager) {
+        
         OTGraphManager2dStore toStore = new OTGraphManager2dStore(manager);
-        List<GraphDB> storedOperations = new ArrayList<GraphDB>();
-        CompositeOperation history = manager.getCompleteHistory();
+        CompositeOperation history;
+        // Check whether the graph exists in the database already
+        List<OTGraphManager2dStore> retrieves = mData.find(OTGraphManager2dStore.class, "id =", manager.getGraphId()).asList();
+        if (retrieves.size() > 1)
+            throw new Error("Duplicate items");
+        else if (retrieves.size() == 1) {
+            // Check state id of update is greater than value in database
+            toStore = retrieves.get(0);
+            if (manager.getStateId() <= toStore.getStateid())
+                return manager.getGraphId();
+            history = manager.getOperationDelta(toStore.getStateid());
+            return updategraph(convertOperations(history), manager.getGraphId(), manager.getStateId());
+        }
+        else {
+            history = manager.getCompleteHistory();
+            return newgraph(convertOperations(history), toStore);
+        }
+
+    }
+    
+    private int newgraph (List<GraphDB> operations, OTGraphManager2dStore toStore) {
+        toStore.setmOps(operations);
+        mData.save(toStore);
+        return toStore.getId();
+    }
+    
+    private int updategraph (List<GraphDB> operations, int id, int newid) {
+        Query<OTGraphManager2dStore> updateQuery = mData.createQuery(OTGraphManager2dStore.class).filter("id =", id);
+        UpdateOperations<OTGraphManager2dStore> ops = 
+            mData.createUpdateOperations(OTGraphManager2dStore.class).add("mOps", operations, true).set("stateid", newid);
+        mData.update(updateQuery, ops);
+        return id;
+    }
+    private List<GraphDB> convertOperations(CompositeOperation history) {
         List<GraphOperation> operations = history.asIndividualOperations();
+        List<GraphDB> storedOperations = new ArrayList<GraphDB>();
         for (GraphOperation item : operations) {
             GraphDB toAdd = null;
             int itemId = item.getHistoryId();
@@ -143,9 +178,6 @@ public class DatabaseImpl implements Database{
             toAdd.setHistoryId(itemId);
             storedOperations.add(toAdd);
         }
-        toStore.setmOps(storedOperations);
-        mData.save(toStore);
-        return toStore.getId();
+        return storedOperations;
     }
-
 }
