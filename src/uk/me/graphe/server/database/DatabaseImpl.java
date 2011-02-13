@@ -52,7 +52,7 @@ public class DatabaseImpl implements Database{
         //  Extract OtGraphManagerStore from DB
         List<OTGraphManager2dStore> retrieves = mData.find(OTGraphManager2dStore.class, "id =", key).asList();
         if (retrieves.size() != 1)
-            throw new Error("Could not locate item");
+            return null;
         OTGraphManager2dStore retrieve = retrieves.get(0);
         List<GraphDB> operations = retrieve.getmOps();
         // Create new 2d Graph manager
