@@ -11,7 +11,6 @@ import uk.me.graphe.shared.graphmanagers.GraphManager2dFactory;
 import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -24,9 +23,11 @@ public class Graphemeui implements EntryPoint {
     public Canvas canvas;
     public GraphManager2dFactory graphManagerFactory;
     public GraphManager2d graphManager;
-    public int nodes;
+    public double zoom;
     public static final int VERTEX_SIZE = 20;
-    private Timer mHeartbeatTimer;
+    public static final int CANVAS_HEIGHT = 400, CANVAS_WIDTH = 800;
+    public static final double ZOOM_STRENGTH = 0.2;
+    private int top, left;
     
     public boolean moving;
     public Vertex movingVertex;
@@ -59,7 +60,7 @@ public class Graphemeui implements EntryPoint {
     }
 
     public Graphemeui() {
-        nodes = 1;
+        zoom = 1;
         moving = false;
         movingVertex = null;
         tools = new Toolbox(this);
@@ -67,6 +68,7 @@ public class Graphemeui implements EntryPoint {
         graphManagerFactory = GraphManager2dFactory.getInstance();
         graphManager = graphManagerFactory.makeDefaultGraphManager();
         d.setOffset(0, 0);
+        d.setZoom(zoom);
         graphManager.addRedrawCallback(new Runnable() {
             @Override
             public void run() {
@@ -137,6 +139,34 @@ public class Graphemeui implements EntryPoint {
         if (v != null) {
             graphManager.moveVertexTo(v, x, y);
         }
+    }
+    
+    public void zoom(boolean isZoomIn, int x, int y){
+    	if(isZoomIn){
+    		//work out zoom
+    		zoom += ZOOM_STRENGTH;
+    	} else if(zoom >= 2*ZOOM_STRENGTH){  //only zoom out if it won't scale to 0  		
+    		//work out zoom
+    		zoom -= ZOOM_STRENGTH;
+       	}
+    	
+    	//work out pan
+		top = (x-(int)(CANVAS_WIDTH/(2*zoom)));
+		left =(y-(int)(CANVAS_HEIGHT/(2*zoom)));
+		
+		//move to point
+		panTo(top, left);
+    	
+		//scale canvas
+    	canvas.zoom = zoom;
+		d.setZoom(zoom);
+		
+    	graphManager.invalidate();
+    }
+    
+    public void panTo(int left, int top){
+    	d.setOffset(-left, -top);
+    	canvas.setOffset(-left, -top);
     }
 
     public void pan(int left, int top) {

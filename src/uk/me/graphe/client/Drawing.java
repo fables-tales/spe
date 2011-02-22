@@ -42,4 +42,16 @@ public interface Drawing {
      * @return the y offset
      */
     public int getOffsetY();
+    
+    /**
+     * set the zoom
+     * @param zoom
+     */
+    public void setZoom(double zoom);
+    
+    /**
+     * 
+     * @return the current level of zoom (1 = no zoom)
+     */
+    public double getZoom();
 }

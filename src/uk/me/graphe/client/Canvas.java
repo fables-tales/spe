@@ -34,6 +34,7 @@ public class Canvas extends Composite{
 	public Graphemeui parent;
 	public int x1, x2, y1, y2, panx, pany, offsetX, offsetY;
 	public boolean pressed;
+	public double zoom;
 	@UiField
 	public CanvasWrapper canvasPanel;
 
@@ -42,14 +43,15 @@ public class Canvas extends Composite{
 		pressed = false;
 		offsetX = 0;
 		offsetY = 0;
+		zoom = 1;
 		this.parent = parent;
 	}
 	
 	@UiHandler("canvasPanel")
 	void onMouseDown(MouseDownEvent e){
 		//get initial click location
-		x1 = e.getX();
-		y1 = e.getY();
+		x1 = (int)(e.getX()/zoom)-offsetX;
+		y1 = (int)(e.getY()/zoom)-offsetY;
 		//make end point equal to start at beginning
 		x2 = x1;
 		y2 = y1;
@@ -66,12 +68,12 @@ public class Canvas extends Composite{
 		panx = x2;
 		pany = y2;
 		//get new end point
-		x2 = e.getX();
-		y2 = e.getY();
+		x2 = (int)(e.getX()/zoom)-offsetX;
+		y2 = (int)(e.getY()/zoom)-offsetY;
 		//if dragging using the move tool
 		if (parent.tools.getTool() == 5 && pressed) {
 			//call graphemeui move method
-			parent.move(x1-offsetX, y1-offsetY, panx-offsetX, pany-offsetY, x2-offsetX, y2-offsetY);
+			parent.move(x1, y1, panx, pany, x2, y2);
 		}
 	}
 	
@@ -91,7 +93,14 @@ public class Canvas extends Composite{
 			parent.tools.getOptionsPanel().remove(0);
 		}
 		if (parent.tools.getTool() == 1) {
-			parent.initOptions(x1-offsetX, y1-offsetY, x2-offsetX, y2-offsetY);
+			parent.initOptions(x1, y1, x2, y2);
+		}
+		if(parent.tools.getTool() == 6){
+			if(e.isControlKeyDown()){
+				parent.zoom(false, x1, y1);
+			} else {
+				parent.zoom(true, x1, y1);
+			}
 		}
 	}
 	
