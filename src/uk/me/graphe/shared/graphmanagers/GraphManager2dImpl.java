@@ -14,6 +14,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Window;
 
+import uk.me.graphe.client.Console;
 import uk.me.graphe.client.EdgeDrawable;
 import uk.me.graphe.client.VertexDrawable;
 import uk.me.graphe.shared.Edge;
@@ -30,7 +31,10 @@ public class GraphManager2dImpl implements GraphManager2d {
     private List<Vertex> mVertices = new ArrayList<Vertex>();
 
     protected GraphManager2dImpl() {
-
+        if (GWT.isClient()) {
+            Console.log("graphmanager2d constructed");
+        }
+        
     }
 
     @Override
@@ -51,17 +55,27 @@ public class GraphManager2dImpl implements GraphManager2d {
 
     @Override
     public void addVertex(Vertex v, int xPosition, int yPosition, int size) {
-
         if (!mVertexEdgeMap.containsKey(v)) {
+            if (GWT.isClient()) {
+                Console.log("adding a vertex in graphmanager2dimpl: " + this);
+                Console.log("before size is: " + mVertices.size());
+            }
+            
             mVertices.add(v);
+            
+            if (GWT.isClient()) {
+                Console.log("after size is: " + mVertices.size());
+            }
             // left and top are x and y - size/2
             int halfSize = size / 2;
             int left = xPosition - halfSize;
             int top = yPosition - halfSize;
 
-            mVertexRenderMap.put(v, new VertexDrawable(left, top, size, size, v
-                    .getLabel()));
+            mVertexRenderMap.put(v, new VertexDrawable(left, top, size, size, v.getLabel()));
             mVertexEdgeMap.put(v, new ArrayList<Edge>());
+            if (GWT.isClient()) {
+                Console.log("vertices size:" + mVertices.size());
+            }
         }
         this.invalidate();
     }
@@ -188,13 +202,7 @@ public class GraphManager2dImpl implements GraphManager2d {
 
     public void invalidate() {
         for (final Runnable r : mRedrawCallbacks) {
-            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-
-                @Override
-                public void execute() {
-                    r.run();
-                }
-            });
+            r.run();
         }
     }
 }

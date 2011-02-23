@@ -9,8 +9,7 @@ public class GraphManager2dFactory {
 	 * @return singleton factory instance
 	 */
 	public static synchronized GraphManager2dFactory getInstance() {
-		if (sInstance == null)
-			sInstance = new GraphManager2dFactory();
+		if (sInstance == null) sInstance = new GraphManager2dFactory();
 		return sInstance;
 	}
 

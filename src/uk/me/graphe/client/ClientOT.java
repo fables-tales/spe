@@ -64,8 +64,6 @@ public class ClientOT {
                     @Override
                     public void run() {
                         ClientOT.this.pumpOut();
-                        ServerChannel.getInstance().send(
-                                new RequestGraphMessage(1, 0).toJson());
                     }
                 }.scheduleRepeating(100);
 
@@ -78,29 +76,41 @@ public class ClientOT {
         GraphOperation o = mUnsentOps.poll();
         if (mInited && o != null) {
             mSc.send(o.toJson());
+            mSentUnAcked.add(o);
         }
     }
 
     protected void handleMessages(String s) {
         List<JSONObject> objs = this.readObjects(s);
         List<Message> messages = this.parseMessages(objs);
-
+        Console.log("handling messages");
         for (Message m : messages) {
+            Console.log("got message" + m.getMessage());
             if (m.isOperation()) {
                 CompositeOperation graph = (CompositeOperation) messages.get(0);
-                List<GraphOperation> myComposite = new ArrayList<GraphOperation>();
+                List<GraphOperation> myComposite = new ArrayList<GraphOperation>(mSentUnAcked);
                 CompositeOperation me = new CompositeOperation(myComposite);
+                Console.log("message is:" + m.toJson());
+                Console.log("transforming against: " + me.toJson());
                 GraphOperation o = GraphTransform.transform(graph, me);
-
+                Console.log("transformed message" + m.toJson());
+                Console.log("graph current state is v: " + mGraph.getVertexDrawables().size()
+                        + " e:" + mGraph.getEdgeDrawables().size());
                 o.applyTo(mGraph);
+                Console.log("after operation current state is v: "
+                        + mGraph.getVertexDrawables().size() + " e:"
+                        + mGraph.getEdgeDrawables().size());
                 mServerOperations.add(o);
-
-            } else if (m.getMessage().equals(
-                    new StateIdMessage(0, 0).getMessage())) {
-                mServerStateId = ((StateIdMessage) m).getState();
                 mSentUnAcked.clear();
+            } else if (m.getMessage().equals(new StateIdMessage(0, 0).getMessage())) {
+                mServerStateId = ((StateIdMessage) m).getState();
             }
+
         }
+        Console.log("I have this many vertices:");
+        Console.log("" + mGraph.getVertexDrawables().size());
+
+        Console.log("done handling messages");
 
     }
 
@@ -133,6 +143,7 @@ public class ClientOT {
     }
 
     public void setOperatingGraph(GraphManager2d graphManager) {
+        Console.log("operating graph set!");
         mGraph = graphManager;
     }
 
@@ -145,13 +156,13 @@ public class ClientOT {
 
     }
 
-    public void notifyAddEdge(Vertex vertex, Vertex vertex2,
-            VertexDirection fromto) {
+    public void notifyAddEdge(Vertex vertex, Vertex vertex2, VertexDirection fromto) {
         mUnsentOps.add(new AddEdgeOperation(new Edge(vertex, vertex2, fromto)));
 
     }
 
     public void notifyAddVertex(Vertex v, int i, int j, int vertexSize) {
+        Console.log("notified of adding vertex:" + v.getLabel());
         mUnsentOps.add(new AddNodeOperation(v, i, j));
 
     }

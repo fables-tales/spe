@@ -38,7 +38,7 @@ public class Graphemeui implements EntryPoint {
      * This is the entry point method.
      */
     public void onModuleLoad() {
-        Graphemeui gui = new Graphemeui();
+        Graphemeui gui = this;
         JSONImplHolder.initialise(new JSOFactory());
         RootPanel.get("toolbox").add(gui.getToolBox());
         RootPanel.get("canvas").add(gui.getCanvas());
