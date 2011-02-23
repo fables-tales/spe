@@ -24,7 +24,7 @@ public class Graphemeui implements EntryPoint {
     public GraphManager2dFactory graphManagerFactory;
     public GraphManager2d graphManager;
     public double zoom;
-    public static final int VERTEX_SIZE = 20;
+    public static final int VERTEX_SIZE = 80;
     public static final int CANVAS_HEIGHT = 400, CANVAS_WIDTH = 800;
     public static final double ZOOM_STRENGTH = 0.2;
     private int top, left;
