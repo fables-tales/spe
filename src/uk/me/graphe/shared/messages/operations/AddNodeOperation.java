@@ -1,6 +1,6 @@
 package uk.me.graphe.shared.messages.operations;
 
-
+import uk.me.graphe.client.Console;
 import uk.me.graphe.client.Graphemeui;
 import uk.me.graphe.shared.Vertex;
 import uk.me.graphe.shared.graphmanagers.GraphManager2d;
@@ -8,6 +8,10 @@ import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
 import uk.me.graphe.shared.jsonwrapper.JSONException;
 import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
 import uk.me.graphe.shared.jsonwrapper.JSONObject;
+
+import com.allen_sauer.gwt.log.client.ConsoleLogger;
+import com.allen_sauer.gwt.log.shared.LogRecord;
+import com.google.gwt.core.client.GWT;
 
 public class AddNodeOperation extends NodeOperation {
 
@@ -49,7 +53,7 @@ public class AddNodeOperation extends NodeOperation {
     public boolean isNodeOperation() {
         return true;
     }
-    
+
     @Override
     public NodeOperation asNodeOperation() {
         return this;
@@ -58,7 +62,7 @@ public class AddNodeOperation extends NodeOperation {
     public int getX() {
         return mNodeX;
     }
-    
+
     public int getY() {
         return mNodeY;
     }
@@ -70,6 +74,7 @@ public class AddNodeOperation extends NodeOperation {
 
     @Override
     public void applyTo(GraphManager2d mGraph) {
+        Console.log("add node: " + getNode().getLabel());
         mGraph.addVertex(getNode(), mNodeX, mNodeY, Graphemeui.VERTEX_SIZE);
     }
 }
