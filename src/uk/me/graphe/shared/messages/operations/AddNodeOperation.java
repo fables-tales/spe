@@ -9,10 +9,6 @@ import uk.me.graphe.shared.jsonwrapper.JSONException;
 import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
 import uk.me.graphe.shared.jsonwrapper.JSONObject;
 
-import com.allen_sauer.gwt.log.client.ConsoleLogger;
-import com.allen_sauer.gwt.log.shared.LogRecord;
-import com.google.gwt.core.client.GWT;
-
 public class AddNodeOperation extends NodeOperation {
 
     public AddNodeOperation(Vertex v, int x, int y) {
