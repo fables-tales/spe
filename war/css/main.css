@@ -158,12 +158,26 @@ left:0;
 right:0;
 margin-top:60px;
 margin-bottom:25px;
-margin-right:25px;
+margin-right: 340px;
 margin-left:25px;
 background-color: #ffffff;
 -moz-border-radius: 8px;
 border-radius: 8px;
 overflow: hidden;
+float: left;
+}
+
+#chat{
+display: block;
+position: absolute;
+width: 300px;
+float: left;
+right: 25px;
+height:auto;
+bottom:0;
+top:0;
+margin-top:60px;
+margin-bottom:25px;
 }
 
 #toolbar {
