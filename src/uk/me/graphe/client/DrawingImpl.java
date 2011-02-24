@@ -506,7 +506,9 @@ public class DrawingImpl implements Drawing {
 
     function drawSquare(left,top,width,height,rotation,color){
         var diam = width/2;
-        drawLine(left-diam,top,left+diam,top,height,color);
+        var topOffset = Math.round(Math.sin(rotation)*diam);
+        var leftOffset = Math.round(Math.cos(rotation)*diam);
+        drawLine(left-leftOffset,top-topOffset,left+leftOffset,top+topOffset,height,color);
     }
 
     function drawCircle(left,top,width,color){
@@ -598,6 +600,34 @@ public class DrawingImpl implements Drawing {
             drawCircle(left+(width*0.20),top-(width*0.2),width*0.2,0);
             break;
         case 2:
+            drawSquare(left,top,width*0.9,width*1.1,0,0);
+            drawSquare(left,top,width*0.85,width*1.05,0,5);
+            drawSquare(left-width*0.27,top+width*0.2,width*0.35,width*1.2,0,0);
+            drawSquare(left-width*0.27,top+width*0.2,width*0.31,width*1.16,0,5);
+            drawCircle(left+width*0.15,top+width*0.45,width*0.6,0);
+            drawCircle(left+width*0.15,top+width*0.45,width*0.545,5);
+            drawSquare(left,top+width*0.27,width*0.85,width*0.5,0,5);
+            drawSquare(left-width*0.31,top-width*0.55,width*0.2,width*0.2,(Math.PI/4),0)
+            drawSquare(left-width*0.31,top-width*0.55,width*0.16,width*0.16,(Math.PI/4),5)
+            drawSquare(left-width*0.06,top-width*0.55,width*0.2,width*0.2,(Math.PI/4),0)
+            drawSquare(left-width*0.06,top-width*0.55,width*0.16,width*0.16,(Math.PI/4),5)
+            drawSquare(left+width*0.19,top-width*0.55,width*0.2,width*0.2,(Math.PI/4),0)
+            drawSquare(left+width*0.19,top-width*0.55,width*0.16,width*0.16,(Math.PI/4),5)
+            drawSquare(left+width*0.32,top-width*0.55,width*0.2,width*0.2,(Math.PI/4),0)
+            drawSquare(left+width*0.32,top-width*0.55,width*0.16,width*0.16,(Math.PI/4),5)
+            drawSquare(left,top-width*0.3,width*0.85,width*0.5,0,5);
+            drawSquare(left,top-width*0.23,width*0.85,width*0.5,0,5);
+            drawSquare(left-width*0.15,top+width*0.53,width*0.15,width*0.02,-(Math.PI/5),0)
+            drawCircle(left+width*0.3,top-width*0.1,width*0.4,0);
+            drawCircle(left+width*0.3,top-width*0.1,width*0.35,1);
+            drawCircle(left+width*0.3,top+width*0.1,width*0.2,0);
+            drawCircle(left+width*0.3,top+width*0.1,width*0.15,5);
+            drawSquare(left+width*0.2,top+width*0.1,width*0.2,width*0.2,0,0);
+            drawSquare(left+width*0.2,top+width*0.1,width*0.2,width*0.15,0,5);
+            drawCircle(left+width*0.05,top-width*0.1,width*0.4,0);
+            drawCircle(left+width*0.05,top-width*0.1,width*0.35,1);
+            drawCircle(left+width*0.3,top-width*0.1,width*0.05,0);
+            drawCircle(left+width*0.05,top-width*0.1,width*0.05,0);
             break;
         default:
             alert("ERROR: No style specified for vertex!");
@@ -673,7 +703,7 @@ public class DrawingImpl implements Drawing {
                 double centreY = (thisVertex.getTop() + 0.5
                         * thisVertex.getHeight() + offsetY)*zoom;
                 double width = (0.5 * thisVertex.getWidth())*zoom;
-                vertexStyle = 1;
+                vertexStyle = 2;
                 veticesString += centreX + separator + centreY + separator
                         + width + separator + vertexStyle + separator;
             }
