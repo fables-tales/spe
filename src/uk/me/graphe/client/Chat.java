@@ -1,5 +1,8 @@
 package uk.me.graphe.client;
 
+import uk.me.graphe.client.communications.ServerChannel;
+import uk.me.graphe.shared.messages.ChatMessage;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -55,6 +58,8 @@ public class Chat extends Composite{
 			@Override
 			public void onClick(ClickEvent event) {
 				//do stuff here to send message
+				ChatMessage cm = new ChatMessage("bob", input.getText());
+				ServerChannel.getInstance().send(cm.toJson());
 				output.setText(output.getText() + "\nUser:\n" + input.getText());
 				input.setText("");
 				label.setText("");
