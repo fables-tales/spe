@@ -9,6 +9,7 @@ import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
 import uk.me.graphe.shared.jsonwrapper.JSONException;
 import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
 import uk.me.graphe.shared.jsonwrapper.JSONObject;
+import uk.me.graphe.shared.messages.ChatMessage;
 import uk.me.graphe.shared.messages.Message;
 import uk.me.graphe.shared.messages.MessageFactory;
 import uk.me.graphe.shared.messages.NoSuchGraphMessage;
@@ -109,6 +110,13 @@ public class ClientMessageHandler extends Thread {
                         new StateIdMessage(rgm.getGraphId(), g.getStateId()));
                 c.updateStateId(rgm.getSince());
             }
+        } else if (message.getMessage().equals("chat")){
+        	System.err.println("got cm");
+        	ChatMessage cm = (ChatMessage) message;
+        	for (Client otherClients : ClientManager.getInstance().clientsForGraph(1)) {
+        		if (c != otherClients) ClientMessageSender.getInstance().sendMessage(otherClients, cm);
+        	}
+        	
         } else if (message.isOperation()) {
             mProcessor.submit(c, (GraphOperation) message);
         } else {
