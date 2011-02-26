@@ -108,7 +108,7 @@ public class ClientOT {
             } else if (m.getMessage().equals("chat")) {
             	//show message here
             	ChatMessage cm = (ChatMessage)m;
-            	//Chat.getInstance().displayMessage(cm);
+            	Chat.getInstance().displayMessage(cm);
             }
 
         }
