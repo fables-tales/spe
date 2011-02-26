@@ -21,10 +21,10 @@ public class Toolbox extends Composite {
 	@UiField
 	HorizontalPanel options, tools;
 	@UiField
-	Button button1, button2, button3, button4, button5;
+	Button button1, button2, button3, button4, button5, button6;
 	Graphemeui parent;
 	
-	public Toolbox(Graphemeui parent) {
+	public Toolbox(final Graphemeui parent) {
 		this.parent = parent;
 		initWidget(uiBinder.createAndBindUi(this));
 		toolNum = 0;
@@ -41,6 +41,8 @@ public class Toolbox extends Composite {
 					setTool(4);
 				}else if(event.getSource() == button5){
 					setTool(5);
+				}else if(event.getSource() == button6){
+					setTool(6);
 				}
 			}
 		};
@@ -49,6 +51,7 @@ public class Toolbox extends Composite {
 		button3.addClickHandler(ch);
 		button4.addClickHandler(ch);
 		button5.addClickHandler(ch);
+		button6.addClickHandler(ch);
 	}
 	
 	public int getTool(){

@@ -50,10 +50,12 @@
 			<div id="body">
 				
 				<div id="toolbox">
-				
 				</div><!--end toolbar-->
-			<div id="canvas">
-            <canvas width="2000" height="2000" style="position: absolute; z-index: -10;"></canvas>
+				
+				<div id="chat">
+				</div>
+				<div id="canvas">
+            	<canvas width="800" height="800" style="position: absolute; z-index: -10;"></canvas>
 			</div><!--end body-->
 		
 	</div><!--end container-->
