@@ -15,6 +15,7 @@ import uk.me.graphe.shared.graphmanagers.GraphManager2d;
 import uk.me.graphe.shared.jsonwrapper.JSONException;
 import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
 import uk.me.graphe.shared.jsonwrapper.JSONObject;
+import uk.me.graphe.shared.messages.ChatMessage;
 import uk.me.graphe.shared.messages.Message;
 import uk.me.graphe.shared.messages.MessageFactory;
 import uk.me.graphe.shared.messages.RequestGraphMessage;
@@ -104,6 +105,10 @@ public class ClientOT {
                 mSentUnAcked.clear();
             } else if (m.getMessage().equals(new StateIdMessage(0, 0).getMessage())) {
                 mServerStateId = ((StateIdMessage) m).getState();
+            } else if (m.getMessage().equals("chat")) {
+            	//show message here
+            	ChatMessage cm = (ChatMessage)m;
+            	//Chat.getInstance().displayMessage(cm);
             }
 
         }
