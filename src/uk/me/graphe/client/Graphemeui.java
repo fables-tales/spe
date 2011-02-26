@@ -1,5 +1,6 @@
 package uk.me.graphe.client;
 
+import uk.me.graphe.client.communications.ReceiveNotificationRunner;
 import uk.me.graphe.client.communications.ServerChannel;
 import uk.me.graphe.client.json.wrapper.JSOFactory;
 import uk.me.graphe.shared.Edge;
@@ -66,7 +67,7 @@ public class Graphemeui implements EntryPoint {
         movingVertex = null;
         tools = new Toolbox(this);
         canvas = new Canvas(this);
-        chat = new Chat(this);
+        chat = Chat.getInstance(this);
         graphManagerFactory = GraphManager2dFactory.getInstance();
         graphManager = graphManagerFactory.makeDefaultGraphManager();
         d.setOffset(0, 0);
