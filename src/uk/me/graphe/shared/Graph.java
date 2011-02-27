@@ -3,6 +3,9 @@ package uk.me.graphe.shared;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.code.morphia.annotations.Embedded;
+
+@Embedded
 public class Graph {
 
 	private List<Edge> mEdges;
