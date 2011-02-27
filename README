@@ -1,27 +1,36 @@
-this is grapheme, it does some things
+Grapheme is an online, collaborative graph editing suite.
 
-SETUP
-1) download the google web toolkit and set up an environment variable
-   GWT=/path/to/your/gwt/install
+=======
 
-2) download the selenium jars from here
-  http://code.google.com/p/selenium/downloads/list
-  and extract into the depends directory
+SETUP:
+  1) Download the "Google Web Toolkit" and set up an environment variable 
+     GWT=/path/to/your/gwt/install
 
+  2) Download the selenium jars from here 
+     http://code.google.com/p/selenium/downloads/list and extract into 
+     the depends directory (create this in root directory).
 
-DEVMODE
-*now broken*
+=======
 
-TESTING
-we have some unit tests which can be run with "ant test.dev"
+DEVMODE:
+  Under development.
+
+=======
+
+TESTING:
+  Unit tests can be run with the command "ant test.dev".
+
+=======
 
 WEBSOCKETS:
-you need to download orbited from here: http://orbited.org/wiki/Download
-and point it at the config in config/
+  You need to download Orbited from http://orbited.org/wiki/Download and
+  point it to the config located in "config/".
+  
+  You will need to run a HTTP server, you can download "lighttpd" and use
+  the config file located in "war/".
+  
+  Start Orbited and lighttpd and navigate to http://localhost:1338/index.html
+  on your web browser.
+  
+  To rebuild, just run "ant build".
 
-to run a simple http server download lighttpd and use the config file in war/
-
-to run everything, start orbited and lighttpd and then point your browser at
-localhost:1338/index.html.
-
-in order to rebuild just run at build

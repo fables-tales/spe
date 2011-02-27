@@ -1,0 +1,49 @@
+------------------- MEETING MINUTES -------------------
+
+TIME/DATE: 15/12/10 - 13:00.
+DURATION: 1 hour.
+LOCATION: MVB 3.10.
+ATTENDEES: Ben, Ed, Sam, John, Mike (& Dan Page)
+
+
+AGENDA:
+  1) Claim hours.
+  2) Sort out what people are doing over Christmas.
+  3) Ensure everyone has GIT working.
+  4) Ensure everyone can do a pull request from GIT.
+
+
+HOURS:
+  Ben - 3 hours: getting GIT working.
+  Ed - 0.
+  Max - 0.
+  Sam - 8 hours: websockets.
+  John - 3 hours: UI workings.
+  Mike - 2 hours: WebGL.
+
+
+RESPONSIBILITIES:
+  Sam: sockets and concurrent editing.
+  Ed: manipulating nodes with mouse on canvas; zooming and panning; UI.
+  Ben: bugs; canvas size; UI; local (client) database.
+  Mike: WebGL.
+  John: UI; styling/layout.
+  Max: WebGL; styling/layout; server database.
+
+
+EXTRA NOTES:
+  Concurrent editing: why not use version control? Reason: because it doesn't
+    deal with edits and clashes between clients.
+
+  Find a direction for the program:
+    - Collabrative: large business networking diagrams.
+    - Simulation: DFAs, teaching.
+
+  Exporting of graphs: Graphviz, Tex formats.
+
+  Look at GIT hooks to keep code formatted to code standards.
+
+  Dan Page comments:
+    - What does the application do?
+    - Stress the challenge of the coding in the report.
+    - Stress the testing and testing suite in the report.
