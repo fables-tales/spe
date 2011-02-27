@@ -7,13 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DeferredCommand;
-import com.google.gwt.user.client.Window;
-
 import uk.me.graphe.client.Console;
 import uk.me.graphe.client.EdgeDrawable;
 import uk.me.graphe.client.VertexDrawable;
@@ -21,6 +14,8 @@ import uk.me.graphe.shared.Edge;
 import uk.me.graphe.shared.Graph;
 import uk.me.graphe.shared.Vertex;
 import uk.me.graphe.shared.VertexDirection;
+
+import com.google.gwt.core.client.GWT;
 
 public class GraphManager2dImpl implements GraphManager2d {
 
@@ -204,5 +199,10 @@ public class GraphManager2dImpl implements GraphManager2d {
         for (final Runnable r : mRedrawCallbacks) {
             r.run();
         }
+    }
+
+    @Override
+    public VertexDrawable getVertexDrawable(String s) {
+        return mVertexRenderMap.get(new Vertex(s));
     }
 }

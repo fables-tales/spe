@@ -18,6 +18,8 @@ public interface GraphManager2d {
 	* @return a new graph instance
 	*/
     public Graph getUnderlyingGraph();
+    
+    public VertexDrawable getVertexDrawable(String s);
 
     /**
 	* adds a vertex to the graph
