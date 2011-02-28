@@ -59,6 +59,7 @@ public class ClientOT {
             @Override
             public void run() {
                 mSc.send(new RequestGraphMessage(1, 0).toJson());
+                Console.log("sent ogm");
                 Window.alert("SENT OGM");
                 new Timer() {
 
@@ -69,7 +70,7 @@ public class ClientOT {
                 }.scheduleRepeating(100);
 
             }
-        }.schedule(500);
+        }.schedule(1000);
 
     }
 
