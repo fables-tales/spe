@@ -161,8 +161,8 @@ margin-bottom:25px;
 margin-right: 340px;
 margin-left:25px;
 background-color: #ffffff;
--moz-border-radius: 8px;
-border-radius: 8px;
+/*-moz-border-radius: 8px;
+border-radius: 8px;*/
 overflow: hidden;
 float: left;
 }
