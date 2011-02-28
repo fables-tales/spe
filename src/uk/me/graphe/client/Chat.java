@@ -1,5 +1,7 @@
 package uk.me.graphe.client;
 
+import java.util.Random;
+
 import uk.me.graphe.client.communications.ServerChannel;
 import uk.me.graphe.shared.messages.ChatMessage;
 
@@ -20,6 +22,8 @@ import com.google.gwt.user.client.ui.Widget;
 public class Chat extends Composite{
 
 	private static UiBinderChat uiBinder = GWT.create(UiBinderChat.class);
+	
+	private static int mMyName = new Random().nextInt(10000);
 
 	interface UiBinderChat extends UiBinder<Widget, Chat> {}
 	
@@ -60,9 +64,9 @@ public class Chat extends Composite{
 			@Override
 			public void onClick(ClickEvent event) {
 				//do stuff here to send message
-				ChatMessage cm = new ChatMessage("bob", input.getText());
+				ChatMessage cm = new ChatMessage("" + mMyName, input.getText());
 				ServerChannel.getInstance().send(cm.toJson());
-				output.setText(output.getText() + "\nUser:\n" + input.getText());
+				output.setText(output.getText() + "\n" +  mMyName + ":\n" + input.getText());
 				input.setText("");
 				label.setText("");
 			}
