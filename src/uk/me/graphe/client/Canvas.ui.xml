@@ -4,8 +4,8 @@
 	xmlns:w="urn:import:com.google.gwt.user.client.ui" >
 	<ui:style>
 		.canvas {
-			width: 400px;
-			height: 300px;
+			width: 800px;
+			height: 800px;
 			border-style: solid;
 			border-width: 1px;
 		}

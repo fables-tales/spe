@@ -21,6 +21,7 @@ public class Graphemeui implements EntryPoint {
 
     public Toolbox tools;
     public Canvas canvas;
+    public Chat chat;
     public GraphManager2dFactory graphManagerFactory;
     public GraphManager2d graphManager;
     public double zoom;
@@ -41,14 +42,10 @@ public class Graphemeui implements EntryPoint {
         JSONImplHolder.initialise(new JSOFactory());
         RootPanel.get("toolbox").add(gui.getToolBox());
         RootPanel.get("canvas").add(gui.getCanvas());
+        RootPanel.get("chat").add(gui.getChat());
         ServerChannel sc = ServerChannel.getInstance();
         ClientOT.getInstance().setOperatingGraph(this.graphManager);
         sc.init();
-        
-        
-
-        
-
     }
 
     private Widget getToolBox() {
@@ -59,12 +56,17 @@ public class Graphemeui implements EntryPoint {
         return canvas;
     }
 
+    private Widget getChat() {
+        return chat;
+    }
+    
     public Graphemeui() {
         zoom = 1;
         moving = false;
         movingVertex = null;
         tools = new Toolbox(this);
         canvas = new Canvas(this);
+        chat = new Chat(this);
         graphManagerFactory = GraphManager2dFactory.getInstance();
         graphManager = graphManagerFactory.makeDefaultGraphManager();
         d.setOffset(0, 0);
