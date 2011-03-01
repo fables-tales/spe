@@ -75,12 +75,31 @@ public class Graphemeui implements EntryPoint {
     public void addEdge(Vertex from, Vertex to) {
         graphManager.addEdge(from, to, VertexDirection.fromTo);
         ClientOT.getInstance().notifyAddEdge(from, to, VertexDirection.fromTo);
+        
+        clearSelectedObjects();
     }
     
     public void addVertex(String label) {
         Vertex v = new Vertex(label);
         graphManager.addVertex(v, canvas.lMouseDown[X], canvas.lMouseDown[Y], VERTEX_SIZE);
         ClientOT.getInstance().notifyAddVertex(v, canvas.lMouseDown[X], canvas.lMouseDown[Y], VERTEX_SIZE);    	
+    }
+    
+    public void clearSelectedEdges()
+    {
+    	selectedEdges.clear();
+    }
+    
+    public void clearSelectedObjects()
+    {
+    	// TODO: UN-Highlight vertex and edges here.
+    	clearSelectedEdges();
+		clearSelectedVertices();
+    }
+    
+    public void clearSelectedVertices()
+    {
+    	selectedVertices.clear();
     }
     
     public void moveNode(Vertex v, int x, int y) {
@@ -104,36 +123,39 @@ public class Graphemeui implements EntryPoint {
         ClientOT.getInstance().notifyRemoveVertex(v);   	
     }
     
-    public boolean selectObjectAt(int x, int y){
-        VertexDrawable vd = graphManager.getDrawableAt(x, y);
-        
-        if (vd != null) {
-            selectedVertices.add(graphManager.getVertexFromDrawable(vd));
-            return true;
-        }
-
-        // TODO: Need to add code to highlight edges too.        
+    public boolean toggleSelectedEdgeAt(int x, int y) {
+    	// TODO: Implement.
+    	return false;
+    }
+    
+    public boolean toggleSelectedObjectAt(int x, int y) {
+    	if (toggleSelectedVertexAt(x, y))
+    	{
+    		return true;
+    	} else if (toggleSelectedEdgeAt(x, y)) {
+    		return true;
+    	}
         
         return false;
     }
     
-    public boolean toggleSelectedObjectAt(int x, int y) {
+    public boolean toggleSelectedVertexAt(int x, int y) {
         VertexDrawable vd = graphManager.getDrawableAt(x, y);
         
         if (vd != null) {
         	Vertex v = graphManager.getVertexFromDrawable(vd);
         	if (selectedVertices.contains(v))
         	{
+        		// TODO: UN-Highlight vertex here.
         		selectedVertices.remove(v);
         	} else {
+        		// TODO: Highlight vertex here.
         		selectedVertices.add(v);
         	}
             return true;
         }
-
-        // TODO: Need to add code to highlight edges too.        
         
-        return false;	
+        return false;
     }
     
     public void zoomIn() {
