@@ -616,6 +616,18 @@ public class DrawingImpl implements Drawing {
 
     }
 
+    function drawLineArrow(left1,top1,left2,top2,width,color)
+    {
+        var opp = top1-top2;
+        var adj = left1-left2;
+        var angle = Math.atan(opp/adj)+Math.PI/2;
+        if(left1>left2 )angle+=Math.PI;
+        drawLine(left1,top1,left2,top2,width,color);
+        var triLeft = left1-Math.round(adj/2);
+        var triTop = top1-Math.round(opp/2);
+        drawTriang(triLeft,triTop,20,20,angle,color);
+    }
+    
     //Styling functions
 
     // BLACK    0
@@ -632,9 +644,11 @@ public class DrawingImpl implements Drawing {
         switch(style){
         case 100: // FLOW CHART
             // Draw line with Arrow at end
-            drawLine(left1,top1,left2,top2,2,2);
-            //drawTriang(left,top,width,height,Math.PI/2,0);
-            // TO DO: math to work out where arrow goes
+            drawLineArrow(left1,top1,left2,top2,2,0);
+            break;
+        case -100: 
+            // Draw line with Arrow at end - HIGHLIGHTED
+            drawLineArrow(left1,top1,left2,top2,2,6);
             break;
         case -10:
             drawLine(left1,top1,left2,top2,2,6);
@@ -670,9 +684,9 @@ public class DrawingImpl implements Drawing {
     
     function flowDecision(left,top,width,height,color,strokeSize,strokeColor)
     {
-        var sOff = strokeSize*2+1;
+        var sOff = strokeSize*2;
         drawDiamond(left,top,width,height,strokeColor);
-        drawDiamond(left,top,width-sOff-1,height-sOff,color);
+        drawDiamond(left,top,width-sOff,height-(sOff*1.8),color);
     }
 
     function drawVertex(left,top,width,height,style)
@@ -681,6 +695,7 @@ public class DrawingImpl implements Drawing {
         var flowStrokeColor = 0;
         var flowColor = 7;
         var flowStrokeSize = 2;
+        
         switch(style){
         case 100:  // (100 - 199) FLOW CHART SYMBOLS
             // Terminator, start stop
@@ -751,7 +766,6 @@ public class DrawingImpl implements Drawing {
             break;
         case -10:
             drawCircleDim(left,top,width,height,6);
-            
             break;
         default:
             // Default vertex style: black circle
@@ -820,9 +834,9 @@ public class DrawingImpl implements Drawing {
                 double endX = (thisEdge.getEndX() + offsetX)*zoom;
                 double endY = (thisEdge.getEndY() + offsetY)*zoom;
                 //edgeStyle = thisEdge.getStyle();
-                edgeStyle = -1;
+                edgeStyle = 100;
                 
-                if(thisEdge.isHilighted())edgeStyle = -10;
+                if(thisEdge.isHilighted())edgeStyle = -100;
                 edgesString += startX + separator + startY + separator + endX
                         + separator + endY + separator + edgeStyle + separator;
             }
