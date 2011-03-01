@@ -681,7 +681,6 @@ public class DrawingImpl implements Drawing {
         var flowStrokeColor = 0;
         var flowColor = 7;
         var flowStrokeSize = 2;
-        alert(style);
         switch(style){
         case 100:  // (100 - 199) FLOW CHART SYMBOLS
             // Terminator, start stop
@@ -833,8 +832,8 @@ public class DrawingImpl implements Drawing {
                 double width = (0.5 * thisVertex.getWidth())*zoom;
                 double height = (0.5 * thisVertex.getWidth())*zoom;
                 //vertexStyle = thisVertex.getStyle();
-                vertexStyle = -1;
-                if(thisVertex.isHilighted())vertexStyle = -10;
+                vertexStyle = 100;
+                if(thisVertex.isHilighted())vertexStyle = -100;
                 veticesString += centreX + separator + centreY + separator
                         + width + separator+ height + separator + vertexStyle + separator;
             }
