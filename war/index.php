@@ -55,19 +55,11 @@
 				<div id="canvas">
             	<canvas width="800" height="800" style="position: absolute; z-index: -10;"></canvas>
             	
-            	<div id="chatbar" class="fixed-position">
-					<div id="chatbarframe">
-						<div id="chatbarcontent">
-							<!--this is the bottom bar, need a button which brings up the following div:-->
-							<div id="chat">
-							</div>
-						</div>
-					</div>
-				</div>
-            	
 			</div><!--end body-->
 		
 	</div><!--end container-->
+	
+	<div id="bottom"><div id="chat"></div></div>
 
 </body>
 </html>
