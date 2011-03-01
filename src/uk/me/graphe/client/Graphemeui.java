@@ -147,9 +147,11 @@ public class Graphemeui implements EntryPoint {
         	if (selectedVertices.contains(v))
         	{
         		// TODO: UN-Highlight vertex here.
+        		vd.setHilighted(false);
         		selectedVertices.remove(v);
         	} else {
         		// TODO: Highlight vertex here.
+        		vd.setHilighted(true);
         		selectedVertices.add(v);
         	}
             return true;
