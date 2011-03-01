@@ -153,6 +153,7 @@ public class Graphemeui implements EntryPoint {
         		// TODO: Highlight vertex here.
         		vd.setHilighted(true);
         		selectedVertices.add(v);
+        		graphManager.invalidate();
         	}
             return true;
         }

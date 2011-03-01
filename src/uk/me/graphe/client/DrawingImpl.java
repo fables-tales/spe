@@ -636,6 +636,9 @@ public class DrawingImpl implements Drawing {
             //drawTriang(left,top,width,height,Math.PI/2,0);
             // TO DO: math to work out where arrow goes
             break;
+        case -10:
+            drawLine(left1,top1,left2,top2,2,6);
+            break;
         default:
             //Default edge style: black line  
             drawLine(left1,top1,left2,top2,2,0);
@@ -678,7 +681,7 @@ public class DrawingImpl implements Drawing {
         var flowStrokeColor = 0;
         var flowColor = 7;
         var flowStrokeSize = 2;
-        
+        alert(style);
         switch(style){
         case 100:  // (100 - 199) FLOW CHART SYMBOLS
             // Terminator, start stop
@@ -746,6 +749,10 @@ public class DrawingImpl implements Drawing {
             drawCircle(left+width*0.05,top-width*0.1,width*0.35,1);
             drawCircle(left+width*0.3,top-width*0.1,width*0.05,0);
             drawCircle(left+width*0.05,top-width*0.1,width*0.05,0);
+            break;
+        case -10:
+            drawCircleDim(left,top,width,height,6);
+            
             break;
         default:
             // Default vertex style: black circle
@@ -815,6 +822,8 @@ public class DrawingImpl implements Drawing {
                 double endY = (thisEdge.getEndY() + offsetY)*zoom;
                 //edgeStyle = thisEdge.getStyle();
                 edgeStyle = -1;
+                
+                if(thisEdge.isHilighted())edgeStyle = -10;
                 edgesString += startX + separator + startY + separator + endX
                         + separator + endY + separator + edgeStyle + separator;
             }
@@ -825,6 +834,7 @@ public class DrawingImpl implements Drawing {
                 double height = (0.5 * thisVertex.getWidth())*zoom;
                 //vertexStyle = thisVertex.getStyle();
                 vertexStyle = -1;
+                if(thisVertex.isHilighted())vertexStyle = -10;
                 veticesString += centreX + separator + centreY + separator
                         + width + separator+ height + separator + vertexStyle + separator;
             }
