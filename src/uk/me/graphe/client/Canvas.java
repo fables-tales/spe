@@ -1,5 +1,7 @@
 package uk.me.graphe.client;
 
+import uk.me.graphe.shared.Tools;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -11,85 +13,141 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
-/**
- * Class used to handle clicks on canvas.
- * 
- * @author ed/ben
- * 
- * @mouseDown stores the first point the user dragged from
- * @mouseMove continually updates the end coordinates
- * @mouseUp when this is called the last set of coordinates are 
- * used as the end coordinates.
- * Finally the canvas calls for the options panel from the
- * graphemeui class.
- */
 public class Canvas extends Composite{
+	private static UiBinderCanvas uiBinder = GWT.create(UiBinderCanvas.class);
+	interface UiBinderCanvas extends UiBinder<Widget, Canvas> {}
 
-	private static UiBinderCanvas uiBinder = GWT
-			.create(UiBinderCanvas.class);
-
-	interface UiBinderCanvas extends UiBinder<Widget, Canvas> {
-	}
-	
-	public Graphemeui parent;
-	public int x1, x2, y1, y2, panx, pany, offsetX, offsetY;
-	public boolean pressed;
-	public double zoom;
 	@UiField
 	public CanvasWrapper canvasPanel;
+	
+	public final Graphemeui parent;
+	
+	public int lMouseDown[], lMouseMove[], lMouseUp[]; // last mouse positions.
+		
+	private static final int X = 0, Y = 1;
 
-	public Canvas(Graphemeui parent) {
+	private boolean isMouseDown;
+
+	
+	public Canvas(Graphemeui gUI) {
 		initWidget(uiBinder.createAndBindUi(this));
-		pressed = false;
-		offsetX = 0;
-		offsetY = 0;
-		zoom = 1;
-		this.parent = parent;
+		this.parent = gUI;
+		
+		lMouseDown = new int[2];
+		lMouseMove = new int[2];
+		lMouseUp = new int[2];
 	}
 	
 	@UiHandler("canvasPanel")
 	void onMouseDown(MouseDownEvent e){
+		if (parent.tools.currentTool != Tools.nameVertex)
+		{
+			isMouseDown = true;
+			
+			lMouseDown[X] = getMouseX(e.getX());
+			lMouseDown[Y] = getMouseY(e.getY());
+			
+			lMouseMove[X] = lMouseDown[X];
+			lMouseMove[Y] = lMouseDown[Y];
+			
+			lMouseUp[X] = lMouseDown[X];
+			lMouseUp[Y] = lMouseDown[Y];
+			
+			
+			switch (parent.tools.currentTool) {
+				case move:
+					break;
+				case select:
+					if (e.isControlKeyDown())
+					{
+						
+					} else {
+						parent.selectedEdges.clear();
+						parent.selectedVertices.clear();
+						parent.selectObjectAt(lMouseDown[X], lMouseDown[Y]);
+					}
+					break;
+				default:
+					break;
+			}
+		}
+		/*
 		//get initial click location
-		x1 = (int)(e.getX()/zoom)-offsetX;
-		y1 = (int)(e.getY()/zoom)-offsetY;
+		//x1 = (int)(e.getX()/zoom)-offsetX;
+		//y1 = (int)(e.getY()/zoom)-offsetY;
+		x1 = getMouseX(e.getX());
+		y1 = getMouseX(e.getY());
 		//make end point equal to start at beginning
 		x2 = x1;
 		y2 = y1;
 		//keeps track of previous end point for working out pan
 		panx = x1;
 		pany = y1;
-		//user is dragging until mouse up
-		pressed = true;
+		
+       /* int left = x2 - panx;
+        int top = y2 - pany;
+        pan(left, top);
+        
+        */
 	}
 	
 	@UiHandler("canvasPanel")
 	void onMouseMove(MouseMoveEvent e){
-		//keep record of last end point
-		panx = x2;
-		pany = y2;
-		//get new end point
-		x2 = (int)(e.getX()/zoom)-offsetX;
-		y2 = (int)(e.getY()/zoom)-offsetY;
-		//if dragging using the move tool
-		if (parent.tools.getTool() == 5 && pressed) {
-			//call graphemeui move method
-			parent.move(x1, y1, panx, pany, x2, y2);
+		if (parent.tools.currentTool != Tools.nameVertex){
+			int x = getMouseX(e.getX());
+			int y = getMouseX(e.getY());
+			
+			//Do pan here
+			
+			lMouseMove[X] = x;
+			lMouseMove[Y] = y;
+			
+			/*	
+			panx = x2;
+			pany = y2;
+			//get new end point
+			x2 = getMouseX(e.getX());
+			y2 = getMouseX(e.getY());
+			//if dragging using the move tool
+			/*if (parent.tools.getTool() == 5 && pressed) {
+				//call graphemeui move method
+				parent.move(x1, y1, panx, pany, x2, y2);
+			}*/
 		}
 	}
 	
 	@UiHandler("canvasPanel")
 	void onMouseOut(MouseOutEvent e){
-		pressed = false;
+		isMouseDown = false;
 		parent.moving = false;
 		parent.movingVertex = null;
 	}
 	
 	@UiHandler("canvasPanel")
 	void onMouseUp(MouseUpEvent e){
-		pressed = false;
+		switch (parent.tools.currentTool){
+			case addVertex:
+				parent.tools.setTool(Tools.nameVertex);
+				break;
+			case move:
+				break;
+			case select:
+				break;
+			case zoom:
+				if(e.isControlKeyDown()){
+					parent.zoomOut();
+				} else {
+					parent.zoomIn();
+				}
+				break;
+			default:
+				break;
+		}
+		//parent.tools.setTool(Tools.nameVertex);
 		parent.moving = false;
 		parent.movingVertex = null;
-		if (parent.tools.getOptionsPanel().getWidgetCount() != 0) {
+		isMouseDown = false;
+		/*if (parent.tools.getOptionsPanel().getWidgetCount() != 0) {
 			parent.tools.getOptionsPanel().remove(0);
 		}
 		if (parent.tools.getTool() == 1) {
@@ -101,19 +159,14 @@ public class Canvas extends Composite{
 			} else {
 				parent.zoom(true, x1, y1);
 			}
-		}
+		}*/
 	}
 	
-	public void setOffset(int x, int y){
-		offsetX = x;
-		offsetY = y;
+	private int getMouseX(int x) {
+		return (int)(x / parent.drawing.getZoom()) - parent.drawing.getOffsetX();
 	}
 	
-	public int getOffsetX(){
-		return offsetX;
-	}
-	
-	public int getOffsetY(){
-		return offsetY;
+	private int getMouseY(int y) {
+		return (int)(y / parent.drawing.getZoom()) - parent.drawing.getOffsetY();
 	}
 }

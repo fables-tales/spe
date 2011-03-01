@@ -21,11 +21,11 @@
 			width: 300px;
 			height: 350px;
 		}
-		
+				
 	</ui:style>
-	<g:VerticalPanel styleName='{style.chat}'>
+	<g:VerticalPanel styleName='{style.chat}' width="300" height="420">
 		<g:TextArea styleName='{style.output}' ui:field='output'></g:TextArea>
-		<g:Label ui:field='label'/>
+		<g:Label ui:field='label' height="20" width="300"/>
 		<g:HorizontalPanel>
 			<g:TextArea styleName='{style.input}' ui:field='input'></g:TextArea>
 			<g:Button styleName='{style.button}' ui:field='button'>Send</g:Button>

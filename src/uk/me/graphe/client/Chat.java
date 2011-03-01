@@ -64,9 +64,9 @@ public class Chat extends Composite{
 			@Override
 			public void onClick(ClickEvent event) {
 				//do stuff here to send message
-				ChatMessage cm = new ChatMessage("" + mMyName, input.getText());
+				ChatMessage cm = new ChatMessage("User" + mMyName, input.getText());
 				ServerChannel.getInstance().send(cm.toJson());
-				output.setText(output.getText() + "\n" +  mMyName + ":\n" + input.getText());
+				output.setText(output.getText() + "\nUser" +  mMyName + ":\n" + input.getText());
 				input.setText("");
 				label.setText("");
 			}
