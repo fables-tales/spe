@@ -9,6 +9,7 @@ import uk.me.graphe.shared.jsonwrapper.JSONException;
 import uk.me.graphe.shared.jsonwrapper.JSONObject;
 import uk.me.graphe.shared.messages.factories.AddEdgeFactory;
 import uk.me.graphe.shared.messages.factories.AddNodeFactory;
+import uk.me.graphe.shared.messages.factories.ChatFactory;
 import uk.me.graphe.shared.messages.factories.CompositeFactory;
 import uk.me.graphe.shared.messages.factories.ConversionFactory;
 import uk.me.graphe.shared.messages.factories.DeleteEdgeFactory;
@@ -41,6 +42,7 @@ public abstract class MessageFactory {
         sOpFactoryMap.put("requestGraph", new RequestGraphFactory());
         sOpFactoryMap.put("noSuchGraph", new NoSuchGraphFactory());
         sOpFactoryMap.put("composite", new CompositeFactory());
+        sOpFactoryMap.put("chat", new ChatFactory());
     }
 
     public static List<Message> makeOperationsFromJson(List<JSONObject> jsos)
