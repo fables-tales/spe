@@ -27,6 +27,7 @@ public class DrawingImpl implements Drawing {
                     [0.0, 0.0, 1.0], // BLUE 4 
                     [1.0, 1.0, 0.0], // YELLOW 5
                     [1.0, 0.317, 1.0], // PINK 6
+                    [0.5, 0.5, 0.5], // GREY 7
                     ];
 
     // Sylvester.js Libary
@@ -515,9 +516,50 @@ public class DrawingImpl implements Drawing {
         drawLine(left-leftOffset,top-topOffset,left+leftOffset,top+topOffset,height,color);
     }
     
-    function drawCircle(left,top,width,height,color){drawCircleDim(left,top,width,height,color);}
+    function drawDiamond(left,top,width,height,color)
+    {
+        var halfWidth = width/2;
+        var halfHeight = height/2;
+        var pvertices = new Float32Array(8);
+        pvertices[0] = left;
+        pvertices[1] = top-halfHeight;
+        pvertices[2] = left-halfWidth;
+        pvertices[3] = top;
+        pvertices[4] = left+halfWidth;
+        pvertices[5] = top;
+        pvertices[6] = left;
+        pvertices[7] = top+halfHeight;
+        drawPolygon(pvertices,color);
+    }
     
-    function drawCircle(left,top,width,color){drawCircleDim(left,top,width,width,color);}
+    function drawTriang(left,top,width,height,rotation,color)
+    {
+        var halfWidth = width/2;
+        var halfHeight = height/2;
+        var pvertices = new Float32Array(6);
+        pvertices[0] = 0;
+        pvertices[1] = 0-halfHeight;
+        pvertices[2] = 0-halfWidth;
+        pvertices[3] = 0+halfHeight;
+        pvertices[4] = 0+halfWidth;
+        pvertices[5] = 0+halfHeight;
+        
+        var j = 0;
+        for (i=0;i<3;i++)
+        {
+                var tempX = pvertices[j];
+                var tempY = pvertices[j+1];
+                pvertices[j] = (Math.cos(rotation)*tempX)-(Math.sin(rotation)*tempY)
+                pvertices[j] = Math.round(pvertices[j]+left);
+                j++;
+                pvertices[j] = (Math.sin(rotation)*tempX)+(Math.cos(rotation)*tempY)
+                pvertices[j] = Math.round(pvertices[j]+top);
+                j++;
+        }
+        drawPolygon(pvertices,color);
+    }
+    
+    function drawCircle(left,top,width,color){drawCircleDim(left,top,width,width,color)};
     
     function drawCircleDim(left,top,width,height,color){
 
@@ -528,7 +570,7 @@ public class DrawingImpl implements Drawing {
         var w = Math.round(width/2);
         var h = Math.round(height/2);
         var numSections;
-        if(width>height)numSections
+        if(width>height)numSections = width*2;
         else numSections = height*2;
         
         if(numSections>33)numSections = 33;
@@ -583,14 +625,16 @@ public class DrawingImpl implements Drawing {
     // BLUE     4 
     // YELLOW   5
     // PINK     6
+    // GREY     7
 
     function drawEdge(left1,top1, left2,top2,style){
         
         switch(style){
-        case 1:
+        case 100: // FLOW CHART
+            // Draw line with Arrow at end
             drawLine(left1,top1,left2,top2,2,2);
-            break;
-        case 2:
+            //drawTriang(left,top,width,height,Math.PI/2,0);
+            // TO DO: math to work out where arrow goes
             break;
         default:
             //Default edge style: black line  
@@ -620,22 +664,45 @@ public class DrawingImpl implements Drawing {
         drawSquare(left,top,width,height,0,strokeColor);
         drawSquare(left,top,width-sOff,height-sOff,0,color);
     }
-
-    function drawVertex(left,top,width,style)
+    
+    function flowDecision(left,top,width,height,color,strokeSize,strokeColor)
     {
+        var sOff = strokeSize*2+1;
+        drawDiamond(left,top,width,height,strokeColor);
+        drawDiamond(left,top,width-sOff-1,height-sOff,color);
+    }
+
+    function drawVertex(left,top,width,height,style)
+    {
+        var flowStrokeHighColor = 5;
+        var flowStrokeColor = 0;
+        var flowColor = 7;
+        var flowStrokeSize = 2;
         
         switch(style){
         case 100:  // (100 - 199) FLOW CHART SYMBOLS
             // Terminator, start stop
-            flowTerminator(left,top,width,width*0.7,4,2,0);
+            flowTerminator(left,top,width,height,flowColor,flowStrokeSize,flowStrokeColor);
+            break;
+        case -100:  
+            // Terminator, start stop - HIGHLIGHTED
+            flowTerminator(left,top,width,height,flowColor,flowStrokeSize,flowStrokeHighColor);
             break;
         case 101:
             // Process, process or action step
-            flowProcess(left,top,width,width,4,2,0);
+            flowProcess(left,top,width,height,flowColor,flowStrokeSize,flowStrokeColor);
+            break;
+        case -101:
+            // Process, process or action step - HIGHLIGHTED
+            flowProcess(left,top,width,height,flowColor,flowStrokeSize,flowStrokeHighColor);
             break;
         case 102:
             // Decision, question or branch
-            
+            flowDecision(left,top,width,height,flowColor,flowStrokeSize,flowStrokeColor)
+            break;
+        case -102:
+            // Decision, question or branch - HIGHLIGHTED
+            flowDecision(left,top,width,height,flowColor,flowStrokeSize,flowStrokeHighColor)
             break;
         case 1:
             // Smiley Face
@@ -682,7 +749,7 @@ public class DrawingImpl implements Drawing {
             break;
         default:
             // Default vertex style: black circle
-            drawCircle(left,top,width,0);
+            drawCircleDim(left,top,width,height,0);
         }
 
     }
@@ -692,7 +759,7 @@ public class DrawingImpl implements Drawing {
         setupGL();
         
         var numEdgeOpt = 5;
-        var numVertOpt = 4;
+        var numVertOpt = 5;
         var edgesArray=edges.split(",");
         for(var i=0;i<edgesArray.length-numEdgeOpt;i+=numEdgeOpt)
         {
@@ -710,8 +777,9 @@ public class DrawingImpl implements Drawing {
             var left = parseInt(verticesArray[i]);
             var top = parseInt(verticesArray[i+1]);
             var width = parseInt(verticesArray[i+2]);
-            var style = parseInt(verticesArray[i+3]);
-            drawVertex(left,top,width,style);
+            var height = parseInt(verticesArray[i+3]);
+            var style = parseInt(verticesArray[i+4]);
+            drawVertex(left,top,width,height,style);
         }
 
     }
@@ -745,19 +813,20 @@ public class DrawingImpl implements Drawing {
                 double startY = (thisEdge.getStartY() + offsetY)*zoom;
                 double endX = (thisEdge.getEndX() + offsetX)*zoom;
                 double endY = (thisEdge.getEndY() + offsetY)*zoom;
+                //edgeStyle = thisEdge.getStyle();
                 edgeStyle = -1;
                 edgesString += startX + separator + startY + separator + endX
                         + separator + endY + separator + edgeStyle + separator;
             }
             for (VertexDrawable thisVertex : vertices) {
-                double centreX = (thisVertex.getLeft() + 0.5
-                        * thisVertex.getWidth() + offsetX)*zoom;
-                double centreY = (thisVertex.getTop() + 0.5
-                        * thisVertex.getHeight() + offsetY)*zoom;
+                double centreX = (thisVertex.getCenterX() + offsetX)*zoom;
+                double centreY = (thisVertex.getCenterY() + offsetY)*zoom;
                 double width = (0.5 * thisVertex.getWidth())*zoom;
+                double height = (0.5 * thisVertex.getWidth())*zoom;
+                //vertexStyle = thisVertex.getStyle();
                 vertexStyle = -1;
                 veticesString += centreX + separator + centreY + separator
-                        + width + separator + vertexStyle + separator;
+                        + width + separator+ height + separator + vertexStyle + separator;
             }
 
             // JSNI method used to draw webGL graph version
