@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class Chat extends Composite{
@@ -24,38 +25,42 @@ public class Chat extends Composite{
 	private static UiBinderChat uiBinder = GWT.create(UiBinderChat.class);
 	
 	private static int mMyName = new Random().nextInt(10000);
+	
+	private boolean mSendEnabled;
 
 	interface UiBinderChat extends UiBinder<Widget, Chat> {}
 	
 	private static Chat sInstance;
 	
 	@UiField
-	TextArea output, input;
+	TextArea output;
 	@UiField
-	Button button;
+	TextArea input;
 	@UiField
-	Label label;
+	Button minimize;
+	@UiField
+	VerticalPanel panel;
 	Graphemeui parent;
 	
 	public Chat(Graphemeui parent){
 		this.parent = parent;
 		initWidget(uiBinder.createAndBindUi(this));
+		mSendEnabled = false;
 		output.setReadOnly(true);
-		button.setEnabled(false);
 		
 		input.addKeyUpHandler(new KeyUpHandler() {
 			public void onKeyUp(KeyUpEvent e) {
 				if (input.getText().trim().length() > 0) {
-					button.setEnabled(true);
+					mSendEnabled = true;
 					//notify other people that user is writing e.g:
-					label.setText("User is writing a message...");
 				} else {
-					button.setEnabled(false);
+					mSendEnabled = false;
 					//stop notifying e.g:
-					label.setText("");
 				}
 				if (e.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-					button.click();
+					if(mSendEnabled){
+						sendMessage();
+					}
 				}
 			}
 		});
@@ -63,17 +68,23 @@ public class Chat extends Composite{
 		ClickHandler ch = new ClickHandler(){
 			@Override
 			public void onClick(ClickEvent event) {
-				//do stuff here to send message
-				ChatMessage cm = new ChatMessage("User" + mMyName, input.getText());
-				ServerChannel.getInstance().send(cm.toJson());
-				output.setText(output.getText() + "\nUser" +  mMyName + ":\n" + input.getText());
-				input.setText("");
-				label.setText("");
+				if(panel.isVisible()){
+					panel.setVisible(false);
+				}else{
+					panel.setVisible(true);
+				}
 			}
 		};
-		button.addClickHandler(ch);
+		minimize.addClickHandler(ch);
 	}
 
+	public void sendMessage(){
+		//do stuff here to send message
+		ChatMessage cm = new ChatMessage("User" + mMyName, input.getText());
+		ServerChannel.getInstance().send(cm.toJson());
+		output.setText(output.getText() + "\nUser" +  mMyName + ":\n" + input.getText());
+		input.setText("");
+	}
 	public static Chat getInstance(Graphemeui parent){
 		if (sInstance == null) sInstance = new Chat(parent);
         return sInstance;

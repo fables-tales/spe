@@ -118,7 +118,7 @@ public class Canvas extends Composite{
 			int y = getMouseX(e.getY());
 			
 			//Do pan here
-			
+
 			lMouseMove[X] = x;
 			lMouseMove[Y] = y;
 			

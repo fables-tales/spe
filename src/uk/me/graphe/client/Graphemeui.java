@@ -110,7 +110,7 @@ public class Graphemeui implements EntryPoint {
   
     public void pan(int left, int top) {
         drawing.setOffset(drawing.getOffsetX() + left, drawing.getOffsetY() + top);        
-        graphManager.invalidate(); // TODO: This needs to change.
+        graphManager.invalidate();
     }
     
     public void removeEdge(Edge e) {
