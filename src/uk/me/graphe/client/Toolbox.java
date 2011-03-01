@@ -10,6 +10,7 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -61,7 +62,7 @@ public class Toolbox extends Composite {
 		btnSelect.addClickHandler(chTools);
 		btnMove.addClickHandler(chTools);
 		btnZoom.addClickHandler(chTools);
-
+		
 		ClickHandler chOptions = new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -98,10 +99,40 @@ public class Toolbox extends Composite {
 				}
 			}
 		});
-		
+	
 		btnCancel.setText("Cancel");
 		
 		setTool(Tools.select);
+		
+		KeyUpHandler khHotkeys = new KeyUpHandler() {
+			public void onKeyUp(KeyUpEvent e) {
+				switch (e.getNativeKeyCode()) {
+					case 69: // e
+						setTool(Tools.addEdge);
+						break;
+					case 77: // m
+						setTool(Tools.move);
+						break;
+					case 83: // s
+						setTool(Tools.select);
+						break;
+					case 86: // v
+						setTool(Tools.addVertex);
+						break;
+					case 90: // z
+						setTool(Tools.zoom);
+						break;
+					case KeyCodes.KEY_DELETE:
+						// TODO: Delete what is current selected, unhighlighting them on the way.
+						setLabel("delete");
+						break;
+					default:
+						break;
+				}
+			}
+		};
+		super.sinkEvents(Event.KEYEVENTS);
+		super.addDomHandler(khHotkeys, KeyUpEvent.getType());
 	}
 	
 	public void setTool(Tools tool) {
@@ -114,6 +145,7 @@ public class Toolbox extends Composite {
 			case addVertex:
 				lblInstruction.setText("Click the canvas to add a vertex.");
 				pnlOptions.add(lblInstruction);
+				parent.clearSelectedObjects();
 				break;
 			case nameVertex:
 				lblInstruction.setText("Vertex name:");
@@ -129,6 +161,12 @@ public class Toolbox extends Composite {
 			case addEdge:
 				lblInstruction.setText("Click to select the vertices you would like to connect.");
 				pnlOptions.add(lblInstruction);
+				parent.clearSelectedEdges();
+				if (parent.selectedVertices.size() == 2) {
+					parent.addEdge(parent.selectedVertices.get(0), parent.selectedVertices.get(1));
+				} else if (parent.selectedVertices.size() > 2) {
+					parent.clearSelectedVertices();
+				}
 				break;
 			case move:
 				lblInstruction.setText("Click and drag to pan the canvas or move a vertex.");
