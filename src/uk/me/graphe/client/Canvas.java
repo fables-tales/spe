@@ -3,6 +3,7 @@ package uk.me.graphe.client;
 import uk.me.graphe.shared.Tools;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -10,6 +11,7 @@ import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -39,6 +41,12 @@ public class Canvas extends Composite{
 	}
 	
 	@UiHandler("canvasPanel")
+	void onKeyUp(KeyUpEvent e)
+	{
+		parent.tools.setLabel("hey");
+	}
+	
+	@UiHandler("canvasPanel")
 	void onMouseDown(MouseDownEvent e){
 		if (parent.tools.currentTool != Tools.nameVertex)
 		{
@@ -51,20 +59,32 @@ public class Canvas extends Composite{
 			lMouseMove[Y] = lMouseDown[Y];
 			
 			lMouseUp[X] = lMouseDown[X];
-			lMouseUp[Y] = lMouseDown[Y];
-			
+			lMouseUp[Y] = lMouseDown[Y];	
 			
 			switch (parent.tools.currentTool) {
+				case addEdge:
+					parent.toggleSelectedVertexAt(lMouseDown[X], lMouseDown[Y]);
+					
+					if (parent.selectedVertices.size() > 1) {
+						parent.addEdge(parent.selectedVertices.get(0),parent.selectedVertices.get(1));
+					}
+					break;
 				case move:
+					if (parent.selectedVertices.size() > 0) {
+						// TODO: Move the nodes here by the offset.
+					} else if (parent.toggleSelectedVertexAt(lMouseDown[X], lMouseDown[Y])) {
+						// TODO: Move this one node then deselect it.
+					} else {
+						// TODO: User wants to pan.
+					}
 					break;
 				case select:
 					if (e.isControlKeyDown())
 					{
-						
+						parent.toggleSelectedObjectAt(lMouseDown[X], lMouseDown[Y]);
 					} else {
-						parent.selectedEdges.clear();
-						parent.selectedVertices.clear();
-						parent.selectObjectAt(lMouseDown[X], lMouseDown[Y]);
+						parent.clearSelectedObjects(); // clearing because we are selecting object on own.
+						parent.toggleSelectedObjectAt(lMouseDown[X], lMouseDown[Y]);
 					}
 					break;
 				default:
