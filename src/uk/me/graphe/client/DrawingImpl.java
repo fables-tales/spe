@@ -13,7 +13,9 @@ public class DrawingImpl implements Drawing {
 
 	// JSNI method for webgl, comments omitted because it is one big comment...
     private static native void drawGraph3D(String verticesString, String edgesString) /*-{
-    var circleCoords = new Array(10000);
+    var circleCoords = new Array(1000);
+    for(i=0;i<circleCoords.length;i++)circleCoords[i] = new Array(1000);
+
     var gl;
     var shaderProgram;
     var mvMatrix;
@@ -503,48 +505,59 @@ public class DrawingImpl implements Drawing {
         
         drawPolygon(pvertices,color);
     }
-
-    function drawSquare(left,top,width,height,rotation,color){
+    
+    function drawSquare(left,top,width,height,rotation,color){drawSquareComplex(left,top,width,height,rotation,height,width,color);}
+    
+    function drawSquareComplex(left,top,width,height,rotation,vHeight,hWidth,color){
         var diam = width/2;
         var topOffset = Math.round(Math.sin(rotation)*diam);
         var leftOffset = Math.round(Math.cos(rotation)*diam);
         drawLine(left-leftOffset,top-topOffset,left+leftOffset,top+topOffset,height,color);
     }
-
-    function drawCircle(left,top,width,color){
+    
+    function drawCircle(left,top,width,height,color){drawCircleDim(left,top,width,height,color);}
+    
+    function drawCircle(left,top,width,color){drawCircleDim(left,top,width,width,color);}
+    
+    function drawCircleDim(left,top,width,height,color){
 
         left = Math.round(left);
         top = Math.round(top);
         width = Math.round(width);
-        var r = Math.round(width/2);
-        var numSections =width*2;
+        height = Math.round(height);
+        var w = Math.round(width/2);
+        var h = Math.round(height/2);
+        var numSections;
+        if(width>height)numSections
+        else numSections = height*2;
+        
         if(numSections>33)numSections = 33;
         if(numSections<10)numSections = 10;
         var delta_theta = 2.0 * Math.PI / numSections
         var theta = 0
-        if(circleCoords[r]==undefined)
+        if(circleCoords[w][h]==undefined)
         {
             //alert("make circle "+r);
-            circleCoords[r] = new Array(numSections);
-            circleCoords[r] = new Array(numSections);
+            circleCoords[w][h] = new Array(numSections);
+            circleCoords[w][h] = new Array(numSections);
             for (i = 0; i < numSections ; i++) {
-                circleCoords[r][i] = new Array(2);
-                x = (r * Math.cos(theta));
-                y = (r * Math.sin(theta));
+                circleCoords[w][h][i] = new Array(2);
+                x = (w * Math.cos(theta));
+                y = (h * Math.sin(theta));
                 x = Math.round(x*1000)/1000
                 y = Math.round(y*1000)/1000
-                circleCoords[r][i][1] = x;
-                circleCoords[r][i][0] = y;
+                circleCoords[w][h][i][1] = x;
+                circleCoords[w][h][i][0] = y;
                 theta += delta_theta
             }
-            circleCoords[r].sort(compareXValue);
+            circleCoords[w][h].sort(compareXValue);
             for(var i = 0;i<numSections-1;i++)
             {
-                if(circleCoords[r][i][0] == circleCoords[r][i+1][0] && circleCoords[r][i][1]<circleCoords[r][i+1][1])
+                if(circleCoords[w][h][i][0] == circleCoords[w][h][i+1][0] && circleCoords[w][h][i][1]<circleCoords[w][h][i+1][1])
                 {
-                    temp = circleCoords[r][i];
-                    circleCoords[r][i] = circleCoords[r][i+1];
-                    circleCoords[r][i+1] = temp;
+                    temp = circleCoords[w][h][i];
+                    circleCoords[w][h][i] = circleCoords[w][h][i+1];
+                    circleCoords[w][h][i+1] = temp;
                 }
             }
         }
@@ -552,9 +565,9 @@ public class DrawingImpl implements Drawing {
         var pvertices = new Float32Array(numSections*2);
         for (i=0;i<numSections;i++)
         {
-                pvertices[j] = circleCoords[r][i][1]+left;
+                pvertices[j] = circleCoords[w][h][i][1]+left;
                 j++;
-                pvertices[j] = circleCoords[r][i][0]+top;
+                pvertices[j] = circleCoords[w][h][i][0]+top;
                 j++;
         }
         drawPolygon(pvertices,color);
@@ -580,15 +593,52 @@ public class DrawingImpl implements Drawing {
         case 2:
             break;
         default:
-            alert("ERROR: No style specified for edge!");
+            //Default edge style: black line  
+            drawLine(left1,top1,left2,top2,2,0);
         }
+    }
+
+    function flowTerminator(left,top,width,height,color,strokeSize,strokeColor)
+    {
+        var sOff = strokeSize*2;
+        flowTerminatorNoStroke(left,top,width,height,strokeColor);
+        flowTerminatorNoStroke(left,top,width-sOff,height-sOff,color);
+    }
+    
+    function flowTerminatorNoStroke(left,top,width,height,color)
+    {
+        var cWidth = height;
+        var cOff = (width/2)-(cWidth/2);
+        drawCircle(left-cOff,top,cWidth,color);
+        drawCircle(left+cOff,top,cWidth,color);
+        drawSquare(left,top,cOff*2,height,0,color); 
+    }
+    
+    function flowProcess(left,top,width,height,color,strokeSize,strokeColor)
+    {
+        var sOff = strokeSize*2;
+        drawSquare(left,top,width,height,0,strokeColor);
+        drawSquare(left,top,width-sOff,height-sOff,0,color);
     }
 
     function drawVertex(left,top,width,style)
     {
-
+        
         switch(style){
+        case 100:  // (100 - 199) FLOW CHART SYMBOLS
+            // Terminator, start stop
+            flowTerminator(left,top,width,width*0.7,4,2,0);
+            break;
+        case 101:
+            // Process, process or action step
+            flowProcess(left,top,width,width,4,2,0);
+            break;
+        case 102:
+            // Decision, question or branch
+            
+            break;
         case 1:
+            // Smiley Face
             drawCircle(left,top,width,5);
             drawCircle(left,top,width*0.7,0);
             drawCircle(left,top,width*0.5,5);
@@ -600,6 +650,7 @@ public class DrawingImpl implements Drawing {
             drawCircle(left+(width*0.20),top-(width*0.2),width*0.2,0);
             break;
         case 2:
+            // Bart Simpson
             drawSquare(left,top,width*0.9,width*1.1,0,0);
             drawSquare(left,top,width*0.85,width*1.05,0,5);
             drawSquare(left-width*0.27,top+width*0.2,width*0.35,width*1.2,0,0);
@@ -630,7 +681,8 @@ public class DrawingImpl implements Drawing {
             drawCircle(left+width*0.05,top-width*0.1,width*0.05,0);
             break;
         default:
-            alert("ERROR: No style specified for vertex!");
+            // Default vertex style: black circle
+            drawCircle(left,top,width,0);
         }
 
     }
@@ -693,7 +745,7 @@ public class DrawingImpl implements Drawing {
                 double startY = (thisEdge.getStartY() + offsetY)*zoom;
                 double endX = (thisEdge.getEndX() + offsetX)*zoom;
                 double endY = (thisEdge.getEndY() + offsetY)*zoom;
-                edgeStyle = 1;
+                edgeStyle = -1;
                 edgesString += startX + separator + startY + separator + endX
                         + separator + endY + separator + edgeStyle + separator;
             }
@@ -703,7 +755,7 @@ public class DrawingImpl implements Drawing {
                 double centreY = (thisVertex.getTop() + 0.5
                         * thisVertex.getHeight() + offsetY)*zoom;
                 double width = (0.5 * thisVertex.getWidth())*zoom;
-                vertexStyle = 2;
+                vertexStyle = -1;
                 veticesString += centreX + separator + centreY + separator
                         + width + separator + vertexStyle + separator;
             }
