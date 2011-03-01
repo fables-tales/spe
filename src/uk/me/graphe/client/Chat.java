@@ -23,6 +23,8 @@ public class Chat extends Composite{
 
 	interface UiBinderChat extends UiBinder<Widget, Chat> {}
 	
+	private static Chat sInstance;
+	
 	@UiField
 	TextArea output, input;
 	@UiField
@@ -66,5 +68,18 @@ public class Chat extends Composite{
 			}
 		};
 		button.addClickHandler(ch);
+	}
+
+	public static Chat getInstance(Graphemeui parent){
+		if (sInstance == null) sInstance = new Chat(parent);
+        return sInstance;
+	}
+	
+	public static Chat getInstance() {
+		return sInstance;
+	}
+	
+	public void displayMessage(ChatMessage cm){
+		output.setText(output.getText() + "\n" + cm.getUserId() + ":\n" + cm.getText());
 	}
 }

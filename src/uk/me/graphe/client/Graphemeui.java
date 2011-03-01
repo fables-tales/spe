@@ -25,11 +25,12 @@ public class Graphemeui implements EntryPoint {
     public GraphManager2dFactory graphManagerFactory;
     public GraphManager2d graphManager;
     public double zoom;
-    public static final int VERTEX_SIZE = 80;
-    public static final int CANVAS_HEIGHT = 400, CANVAS_WIDTH = 800;
+    
+    public static final int VERTEX_SIZE = 20;
+    public static final int CANVAS_HEIGHT = 800, CANVAS_WIDTH = 800;
     public static final double ZOOM_STRENGTH = 0.2;
     private int top, left;
-    
+
     public boolean moving;
     public Vertex movingVertex;
     public final Drawing d = new DrawingImpl();
@@ -59,14 +60,14 @@ public class Graphemeui implements EntryPoint {
     private Widget getChat() {
         return chat;
     }
-    
+
     public Graphemeui() {
         zoom = 1;
         moving = false;
         movingVertex = null;
         tools = new Toolbox(this);
         canvas = new Canvas(this);
-        chat = new Chat(this);
+        chat = Chat.getInstance(this);
         graphManagerFactory = GraphManager2dFactory.getInstance();
         graphManager = graphManagerFactory.makeDefaultGraphManager();
         d.setOffset(0, 0);
@@ -74,8 +75,8 @@ public class Graphemeui implements EntryPoint {
         graphManager.addRedrawCallback(new Runnable() {
             @Override
             public void run() {
-                d.renderGraph(canvas.canvasPanel, graphManager
-                        .getEdgeDrawables(), graphManager.getVertexDrawables());// graph
+                d.renderGraph(canvas.canvasPanel, graphManager.getEdgeDrawables(),
+                        graphManager.getVertexDrawables());// graph
                 // goes
                 // here!
             }
@@ -94,8 +95,7 @@ public class Graphemeui implements EntryPoint {
         int tool = tools.getTool();
 
         // create appropriate dialog box
-        EdgeDialog ed = new EdgeDialog(graphManager.getUnderlyingGraph(), tool,
-                this);
+        EdgeDialog ed = new EdgeDialog(graphManager.getUnderlyingGraph(), tool, this);
 
         // keep record of first point when adding nodes
         if (tool == 1) {
@@ -142,33 +142,34 @@ public class Graphemeui implements EntryPoint {
             graphManager.moveVertexTo(v, x, y);
         }
     }
-    
-    public void zoom(boolean isZoomIn, int x, int y){
-    	if(isZoomIn){
-    		//work out zoom
-    		zoom += ZOOM_STRENGTH;
-    	} else if(zoom >= 2*ZOOM_STRENGTH){  //only zoom out if it won't scale to 0  		
-    		//work out zoom
-    		zoom -= ZOOM_STRENGTH;
-       	}
-    	
-    	//work out pan
-		top = (x-(int)(CANVAS_WIDTH/(2*zoom)));
-		left =(y-(int)(CANVAS_HEIGHT/(2*zoom)));
-		
-		//move to point
-		panTo(top, left);
-    	
-		//scale canvas
-    	canvas.zoom = zoom;
-		d.setZoom(zoom);
-		
-    	graphManager.invalidate();
+
+    public void zoom(boolean isZoomIn, int x, int y) {
+        if (isZoomIn) {
+            // work out zoom
+            zoom += ZOOM_STRENGTH;
+        } else if (zoom >= 2 * ZOOM_STRENGTH) { // only zoom out if it won't
+                                                // scale to 0
+            // work out zoom
+            zoom -= ZOOM_STRENGTH;
+        }
+
+        // work out pan
+        top = (x - (int) (CANVAS_WIDTH / (2 * zoom)));
+        left = (y - (int) (CANVAS_HEIGHT / (2 * zoom)));
+
+        // move to point
+        panTo(top, left);
+
+        // scale canvas
+        canvas.zoom = zoom;
+        d.setZoom(zoom);
+
+        graphManager.invalidate();
     }
-    
-    public void panTo(int left, int top){
-    	d.setOffset(-left, -top);
-    	canvas.setOffset(-left, -top);
+
+    public void panTo(int left, int top) {
+        d.setOffset(-left, -top);
+        canvas.setOffset(-left, -top);
     }
 
     public void pan(int left, int top) {
@@ -197,10 +198,9 @@ public class Graphemeui implements EntryPoint {
      *            - the dialog box itself (passed in so we can delete it
      *            afterwards)
      */
-    public void addElement(int type, int v1, int v2, int edge, String label,
-            EdgeDialog ed) {
+    public void addElement(int type, int v1, int v2, int edge, String label, EdgeDialog ed) {
         Graph g = graphManager.getUnderlyingGraph();
-        
+
         if (type == 4) {
             Edge e = g.getEdges().get(edge);
             graphManager.removeEdge(e);
@@ -210,17 +210,17 @@ public class Graphemeui implements EntryPoint {
             graphManager.removeVertex(v);
             ClientOT.getInstance().notifyRemoveVertex(v);
         } else if (type == 2) {
-            graphManager.addEdge(g.getVertices().get(v1), g.getVertices().get(
-                    v2), VertexDirection.fromTo);
-            ClientOT.getInstance().notifyAddEdge(g.getVertices().get(v1), g.getVertices().get(
-                    v2), VertexDirection.fromTo);
+            graphManager.addEdge(g.getVertices().get(v1), g.getVertices().get(v2),
+                    VertexDirection.fromTo);
+            ClientOT.getInstance().notifyAddEdge(g.getVertices().get(v1), g.getVertices().get(v2),
+                    VertexDirection.fromTo);
         } else if (type == 1) {
             Vertex v = new Vertex(label);
             int[] coords = ed.getPoint();
             graphManager.addVertex(v, coords[0], coords[1], VERTEX_SIZE);
             ClientOT.getInstance().notifyAddVertex(v, coords[0], coords[1], VERTEX_SIZE);
         }
-        
+
         removeOptions(ed);
     }
 

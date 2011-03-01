@@ -5,8 +5,15 @@ public class VertexDrawable {
     private int mTop;
     private int mWidth;
     private int mHeight;
+    private int mStyle = UNDEFINED_STYLE;
+    
+    public static final int UNDEFINED_STYLE = -1;
+    public static final int FILLED_CIRCLE_STYLE = 0x01;
+    public static final int STROKED_SQUARE_STYLE = 0x03;
+    public static final int STROKED_DIAMOND_STYLE = 0x04;
 
     private String mLabel;
+    public static final int STROKED_CIRCLE_STYLE = 0x02;
 
     /**
      * create a new VertexDrawable
@@ -28,6 +35,11 @@ public class VertexDrawable {
         this.mWidth = width;
         this.mHeight = height;
         this.mLabel = label;
+    }
+    
+    public VertexDrawable(int left, int top, int width, int height, String label, int style) {
+        this(left, top, width, height, label);
+        mStyle = style;
     }
 
     /**
@@ -118,6 +130,14 @@ public class VertexDrawable {
      */
     public boolean contains(int x, int y) {
         return x >= mLeft && x <= mLeft + mWidth && y >= mTop && y <= mTop + mHeight;
+    }
+
+    public void setStyle(int style) {
+        mStyle = style;
+    }
+
+    public int getStyle() {
+        return mStyle;
     }
 
 }
