@@ -9,11 +9,12 @@ public class VertexDrawable {
     
     public static final int UNDEFINED_STYLE = -1;
     public static final int FILLED_CIRCLE_STYLE = 0x01;
+    public static final int STROKED_CIRCLE_STYLE = 0x02;
     public static final int STROKED_SQUARE_STYLE = 0x03;
     public static final int STROKED_DIAMOND_STYLE = 0x04;
 
     private String mLabel;
-    public static final int STROKED_CIRCLE_STYLE = 0x02;
+    private boolean mHilighted;
 
     /**
      * create a new VertexDrawable
@@ -138,6 +139,14 @@ public class VertexDrawable {
 
     public int getStyle() {
         return mStyle;
+    }
+    
+    public boolean isHilighted() {
+        return mHilighted;
+    }
+    
+    public void setHilighted(boolean h) {
+        mHilighted = h;
     }
 
 }
