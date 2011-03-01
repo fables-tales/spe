@@ -13,6 +13,7 @@ public class EdgeDrawable {
      * arrows are always at the end edge
      */
     private boolean mArrow;
+    private boolean mHilighted;
 
     /**
      * creates a new EdgeDrawable, with no arrow
@@ -98,5 +99,13 @@ public class EdgeDrawable {
     public boolean needsArrow() {
         return mArrow;
     }
-
+    
+    
+    public boolean isHilighted() {
+        return mHilighted;
+    }
+    
+    public void setHilighted(boolean h) {
+        mHilighted = h;
+    } 
 }
