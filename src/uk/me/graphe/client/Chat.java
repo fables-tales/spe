@@ -70,8 +70,10 @@ public class Chat extends Composite{
 			public void onClick(ClickEvent event) {
 				if(panel.isVisible()){
 					panel.setVisible(false);
+					minimize.setText("Show Chat");
 				}else{
 					panel.setVisible(true);
+					minimize.setText("Hide Chat");
 				}
 			}
 		};
