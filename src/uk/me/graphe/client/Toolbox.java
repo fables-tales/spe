@@ -158,6 +158,7 @@ public class Toolbox extends Composite {
 				btnOk.setText("Add");
 				pnlOptions.add(btnOk);
 				pnlOptions.add(btnCancel);
+				pnlOptions.setVisible(true);
 				txtParam.setFocus(true);
 				break;
 			case addEdge:

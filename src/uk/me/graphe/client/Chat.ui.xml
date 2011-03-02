@@ -10,6 +10,10 @@
 		.button {
 			width: 100%;
 			height: 30px;
+			right: 25px;
+			position: fixed;
+			background-color:#f0f0f0;
+			border: 1px solid #f0f0f0;
 		}
 		
 		.input {
@@ -35,23 +39,11 @@
 			  bottom: 31px;
 			  right: 25px;
 		}
-		
-		.convo {
-			
-		}
-		
-		.chatbutton {
-			width: 300px;
-			height: 30px;
-			font: 13px arial;
-			position: fixed;
-			right: 25px;
-		}
 				
 	</ui:style>
 	<g:VerticalPanel height="380" width="300">
 		<g:VerticalPanel styleName='{style.chatbox}' ui:field='panel' height="350">
-			<g:TextArea styleName='{style.convo}' ui:field='output' width="298px" height="300px"></g:TextArea>
+			<g:TextArea ui:field='output' width="298px" height="300px"></g:TextArea>
 			<g:TextArea styleName='{style.input}' ui:field='input' width="298px" height="50px"></g:TextArea>
 		</g:VerticalPanel>
 		<g:Button styleName='{style.button}' ui:field='minimize' width="298px" height="30px">Hide Chat</g:Button>
