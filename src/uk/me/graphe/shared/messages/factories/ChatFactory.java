@@ -14,7 +14,9 @@ public class ChatFactory implements ConversionFactory {
         try {
             String id = o.getString("id");
             String text = o.getString("text");
-            return new ChatMessage(id, text);
+            boolean notify = Boolean.valueOf(o.getString("notify"));
+            boolean writing = Boolean.valueOf(o.getString("writing"));
+            return new ChatMessage(id, text, notify, writing);
         } catch (JSONException e) {
             throw new Error(e);
         }

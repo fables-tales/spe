@@ -19,6 +19,7 @@ public class Graphemeui implements EntryPoint {
 	public final Toolbox tools;
 	public final Canvas canvas;
 	public final Chat chat;
+	public final Description description;
 	public final GraphManager2d graphManager;
 	public final GraphManager2dFactory graphManagerFactory;
 	public final Drawing drawing;
@@ -43,6 +44,7 @@ public class Graphemeui implements EntryPoint {
 		tools = new Toolbox(this);
 		canvas = new Canvas(this);
 		chat = Chat.getInstance(this);
+		description = new Description();
 		drawing = new DrawingImpl();
 		graphManagerFactory = GraphManager2dFactory.getInstance();
 		graphManager = graphManagerFactory.makeDefaultGraphManager();
@@ -66,6 +68,7 @@ public class Graphemeui implements EntryPoint {
 		RootPanel.get("toolbox").add(this.tools);
 		RootPanel.get("canvas").add(this.canvas);
 		RootPanel.get("chat").add(this.chat);
+		RootPanel.get("description").add(this.description);
 		ServerChannel sc = ServerChannel.getInstance();
 		ClientOT.getInstance().setOperatingGraph(this.graphManager);
 		sc.init();

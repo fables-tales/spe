@@ -7,10 +7,13 @@ import uk.me.graphe.shared.jsonwrapper.JSONObject;
 public class ChatMessage extends Message {
 
 	private String userId, text;
+	private boolean mIsNotify, mUserWriting;
 	
-	public ChatMessage(String userID, String text){
+	public ChatMessage(String userID, String text, boolean isNotify, boolean isWriting){
 		this.userId = userID;
 		this.text = text;
+		this.mIsNotify = isNotify;
+		this.mUserWriting = isWriting;
 	}
 	
 	@Override
@@ -25,6 +28,8 @@ public class ChatMessage extends Message {
             repr.put("message", this.getMessage());
             repr.put("id", userId);
             repr.put("text", text);
+            repr.put("notify", String.valueOf(mIsNotify));
+            repr.put("writing", String.valueOf(mUserWriting));
         } catch (JSONException jse) {
             throw new Error(jse);
         }
@@ -37,6 +42,14 @@ public class ChatMessage extends Message {
 
 	public String getText() {
 		return text;
+	}
+	
+	public boolean isNotification() {
+		return mIsNotify;
+	}
+	
+	public boolean isUserWriting() {
+		return mUserWriting;
 	}
 
 }

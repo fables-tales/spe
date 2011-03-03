@@ -8,3 +8,4 @@ war/WEB-INF
 war/WEB-INF/classes
 war/grapheme
 docs/*
+depends/

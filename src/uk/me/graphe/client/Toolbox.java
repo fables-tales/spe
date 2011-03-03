@@ -39,7 +39,7 @@ public class Toolbox extends Composite {
 	public Toolbox(Graphemeui gUI) {
 		initWidget(uiBinder.createAndBindUi(this));
 		this.parent = gUI;	
-		
+
 		ClickHandler chTools = new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -187,7 +187,10 @@ public class Toolbox extends Composite {
 				break;
 		}
 		
+		parent.description.setTool(tool);
+		
 		pnlOptions.setVisible(true);
+		if (tool == Tools.nameVertex) txtParam.setFocus(true);
 	}
 	
 	public void setLabel(String text)
