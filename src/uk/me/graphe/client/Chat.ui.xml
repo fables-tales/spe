@@ -5,7 +5,7 @@
 		.pnlChat {
 			position: fixed;
 			bottom: 31px;
-			right: 30px;
+			right: 15px;
 			width: 255px;
 			height: 330px;
 			border-top: 1px solid #ccc;
@@ -17,7 +17,7 @@
 	
 		.txtConvo {
 			overflow: auto;
-			width: 220px;
+			width: 235px;
 			height: 282px;
 			padding: 10px;
 			font: 13px arial;
@@ -34,7 +34,7 @@
 			border-right: 0;
 			border-left: 0;
 			border-bottom: 0;
-			width: 220px;
+			width: 235px;
 			overflow: hidden;
 		}
 		
@@ -42,17 +42,19 @@
 			font: 10px arial;
 			text-align: center;
 			background: #f0f0f0;
-			width: 120px;
+			width: 127px;
 			border: 0;
 			cursor: pointer;
 			border-top: 1px solid #ccc;
 		}
 		
 		.btnClearChat {
+			float: right;
 			border-left: 1px solid #ccc;
 		}
 		
 		.btnGoOffline {
+			float: left;
 			border-right: 1px solid #ccc;
 		}
 		
