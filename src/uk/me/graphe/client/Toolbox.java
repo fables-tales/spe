@@ -103,43 +103,10 @@ public class Toolbox extends Composite {
 		btnCancel.setText("Cancel");
 		
 		setTool(Tools.select);
-		
-		/* TODO: sort out hotkeys.
-		 * Disabled hotkeys for now
-		 * 
-		KeyUpHandler khHotkeys = new KeyUpHandler() {
-			public void onKeyUp(KeyUpEvent e) {
-				switch (e.getNativeKeyCode()) {
-					case 69: // e
-						setTool(Tools.addEdge);
-						break;
-					case 77: // m
-						setTool(Tools.move);
-						break;
-					case 83: // s
-						setTool(Tools.select);
-						break;
-					case 86: // v
-						setTool(Tools.addVertex);
-						break;
-					case 90: // z
-						setTool(Tools.zoom);
-						break;
-					case KeyCodes.KEY_DELETE:
-						// TODO: Delete what is current selected, unhighlighting them on the way.
-						setLabel("delete");
-						break;
-					default:
-						break;
-				}
-			}
-		};
-		super.sinkEvents(Event.KEYEVENTS);
-		super.addDomHandler(khHotkeys, KeyUpEvent.getType());
-		*/
 	}
 	
 	public void setTool(Tools tool) {
+		parent.isHotkeysEnabled = true;
 		currentTool = tool;
 		
 		pnlOptions.setVisible(false);
@@ -160,6 +127,7 @@ public class Toolbox extends Composite {
 				btnOk.setText("Add");
 				pnlOptions.add(btnOk);
 				pnlOptions.add(btnCancel);
+				parent.isHotkeysEnabled = false;
 				break;
 			case addEdge:
 				lblInstruction.setText("Click to select the vertices you would like to connect.");

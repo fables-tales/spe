@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import uk.me.graphe.client.communications.ServerChannel;
 import uk.me.graphe.client.json.wrapper.JSOFactory;
 import uk.me.graphe.shared.Edge;
+import uk.me.graphe.shared.Tools;
 import uk.me.graphe.shared.Vertex;
 import uk.me.graphe.shared.VertexDirection;
 import uk.me.graphe.shared.graphmanagers.GraphManager2d;
@@ -12,6 +13,9 @@ import uk.me.graphe.shared.graphmanagers.GraphManager2dFactory;
 import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.ui.RootPanel;
 
 public class Graphemeui implements EntryPoint {
@@ -28,7 +32,9 @@ public class Graphemeui implements EntryPoint {
     
     public static final int VERTEX_SIZE = 20;
     public static final int CANVAS_HEIGHT = 800, CANVAS_WIDTH = 800;
-    public static final double ZOOM_STRENGTH = 0.2;
+    public static final int ZOOM_STRENGTH = 2;
+    
+    public boolean isHotkeysEnabled;
     
 	private static final int X = 0, Y = 1;
 
@@ -52,6 +58,7 @@ public class Graphemeui implements EntryPoint {
         });
     	selectedVertices = new ArrayList<VertexDrawable>();
     	selectedEdges = new ArrayList<EdgeDrawable>();
+    	isHotkeysEnabled = true;
     }
     
     public void onModuleLoad() {
@@ -59,6 +66,39 @@ public class Graphemeui implements EntryPoint {
         RootPanel.get("toolbox").add(this.tools);
         RootPanel.get("canvas").add(this.canvas);
         RootPanel.get("chat").add(this.chat);
+        
+		KeyUpHandler khHotkeys = new KeyUpHandler() {
+			public void onKeyUp(KeyUpEvent e) {
+				if (isHotkeysEnabled) {
+					switch (e.getNativeKeyCode()) {
+						case 69: // e
+							tools.setTool(Tools.addEdge);
+							break;
+						case 77: // m
+							tools.setTool(Tools.move);
+							break;
+						case 83: // s
+							tools.setTool(Tools.select);
+							break;
+						case 86: // v
+							tools.setTool(Tools.addVertex);
+							break;
+						case 90: // z
+							tools.setTool(Tools.zoom);
+							break;
+						case KeyCodes.KEY_DELETE:
+							// TODO: Delete what is current selected, unhighlighting them on the way.
+							tools.setLabel("delete");
+							break;
+						default:
+							break;
+					}
+				}
+			}
+		};
+
+        RootPanel.get().addDomHandler(khHotkeys, KeyUpEvent.getType());
+                
         ServerChannel sc = ServerChannel.getInstance();
         ClientOT.getInstance().setOperatingGraph(this.graphManager);
         sc.init();
@@ -172,25 +212,39 @@ public class Graphemeui implements EntryPoint {
         return false;
     }
     
-    public void zoomIn() {
-    	double zoom = drawing.getZoom() + ZOOM_STRENGTH; //TODO: Need to have a condition so it doesn't zoom to high. 	
-    	zoomDoAction(zoom, canvas.lMouseDown[X], canvas.lMouseDown[Y]);
-    }
-    
-    public void zoomOut() {
-    	if (drawing.getZoom() >= (2 * ZOOM_STRENGTH)) {
-	    	double zoom = drawing.getZoom() - ZOOM_STRENGTH;    	
-	    	zoomDoAction(zoom, canvas.lMouseDown[X], canvas.lMouseDown[Y]);
-    	}
-    }
-    
-    
-    private void zoomDoAction(double zoom, int x, int y) {
-        int left = (x - (int) (CANVAS_WIDTH / (2 * zoom)));
-        int top = (y - (int) (CANVAS_HEIGHT / (2 * zoom)));
-        
-        tools.setLabel(String.valueOf(canvas.getOffsetHeight()));
+	public void zoomIn() {
+		double zoom = drawing.getZoom() + ZOOM_STRENGTH;
 
+		/**
+		 * calculates left and top with respect to position of mouse click rather than
+		 * middle of canvas, more natural zooming achieved.
+		 * actual calculation is: relativeX - (absoluteX / newZoom) and same for y.
+		 * calculated these in separate methods because you need to know previous zoom to
+		 * calculate absolute positions and this changes if you're zooming in or out.
+		 */
+
+		int left = (canvas.lMouseDown[X] - (int) (((canvas.lMouseDown[X] + drawing.getOffsetX()) * (zoom - ZOOM_STRENGTH)) / zoom));
+		int top = (canvas.lMouseDown[Y] - (int) (((canvas.lMouseDown[Y] + 
+				drawing.getOffsetY()) * (zoom - ZOOM_STRENGTH)) / zoom));
+
+		zoomDoAction(zoom, left, top);
+	}
+
+	public void zoomOut() {
+		if (drawing.getZoom() >= (2 * ZOOM_STRENGTH)) {
+			double zoom = drawing.getZoom() - ZOOM_STRENGTH;
+
+			int left = (canvas.lMouseDown[X] - (int) (((canvas.lMouseDown[X] + drawing
+					.getOffsetX()) * (zoom + ZOOM_STRENGTH)) / zoom));
+			int top = (canvas.lMouseDown[Y] - (int) (((canvas.lMouseDown[Y] + drawing
+					.getOffsetY()) * (zoom + ZOOM_STRENGTH)) / zoom));
+
+			zoomDoAction(zoom, left, top);
+		}
+	}
+    
+    
+    private void zoomDoAction(double zoom, int left, int top) {
         drawing.setOffset(-left, -top);
 
         drawing.setZoom(zoom);
