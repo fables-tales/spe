@@ -26,7 +26,7 @@ public class Graphemeui implements EntryPoint {
     public ArrayList<VertexDrawable> selectedVertices;
     public ArrayList<EdgeDrawable> selectedEdges;
     
-    public static final int VERTEX_SIZE = 20;
+    public static final int VERTEX_SIZE = 200;
     public static final int CANVAS_HEIGHT = 800, CANVAS_WIDTH = 800;
     public static final double ZOOM_STRENGTH = 0.2;
     
