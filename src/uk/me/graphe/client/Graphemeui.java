@@ -31,7 +31,6 @@ public class Graphemeui implements EntryPoint {
     public ArrayList<EdgeDrawable> selectedEdges;
     
     public static final int VERTEX_SIZE = 200;
-    public static final int CANVAS_HEIGHT = 800, CANVAS_WIDTH = 800;
     public static final double ZOOM_STRENGTH = 0.2;
     
     public boolean isHotkeysEnabled;
@@ -103,7 +102,7 @@ public class Graphemeui implements EntryPoint {
         ClientOT.getInstance().setOperatingGraph(this.graphManager);
         sc.init();
     }
-
+    
     
     public void addEdge(VertexDrawable from, VertexDrawable to) {
     	Vertex vFrom = graphManager.getVertexFromDrawable(from);
@@ -118,6 +117,16 @@ public class Graphemeui implements EntryPoint {
         Vertex v = new Vertex(label);
         graphManager.addVertex(v, canvas.lMouseDown[X], canvas.lMouseDown[Y], VERTEX_SIZE);
         ClientOT.getInstance().notifyAddVertex(v, canvas.lMouseDown[X], canvas.lMouseDown[Y], VERTEX_SIZE);    	
+    }
+    
+    public void autoLayout()
+    {
+    	// TODO: Implement graph autolayout.
+    }
+    
+    public void clusterVertices()
+    {
+    	// TODO: Implement graph clustering
     }
     
     public void clearSelectedEdges()
@@ -209,6 +218,13 @@ public class Graphemeui implements EntryPoint {
         }
         
         return false;
+    }
+    
+    public void userWentOffline(String user)
+    {
+    	// TODO: Implement this function and change the Server to call this function
+    	// 		 when another client disconnects from the graph. This function lets the 
+    	//		 chat and other things know it's happend.
     }
     
 	public void zoomIn() {
