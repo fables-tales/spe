@@ -2,33 +2,79 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" >
 	<ui:style>
-		.chat {
+		.pnlChat {
+			position: fixed;
+			bottom: 31px;
+			right: 15px;
+			width: 240px;
+			height: 330px;
+			border-top: 1px solid #ccc;
+			border-right: 1px solid #ccc;
+			border-left: 1px solid #ccc;
+			background: #fff;
+			z-index: 1000;
+		}
+	
+		.txtConvo {
+			overflow: auto;
+			width: 220px;
+			height: 282px;
+			padding: 10px;
+			font: 13px arial;
+			color: #333;
+			border: 0;
+			padding: 10px;
+		}
+		
+		.txtWrite {
+			padding: 4px 10px;
+			font: 13px arial;
+			height: 21px;
+			border-top: 1px solid #ccc;
+			border-right: 0;
+			border-left: 0;
+			border-bottom: 0;
+			width: 220px;
+			overflow: hidden;
+		}
+		
+		.btnGoOffline, .btnClearChat {
+			font: 10px arial;
+			text-align: center;
+			background: #f0f0f0;
+			width: 120px;
+			border: 0;
+			cursor: pointer;
+			border-top: 1px solid #ccc;
+		}
+		
+		.btnClearChat {
+			border-left: 1px solid #ccc;
+		}
+		
+		.btnGoOffline {
+			border-right: 1px solid #ccc;
+		}
+		
+		.btnGoOffline:hover, .btnClearChat:hover {
+			background: #fff;
+		}
+		
+		.pnlBtns {
+			border-bottom: 1px solid #ccc;
 			width: 100%;
-			height: 100%;
+			height: 14px;
 		}
-		
-		.button {
-			width: 50px;
-			height: 50px;
-		}
-		
-		.input {
-			width: 250px;
-			height: 50px;
-		}
-		
-		.output{
-			width: 300px;
-			height: 350px;
-		}
-		
 	</ui:style>
-	<g:VerticalPanel styleName='{style.chat}'>
-		<g:TextArea styleName='{style.output}' ui:field='output'></g:TextArea>
-		<g:Label ui:field='label'/>
-		<g:HorizontalPanel>
-			<g:TextArea styleName='{style.input}' ui:field='input'></g:TextArea>
-			<g:Button styleName='{style.button}' ui:field='button'>Send</g:Button>
-		</g:HorizontalPanel>
+	<g:VerticalPanel>
+		<g:VerticalPanel styleName='{style.pnlChat}' ui:field='pnlChat'>
+			<g:HorizontalPanel styleName='{style.pnlBtns}'>
+				<g:Button styleName='{style.btnGoOffline}' ui:field='btnGoOffline'>Go offline</g:Button>
+				<g:Button styleName='{style.btnClearChat}' ui:field='btnClearChat'>Clear chat</g:Button>
+			</g:HorizontalPanel>
+			<g:HTML styleName='{style.txtConvo}' ui:field='txtConvo' />
+			<g:TextArea styleName='{style.txtWrite}' ui:field="txtWrite" />
+		</g:VerticalPanel>
+		<g:Button ui:field='btnChat' />
 	</g:VerticalPanel>
 </ui:UiBinder>
