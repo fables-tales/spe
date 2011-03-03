@@ -12,7 +12,10 @@
   <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
 
   <!-- Other module inherits                                      -->
-
+  
+  <!-- Inherits Sound module                                      -->  
+  <inherits name='com.allen_sauer.gwt.voices.gwt-voices'/>
+  
   <!-- Specify the app entry point class.                         -->
   <entry-point class='uk.me.graphe.client.Graphemeui'/>
   <inherits name='com.google.gwt.widgetideas.GWTCanvas'/>
