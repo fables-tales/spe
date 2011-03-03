@@ -139,8 +139,8 @@ public class Canvas extends Composite{
 	@UiHandler("canvasPanel")
 	void onMouseOut(MouseOutEvent e){
 		isMouseDown = false;
-		parent.moving = false;
-		parent.movingVertex = null;
+		//parent.moving = false;
+		//parent.movingVertex = null;
 	}
 	
 	@UiHandler("canvasPanel")
@@ -164,8 +164,8 @@ public class Canvas extends Composite{
 				break;
 		}
 		//parent.tools.setTool(Tools.nameVertex);
-		parent.moving = false;
-		parent.movingVertex = null;
+		//parent.moving = false;
+		//parent.movingVertex = null;
 		isMouseDown = false;
 		/*if (parent.tools.getOptionsPanel().getWidgetCount() != 0) {
 			parent.tools.getOptionsPanel().remove(0);
