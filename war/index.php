@@ -32,7 +32,7 @@
   <div id="cont">
     <div id="toolbox"></div>
     <div id="canvas">
-      <canvas width="800" height="800" style="position: absolute; z-index: -10;"></canvas>
+      <canvas width="2000" height="2000" style="position: absolute; z-index: -10;"></canvas>
     </div>
   </div>
   <div id="footer">
