@@ -1,0 +1,70 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		.pnlDesc {
+			position: fixed;
+			left: 15px;
+			width: 600px;
+			height: 30px;
+			border-right: 1px solid #ccc;
+			border-left: 1px solid #ccc;
+			background: #f0f0f0;
+			z-index: 1000;
+		}
+		
+		.lblDescription {
+			left: 60px;
+			top: 10px;
+			font-weight: bold;
+            font-size: 13px;
+		}
+		
+		.imgSelect, .imgMove, .imgZoom, .imgAddNode, .imgAddEdge, .imgRemNode, .imgRemEdge {
+            width: 30px;
+            height: 30px;
+            border: 0;
+            cursor: pointer;
+            margin: 0 2px;
+		}
+		
+		.imgSelect {
+			background: url(images/select.png) no-repeat;
+		}
+		
+		.imgMove {
+			background: url(images/move.png) no-repeat;
+		}
+		
+		.imgZoom {
+			background: url(images/zoom.png) no-repeat;
+		}
+		
+		.imgAddNode {
+			background: url(images/addvert.png) no-repeat;
+		}
+		
+		.imgAddEdge {
+			background: url(images/addedge.png) no-repeat;
+		}
+		
+		.imgRemNode {
+			background: url(images/remvert.png) no-repeat;
+		}
+		
+		.imgRemEdge {
+			background: url(images/remedge.png) no-repeat;
+		}
+		
+	</ui:style>
+	<g:HorizontalPanel styleName='{style.pnlDesc}' ui:field='pnlDesc'>
+		<g:Label styleName='{style.imgSelect}' ui:field='imgSelect'></g:Label>
+		<g:Label styleName='{style.imgMove}' ui:field='imgMove'></g:Label>
+		<g:Label styleName='{style.imgZoom}' ui:field='imgZoom'></g:Label>
+		<g:Label styleName='{style.imgAddNode}' ui:field='imgAddNode'></g:Label>
+		<g:Label styleName='{style.imgAddEdge}' ui:field='imgAddEdge'></g:Label>
+		<g:Label styleName='{style.imgRemNode}' ui:field='imgRemNode'></g:Label>
+		<g:Label styleName='{style.imgRemEdge}' ui:field='imgRemEdge'></g:Label>
+		<g:Label styleName='{style.lblDescription}' ui:field='lblDescription'></g:Label>
+	</g:HorizontalPanel>
+</ui:UiBinder>
