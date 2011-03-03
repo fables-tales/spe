@@ -32,7 +32,7 @@ public class Graphemeui implements EntryPoint {
     
     public static final int VERTEX_SIZE = 200;
     public static final int CANVAS_HEIGHT = 800, CANVAS_WIDTH = 800;
-    public static final int ZOOM_STRENGTH = 2;
+    public static final double ZOOM_STRENGTH = 0.2;
     
     public boolean isHotkeysEnabled;
     
@@ -123,7 +123,7 @@ public class Graphemeui implements EntryPoint {
     public void clearSelectedEdges()
     {
     	for(EdgeDrawable ed : selectedEdges){
-    		// TODO: Unhighlight ed here.
+    		ed.setHilighted(false);
     	}
     	selectedEdges.clear();
     }
@@ -248,6 +248,6 @@ public class Graphemeui implements EntryPoint {
 
         drawing.setZoom(zoom);
 
-        graphManager.invalidate(); // TODO: This needs to change. 	
+        graphManager.invalidate();	
     }
 }
