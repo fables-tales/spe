@@ -5,8 +5,8 @@
 		.pnlChat {
 			position: fixed;
 			bottom: 31px;
-			right: 15px;
-			width: 240px;
+			right: 30px;
+			width: 255px;
 			height: 330px;
 			border-top: 1px solid #ccc;
 			border-right: 1px solid #ccc;
