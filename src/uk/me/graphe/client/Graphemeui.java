@@ -30,7 +30,7 @@ public class Graphemeui implements EntryPoint {
     public ArrayList<VertexDrawable> selectedVertices;
     public ArrayList<EdgeDrawable> selectedEdges;
     
-    public static final int VERTEX_SIZE = 20;
+    public static final int VERTEX_SIZE = 200;
     public static final int CANVAS_HEIGHT = 800, CANVAS_WIDTH = 800;
     public static final int ZOOM_STRENGTH = 2;
     
@@ -198,14 +198,13 @@ public class Graphemeui implements EntryPoint {
         if (vd != null) {
         	if (selectedVertices.contains(vd))
         	{
-        		// TODO: UN-Highlight vertex here.
         		vd.setHilighted(false);
         		selectedVertices.remove(vd);
         	} else {
-        		// TODO: Highlight vertex here.
         		vd.setHilighted(true);
         		selectedVertices.add(vd);
         	}
+        	graphManager.invalidate();
             return true;
         }
         
