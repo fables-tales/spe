@@ -1,225 +1,138 @@
-/*reset*/
-
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, font, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td {
-margin: 0;
-padding: 0;
-border: 0;
-outline: 0;
-font-size: 100%;
-vertical-align: baseline;
-background: transparent;
+*, html {
+  margin: 0;
+  padding: 0;
+  outline: 0;
+  vertical-align: baseline;
 }
+
 body {
-line-height: 1;
-}
-ol, ul {
-list-style: none;
-}
-blockquote, q {
-quotes: none;
-}
-blockquote:before, blockquote:after,
-q:before, q:after {
-content: '';
-content: none;
+  font-size: 100%;
+  line-height: 1;
+  background: #fff;
+  font-family:"Verdana", Verdana, Arial;
+  line-height: 1.2;
+  color: #0f116d;
 }
 
-/* remember to define focus styles! */
-:focus {
-outline: 0;
-}
-
-/* remember to highlight inserts somehow! */
-ins {
-text-decoration: none;
-}
-del {
-text-decoration: line-through;
-}
-
-/* tables still need 'cellspacing="0"' in the markup */
 table {
 border-collapse: collapse;
 border-spacing: 0;
 }
 
-/*end of reset*/
-
-.clr{
-clear:both;
+h1 {
+  text-indent: -5000px;
+  background-image: url(../images/logo.png);
+  background-repeat: no-repeat;
+  background-position: right top;
+  width: 231px;
+  height: 66px;
+  float: left;
 }
 
-/*site-specific*/
-/*grapheme main css*/
-/*10/11/10*/
-
-html {
-background: #ffffff;
-font-family:"Verdana", Verdana, Arial;
-line-height: 1.2;
-color: #0f116d;
-}
-
-#minwidth {
-width: 100px;
-}
-
-#container {
-width: 100%;
-display: block;
-}
-
-div#footer {
-	position:absolute;
-	width:100%;
-	bottom:0; /* stick to bottom */
-	}
-
-#nav ul{
-float: right;
-padding-right: 20px;
-}
-
-img, #title{
-float: left;
+#nav {
+  float: right;
+  padding-right: 20px;
+  list-style: none;
 }
 
 #nav li {
-float: left;
-margin-left: -20px;
-width: 150px;
-height: 35px; /*58 - 23*/
-background-image: url('../images/tab.png');
-text-align: center;
-padding-top: 23px;
-}
-
-#nav li a {
-text-decoration: none;
-color: black;
+  float: left;
+  margin-left: -20px;
+  width: 150px;
+  height: 35px; /*58 - 23*/
+  background-image: url(../images/tab.png);
+  text-align: center;
+  padding-top: 23px;
 }
 
 #nav li:hover {
-background-image: url('../images/tabdown.png');
+  background-image: url(../images/tabdown.png);
 }
 
-#title {
-position: absolute;
-left: 250px;
-display: inline;
-z-index: -1;
+#nav li a {
+  text-decoration: none;
+  color: #000;
 }
 
-#title h2 {
-color: #111111;
-padding-top: 15px;
-text-shadow: 0px 2px 2px #cccccc;
+#graphInfo {
+  position: absolute;
+  left: 260px;
+  display: inline;
+  z-index: -1;
 }
 
-#title h3 {
-padding-top: 2px;
-font-weight: normal;
-color: #bbbbbb;
-font-size: 12px;
+#cont {
+  display: block;
+  position: absolute;
+  height: auto;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: 58px 20px 20px 20px;
+  background-color: #c6d1df;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
 }
 
-#body {
-display: block;
-position:absolute;
-height:auto;
-bottom:0;
-top:0;
-left:0;
-right:0;
-margin-top:58px;
-margin-bottom:20px;
-margin-right:20px;
-margin-left:20px;
-background-color: #c6d1df;
--moz-border-radius: 8px;
-border-radius: 8px;
+#canvas {
+  display: block;
+  position: absolute;
+  height: auto;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: 60px 25px 25px 25px;
+  background-color: #fff;
+  overflow: hidden;
+  float: left;
 }
 
-#canvas{
-display: block;
-position:absolute;
-height:auto;
-bottom:0;
-top:0;
-left:0;
-right:0;
-margin-top:60px;
-margin-bottom:25px;
-margin-right: 340px;
-margin-left:25px;
-background-color: #ffffff;
-/*-moz-border-radius: 8px;
-border-radius: 8px;*/
-overflow: hidden;
-float: left;
+#footer {
+  position: fixed;
+  bottom: 0;
+  height: 30px;
+  z-index: 1000;
+  background-color: #f0f0f0;
+  border-top: 1px solid #ccc;
+  width: 100%;
 }
 
-#chat{
-display: block;
-position: absolute;
-width: 300px;
-float: left;
-right: 25px;
-height:auto;
-bottom:0;
-top:0;
-margin-top:60px;
-margin-bottom:25px;
+#graphInfo { display: none; }
+
+#chat { float: right; }
+
+#chat hr{
+  margin: 6px 0 4px 0;
+  background-color: #ccc;
+  height: 1px;
+  border: 0;
 }
 
-#toolbar {
-position: absolute;
-left: 10px;
-top: 10px;
-height: 45px;
+.btnChatOnline, .btnChatOffline, .btnChatWriting {
+	font-weight: bold;
+	margin-right: 30px;
+	text-decoration: none;
+	color: #333;
+	padding: 7px 8px 7px 25px;
+	width: 225px;
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	border-top: 0;
+	border-bottom: 0;
+	text-align: left;
+	cursor: pointer;
 }
 
-#body ul {
-float: left;
-margin-left: 10px;
-border: 1px black solid;
-background-image: url('../images/toolgrad.png');
+.btnChatOnline {
+	background: #f0f0f0 url(../images/chatonline.png) no-repeat +5px center;
 }
 
-#body li {
-display: inline;
-float: left;
-text-align: center;
+.btnChatOffline {
+	background: #f0f0f0 url(../images/chatoffline.png) no-repeat +5px center;
 }
 
-#body li img {
-display: block;
+.btnChatWriting {
+	background: #f0f0f0 url(../images/chatwriting.png) no-repeat +5px center;
 }
-
-#body li p{
-float: left;
-font-size: 8px;
-}
-
-#body img:hover{
-background: #dddddd;
-}
-
-#body li { 
-    display: inline; 
-} 
-#body li:before { 
-	float: left;
-    content: url(../images/toolsep.png); 
-} 
-#body li:first-child:before { 
-    content: ""; 
-} 
