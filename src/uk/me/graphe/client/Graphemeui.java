@@ -23,8 +23,8 @@ public class Graphemeui implements EntryPoint {
     public final GraphManager2dFactory graphManagerFactory;
     public final Drawing drawing;
     
-    public ArrayList<Vertex> selectedVertices;
-    public ArrayList<Edge> selectedEdges;
+    public ArrayList<VertexDrawable> selectedVertices;
+    public ArrayList<EdgeDrawable> selectedEdges;
     
     public static final int VERTEX_SIZE = 20;
     public static final int CANVAS_HEIGHT = 800, CANVAS_WIDTH = 800;
@@ -32,15 +32,7 @@ public class Graphemeui implements EntryPoint {
     
 	private static final int X = 0, Y = 1;
 
-    public boolean moving;
-    public Vertex movingVertex;
-     
-
     public Graphemeui() {
-    	selectedVertices = new ArrayList<Vertex>();
-    	selectedEdges = new ArrayList<Edge>();
-        moving = false;
-        movingVertex = null;
         tools = new Toolbox(this);
         canvas = new Canvas(this);
         chat = Chat.getInstance(this);
@@ -58,10 +50,11 @@ public class Graphemeui implements EntryPoint {
                 // here!
             }
         });
-
+    	selectedVertices = new ArrayList<VertexDrawable>();
+    	selectedEdges = new ArrayList<EdgeDrawable>();
     }
     
-    public void onModuleLoad() {;
+    public void onModuleLoad() {
         JSONImplHolder.initialise(new JSOFactory());
         RootPanel.get("toolbox").add(this.tools);
         RootPanel.get("canvas").add(this.canvas);
@@ -72,9 +65,11 @@ public class Graphemeui implements EntryPoint {
     }
 
     
-    public void addEdge(Vertex from, Vertex to) {
-        graphManager.addEdge(from, to, VertexDirection.fromTo);
-        ClientOT.getInstance().notifyAddEdge(from, to, VertexDirection.fromTo);
+    public void addEdge(VertexDrawable from, VertexDrawable to) {
+    	Vertex vFrom = graphManager.getVertexFromDrawable(from);
+    	Vertex vTo = graphManager.getVertexFromDrawable(to);
+        graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo);
+        ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo);
         
         clearSelectedObjects();
     }
@@ -87,40 +82,58 @@ public class Graphemeui implements EntryPoint {
     
     public void clearSelectedEdges()
     {
+    	for(EdgeDrawable ed : selectedEdges){
+    		// TODO: Unhighlight ed here.
+    	}
     	selectedEdges.clear();
     }
     
     public void clearSelectedObjects()
     {
-    	// TODO: UN-Highlight vertex and edges here.
     	clearSelectedEdges();
 		clearSelectedVertices();
     }
     
     public void clearSelectedVertices()
     {
+    	for(VertexDrawable vd : selectedVertices) {
+    		vd.setHilighted(false);
+    	}
+    	
     	selectedVertices.clear();
     }
     
-    public void moveNode(Vertex v, int x, int y) {
-        if (v != null) {
+    public void moveNode(VertexDrawable vd, int x, int y) {
+        Vertex v = graphManager.getVertexFromDrawable(vd);
+        
+    	if (v != null) {
             graphManager.moveVertexTo(v, x, y);
         }
     }
   
     public void pan(int left, int top) {
         drawing.setOffset(drawing.getOffsetX() + left, drawing.getOffsetY() + top);        
-        graphManager.invalidate(); // TODO: This needs to change.
+        graphManager.invalidate();
     }
     
-    public void removeEdge(Edge e) {
+    public void removeEdge(EdgeDrawable ed) {
+    	Edge e = null; // TODO: Get edge from edge drawable.
         graphManager.removeEdge(e);
         ClientOT.getInstance().notifyRemoveEdge(e);
+        
+        if (selectedEdges.contains(ed)){
+        	selectedEdges.remove(ed);
+        }
     }
     
-    public void removeVertex(Vertex v) {
+    public void removeVertex(VertexDrawable vd) {
+    	Vertex v = graphManager.getVertexFromDrawable(vd);
         graphManager.removeVertex(v);
-        ClientOT.getInstance().notifyRemoveVertex(v);   	
+        ClientOT.getInstance().notifyRemoveVertex(v);
+        
+        if (selectedVertices.contains(vd)) {
+        	selectedVertices.remove(vd);
+        }
     }
     
     public boolean toggleSelectedEdgeAt(int x, int y) {
@@ -143,16 +156,15 @@ public class Graphemeui implements EntryPoint {
         VertexDrawable vd = graphManager.getDrawableAt(x, y);
         
         if (vd != null) {
-        	Vertex v = graphManager.getVertexFromDrawable(vd);
-        	if (selectedVertices.contains(v))
+        	if (selectedVertices.contains(vd))
         	{
         		// TODO: UN-Highlight vertex here.
         		vd.setHilighted(false);
-        		selectedVertices.remove(v);
+        		selectedVertices.remove(vd);
         	} else {
         		// TODO: Highlight vertex here.
         		vd.setHilighted(true);
-        		selectedVertices.add(v);
+        		selectedVertices.add(vd);
         	}
             return true;
         }
