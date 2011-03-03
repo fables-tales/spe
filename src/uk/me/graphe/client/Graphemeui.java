@@ -41,10 +41,10 @@ public class Graphemeui implements EntryPoint {
 		selectedEdges = new ArrayList<Edge>();
 		moving = false;
 		movingVertex = null;
+		description = new Description();
 		tools = new Toolbox(this);
 		canvas = new Canvas(this);
 		chat = Chat.getInstance(this);
-		description = new Description();
 		drawing = new DrawingImpl();
 		graphManagerFactory = GraphManager2dFactory.getInstance();
 		graphManager = graphManagerFactory.makeDefaultGraphManager();

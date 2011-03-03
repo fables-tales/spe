@@ -142,7 +142,7 @@ public class Toolbox extends Composite {
 		
 		pnlOptions.setVisible(false);
 		pnlOptions.clear();
-		
+		parent.description.setTool(tool);
 		switch(tool) {
 			case addVertex:
 				lblInstruction.setText("Click the canvas to add a vertex.");
@@ -186,8 +186,6 @@ public class Toolbox extends Composite {
 			default:
 				break;
 		}
-		
-		parent.description.setTool(tool);
 		
 		pnlOptions.setVisible(true);
 		if (tool == Tools.nameVertex) txtParam.setFocus(true);
