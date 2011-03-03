@@ -39,7 +39,7 @@ public class Toolbox extends Composite {
 	public Toolbox(Graphemeui gUI) {
 		initWidget(uiBinder.createAndBindUi(this));
 		this.parent = gUI;	
-		
+
 		ClickHandler chTools = new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -156,7 +156,6 @@ public class Toolbox extends Composite {
 				btnOk.setText("Add");
 				pnlOptions.add(btnOk);
 				pnlOptions.add(btnCancel);
-				txtParam.setFocus(true);
 				break;
 			case addEdge:
 				lblInstruction.setText("Click to select the vertices you would like to connect.");
@@ -185,6 +184,7 @@ public class Toolbox extends Composite {
 		}
 		
 		pnlOptions.setVisible(true);
+		if (tool == Tools.nameVertex) txtParam.setFocus(true);
 	}
 	
 	public void setLabel(String text)
