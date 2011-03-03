@@ -158,14 +158,13 @@ public class Graphemeui implements EntryPoint {
         if (vd != null) {
         	if (selectedVertices.contains(vd))
         	{
-        		// TODO: UN-Highlight vertex here.
         		vd.setHilighted(false);
         		selectedVertices.remove(vd);
         	} else {
-        		// TODO: Highlight vertex here.
         		vd.setHilighted(true);
         		selectedVertices.add(vd);
         	}
+        	graphManager.invalidate();
             return true;
         }
         
