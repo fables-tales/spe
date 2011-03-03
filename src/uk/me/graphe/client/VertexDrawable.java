@@ -12,9 +12,12 @@ public class VertexDrawable {
     public static final int STROKED_CIRCLE_STYLE = 0x02;
     public static final int STROKED_SQUARE_STYLE = 0x03;
     public static final int STROKED_DIAMOND_STYLE = 0x04;
+    public static final int COLORED_FILLED_CIRCLE = 0x05;
+    
 
     private String mLabel;
     private boolean mHilighted;
+    private int[] mColor = new int[]{0,0,0};
 
     /**
      * create a new VertexDrawable
@@ -148,5 +151,17 @@ public class VertexDrawable {
     public void setHilighted(boolean h) {
         mHilighted = h;
     }
-
+    
+    
+    public int[] getColor() {
+        int[] ret = new int[3];
+        for (int i = 0; i < 3; i++) ret[i] = mColor[i];
+        return mColor;
+    }
+    
+    public void setColor(int[] color) {
+        for (int i = 0; i < 3; i++) {
+            mColor[i] = color[i];
+        }
+    }
 }

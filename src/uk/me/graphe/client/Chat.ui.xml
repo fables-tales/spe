@@ -1,6 +1,6 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" >
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style>
 		.pnlChat {
 			position: fixed;
@@ -14,7 +14,7 @@
 			background: #fff;
 			z-index: 1000;
 		}
-	
+		
 		.txtConvo {
 			overflow: auto;
 			width: 235px;
@@ -38,7 +38,7 @@
 			overflow: hidden;
 		}
 		
-		.btnGoOffline, .btnClearChat {
+		.btnGoOffline,.btnClearChat {
 			font: 10px arial;
 			text-align: center;
 			background: #f0f0f0;
@@ -58,7 +58,7 @@
 			border-right: 1px solid #ccc;
 		}
 		
-		.btnGoOffline:hover, .btnClearChat:hover {
+		.btnGoOffline:hover,.btnClearChat:hover {
 			background: #fff;
 		}
 		
@@ -71,8 +71,10 @@
 	<g:VerticalPanel>
 		<g:VerticalPanel styleName='{style.pnlChat}' ui:field='pnlChat'>
 			<g:HorizontalPanel styleName='{style.pnlBtns}'>
-				<g:Button styleName='{style.btnGoOffline}' ui:field='btnGoOffline'>Go offline</g:Button>
-				<g:Button styleName='{style.btnClearChat}' ui:field='btnClearChat'>Clear chat</g:Button>
+				<g:Button styleName='{style.btnGoOffline}' ui:field='btnGoOffline'>Go
+					offline</g:Button>
+				<g:Button styleName='{style.btnClearChat}' ui:field='btnClearChat'>Clear
+					chat</g:Button>
 			</g:HorizontalPanel>
 			<g:HTML styleName='{style.txtConvo}' ui:field='txtConvo' />
 			<g:TextArea styleName='{style.txtWrite}' ui:field="txtWrite" />

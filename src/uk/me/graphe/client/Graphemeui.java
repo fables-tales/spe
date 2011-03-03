@@ -23,6 +23,7 @@ public class Graphemeui implements EntryPoint {
     public final Toolbox tools;
     public final Canvas canvas;
     public final Chat chat;    
+    public final Description description;
     public final GraphManager2d graphManager;
     public final GraphManager2dFactory graphManagerFactory;
     public final Drawing drawing;
@@ -42,6 +43,7 @@ public class Graphemeui implements EntryPoint {
         canvas = new Canvas(this);
         chat = Chat.getInstance(this);
         drawing = new DrawingImpl();
+        description = new Description();
         graphManagerFactory = GraphManager2dFactory.getInstance();
         graphManager = graphManagerFactory.makeDefaultGraphManager();
         drawing.setOffset(0, 0);
@@ -65,6 +67,7 @@ public class Graphemeui implements EntryPoint {
         RootPanel.get("toolbox").add(this.tools);
         RootPanel.get("canvas").add(this.canvas);
         RootPanel.get("chat").add(this.chat);
+        RootPanel.get("description").add(this.description);
         
 		KeyUpHandler khHotkeys = new KeyUpHandler() {
 			public void onKeyUp(KeyUpEvent e) {
