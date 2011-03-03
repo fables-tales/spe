@@ -1,0 +1,39 @@
+------------------- MEETING MINUTES -------------------
+
+TIME/DATE: 09/02/11 - 13:00.
+DURATION: 1 hour.
+LOCATION: MVB 3.10.
+ATTENDEES: Ben, Ed, Sam, John, Max, Mike (& Dan Page)
+
+
+AGENDA:
+  1) Claim hours.
+  2) Get advice from Dan.
+  3) See what people have been up to.
+  4) Set some targets.
+  
+
+HOURS:
+  Ben - 6 hours: looking into WebGL anti-aliasing and doing toolbox.
+  Ed - 0.
+  Sam - 0.
+  John - 4 hours: user authentication.
+  Max - 2.5 hours: databse stuff.
+  Mike - 4 hours: colours.
+
+
+EXTRA NOTES:
+  Getting rid of 2D and proceeding with WebGL instead because 2D is crap.
+  
+  Colouring of nodes was discussed.
+  
+  Sam: justify all management decisions.
+
+  Dan Page comments:
+    - What decisions have been made? - make sure you back them up.
+    - Report is potensially more important that source code
+    - Tell the judging panel what they want to hear
+      - sell the project basically.
+      - work backwards from what you think they want.
+    - Focus on the core things they want rather than the fancy things
+

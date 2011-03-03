@@ -1,0 +1,66 @@
+------------------- MEETING MINUTES -------------------
+
+TIME/DATE: POST CHRISTMAS MEETINGS
+DURATION: 2.5 hours total.
+LOCATION: MVB.
+ATTENDEES: Ben, Ed, Sam, John, Mike & Max.
+
+
+AGENDA:
+  1) Claim hours.
+  2) See what people have done over Christmas.
+  3) Put things together for beta presentation.
+
+
+HOURS:
+  Ben - 21 hours: mostly UI stuff.
+  Ed - 35.5 hours: zoom, pan and UI stuff.
+  Max - 30 hours: database stuff.
+  Sam - 48.5 hours: concurrent editing.
+  John - 23.5 hours: UI stuff.
+  Mike - 33.5 hours: WebGL.
+
+
+RESPONSIBILITIES:
+  For everyone to get their designated tasks working for the BETA.
+  
+
+------------------- MEETING MINUTES -------------------
+
+TIME/DATE: 02/02/11
+DURATION: 1 hour.
+LOCATION: MVB.
+ATTENDEES: Ben, Ed, Sam, John, Mike & Max.
+
+
+AGENDA:
+  1) Claim hours.
+  2) Post Beta discussion.
+  3) New duties to everyone.
+
+
+HOURS:
+  Ben - 2 hours: working on UI.
+  Ed - 5 hours: getting zooming working.
+  Max - 0.
+  Sam - 1 hour: Beta hacking.
+  John - 0.
+  Mike - 0.
+
+
+RESPONSIBILITIES:
+  Sam: sockets and concurrent editing.
+  Ed: zooming & chat interface.
+  Ben: bugs; canvas size; UI; local (client) database.
+  Mike: WebGL.
+  John: authorization system & styling.
+  Max: integrating databse
+
+
+EXTRA NOTES:
+  UI stuff:
+    - highlight node - graph manager keeps track of highlighted nodes.
+    - multiselect node
+    - keyboard shortcuts
+    - zooming/panning
+

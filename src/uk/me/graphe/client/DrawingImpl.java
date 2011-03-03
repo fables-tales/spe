@@ -13,7 +13,9 @@ public class DrawingImpl implements Drawing {
 
 	// JSNI method for webgl, comments omitted because it is one big comment...
     private static native void drawGraph3D(String verticesString, String edgesString) /*-{
-    var circleCoords = new Array(10000);
+    var circleCoords = new Array(1000);
+    for(i=0;i<circleCoords.length;i++)circleCoords[i] = new Array(1000);
+
     var gl;
     var shaderProgram;
     var mvMatrix;
@@ -25,6 +27,7 @@ public class DrawingImpl implements Drawing {
                     [0.0, 0.0, 1.0], // BLUE 4 
                     [1.0, 1.0, 0.0], // YELLOW 5
                     [1.0, 0.317, 1.0], // PINK 6
+                    [0.5, 0.5, 0.5], // GREY 7
                     ];
 
     // Sylvester.js Libary
@@ -503,48 +506,100 @@ public class DrawingImpl implements Drawing {
         
         drawPolygon(pvertices,color);
     }
-
-    function drawSquare(left,top,width,height,rotation,color){
+    
+    function drawSquare(left,top,width,height,rotation,color){drawSquareComplex(left,top,width,height,rotation,height,width,color);}
+    
+    function drawSquareComplex(left,top,width,height,rotation,vHeight,hWidth,color){
         var diam = width/2;
         var topOffset = Math.round(Math.sin(rotation)*diam);
         var leftOffset = Math.round(Math.cos(rotation)*diam);
         drawLine(left-leftOffset,top-topOffset,left+leftOffset,top+topOffset,height,color);
     }
-
-    function drawCircle(left,top,width,color){
+    
+    function drawDiamond(left,top,width,height,color)
+    {
+        var halfWidth = width/2;
+        var halfHeight = height/2;
+        var pvertices = new Float32Array(8);
+        pvertices[0] = left;
+        pvertices[1] = top-halfHeight;
+        pvertices[2] = left-halfWidth;
+        pvertices[3] = top;
+        pvertices[4] = left+halfWidth;
+        pvertices[5] = top;
+        pvertices[6] = left;
+        pvertices[7] = top+halfHeight;
+        drawPolygon(pvertices,color);
+    }
+    
+    function drawTriang(left,top,width,height,rotation,color)
+    {
+        var halfWidth = width/2;
+        var halfHeight = height/2;
+        var pvertices = new Float32Array(6);
+        pvertices[0] = 0;
+        pvertices[1] = 0-halfHeight;
+        pvertices[2] = 0-halfWidth;
+        pvertices[3] = 0+halfHeight;
+        pvertices[4] = 0+halfWidth;
+        pvertices[5] = 0+halfHeight;
+        
+        var j = 0;
+        for (i=0;i<3;i++)
+        {
+                var tempX = pvertices[j];
+                var tempY = pvertices[j+1];
+                pvertices[j] = (Math.cos(rotation)*tempX)-(Math.sin(rotation)*tempY)
+                pvertices[j] = Math.round(pvertices[j]+left);
+                j++;
+                pvertices[j] = (Math.sin(rotation)*tempX)+(Math.cos(rotation)*tempY)
+                pvertices[j] = Math.round(pvertices[j]+top);
+                j++;
+        }
+        drawPolygon(pvertices,color);
+    }
+    
+    function drawCircle(left,top,width,color){drawCircleDim(left,top,width,width,color)};
+    
+    function drawCircleDim(left,top,width,height,color){
 
         left = Math.round(left);
         top = Math.round(top);
         width = Math.round(width);
-        var r = Math.round(width/2);
-        var numSections =width*2;
+        height = Math.round(height);
+        var w = Math.round(width/2);
+        var h = Math.round(height/2);
+        var numSections;
+        if(width>height)numSections = width*2;
+        else numSections = height*2;
+        
         if(numSections>33)numSections = 33;
         if(numSections<10)numSections = 10;
         var delta_theta = 2.0 * Math.PI / numSections
         var theta = 0
-        if(circleCoords[r]==undefined)
+        if(circleCoords[w][h]==undefined)
         {
             //alert("make circle "+r);
-            circleCoords[r] = new Array(numSections);
-            circleCoords[r] = new Array(numSections);
+            circleCoords[w][h] = new Array(numSections);
+            circleCoords[w][h] = new Array(numSections);
             for (i = 0; i < numSections ; i++) {
-                circleCoords[r][i] = new Array(2);
-                x = (r * Math.cos(theta));
-                y = (r * Math.sin(theta));
+                circleCoords[w][h][i] = new Array(2);
+                x = (w * Math.cos(theta));
+                y = (h * Math.sin(theta));
                 x = Math.round(x*1000)/1000
                 y = Math.round(y*1000)/1000
-                circleCoords[r][i][1] = x;
-                circleCoords[r][i][0] = y;
+                circleCoords[w][h][i][1] = x;
+                circleCoords[w][h][i][0] = y;
                 theta += delta_theta
             }
-            circleCoords[r].sort(compareXValue);
+            circleCoords[w][h].sort(compareXValue);
             for(var i = 0;i<numSections-1;i++)
             {
-                if(circleCoords[r][i][0] == circleCoords[r][i+1][0] && circleCoords[r][i][1]<circleCoords[r][i+1][1])
+                if(circleCoords[w][h][i][0] == circleCoords[w][h][i+1][0] && circleCoords[w][h][i][1]<circleCoords[w][h][i+1][1])
                 {
-                    temp = circleCoords[r][i];
-                    circleCoords[r][i] = circleCoords[r][i+1];
-                    circleCoords[r][i+1] = temp;
+                    temp = circleCoords[w][h][i];
+                    circleCoords[w][h][i] = circleCoords[w][h][i+1];
+                    circleCoords[w][h][i+1] = temp;
                 }
             }
         }
@@ -552,15 +607,27 @@ public class DrawingImpl implements Drawing {
         var pvertices = new Float32Array(numSections*2);
         for (i=0;i<numSections;i++)
         {
-                pvertices[j] = circleCoords[r][i][1]+left;
+                pvertices[j] = circleCoords[w][h][i][1]+left;
                 j++;
-                pvertices[j] = circleCoords[r][i][0]+top;
+                pvertices[j] = circleCoords[w][h][i][0]+top;
                 j++;
         }
         drawPolygon(pvertices,color);
 
     }
 
+    function drawLineArrow(left1,top1,left2,top2,width,color)
+    {
+        var opp = top1-top2;
+        var adj = left1-left2;
+        var angle = Math.atan(opp/adj)+Math.PI/2;
+        if(left1>left2 )angle+=Math.PI;
+        drawLine(left1,top1,left2,top2,width,color);
+        var triLeft = left1-Math.round(adj/2);
+        var triTop = top1-Math.round(opp/2);
+        drawTriang(triLeft,triTop,20,20,angle,color);
+    }
+    
     //Styling functions
 
     // BLACK    0
@@ -570,25 +637,92 @@ public class DrawingImpl implements Drawing {
     // BLUE     4 
     // YELLOW   5
     // PINK     6
+    // GREY     7
 
     function drawEdge(left1,top1, left2,top2,style){
         
         switch(style){
-        case 1:
-            drawLine(left1,top1,left2,top2,2,2);
+        case 100: // FLOW CHART
+            // Draw line with Arrow at end
+            drawLineArrow(left1,top1,left2,top2,2,0);
             break;
-        case 2:
+        case -100: 
+            // Draw line with Arrow at end - HIGHLIGHTED
+            drawLineArrow(left1,top1,left2,top2,2,6);
+            break;
+        case -10:
+            drawLine(left1,top1,left2,top2,2,6);
             break;
         default:
-            alert("ERROR: No style specified for edge!");
+            //Default edge style: black line  
+            drawLine(left1,top1,left2,top2,2,0);
         }
     }
 
-    function drawVertex(left,top,width,style)
+    function flowTerminator(left,top,width,height,color,strokeSize,strokeColor)
     {
+        var sOff = strokeSize*2;
+        flowTerminatorNoStroke(left,top,width,height,strokeColor);
+        flowTerminatorNoStroke(left,top,width-sOff,height-sOff,color);
+    }
+    
+    function flowTerminatorNoStroke(left,top,width,height,color)
+    {
+        var cWidth = height;
+        var cOff = (width/2)-(cWidth/2);
+        drawCircle(left-cOff,top,cWidth,color);
+        drawCircle(left+cOff,top,cWidth,color);
+        drawSquare(left,top,cOff*2,height,0,color); 
+    }
+    
+    function flowProcess(left,top,width,height,color,strokeSize,strokeColor)
+    {
+        var sOff = strokeSize*2;
+        drawSquare(left,top,width,height,0,strokeColor);
+        drawSquare(left,top,width-sOff,height-sOff,0,color);
+    }
+    
+    function flowDecision(left,top,width,height,color,strokeSize,strokeColor)
+    {
+        var sOff = strokeSize*2;
+        drawDiamond(left,top,width,height,strokeColor);
+        drawDiamond(left,top,width-sOff,height-(sOff*1.8),color);
+    }
 
+    function drawVertex(left,top,width,height,style)
+    {
+        var flowStrokeHighColor = 5;
+        var flowStrokeColor = 0;
+        var flowColor = 7;
+        var flowStrokeSize = 2;
+        
         switch(style){
+        case 100:  // (100 - 199) FLOW CHART SYMBOLS
+            // Terminator, start stop
+            flowTerminator(left,top,width,height,flowColor,flowStrokeSize,flowStrokeColor);
+            break;
+        case -100:  
+            // Terminator, start stop - HIGHLIGHTED
+            flowTerminator(left,top,width,height,flowColor,flowStrokeSize,flowStrokeHighColor);
+            break;
+        case 101:
+            // Process, process or action step
+            flowProcess(left,top,width,height,flowColor,flowStrokeSize,flowStrokeColor);
+            break;
+        case -101:
+            // Process, process or action step - HIGHLIGHTED
+            flowProcess(left,top,width,height,flowColor,flowStrokeSize,flowStrokeHighColor);
+            break;
+        case 102:
+            // Decision, question or branch
+            flowDecision(left,top,width,height,flowColor,flowStrokeSize,flowStrokeColor)
+            break;
+        case -102:
+            // Decision, question or branch - HIGHLIGHTED
+            flowDecision(left,top,width,height,flowColor,flowStrokeSize,flowStrokeHighColor)
+            break;
         case 1:
+            // Smiley Face
             drawCircle(left,top,width,5);
             drawCircle(left,top,width*0.7,0);
             drawCircle(left,top,width*0.5,5);
@@ -600,6 +734,7 @@ public class DrawingImpl implements Drawing {
             drawCircle(left+(width*0.20),top-(width*0.2),width*0.2,0);
             break;
         case 2:
+            // Bart Simpson
             drawSquare(left,top,width*0.9,width*1.1,0,0);
             drawSquare(left,top,width*0.85,width*1.05,0,5);
             drawSquare(left-width*0.27,top+width*0.2,width*0.35,width*1.2,0,0);
@@ -629,8 +764,12 @@ public class DrawingImpl implements Drawing {
             drawCircle(left+width*0.3,top-width*0.1,width*0.05,0);
             drawCircle(left+width*0.05,top-width*0.1,width*0.05,0);
             break;
+        case -10:
+            drawCircleDim(left,top,width,height,6);
+            break;
         default:
-            alert("ERROR: No style specified for vertex!");
+            // Default vertex style: black circle
+            drawCircleDim(left,top,width,height,0);
         }
 
     }
@@ -640,7 +779,7 @@ public class DrawingImpl implements Drawing {
         setupGL();
         
         var numEdgeOpt = 5;
-        var numVertOpt = 4;
+        var numVertOpt = 5;
         var edgesArray=edges.split(",");
         for(var i=0;i<edgesArray.length-numEdgeOpt;i+=numEdgeOpt)
         {
@@ -658,8 +797,9 @@ public class DrawingImpl implements Drawing {
             var left = parseInt(verticesArray[i]);
             var top = parseInt(verticesArray[i+1]);
             var width = parseInt(verticesArray[i+2]);
-            var style = parseInt(verticesArray[i+3]);
-            drawVertex(left,top,width,style);
+            var height = parseInt(verticesArray[i+3]);
+            var style = parseInt(verticesArray[i+4]);
+            drawVertex(left,top,width,height,style);
         }
 
     }
@@ -693,19 +833,23 @@ public class DrawingImpl implements Drawing {
                 double startY = (thisEdge.getStartY() + offsetY)*zoom;
                 double endX = (thisEdge.getEndX() + offsetX)*zoom;
                 double endY = (thisEdge.getEndY() + offsetY)*zoom;
-                edgeStyle = 1;
+                //edgeStyle = thisEdge.getStyle();
+                edgeStyle = 100;
+                
+                if(thisEdge.isHilighted())edgeStyle = -100;
                 edgesString += startX + separator + startY + separator + endX
                         + separator + endY + separator + edgeStyle + separator;
             }
             for (VertexDrawable thisVertex : vertices) {
-                double centreX = (thisVertex.getLeft() + 0.5
-                        * thisVertex.getWidth() + offsetX)*zoom;
-                double centreY = (thisVertex.getTop() + 0.5
-                        * thisVertex.getHeight() + offsetY)*zoom;
+                double centreX = (thisVertex.getCenterX() + offsetX)*zoom;
+                double centreY = (thisVertex.getCenterY() + offsetY)*zoom;
                 double width = (0.5 * thisVertex.getWidth())*zoom;
-                vertexStyle = 2;
+                double height = (0.5 * thisVertex.getWidth())*zoom;
+                //vertexStyle = thisVertex.getStyle();
+                vertexStyle = 100;
+                if(thisVertex.isHilighted())vertexStyle = -100;
                 veticesString += centreX + separator + centreY + separator
-                        + width + separator + vertexStyle + separator;
+                        + width + separator+ height + separator + vertexStyle + separator;
             }
 
             // JSNI method used to draw webGL graph version

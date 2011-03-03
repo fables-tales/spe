@@ -52,13 +52,14 @@
 				<div id="toolbox">
 				</div><!--end toolbar-->
 				
-				<div id="chat">
-				</div>
 				<div id="canvas">
             	<canvas width="800" height="800" style="position: absolute; z-index: -10;"></canvas>
+            	
 			</div><!--end body-->
 		
 	</div><!--end container-->
+	
+	<div id="bottom"><div id="chat"></div></div>
 
 </body>
 </html>

@@ -1,0 +1,46 @@
+------------------- MEETING MINUTES -------------------
+
+TIME/DATE: 24/02/11 - 11:00.
+DURATION: 1 hour.
+LOCATION: MVB
+ATTENDEES: Ben, Ed, Sam, John, Max, Mike
+
+
+AGENDA:
+  1) Claim hours.
+  2) See what people have been up to.
+  3) Set some targets.
+  
+
+HOURS:
+  Ben - 1 hour.
+  Ed - 2 hours.
+  Sam - 3 hours.
+  John - 3 hours.
+  Max - 1 hour.
+  Mike - 8 hours.
+
+
+NOTES:
+  Sam: Fixed OT by changing one line in GraphemeUI.
+  
+  John: OpenID now works with GTW.
+          - currently redirects to OpenID website though.
+            - possible fix using AJAX but may not be possible
+
+  Max: Cache now works.
+  
+  Mike: Currently working on styling, demoed some stuff.
+  
+  Ed: Chat demoed.
+  
+  Ben: done some algorithm stuff for layout.
+
+
+Tasks set:
+  Ben - continue & add ability to change styles in UI.
+  Ed - chat.
+  Sam - clustering & start on documentation.
+  John - user authentication & OpenID.
+  Max - Local storage.
+  Mike - continue & overlaying text.
