@@ -8,6 +8,8 @@ import uk.me.graphe.shared.messages.ChatMessage;
 
 import com.allen_sauer.gwt.voices.client.Sound;
 import com.allen_sauer.gwt.voices.client.SoundController;
+import com.google.gwt.safehtml.shared.SimpleHtmlSanitizer;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -151,7 +153,7 @@ public class Chat extends Composite{
 				}
 			} else {
 				removeUserWriting(cm.getUserId());
-				displayMessage(cm.getUserId(), cm.getText());
+				displayMessage(cm.getUserId(), escapeHtml(cm.getText()));
 			}
 		}
 	}
@@ -196,6 +198,12 @@ public class Chat extends Composite{
 	private void resetUnreadCount() {
 		unreadCount = 0;
 		setButtonStyle();
+	}
+	
+	private String escapeHtml(String html){
+		SimpleHtmlSanitizer shs = SimpleHtmlSanitizer.getInstance();
+		html = shs.sanitize(html).asString();
+		return html;
 	}
 	
 	private void setButtonStyle() {
