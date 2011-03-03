@@ -104,6 +104,9 @@ public class Toolbox extends Composite {
 		
 		setTool(Tools.select);
 		
+		/* TODO: sort out hotkeys.
+		 * Disabled hotkeys for now
+		 * 
 		KeyUpHandler khHotkeys = new KeyUpHandler() {
 			public void onKeyUp(KeyUpEvent e) {
 				switch (e.getNativeKeyCode()) {
@@ -133,6 +136,7 @@ public class Toolbox extends Composite {
 		};
 		super.sinkEvents(Event.KEYEVENTS);
 		super.addDomHandler(khHotkeys, KeyUpEvent.getType());
+		*/
 	}
 	
 	public void setTool(Tools tool) {
