@@ -1201,6 +1201,19 @@ public class DrawingImpl implements Drawing {
         drawTriang(triLeft,triTop,20,20,angle,color);
     }
     
+    function stringPixelLength(string)
+    {
+        var code;
+        var width = 0;
+        for(i=0;i<string.length;i++)
+        {
+            code = string.charCodeAt(i)-32;
+            width += hersheyFont[code][1];
+        }
+        
+        return width;
+    }
+    
     function printChar(left,top,character,color,thickness,size)
     {
         var code = character.charCodeAt(0)-32;
@@ -1212,7 +1225,8 @@ public class DrawingImpl implements Drawing {
         var top2;
         var j = 0;
         var i = 2;
-        var fHeight = 60;
+        var fHeight = 10*size;
+        
         while(i<(verticesNeeded*2)+2)
         {
             j++;
@@ -1242,9 +1256,9 @@ public class DrawingImpl implements Drawing {
     
     function printString(left,top,string,color,thickness,size)
     {
-        var length = string.length;
-        var offset = 0;
-        for(i=0;i<length;i++)
+        var length = (stringPixelLength(string)/2)*size;
+        var offset = -length;
+        for(i=0;i<string.length;i++)
         {
             offset += printChar(left+offset,top,string[i],color,thickness,size);
             
@@ -1252,36 +1266,7 @@ public class DrawingImpl implements Drawing {
     }
     
     //Styling functions
-
-    // BLACK    0
-    // WHITE    1
-    // RED      2
-    // GREEN    3 
-    // BLUE     4 
-    // YELLOW   5
-    // PINK     6
-    // GREY     7
-
-    function drawEdge(left1,top1, left2,top2,style){
-        
-        switch(style){
-        case 100: // FLOW CHART
-            // Draw line with Arrow at end
-            drawLineArrow(left1,top1,left2,top2,2,0);
-            break;
-        case -100: 
-            // Draw line with Arrow at end - HIGHLIGHTED
-            drawLineArrow(left1,top1,left2,top2,2,6);
-            break;
-        case -10:
-            drawLine(left1,top1,left2,top2,2,6);
-            break;
-        default:
-            //Default edge style: black line  
-            drawLine(left1,top1,left2,top2,2,0);
-        }
-    }
-
+    
     function flowTerminator(left,top,width,height,color,strokeSize,strokeColor)
     {
         var sOff = strokeSize*2;
@@ -1311,6 +1296,35 @@ public class DrawingImpl implements Drawing {
         drawDiamond(left,top,width,height,strokeColor);
         drawDiamond(left,top,width-sOff,height-(sOff*1.8),color);
     }
+    
+    // BLACK    0
+    // WHITE    1
+    // RED      2
+    // GREEN    3 
+    // BLUE     4 
+    // YELLOW   5
+    // PINK     6
+    // GREY     7
+    
+    function drawEdge(left1,top1, left2,top2,style){
+        
+        switch(style){
+        case 100: // FLOW CHART
+            // Draw line with Arrow at end
+            drawLineArrow(left1,top1,left2,top2,2,0);
+            break;
+        case -100: 
+            // Draw line with Arrow at end - HIGHLIGHTED
+            drawLineArrow(left1,top1,left2,top2,2,6);
+            break;
+        case -10:
+            drawLine(left1,top1,left2,top2,2,6);
+            break;
+        default:
+            //Default edge style: black line  
+            drawLine(left1,top1,left2,top2,2,0);
+        }
+    }
 
     function drawVertex(left,top,width,height,style,text)
     {
@@ -1323,12 +1337,12 @@ public class DrawingImpl implements Drawing {
         case 100:  // (100 - 199) FLOW CHART SYMBOLS
             // Terminator, start stop
             flowTerminator(left,top,width,height,flowColor,flowStrokeSize,flowStrokeColor);
-            printString(left-width,top-height/2,text,0,2,1);
+            printString(left,top,text,0,2,0.75);
             break;
         case -100:  
             // Terminator, start stop - HIGHLIGHTED
             flowTerminator(left,top,width,height,flowColor,flowStrokeSize,flowStrokeHighColor);
-            printString(left-width,top-height/2,text,0,2,1);
+            printString(left,top,text,0,2,0.75);
             break;
         case 101:
             // Process, process or action step
@@ -1427,7 +1441,7 @@ public class DrawingImpl implements Drawing {
             var text = verticesArray[i+5];
             drawVertex(left,top,width,height,style,text);
         }
-  
+
     }
     
     drawGraph(verticesString,edgesString)
