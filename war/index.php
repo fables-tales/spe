@@ -23,12 +23,12 @@
     <p id="graphTitle">Network Diagram</p>
     <p id="graphUsers">1 user viewing</p>
   </div>
-  <ul id="nav">
+  <!--<ul id="nav">
     <li><a href="#">file</a></li>
     <li><a href="#">edit</a></li>
     <li><a href="#">algorithms</a></li>
     <li><a href="#">history</a></li>
-  </ul>
+  </ul>-->
   <div id="cont">
     <div id="toolbox"></div>
     <div id="canvas">
