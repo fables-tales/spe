@@ -30,7 +30,7 @@ public class Graphemeui implements EntryPoint {
     public ArrayList<VertexDrawable> selectedVertices;
     public ArrayList<EdgeDrawable> selectedEdges;
     
-    public static final int VERTEX_SIZE = 200;
+    public static final int VERTEX_SIZE = 15;
     public static final double ZOOM_STRENGTH = 0.2;
     
     public boolean isHotkeysEnabled;
@@ -86,8 +86,8 @@ public class Graphemeui implements EntryPoint {
 							tools.setTool(Tools.zoom);
 							break;
 						case KeyCodes.KEY_DELETE:
-							// TODO: Delete what is current selected, unhighlighting them on the way.
-							tools.setLabel("delete");
+							// TODO: Is this really the desired action?
+							tools.setTool(Tools.delete);
 							break;
 						default:
 							break;
@@ -152,6 +152,32 @@ public class Graphemeui implements EntryPoint {
     	selectedVertices.clear();
     }
     
+    public void deleteSelected()
+    {
+    	Vertex v;
+    	
+    	for (VertexDrawable vd: selectedVertices)
+    	{
+        	v = graphManager.getVertexFromDrawable(vd);
+            graphManager.removeVertex(v);
+            ClientOT.getInstance().notifyRemoveVertex(v);
+    	}
+    	
+    	Edge e;
+    	
+    	for (EdgeDrawable ed: selectedEdges)
+    	{
+			e = null; // TODO: Get edge from edge drawable.
+			graphManager.removeEdge(e);
+			ClientOT.getInstance().notifyRemoveEdge(e);	
+    	}
+    	
+    	selectedVertices.clear();
+    	selectedEdges.clear();
+    	
+    	graphManager.invalidate(); // TODO: does this need to be here?
+    }
+    
     public void moveNode(VertexDrawable vd, int x, int y) {
         Vertex v = graphManager.getVertexFromDrawable(vd);
         
@@ -163,26 +189,6 @@ public class Graphemeui implements EntryPoint {
     public void pan(int left, int top) {
         drawing.setOffset(drawing.getOffsetX() + left, drawing.getOffsetY() + top);        
         graphManager.invalidate();
-    }
-    
-    public void removeEdge(EdgeDrawable ed) {
-    	Edge e = null; // TODO: Get edge from edge drawable.
-        graphManager.removeEdge(e);
-        ClientOT.getInstance().notifyRemoveEdge(e);
-        
-        if (selectedEdges.contains(ed)){
-        	selectedEdges.remove(ed);
-        }
-    }
-    
-    public void removeVertex(VertexDrawable vd) {
-    	Vertex v = graphManager.getVertexFromDrawable(vd);
-        graphManager.removeVertex(v);
-        ClientOT.getInstance().notifyRemoveVertex(v);
-        
-        if (selectedVertices.contains(vd)) {
-        	selectedVertices.remove(vd);
-        }
     }
     
     public boolean toggleSelectedEdgeAt(int x, int y) {
@@ -242,7 +248,9 @@ public class Graphemeui implements EntryPoint {
 		int top = (canvas.lMouseDown[Y] - (int) (((canvas.lMouseDown[Y] + 
 				drawing.getOffsetY()) * (zoom - ZOOM_STRENGTH)) / zoom));
 
-		zoomDoAction(zoom, left, top);
+        drawing.setOffset(-left, -top);
+        drawing.setZoom(zoom);
+        graphManager.invalidate();	;
 	}
 
 	public void zoomOut() {
@@ -254,16 +262,9 @@ public class Graphemeui implements EntryPoint {
 			int top = (canvas.lMouseDown[Y] - (int) (((canvas.lMouseDown[Y] + drawing
 					.getOffsetY()) * (zoom + ZOOM_STRENGTH)) / zoom));
 
-			zoomDoAction(zoom, left, top);
+	        drawing.setOffset(-left, -top);
+	        drawing.setZoom(zoom);
+	        graphManager.invalidate();	
 		}
 	}
-    
-    
-    private void zoomDoAction(double zoom, int left, int top) {
-        drawing.setOffset(-left, -top);
-
-        drawing.setZoom(zoom);
-
-        graphManager.invalidate();	
-    }
 }

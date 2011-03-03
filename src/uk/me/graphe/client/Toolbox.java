@@ -53,6 +53,12 @@ public class Toolbox extends Composite {
 					setTool(Tools.addVertex);
 				}else if(event.getSource() == btnAddEd){
 					setTool(Tools.addEdge);
+				}else if(event.getSource() == btnDelete){
+					setTool(Tools.delete);
+				}else if(event.getSource() == btnAutoLayout){
+					setTool(Tools.autolayout);
+				}else if(event.getSource() == btnCluster){
+					setTool(Tools.cluster);
 				}
 			}
 		};
@@ -150,6 +156,7 @@ public class Toolbox extends Composite {
 				break;
 			case delete:
 				// TODO: Implement
+				parent.deleteSelected();
 				break;
 			case move:
 				lblInstruction.setText("Click and drag to pan the canvas or move a vertex.");
