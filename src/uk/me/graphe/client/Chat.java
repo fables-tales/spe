@@ -96,6 +96,10 @@ public class Chat extends Composite{
 		return sInstance;
 	}
 	
+	public void printDebugMessage(String message){
+		output.setText(output.getText() + "\n" + message);
+	}
+	
 	public void displayMessage(ChatMessage cm){
 		output.setText(output.getText() + "\n" + cm.getUserId() + ":\n" + cm.getText());
 	}
