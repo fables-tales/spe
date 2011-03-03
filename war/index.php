@@ -9,7 +9,7 @@
   <script type="text/javascript" language="javascript">
     document.domain = document.domain;
   </script>
-  <?php echo "  <script src=\"http://$_SERVER[SERVER_NAME]:1337/static/Orbited.js\"></script>"; ?>
+  <?php echo "\n  <script src=\"http://$_SERVER[SERVER_NAME]:1337/static/Orbited.js\"></script>"; ?>
   <script>
     Orbited.settings.port = 1337;
     TCPSocket = Orbited.TCPSocket
