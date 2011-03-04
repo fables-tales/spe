@@ -25,7 +25,6 @@ import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
 import com.google.code.morphia.query.Query;
 import com.google.code.morphia.query.UpdateOperations;
-import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.Mongo;
 
