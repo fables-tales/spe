@@ -16,14 +16,24 @@ public class LocalStore {
         if (Storage.isSupported() == false )
             Window.alert("Warning your broswer does not support local storage, permanent high speed internet connection will be required to play");
         mStorage = Storage.getLocalStorage();
-        mStorage.setItem("itemID", "none");
+        if (mStorage.getItem("itemID") == null) {
+            mStorage.setItem("itemID", "none");
+            mStorage.setItem("historyID", "0");
+        }
     }
     
     public void store (GraphOperation op){
         String jsonOp = op.toJson();
-        String historyId= Integer.toString(op.getHistoryId());
+        int newHistId = op.getHistoryId();
+        String historyId= Integer.toString(newHistId);
         mStorage.setItem(historyId, jsonOp);
+        int oldHistId = Integer.parseInt(mStorage.getItem("historyID"));
+        if (newHistId > oldHistId) {
+            mStorage.setItem("historyID", historyId);
+        }
+        
     }
+    
     
     private boolean setgraph(int graphId) {
         String id = Integer.toString(graphId);
@@ -31,6 +41,7 @@ public class LocalStore {
             return true;
         mStorage.clear();
         mStorage.setItem("itemID", id);
+        mStorage.setItem("historyID", "0");
         return false;
     }
 }
