@@ -974,7 +974,7 @@ public class DrawingImpl implements Drawing {
 
         // Drawing functions
 
-        function drawPolygon(pixelVertices,colorNum)
+        function drawPolygon(pixelVertices,color)
         {
 
             var factor;
@@ -1011,10 +1011,10 @@ public class DrawingImpl implements Drawing {
             gl.bindBuffer(gl.ARRAY_BUFFER, vertexColorBuffer);
 
             for(var i=0;i<(vl / 3.0)*4;i+=4){
-                polygonColors[i] = colors[colorNum][0];
-                polygonColors[i+1] = colors[colorNum][1];
-                polygonColors[i+2] = colors[colorNum][2];
-                polygonColors[i+3] = 1.0;
+                polygonColors[i] = color[0];
+                polygonColors[i+1] = color[1];
+                polygonColors[i+2] = color[2];
+                polygonColors[i+3] = color[3];
             }
             
             gl.bufferData(gl.ARRAY_BUFFER, polygonColors, gl.STATIC_DRAW);
@@ -1271,6 +1271,13 @@ public class DrawingImpl implements Drawing {
         
         //Styling functions
         
+        function getColor(index)
+        {
+            var temp = new Array(4);
+            temp = [colors[index][0],colors[index][1],colors[index][2],1.0]
+            return temp;
+        }
+        
         function flowTerminator(left,top,width,height,color,strokeSize,strokeColor)
         {
             var sOff = strokeSize*2;
@@ -1315,38 +1322,41 @@ public class DrawingImpl implements Drawing {
             switch(style){
             case 100: // FLOW CHART
                 // Draw line with Arrow at end
-                drawLineArrow(left1,top1,left2,top2,2,0);
+                drawLineArrow(left1,top1,left2,top2,2,getColor(0));
                 break;
             case -100: 
                 // Draw line with Arrow at end - HIGHLIGHTED
-                drawLineArrow(left1,top1,left2,top2,2,6);
+                drawLineArrow(left1,top1,left2,top2,2,getColor(6));
                 break;
             case -10:
-                drawLine(left1,top1,left2,top2,2,6);
+                drawLine(left1,top1,left2,top2,2,getColor(6));
                 break;
             default:
                 //Default edge style: black line  
-                drawLine(left1,top1,left2,top2,2,0);
+                drawLine(left1,top1,left2,top2,2,getColor(0));
             }
         }
 
-        function drawVertex(left,top,width,height,style,text)
+        function drawVertex(left,top,width,height,style,text,c1,c2,c3)
         {
-            var flowStrokeHighColor = 5;
-            var flowStrokeColor = 0;
-            var flowColor = 7;
+            var flowStrokeHighColor = getColor(5);
+            var flowStrokeColor = getColor(0);
+            var flowColor = getColor(7);
             var flowStrokeSize = 2;
+            var flowTextColor = getColor(0);
+            
+            var customColor = [c1,c2,c3,1.0];
             
             switch(style){
             case 100:  // (100 - 199) FLOW CHART SYMBOLS
                 // Terminator, start stop
                 flowTerminator(left,top,width,height,flowColor,flowStrokeSize,flowStrokeColor);
-                printString(left,top,text,0,2,0.75);
+                printString(left,top,text,flowTextColor,2,0.75);
                 break;
             case -100:  
                 // Terminator, start stop - HIGHLIGHTED
                 flowTerminator(left,top,width,height,flowColor,flowStrokeSize,flowStrokeHighColor);
-                printString(left,top,text,0,2,0.75);
+                printString(left,top,text,flowTextColor,2,0.75);
                 break;
             case 101:
                 // Process, process or action step
@@ -1363,6 +1373,20 @@ public class DrawingImpl implements Drawing {
             case -102:
                 // Decision, question or branch - HIGHLIGHTED
                 flowDecision(left,top,width,height,flowColor,flowStrokeSize,flowStrokeHighColor)
+                break;
+            case 5:
+                // Circle
+                var sOff = flowStrokeSize*2;
+                drawCircleDim(left,top,width,height,flowStrokeColor);
+                drawCircleDim(left,top,width-sOff,height-sOff,customColor);
+                printString(left,top,text,flowTextColor,2,0.75);
+                break;
+            case -5:
+                // Circle
+                var sOff = flowStrokeSize*2;
+                drawCircleDim(left,top,width,height,flowStrokeHighColor);
+                drawCircleDim(left,top,width-sOff,height-sOff,customColor);
+                printString(left,top,text,flowTextColor,2,0.75);
                 break;
             case 1:
                 // Smiley Face
@@ -1417,7 +1441,7 @@ public class DrawingImpl implements Drawing {
 
         }
 
-        function drawGraph(vString,eString) {
+        function drawGraph() {
 
             setupGL();
 
@@ -1439,7 +1463,10 @@ public class DrawingImpl implements Drawing {
                 var height = parseInt(verticeArray[i][3]);
                 var style = parseInt(verticeArray[i][4]);
                 var text = verticeArray[i][5];
-                drawVertex(left,top,width,height,style,text);
+                var c1 = verticeArray[i][6];
+                var c2 = verticeArray[i][7];
+                var c3 = verticeArray[i][8];
+                drawVertex(left,top,width,height,style,text,c1,c2,c3);
             }
 
         }
@@ -1472,9 +1499,9 @@ public class DrawingImpl implements Drawing {
         verticeArray[verticeNumber][3] = parseInt(height);
         verticeArray[verticeNumber][4] = parseInt(style);
         verticeArray[verticeNumber][5] = label;
-        verticeArray[verticeNumber][6] = parseInt(c1);
-        verticeArray[verticeNumber][7] = parseInt(c1);
-        verticeArray[verticeNumber][8] = parseInt(c1);
+        verticeArray[verticeNumber][6] = c1;
+        verticeArray[verticeNumber][7] = c1;
+        verticeArray[verticeNumber][8] = c1;
         verticeNumber++;
     }-*/;
     
@@ -1518,8 +1545,14 @@ public class DrawingImpl implements Drawing {
                 //vertexStyle = thisVertex.getStyle();
                 vertexStyle = 100;
                 label = thisVertex.getLabel();
-                if(thisVertex.isHilighted())vertexStyle = -100;
-                addVertice(centreX,centreY,width,height,vertexStyle,label,0,0,0);
+                int[] customColor = {0,0,0};
+                if(thisVertex.getStyle() == VertexDrawable.COLORED_FILLED_CIRCLE)
+                {
+                    vertexStyle = 5;
+                    customColor = thisVertex.getColor();
+                }
+                if(thisVertex.isHilighted())vertexStyle = -vertexStyle;
+                addVertice(centreX,centreY,width,height,vertexStyle,label,customColor[0],customColor[1],customColor[2]);
             }
 
             // JSNI method used to draw webGL graph version
