@@ -20,10 +20,24 @@ public class LocalStore {
         	mStorage.setItem("itemID", "none");
     }
     
-    public void store (GraphOperation op){
+    private void storethis (GraphOperation op){
         String jsonOp = op.toJson();
         String historyId= Integer.toString(op.getHistoryId());
         mStorage.setItem(historyId, jsonOp);
+    }
+    
+    public void store (GraphOperation op) {
+    	storethis (op);
+    	toUnSent(op);
+    }
+    
+    public void store (GraphOperation op, boolean Acked) {
+    	storethis(op);
+    	if (Acked == true)
+    		toSent(op);
+		else
+			toUnAck(op);
+    	
     }
     
     private boolean setgraph(int graphId) {
