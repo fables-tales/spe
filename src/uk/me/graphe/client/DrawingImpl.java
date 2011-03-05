@@ -1526,7 +1526,7 @@ public class DrawingImpl implements Drawing {
     private void drawVertex(VertexDrawable vertex, GWTCanvas canvas) {
         double centreX = (vertex.getLeft() + 0.5 * vertex.getWidth() + offsetX) * zoom;
         double centreY = (vertex.getTop() + 0.5 * vertex.getHeight() + offsetY) * zoom;
-        double radius = (0.5 * vertex.getWidth()) * zoom;
+        double radius = (0.25 * vertex.getWidth()) * zoom;
 
         canvas.moveTo(centreX, centreY);
         canvas.beginPath();
