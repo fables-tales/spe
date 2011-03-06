@@ -2,9 +2,15 @@ package uk.me.graphe.client;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import uk.me.graphe.shared.jsonwrapper.JSONException;
+import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
+import uk.me.graphe.shared.jsonwrapper.JSONObject;
+import uk.me.graphe.shared.messages.Message;
+import uk.me.graphe.shared.messages.MessageFactory;
 import uk.me.graphe.shared.messages.operations.GraphOperation;
 
 import com.google.code.gwt.storage.client.*;
@@ -110,6 +116,42 @@ public class LocalStore {
     		String historyId= id.toString();
     		mStorage.setItem(historyId, jsonOp);
     	}
+    }
+    
+    public void restore() {
+    	String max = mStorage.getItem("maxHistory");
+    	maxHistoryId = Integer.parseInt(max);
+    	restoreOps();
+    	restoreState();
+    }
+    private void restoreOps() {
+    	List<JSONObject> objects = new LinkedList<JSONObject>();
+    	List<Message> messages = null;
+    	for (int i = 0; i < maxHistoryId; i++) {
+    		Integer id = Integer.valueOf(i);
+    		String sId = id.toString();
+    		JSONObject item = parseItem(mStorage.getItem(sId));
+			objects.add(item);
+    	}
+    	try {
+    		messages = MessageFactory.makeOperationsFromJson(objects);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		for (Message item : messages)
+			store((GraphOperation) item);
+    }
+    
+    private JSONObject parseItem (String json) {
+		JSONObject object = null;
+		try {
+			object = JSONImplHolder.make(json) ;
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return object;
     }
     
     private void restoreState() {
