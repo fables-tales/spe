@@ -31,14 +31,14 @@ public interface LocalStore {
 	void restore();
 
 	/**
-	 *  Save the state of the graph into the serverside database
+	 *  Save the state of the graph into the server side database
 	 */
 	void save();
 
 	/**
 	 * Retrieve the collection of operations being stored
 	 * 
-	 * @return Contained for the three types of storage
+	 * @return Container for the three types of operation
 	 */
 	StorePackage getInformation();
 
