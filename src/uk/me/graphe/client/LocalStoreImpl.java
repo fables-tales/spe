@@ -197,5 +197,17 @@ public class LocalStoreImpl implements LocalStore {
         int historyID = o.getHistoryId();
         mStates.put(historyID, State.Sent);
     }
+
+	@Override
+	public void setup(int GraphId, List<GraphOperation> sent,
+			List<GraphOperation> unsent, List<GraphOperation> unacked) {
+		setgraph(GraphId);
+		for (GraphOperation item : sent)
+			store(item, true);
+		for (GraphOperation item : unsent)
+			store(item);
+		for (GraphOperation item : unacked)
+			store(item, false);
+	}
     
 }

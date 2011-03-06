@@ -1,5 +1,7 @@
 package uk.me.graphe.client;
 
+import java.util.List;
+
 import uk.me.graphe.shared.messages.operations.GraphOperation;
 
 public interface LocalStore {
@@ -28,7 +30,17 @@ public interface LocalStore {
 	/**
 	 *  Load the state of graph into memory
 	 */
+	
 	void restore();
+
+	/**
+	 * Prepares the localStore
+	 * @param GraphId id of the graph to be stored
+	 * @param sent list of server acknowledged operations
+	 * @param unsent list of unsent operations
+	 * @param unacked list of unacknowledged operations
+	 */
+	void setup(int GraphId, List<GraphOperation> sent, List<GraphOperation> unsent, List<GraphOperation> unacked);
 
 	/**
 	 *  Save the state of the graph into the server side database
