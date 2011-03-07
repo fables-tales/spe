@@ -88,6 +88,30 @@
         	background: url(images/erased.png) no-repeat;
         }
         
+        .btnProcess {
+        	background: url(images/process.png) no-repeat;
+        }
+
+        .btnProcess:hover {
+        	background: url(images/processd.png) no-repeat;
+        }
+        
+        .btnTerminator {
+        	background: url(images/terminator.png) no-repeat;
+        }
+
+        .btnTerminator:hover {
+        	background: url(images/terminatord.png) no-repeat;
+        }
+        
+        .btnDecision {
+        	background: url(images/decision.png) no-repeat;
+        }
+
+        .btnDecision:hover {
+        	background: url(images/decisiond.png) no-repeat;
+        }
+        
         .btnOpts {
 			margin: 8px 0 0 5px;
         }
@@ -116,6 +140,11 @@
 	    <g:HorizontalPanel styleName='{style.pnlTools}'>
 		    <g:Button styleName='{style.btnAutoLayout}' ui:field="btnAutoLayout" />
 		    <g:Button styleName='{style.btnCluster}' ui:field="btnCluster" />
+	    </g:HorizontalPanel>
+	    <g:HorizontalPanel styleName='{style.pnlTools}'>
+	    	<g:Button styleName='{style.btnProcess}' ui:field="btnProcess" />
+	    	<g:Button styleName='{style.btnTerminator}' ui:field="btnTerminator"/>
+	    	<g:Button styleName='{style.btnDecision}' ui:field="btnDecision"/>
 	    </g:HorizontalPanel>	 
 	    <g:HorizontalPanel styleName='{style.pnlOptions}' ui:field="pnlOptions">
 	    	<g:Button styleName='{style.btnOpts}' ui:field="btnOk" />
