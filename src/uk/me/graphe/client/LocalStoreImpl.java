@@ -27,7 +27,7 @@ public class LocalStoreImpl implements LocalStore {
         if (Storage.isSupported() == false )
             Window.alert("Warning your broswer does not support local storage, permanent high speed internet connection will be required to play");
         mStorage = Storage.getLocalStorage();
-        if (mStorage.getItem("itemID") == null)
+        if (mStorage.getItem("itemID") == null || mStorage.getItem("itemID").equals("none"))
         	mStorage.setItem("itemID", "none");
         else
         	restore();
@@ -86,8 +86,12 @@ public class LocalStoreImpl implements LocalStore {
     
     @Override
     public void save() {
+    	try {
     	String maxID = Integer.toString(maxHistoryId);
     	mStorage.setItem("maxHistory", maxID);
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
     	saveState();
     	saveOps();
     }
