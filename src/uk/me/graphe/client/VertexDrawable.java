@@ -110,6 +110,11 @@ public class VertexDrawable {
         mLeft = left;
     }
     
+    public void updateSize(int width, int height){
+    	mHeight = height;
+    	mWidth = width;
+    }
+    
     /**
      * gets the center x of this vd
      * @return
