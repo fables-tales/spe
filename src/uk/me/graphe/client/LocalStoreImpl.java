@@ -163,21 +163,15 @@ public class LocalStoreImpl implements LocalStore {
     	String sent = mStorage.getItem("Sent");
     	String unsent = mStorage.getItem("Unsent");
     	String unacked = mStorage.getItem("Unacked");
-    	StringTokenizer st = new StringTokenizer(sent);
-    	while(st.hasMoreTokens()) {
-    		String id = st.nextToken();
-    		mStates.put(Integer.parseInt(id), State.Sent);
-    	}
-    	st = new StringTokenizer(unsent);
-    	while(st.hasMoreTokens()) {
-    		String id = st.nextToken();
-    		mStates.put(Integer.parseInt(id), State.Unsent);
-    	}
-    	st = new StringTokenizer(unacked);
-    	while(st.hasMoreTokens()) {
-    		String id = st.nextToken();
-    		mStates.put(Integer.parseInt(id), State.Unacked);
-    	}
+    	String[] st = sent.split(" ");
+    	for(int i = 0; i < st.length; i++)
+    		mStates.put(Integer.parseInt(st[i]), State.Sent);
+    	st = unsent.split(" ");
+    	for(int i = 0; i < st.length; i++)
+    		mStates.put(Integer.parseInt(st[i]), State.Unsent);
+    	st = unacked.split(" ");
+    	for(int i = 0; i < st.length; i++)
+    		mStates.put(Integer.parseInt(st[i]), State.Unacked);
     }
     
     @Override
