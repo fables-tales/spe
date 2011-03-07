@@ -202,12 +202,15 @@ public class LocalStoreImpl implements LocalStore {
 	public void setup(int GraphId, List<GraphOperation> sent,
 			List<GraphOperation> unsent, List<GraphOperation> unacked) {
 		setgraph(GraphId);
-		for (GraphOperation item : sent)
-			store(item, true);
-		for (GraphOperation item : unsent)
-			store(item);
-		for (GraphOperation item : unacked)
-			store(item, false);
+		if (sent != null)
+			for (GraphOperation item : sent)
+				store(item, true);
+		if (unsent != null)
+			for (GraphOperation item : unsent)
+				store(item);
+		if (unacked != null)
+			for (GraphOperation item : unacked)
+				store(item, false);
 	}
     
 }
