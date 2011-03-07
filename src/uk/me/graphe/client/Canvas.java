@@ -114,16 +114,25 @@ public class Canvas extends Composite{
 	@UiHandler("canvasPanel")
 	void onMouseMove(MouseMoveEvent e){
 		if (parent.tools.currentTool != Tools.nameVertex){
-			int x = getMouseX(e.getX());
-			int y = getMouseY(e.getY());
+
+			
+			if (isMouseDown)
+			{
+				int x = getMouseX(e.getX());
+				int y = getMouseY(e.getY());
+				
+				parent.pan(-(lMouseMove[X] - x), -(lMouseMove[Y] -y));
+				
+				lMouseMove[X] = x;
+				lMouseMove[Y] = y;
+			}
 			
 			//Do pan here
 			//FROM ED: make sure there's some sort of boolean to determine 
 			//whether mouse is being moved or dragged. Otherwise it will pan
 			//even if user is just moving mouse!
 
-			lMouseMove[X] = x;
-			lMouseMove[Y] = y;
+
 			
 			/*	
 			panx = x2;
@@ -141,7 +150,7 @@ public class Canvas extends Composite{
 	
 	@UiHandler("canvasPanel")
 	void onMouseOut(MouseOutEvent e){
-		isMouseDown = false;
+		//isMouseDown = false;
 		//parent.moving = false;
 		//parent.movingVertex = null;
 	}
