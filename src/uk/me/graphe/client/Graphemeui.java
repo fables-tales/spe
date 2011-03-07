@@ -11,6 +11,7 @@ import uk.me.graphe.shared.graphmanagers.GraphManager2dFactory;
 import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -30,6 +31,7 @@ public class Graphemeui implements EntryPoint {
 
     public static final double ZOOM_STRENGTH = 0.2;
     private int top, left;
+    private LocalStore mStore;
 
     public boolean moving;
     public Vertex movingVertex;
@@ -47,6 +49,14 @@ public class Graphemeui implements EntryPoint {
         ServerChannel sc = ServerChannel.getInstance();
         ClientOT.getInstance().setOperatingGraph(this.graphManager);
         sc.init();
+        mStore = LocalStoreFactory.newInstance();
+        new Timer() {
+
+			@Override
+			public void run() {
+				mStore.save();
+			}
+        }.scheduleRepeating(1000);
     }
 
     private Widget getToolBox() {
