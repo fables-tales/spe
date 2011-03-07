@@ -1,5 +1,5 @@
 package uk.me.graphe.shared;
 
 public enum Tools{
-	addEdge, addVertex, move, nameVertex, select, zoom
+	addEdge, addVertex, autolayout, cluster, delete, move, nameVertex, select, zoom
 }

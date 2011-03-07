@@ -16,7 +16,7 @@
         	margin-left: 15px;
         }
         
-    	.btnAddVert, .btnAddEd, .btnMove, .btnSelect, .btnZoom {
+    	.btnAddVert, .btnAddEd, .btnMove, .btnSelect, .btnZoom, .btnAutoLayout, .btnCluster, .btnDelete {
             width: 35px;
             height: 35px;
             border: 0;
@@ -64,6 +64,30 @@
         	background: url(images/zoomd.png) no-repeat;
         }
         
+        .btnAutoLayout {
+        	background: url(images/autolayout.png) no-repeat;
+        }
+
+        .btnAutoLayout:hover {
+        	background: url(images/autolayoutd.png) no-repeat;
+        }
+        
+        .btnCluster {
+        	background: url(images/cluster.png) no-repeat;
+        }
+
+        .btnCluster:hover {
+        	background: url(images/clusterd.png) no-repeat;
+        }
+        
+        .btnDelete {
+        	background: url(images/erase.png) no-repeat;
+        }
+
+        .btnDelete:hover {
+        	background: url(images/erased.png) no-repeat;
+        }
+        
         .btnOpts {
 			margin: 8px 0 0 5px;
         }
@@ -78,16 +102,21 @@
         	margin: 8px 0 0 5px;
         }
     </ui:style>
-    <g:HorizontalPanel styleName='{style.pnlCont}' ui:field="pnlContainer">
-	    <g:HorizontalPanel styleName='{style.pnlTools}' ui:field="pnlTools1">
+    <g:HorizontalPanel styleName='{style.pnlCont}'>
+	    <g:HorizontalPanel styleName='{style.pnlTools}'>
 	    	<g:Button styleName='{style.btnSelect}' ui:field="btnSelect" />
 	    	<g:Button styleName='{style.btnMove}' ui:field="btnMove" />
 	    	<g:Button styleName='{style.btnZoom}' ui:field="btnZoom" />
 	    </g:HorizontalPanel>	
-	    <g:HorizontalPanel styleName='{style.pnlTools}' ui:field="pnlTools2">
+	    <g:HorizontalPanel styleName='{style.pnlTools}'>
 		    <g:Button styleName='{style.btnAddVert}' ui:field="btnAddVert" />
 		    <g:Button styleName='{style.btnAddEd}' ui:field="btnAddEd" />
-	    </g:HorizontalPanel>		    
+		    <g:Button styleName='{style.btnDelete}' ui:field="btnDelete" />
+	    </g:HorizontalPanel>		   
+	    <g:HorizontalPanel styleName='{style.pnlTools}'>
+		    <g:Button styleName='{style.btnAutoLayout}' ui:field="btnAutoLayout" />
+		    <g:Button styleName='{style.btnCluster}' ui:field="btnCluster" />
+	    </g:HorizontalPanel>	 
 	    <g:HorizontalPanel styleName='{style.pnlOptions}' ui:field="pnlOptions">
 	    	<g:Button styleName='{style.btnOpts}' ui:field="btnOk" />
 	    	<g:Button styleName='{style.btnOpts}' ui:field="btnCancel" />

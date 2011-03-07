@@ -9,7 +9,7 @@
   <script type="text/javascript" language="javascript">
     document.domain = document.domain;
   </script>
-  <?php echo "  <script src=\"http://$_SERVER[SERVER_NAME]:1337/static/Orbited.js\"></script>"; ?>
+  <?php echo "\n  <script src=\"http://$_SERVER[SERVER_NAME]:1337/static/Orbited.js\"></script>"; ?>
   <script>
     Orbited.settings.port = 1337;
     TCPSocket = Orbited.TCPSocket
@@ -20,8 +20,6 @@
 <body>
   <h1>Grapheme</h1>
   <div id="graphInfo">
-    <p id="graphTitle">Network Diagram</p>
-    <p id="graphUsers">1 user viewing</p>
   </div>
   <!--<ul id="nav">
     <li><a href="#">file</a></li>
@@ -36,6 +34,7 @@
     </div>
   </div>
   <div id="footer">
+  	<div id="description"></div>
   	<div id="chat"></div>
   </div>
 </body>

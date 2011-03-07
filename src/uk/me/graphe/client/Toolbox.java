@@ -24,9 +24,9 @@ public class Toolbox extends Composite {
 	interface UiBinderToolbox extends UiBinder<Widget, Toolbox> {}
 
 	@UiField
-	HorizontalPanel pnlContainer, pnlOptions, pnlTools1, pnlTools2;
+	HorizontalPanel pnlOptions;
 	@UiField
-	Button btnAddVert, btnAddEd, btnSelect, btnMove, btnZoom, btnOk, btnCancel;
+	Button btnAddVert, btnAddEd, btnSelect, btnMove, btnZoom, btnAutoLayout, btnCluster, btnDelete, btnOk, btnCancel;
 	@UiField
 	TextBox txtParam;
 	@UiField
@@ -53,6 +53,12 @@ public class Toolbox extends Composite {
 					setTool(Tools.addVertex);
 				}else if(event.getSource() == btnAddEd){
 					setTool(Tools.addEdge);
+				}else if(event.getSource() == btnDelete){
+					setTool(Tools.delete);
+				}else if(event.getSource() == btnAutoLayout){
+					setTool(Tools.autolayout);
+				}else if(event.getSource() == btnCluster){
+					setTool(Tools.cluster);
 				}
 			}
 		};
@@ -62,6 +68,9 @@ public class Toolbox extends Composite {
 		btnSelect.addClickHandler(chTools);
 		btnMove.addClickHandler(chTools);
 		btnZoom.addClickHandler(chTools);
+		btnAutoLayout.addClickHandler(chTools);
+		btnCluster.addClickHandler(chTools);
+		btnDelete.addClickHandler(chTools);
 		
 		ClickHandler chOptions = new ClickHandler() {
 			@Override
@@ -111,7 +120,7 @@ public class Toolbox extends Composite {
 		
 		pnlOptions.setVisible(false);
 		pnlOptions.clear();
-		
+		parent.description.setTool(tool);
 		switch(tool) {
 			case addVertex:
 				lblInstruction.setText("Click the canvas to add a vertex.");
@@ -138,6 +147,16 @@ public class Toolbox extends Composite {
 				} else if (parent.selectedVertices.size() > 2) {
 					parent.clearSelectedVertices();
 				}
+				break;
+			case autolayout:
+				// TODO: Implement
+				break;
+			case cluster:
+				// TODO: Implment
+				break;
+			case delete:
+				// TODO: Implement
+				parent.deleteSelected();
 				break;
 			case move:
 				lblInstruction.setText("Click and drag to pan the canvas or move a vertex.");

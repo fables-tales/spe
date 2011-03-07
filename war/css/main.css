@@ -92,14 +92,12 @@ h1 {
 #footer {
   position: fixed;
   bottom: 0;
-  height: 30px;
+  height: 35px;
   z-index: 1000;
   background-color: #f0f0f0;
   border-top: 1px solid #ccc;
   width: 100%;
 }
-
-#graphInfo { display: none; }
 
 #chat { float: right; }
 
@@ -116,7 +114,7 @@ h1 {
 	text-decoration: none;
 	color: #333;
 	padding: 7px 8px 7px 25px;
-	width: 225px;
+	width: 240px;
 	border-left: 1px solid #ddd;
 	border-right: 1px solid #ddd;
 	border-top: 0;
