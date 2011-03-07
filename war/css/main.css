@@ -99,8 +99,6 @@ h1 {
   width: 100%;
 }
 
-#graphInfo { display: none; }
-
 #chat { float: right; }
 
 #chat hr{

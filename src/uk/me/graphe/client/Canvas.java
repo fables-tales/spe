@@ -121,7 +121,7 @@ public class Canvas extends Composite{
 			//FROM ED: make sure there's some sort of boolean to determine 
 			//whether mouse is being moved or dragged. Otherwise it will pan
 			//even if user is just moving mouse!
-
+			
 			lMouseMove[X] = x;
 			lMouseMove[Y] = y;
 			

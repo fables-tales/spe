@@ -20,8 +20,6 @@
 <body>
   <h1>Grapheme</h1>
   <div id="graphInfo">
-    <p id="graphTitle">Network Diagram</p>
-    <p id="graphUsers">1 user viewing</p>
   </div>
   <!--<ul id="nav">
     <li><a href="#">file</a></li>

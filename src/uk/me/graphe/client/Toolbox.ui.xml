@@ -81,11 +81,11 @@
         }
         
         .btnDelete {
-        	background: url(images/delete.png) no-repeat;
+        	background: url(images/erase.png) no-repeat;
         }
 
         .btnDelete:hover {
-        	background: url(images/deleted.png) no-repeat;
+        	background: url(images/erased.png) no-repeat;
         }
         
         .btnOpts {
