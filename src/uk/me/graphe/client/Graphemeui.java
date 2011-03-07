@@ -39,11 +39,11 @@ public class Graphemeui implements EntryPoint {
 	private static final int X = 0, Y = 1;
 
     public Graphemeui() {
+    	description = new Description();
         tools = new Toolbox(this);
         canvas = new Canvas(this);
         chat = Chat.getInstance(this);
-        drawing = new DrawingImpl();
-        description = new Description();
+        drawing = new DrawingImpl();        
         graphManagerFactory = GraphManager2dFactory.getInstance();
         graphManager = graphManagerFactory.makeDefaultGraphManager();
         drawing.setOffset(0, 0);
@@ -178,7 +178,9 @@ public class Graphemeui implements EntryPoint {
     	selectedVertices.clear();
     	selectedEdges.clear();
     	
-    	graphManager.invalidate(); // TODO: does this need to be here?
+    	tools.setTool(Tools.select);
+    	
+    	graphManager.invalidate(); // TODO: does this need to be here?  	
     }
     
     public void moveNode(VertexDrawable vd, int x, int y) {
