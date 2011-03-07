@@ -10,7 +10,7 @@ public class UserDB {
 
 	@Id
 	private String mUserID;
-	private List<GraphDB> mGraphs;
+	private List<String> mKeys;
 	
 	// Void constructor for morphia
 	public UserDB() {}
@@ -23,15 +23,15 @@ public class UserDB {
 		return mUserID;
 	}
 	
-	public void addGraph(GraphDB toAdd) {
-		mGraphs.add(toAdd);
+	public void addKey(String toAdd) {
+		mKeys.add(toAdd);
 	}
 	
-	public void removeGraph(GraphDB toRemove) {
-		mGraphs.remove(toRemove);
+	public void removeKey(GraphDB toRemove) {
+		mKeys.remove(toRemove);
 	}
 	
-	public List<GraphDB> getGraphs() {
-		return mGraphs;
+	public List<String> getKeys() {
+		return mKeys;
 	}
 }
