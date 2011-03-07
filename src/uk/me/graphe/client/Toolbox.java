@@ -26,7 +26,7 @@ public class Toolbox extends Composite {
 	@UiField
 	HorizontalPanel pnlOptions;
 	@UiField
-	Button btnAddVert, btnAddEd, btnSelect, btnMove, btnZoom, btnAutoLayout, btnCluster, btnDelete, btnProcess, btnTerminator, btnDecision, btnOk, btnCancel;
+	Button btnAddVert, btnAddEd, btnSelect, btnMove, btnZoom, btnAutoLayout, btnCluster, btnDelete, btnProcess, btnTerminator, btnDecision, btnNormal, btnOk, btnCancel;
 	@UiField
 	TextBox txtParam;
 	@UiField
@@ -77,6 +77,12 @@ public class Toolbox extends Composite {
 						vd.updateSize(300, 200);
 					}
 					parent.graphManager.invalidate();
+				}else if(event.getSource() == btnNormal){
+					for(VertexDrawable vd : parent.selectedVertices){
+						vd.setStyle(VertexDrawable.UNDEFINED_STYLE);
+						vd.updateSize(300, 200);
+					}
+					parent.graphManager.invalidate();
 				}
 			}
 		};
@@ -92,6 +98,7 @@ public class Toolbox extends Composite {
 		btnDecision.addClickHandler(chTools);
 		btnTerminator.addClickHandler(chTools);
 		btnProcess.addClickHandler(chTools);
+		btnNormal.addClickHandler(chTools);
 		
 		ClickHandler chOptions = new ClickHandler() {
 			@Override
@@ -123,6 +130,10 @@ public class Toolbox extends Composite {
 					
 					if (e.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 						btnOk.click();
+						pnlOptions.setVisible(false);
+						if(currentTool == Tools.nameVertex){
+							setTool(Tools.addVertex);
+						}
 					}
 				} else {
 					btnOk.setEnabled(false);
