@@ -26,7 +26,7 @@ public class Toolbox extends Composite {
 	@UiField
 	HorizontalPanel pnlOptions;
 	@UiField
-	Button btnAddVert, btnAddEd, btnSelect, btnMove, btnZoom, btnAutoLayout, btnCluster, btnDelete, btnOk, btnCancel;
+	Button btnAddVert, btnAddEd, btnSelect, btnMove, btnZoom, btnAutoLayout, btnCluster, btnDelete, btnProcess, btnTerminator, btnDecision, btnOk, btnCancel;
 	@UiField
 	TextBox txtParam;
 	@UiField
@@ -59,6 +59,18 @@ public class Toolbox extends Composite {
 					setTool(Tools.autolayout);
 				}else if(event.getSource() == btnCluster){
 					setTool(Tools.cluster);
+				}else if(event.getSource() == btnProcess){
+					for(VertexDrawable vd : parent.selectedVertices){
+						vd.setStyle(VertexDrawable.STROKED_SQUARE_STYLE);
+					}
+				}else if(event.getSource() == btnDecision){
+					for(VertexDrawable vd : parent.selectedVertices){
+						vd.setStyle(VertexDrawable.STROKED_DIAMOND_STYLE);
+					}
+				}else if(event.getSource() == btnTerminator){
+					for(VertexDrawable vd : parent.selectedVertices){
+						vd.setStyle(VertexDrawable.STROKED_TERM_STYLE);
+					}
 				}
 			}
 		};
@@ -71,6 +83,9 @@ public class Toolbox extends Composite {
 		btnAutoLayout.addClickHandler(chTools);
 		btnCluster.addClickHandler(chTools);
 		btnDelete.addClickHandler(chTools);
+		btnDecision.addClickHandler(chTools);
+		btnTerminator.addClickHandler(chTools);
+		btnProcess.addClickHandler(chTools);
 		
 		ClickHandler chOptions = new ClickHandler() {
 			@Override
