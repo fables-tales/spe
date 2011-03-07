@@ -3,7 +3,6 @@ package uk.me.graphe.server.database.dbitems;
 
 import com.google.code.morphia.annotations.Embedded;
 
-import uk.me.graphe.shared.Edge;
 
 @Embedded("graph")
 public class AddEdgeDB extends EdgeDB {
