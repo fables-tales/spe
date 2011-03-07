@@ -114,34 +114,25 @@ public class Canvas extends Composite{
 	@UiHandler("canvasPanel")
 	void onMouseMove(MouseMoveEvent e){
 		if (parent.tools.currentTool != Tools.nameVertex){
-			int x = getMouseX(e.getX());
-			int y = getMouseY(e.getY());
+
 			
-			//Do pan here
-			//FROM ED: make sure there's some sort of boolean to determine 
-			//whether mouse is being moved or dragged. Otherwise it will pan
-			//even if user is just moving mouse!
+			if (isMouseDown)
+			{
+                int x = getMouseX(e.getX());
+                int y = getMouseY(e.getY());
+				
+				parent.pan(-(lMouseMove[X] - x), -(lMouseMove[Y] -y));
+				
+				lMouseMove[X] = x;
+				lMouseMove[Y] = y;
+			}
 			
-			lMouseMove[X] = x;
-			lMouseMove[Y] = y;
-			
-			/*	
-			panx = x2;
-			pany = y2;
-			//get new end point
-			x2 = getMouseX(e.getX());
-			y2 = getMouseX(e.getY());
-			//if dragging using the move tool
-			/*if (parent.tools.getTool() == 5 && pressed) {
-				//call graphemeui move method
-				parent.move(x1, y1, panx, pany, x2, y2);
-			}*/
 		}
 	}
 	
 	@UiHandler("canvasPanel")
 	void onMouseOut(MouseOutEvent e){
-		isMouseDown = false;
+		//isMouseDown = false;
 		//parent.moving = false;
 		//parent.movingVertex = null;
 	}
