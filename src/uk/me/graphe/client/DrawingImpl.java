@@ -1362,6 +1362,8 @@ public class DrawingImpl implements Drawing {
             var flowColor = getColor(7);
             var flowStrokeSize = 2;
             var flowTextColor = getColor(0);
+            var yellow = getColor(6);
+            var black = getColor(0);
             
             var customColor = [c1,c2,c3,1.0];
             
@@ -1455,6 +1457,12 @@ public class DrawingImpl implements Drawing {
                 break;
             case -10:
                 drawCircleDim(left,top,width,height,6);
+                break;
+            case 9:
+                drawCircleDim(left,top,width,height,black);
+                break;
+            case -9:
+                drawCircleDim(left,top,width,height,yellow);
                 break;
             default:
                 // Default vertex style: black circle
@@ -1576,7 +1584,7 @@ public class DrawingImpl implements Drawing {
 						vertexStyle = 102;
 						break;
 					default:
-						vertexStyle = 100;
+						vertexStyle = 9;
 						break;
                 }
                 label = thisVertex.getLabel();
