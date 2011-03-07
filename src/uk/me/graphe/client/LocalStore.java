@@ -4,82 +4,68 @@ import java.util.List;
 
 import uk.me.graphe.shared.messages.operations.GraphOperation;
 
-import com.google.code.gwt.storage.client.*;
-import com.google.gwt.user.client.Window;
+public interface LocalStore {
 
-public class LocalStore {
-    
-    Storage mStorage;
-    List<GraphOperation> mOps;
-    
-    public LocalStore() {
-        if (Storage.isSupported() == false )
-            Window.alert("Warning your broswer does not support local storage, permanent high speed internet connection will be required to play");
-        mStorage = Storage.getLocalStorage();
-        if (mStorage.getItem("itemID") == null)
-        	mStorage.setItem("itemID", "none");
-    }
-    
-    private void storethis (GraphOperation op){
-        String jsonOp = op.toJson();
-        String historyId= Integer.toString(op.getHistoryId());
-        mStorage.setItem(historyId, jsonOp);
-    }
-    
-    public void store (GraphOperation op) {
-    	storethis (op);
-    	toUnSent(op);
-    }
-    
-    public void store (GraphOperation op, boolean Acked) {
-    	storethis(op);
-    	if (Acked == true)
-    		toSent(op);
-		else
-			toUnAck(op);
-    	
-    }
-    
-    private boolean setgraph(int graphId) {
-        String id = Integer.toString(graphId);
-        if (mStorage.getItem("itemID").equalsIgnoreCase(id))
-            return true;
-        mStorage.clear();
-        mStorage.setItem("itemID", id);
-        mStorage.setItem("unAcked", "");
-        mStorage.setItem("unSent", "");
-        mStorage.setItem("Sent", "");
-        return false;
-    }
-    
-    public void toUnSent(GraphOperation o) {
-    	int historyID = o.getHistoryId();
-        String histID = Integer.toString(historyID);
-        String unSent = mStorage.getItem("unSent");
-        mStorage.setItem("unSent", unSent.concat(" " + histID));
-    }
-    
-    public void toUnAck(GraphOperation o) {
-        int historyID = o.getHistoryId();
-        String histID = Integer.toString(historyID);
-        String unAcked = mStorage.getItem("unAcked");
-        String unSent = mStorage.getItem("unSent");
-        if (unSent.contains(histID))
-            mStorage.setItem("unSent", unSent.replace(" " + histID, ""));
-        mStorage.setItem("unAcked", unAcked.concat(" " + histID));
-    }
-    
-    public void toSent(GraphOperation o) {
-        int historyID = o.getHistoryId();
-        String histID = Integer.toString(historyID);
-        String unAcked = mStorage.getItem("unAcked");
-        String unSent = mStorage.getItem("unSent");
-        String Sent = mStorage.getItem("Sent");
-        if (unAcked.contains(histID))
-        	mStorage.setItem("unAcked", unAcked.replace(" "+ histID, ""));
-        if (unSent.contains(histID))
-            mStorage.setItem("unSent", unSent.replace(" " + histID, ""));
-        mStorage.setItem("Sent", Sent.concat(" " + histID));
-    }
-    
+	/**
+	 * Add the graph operation to the UnAcked list
+	 * 
+	 * @param o GraphOperation to be stored
+	 */
+	void toUnack(GraphOperation o);
+
+	/**
+	 * Add the graph operation to the Sent list
+	 * 
+	 * @param o GraphOperation to be stored
+	 */
+	void toSent(GraphOperation o);
+
+	/**
+	 * Add the graph operation to the Unsent list
+	 * 
+	 * @param o GraphOperation to be stored
+	 */
+	void toUnsent(GraphOperation o);
+
+	/**
+	 *  Load the state of graph into memory
+	 */
+	
+	void restore();
+
+	/**
+	 * Prepares the localStore
+	 * @param GraphId id of the graph to be stored
+	 * @param sent list of server acknowledged operations
+	 * @param unsent list of unsent operations
+	 * @param unacked list of unacknowledged operations
+	 */
+	void setup(int GraphId, List<GraphOperation> sent, List<GraphOperation> unsent, List<GraphOperation> unacked);
+
+	/**
+	 *  Save the state of the graph into the server side database
+	 */
+	void save();
+
+	/**
+	 * Retrieve the collection of operations being stored
+	 * 
+	 * @return Container for the three types of operation
+	 */
+	StorePackage getInformation();
+
+	/**
+	 * Save the sent operation into the Store memory
+	 * 
+	 * @param op GraphOperation to be stored
+	 * @param Acked Whether the server has acknowledged receiving the operation 
+	 */
+	void store(GraphOperation op, boolean Acked);
+
+	/**
+	 * Save the unsent operation into the Store memory
+	 * @param op GraphOperation to be stored
+	 */
+	void store(GraphOperation op);
+
 }
