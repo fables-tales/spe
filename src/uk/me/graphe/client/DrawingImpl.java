@@ -1156,7 +1156,6 @@ public class DrawingImpl implements Drawing {
             var theta = 0
             if(circleCoords[w][h]==undefined)
             {
-                //alert("make circle "+r);
                 circleCoords[w][h] = new Array(numSections);
                 circleCoords[w][h] = new Array(numSections);
                 for (i = 0; i < numSections ; i++) {
@@ -1362,7 +1361,7 @@ public class DrawingImpl implements Drawing {
             var flowColor = getColor(7);
             var flowStrokeSize = 2;
             var flowTextColor = getColor(0);
-            var yellow = getColor(6);
+            var yellow = getColor(5);
             var black = getColor(0);
             
             var customColor = [c1,c2,c3,1.0];
