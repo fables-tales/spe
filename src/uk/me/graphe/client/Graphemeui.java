@@ -16,6 +16,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.RootPanel;
 
 public class Graphemeui implements EntryPoint {
@@ -28,6 +29,8 @@ public class Graphemeui implements EntryPoint {
     public final GraphManager2d graphManager;
     public final GraphManager2dFactory graphManagerFactory;
     public final Drawing drawing;
+
+    private LocalStore mStore = LocalStoreFactory.newInstance();
     
     public ArrayList<VertexDrawable> selectedVertices;
     public ArrayList<EdgeDrawable> selectedEdges;
@@ -107,6 +110,14 @@ public class Graphemeui implements EntryPoint {
         ServerChannel sc = ServerChannel.getInstance();
         ClientOT.getInstance().setOperatingGraph(this.graphManager);
         sc.init();
+        mStore = LocalStoreFactory.newInstance();
+        new Timer() {
+
+			@Override
+			public void run() {
+				mStore.save();
+			}
+        }.scheduleRepeating(1000);
     }
     
     
