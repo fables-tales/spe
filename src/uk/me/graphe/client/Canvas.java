@@ -41,12 +41,6 @@ public class Canvas extends Composite{
 	}
 	
 	@UiHandler("canvasPanel")
-	void onKeyUp(KeyUpEvent e)
-	{
-		parent.tools.setLabel("hey");
-	}
-	
-	@UiHandler("canvasPanel")
 	void onMouseDown(MouseDownEvent e){
 		if (parent.tools.currentTool != Tools.nameVertex)
 		{
