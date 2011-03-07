@@ -16,7 +16,7 @@
         	margin-left: 15px;
         }
         
-    	.btnAddVert, .btnAddEd, .btnMove, .btnSelect, .btnZoom, .btnAutoLayout, .btnCluster, .btnDelete {
+    	.btnAddVert, .btnAddEd, .btnMove, .btnSelect, .btnZoom, .btnAutoLayout, .btnCluster, .btnDelete, .btnProcess, .btnDecision, .btnTerminator {
             width: 35px;
             height: 35px;
             border: 0;
