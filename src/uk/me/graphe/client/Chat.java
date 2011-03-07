@@ -79,7 +79,6 @@ public class Chat extends Composite{
 					
 					if (e.getNativeKeyCode() == KeyCodes.KEY_ENTER && !e.isShiftKeyDown()) {
 						e.preventDefault();
-						// TODO: Convert message to HTML entities.
 						ChatMessage cmMessage = new ChatMessage(String.valueOf(mMyName), txtWrite.getText(), false, false);
 						ServerChannel.getInstance().send(cmMessage.toJson());
 						displayMessage(String.valueOf(mMyName), txtWrite.getText());
@@ -201,6 +200,7 @@ public class Chat extends Composite{
 	}
 	
 	private String escapeHtml(String html){
+		// TODO: Do we need to escape anything to protect against database injection?
 		SimpleHtmlSanitizer shs = SimpleHtmlSanitizer.getInstance();
 		html = shs.sanitize(html).asString();
 		return html;
