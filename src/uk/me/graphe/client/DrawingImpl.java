@@ -1260,6 +1260,9 @@ public class DrawingImpl implements Drawing {
         
         function printString(left,top,string,color,thickness,size)
         {
+            var wordArray = string.split(" ");
+            var numWords = wordArray.length;
+        
             var length = (stringPixelLength(string)/2)*size;
             var offset = -length;
             for(i=0;i<string.length;i++)
@@ -1301,11 +1304,26 @@ public class DrawingImpl implements Drawing {
             drawSquare(left,top,width-sOff,height-sOff,0,color);
         }
         
+        function diamondStrokeAlgorithm(width, height, strokeSize)
+        {
+            var angle1 = Math.atan(height/width);
+            var angle2 = Math.PI/2 - angle1;
+            var opp = strokeSize*Math.sin(angle2);
+            var width1Sq = (strokeSize*strokeSize)-(opp*opp);
+            var width1 = Math.sqrt(width1Sq);
+            var width2 = opp/(Math.tan(angle1));
+            var fWidth = (width1+width2)*2;
+            return fWidth;
+        }
+        
         function flowDecision(left,top,width,height,color,strokeSize,strokeColor)
         {
-            var sOff = strokeSize*2;
+
+            var wOff = diamondStrokeAlgorithm(width/2, height/2, strokeSize);
+            var hOff = diamondStrokeAlgorithm(height/2, width/2, strokeSize);
+            
             drawDiamond(left,top,width,height,strokeColor);
-            drawDiamond(left,top,width-sOff,height-(sOff*1.8),color);
+            drawDiamond(left,top,width-wOff,height-hOff,color);
         }
         
         // BLACK    0
@@ -1361,18 +1379,22 @@ public class DrawingImpl implements Drawing {
             case 101:
                 // Process, process or action step
                 flowProcess(left,top,width,height,flowColor,flowStrokeSize,flowStrokeColor);
+                printString(left,top,text,flowTextColor,2,0.75);
                 break;
             case -101:
                 // Process, process or action step - HIGHLIGHTED
                 flowProcess(left,top,width,height,flowColor,flowStrokeSize,flowStrokeHighColor);
+                printString(left,top,text,flowTextColor,2,0.75);
                 break;
             case 102:
                 // Decision, question or branch
-                flowDecision(left,top,width,height,flowColor,flowStrokeSize,flowStrokeColor)
+                flowDecision(left,top,width,height,flowColor,flowStrokeSize,flowStrokeColor);
+                printString(left,top,text,flowTextColor,2,0.75);
                 break;
             case -102:
                 // Decision, question or branch - HIGHLIGHTED
-                flowDecision(left,top,width,height,flowColor,flowStrokeSize,flowStrokeHighColor)
+                flowDecision(left,top,width,height,flowColor,flowStrokeSize,flowStrokeHighColor);
+                printString(left,top,text,flowTextColor,2,0.75);
                 break;
             case 5:
                 // Circle
