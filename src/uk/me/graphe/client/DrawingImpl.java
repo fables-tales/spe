@@ -1564,8 +1564,21 @@ public class DrawingImpl implements Drawing {
                 double centreY = (thisVertex.getCenterY() + offsetY)*zoom;
                 double width = (0.5 * thisVertex.getWidth())*zoom;
                 double height = (0.5 * thisVertex.getHeight())*zoom;
-                //vertexStyle = thisVertex.getStyle();
-                vertexStyle = 100;
+                vertexStyle = thisVertex.getStyle();
+                switch (vertexStyle) {
+					case VertexDrawable.STROKED_TERM_STYLE:
+						vertexStyle = 100;
+						break;
+					case VertexDrawable.STROKED_SQUARE_STYLE:
+						vertexStyle = 101;
+						break;
+					case VertexDrawable.STROKED_DIAMOND_STYLE:
+						vertexStyle = 102;
+						break;
+					default:
+						vertexStyle = 100;
+						break;
+                }
                 label = thisVertex.getLabel();
                 int[] customColor = {0,0,0};
                 if(thisVertex.getStyle() == VertexDrawable.COLORED_FILLED_CIRCLE)
