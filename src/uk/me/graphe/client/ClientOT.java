@@ -41,6 +41,7 @@ public class ClientOT {
     private List<GraphOperation> mSentUnAcked = new ArrayList<GraphOperation>();
     private int mServerStateId = -1;
     private List<GraphOperation> mServerOperations = new ArrayList<GraphOperation>();
+    private LocalStore mStore = LocalStoreFactory.newInstance();
 
     private boolean mInited = true;
 
@@ -154,22 +155,29 @@ public class ClientOT {
     }
 
     public void notifyRemoveEdge(Edge edge) {
-        mUnsentOps.add(new DeleteEdgeOperation(edge));
+    	DeleteEdgeOperation newop = new DeleteEdgeOperation((edge));
+        mUnsentOps.add(newop);
+        mStore.store(newop);
     }
 
     public void notifyRemoveVertex(Vertex vertex) {
-        mUnsentOps.add(new DeleteNodeOperation(vertex));
-
+    	DeleteNodeOperation newop = new DeleteNodeOperation(vertex);
+        mUnsentOps.add(newop);
+        mStore.store(newop);
     }
 
     public void notifyAddEdge(Vertex vertex, Vertex vertex2, VertexDirection fromto) {
-        mUnsentOps.add(new AddEdgeOperation(new Edge(vertex, vertex2, fromto)));
+    	AddEdgeOperation newop = new AddEdgeOperation(new Edge(vertex, vertex2, fromto));
+        mUnsentOps.add(newop);
+    	mStore.store(newop);
 
     }
 
     public void notifyAddVertex(Vertex v, int i, int j, int vertexSize) {
         Console.log("notified of adding vertex:" + v.getLabel());
-        mUnsentOps.add(new AddNodeOperation(v, i, j));
+        AddNodeOperation newop = new AddNodeOperation(v, i, j);
+        mUnsentOps.add(newop);
+        mStore.store(newop);
 
     }
 
