@@ -1587,6 +1587,7 @@ public class DrawingImpl implements Drawing {
                     customColor = thisVertex.getColor();
                 }
                 if(thisVertex.isHilighted())vertexStyle = -vertexStyle;
+                runJavascript("alert("+vertexStyle+")");
                 addVertice(centreX,centreY,width,height,vertexStyle,label,customColor[0],customColor[1],customColor[2]);
             }
 
