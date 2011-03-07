@@ -3,7 +3,6 @@ package uk.me.graphe.server.database.dbitems;
 import java.util.List;
 
 import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
-import uk.me.graphe.shared.messages.operations.CompositeOperation;
 
 import com.google.code.morphia.annotations.Embedded;
 import com.google.code.morphia.annotations.Entity;

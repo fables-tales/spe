@@ -25,6 +25,7 @@ import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
 import com.google.code.morphia.query.Query;
 import com.google.code.morphia.query.UpdateOperations;
+import com.mongodb.DBCollection;
 import com.mongodb.Mongo;
 
 public class DatabaseImpl implements Database{
@@ -32,6 +33,7 @@ public class DatabaseImpl implements Database{
     private Mongo mMongo;
     private Morphia mMorphia = new Morphia();
     private Datastore mData;
+    DBCollection mCollection;
     
     public DatabaseImpl () {
         try {
@@ -40,13 +42,24 @@ public class DatabaseImpl implements Database{
             return;
         }
         mData = mMorphia.createDatastore(mMongo, "graphs");
+        mCollection = mMongo.getDB("graphs").getCollection("OTGraphManager2dStore");
     }
 
     @Override
     public void delete(int key) {
         mData.delete(mData.createQuery(OTGraphManager2dStore.class).filter("id =", key));
     }
+    
+    @Override
+    public void clean() {
+        mCollection.drop();
+    }
 
+    @Override
+    public int size() {
+        return (int) mCollection.getCount();
+    }
+    
     @Override
     public OTGraphManager2d retrieve(int key) {
         //  Extract OtGraphManagerStore from DB
