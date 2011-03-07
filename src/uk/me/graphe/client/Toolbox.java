@@ -62,15 +62,21 @@ public class Toolbox extends Composite {
 				}else if(event.getSource() == btnProcess){
 					for(VertexDrawable vd : parent.selectedVertices){
 						vd.setStyle(VertexDrawable.STROKED_SQUARE_STYLE);
+						vd.updateSize(300, 200);
 					}
+					parent.graphManager.invalidate();
 				}else if(event.getSource() == btnDecision){
 					for(VertexDrawable vd : parent.selectedVertices){
 						vd.setStyle(VertexDrawable.STROKED_DIAMOND_STYLE);
+						vd.updateSize(300, 200);
 					}
+					parent.graphManager.invalidate();
 				}else if(event.getSource() == btnTerminator){
 					for(VertexDrawable vd : parent.selectedVertices){
 						vd.setStyle(VertexDrawable.STROKED_TERM_STYLE);
+						vd.updateSize(300, 200);
 					}
+					parent.graphManager.invalidate();
 				}
 			}
 		};
