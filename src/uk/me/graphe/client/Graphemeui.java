@@ -11,12 +11,14 @@ import uk.me.graphe.shared.VertexDirection;
 import uk.me.graphe.shared.graphmanagers.GraphManager2d;
 import uk.me.graphe.shared.graphmanagers.GraphManager2dFactory;
 import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
+import uk.me.graphe.shared.messages.operations.AddNodeOperation;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
 public class Graphemeui implements EntryPoint {
@@ -30,7 +32,7 @@ public class Graphemeui implements EntryPoint {
     public final GraphManager2dFactory graphManagerFactory;
     public final Drawing drawing;
 
-    private LocalStore mStore = LocalStoreFactory.newInstance();
+    private LocalStore mStore;
     
     public ArrayList<VertexDrawable> selectedVertices;
     public ArrayList<EdgeDrawable> selectedEdges;
@@ -75,6 +77,17 @@ public class Graphemeui implements EntryPoint {
         RootPanel.get("description").add(this.description);
         RootPanel.get("graphInfo").add(this.graphInfo);
         
+        mStore = LocalStoreFactory.newInstance();
+        mStore.store(new AddNodeOperation(new Vertex("test"), 10, 10));
+        Timer t = new Timer() {
+
+            @Override
+            public void run() {
+                mStore.save();
+            }
+        };
+        t.scheduleRepeating(1000);
+        
 		KeyUpHandler khHotkeys = new KeyUpHandler() {
 			public void onKeyUp(KeyUpEvent e) {
 				if (isHotkeysEnabled) {
@@ -110,14 +123,7 @@ public class Graphemeui implements EntryPoint {
         ServerChannel sc = ServerChannel.getInstance();
         ClientOT.getInstance().setOperatingGraph(this.graphManager);
         sc.init();
-        mStore = LocalStoreFactory.newInstance();
-        new Timer() {
-
-			@Override
-			public void run() {
-				mStore.save();
-			}
-        }.scheduleRepeating(1000);
+        
     }
     
     
