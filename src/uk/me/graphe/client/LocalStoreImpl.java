@@ -27,27 +27,30 @@ public class LocalStoreImpl implements LocalStore {
         if (Storage.isSupported() == false )
             Window.alert("Warning your broswer does not support local storage, permanent high speed internet connection will be required to play");
         mStorage = Storage.getLocalStorage();
-        if (mStorage.getItem("itemID") == null || mStorage.getItem("itemID").equals("none"))
+        if (mStorage.getItem("itemID") == null || mStorage.getItem("itemID").equals("none")) {
+            mStorage.clear();
         	mStorage.setItem("itemID", "none");
-        else
+        } else
         	restore();
     }
 
     @Override
     public void store(GraphOperation op) {
-    	int id = op.getHistoryId();
-    	mOps.put(Integer.valueOf(id),op);
-    	if (id > maxHistoryId)
-    		maxHistoryId = id;
+    	//int id = op.getHistoryId();
+    	mOps.put(Integer.valueOf(maxHistoryId),op);
+    	//if (id > maxHistoryId)
+    	//	maxHistoryId = id;
+    	maxHistoryId++;
     	toUnsent(op);
     }
     
     @Override
     public void store(GraphOperation op, boolean Acked) {
-    	int id = op.getHistoryId();
-    	mOps.put(Integer.valueOf(id),op);
-    	if (id > maxHistoryId)
-    		maxHistoryId = id; 
+        //int id = op.getHistoryId();
+        mOps.put(Integer.valueOf(maxHistoryId),op);
+        //if (id > maxHistoryId)
+        //  maxHistoryId = id;
+        maxHistoryId++;
     	if (Acked == true)
     		toSent(op);
 		else
@@ -60,7 +63,7 @@ public class LocalStoreImpl implements LocalStore {
     	List<GraphOperation> sent = new ArrayList<GraphOperation>();
     	List<GraphOperation> unsent = new ArrayList<GraphOperation>();
     	List<GraphOperation> unacked = new ArrayList<GraphOperation>();
-    	for (int i = 0; i < maxHistoryId; i++) {
+    	for (int i = 0; i <= maxHistoryId; i++) {
     		Integer id = Integer.valueOf(i);
 			State curState = mStates.get(id);
 			if (curState == State.Sent)
@@ -81,6 +84,7 @@ public class LocalStoreImpl implements LocalStore {
         mStorage.setItem("itemID", id);
         mStates = new HashMap<Integer, State>();
         mOps = new HashMap<Integer, GraphOperation>();
+        maxHistoryId = 0;
         return false;
     }
     
@@ -115,11 +119,14 @@ public class LocalStoreImpl implements LocalStore {
 		mStorage.setItem("Sent", sent);
     }
     
+    //TODO: Remove debug code
     private void saveOps(){
+        //Console.log(mOps.toString());
     	for (int i = 0; i < maxHistoryId; i++) {
     		Integer id = Integer.valueOf(i);
     		GraphOperation op = mOps.get(id);
     		String jsonOp = op.toJson();
+    		//Console.log(jsonOp);
     		String historyId= id.toString();
     		mStorage.setItem(historyId, jsonOp);
     	}
@@ -196,18 +203,19 @@ public class LocalStoreImpl implements LocalStore {
     }
 
 	@Override
+	// Since historyId doesn't appear to be set up correctly, performing this operation may cause operations to become out of sync.
 	public void setup(int GraphId, List<GraphOperation> sent,
 			List<GraphOperation> unsent, List<GraphOperation> unacked) {
 		setgraph(GraphId);
 		if (sent != null)
 			for (GraphOperation item : sent)
 				store(item, true);
-		if (unsent != null)
-			for (GraphOperation item : unsent)
-				store(item);
 		if (unacked != null)
 			for (GraphOperation item : unacked)
 				store(item, false);
+      if (unsent != null)
+            for (GraphOperation item : unsent)
+                store(item);
 	}
     
 }
