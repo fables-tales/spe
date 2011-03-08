@@ -1,131 +1,156 @@
-<!-- LOCK ED -->
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style>
-        .button {
-            width: 150px;
-        }
-        
-        .buttonadv {
-            width: 35px;
-            height: 33px;
-            color: transparent;
-            margin: 0;
-            border: 0;
-            background: url(images/addvert.png) no-repeat;
-            cursor: pointer;
-            margin-right: 5px;
-        }
-        
-        .buttonadv:hover{
-	    background: url(images/addvertd.png);
-        }
-        
-        .buttonade {
-            width: 35px;
-            height: 33px;
-            color: transparent;
-            margin: 0;
-            border: 0;
-            background: url(images/addedge.png) no-repeat;
-            cursor: pointer;
-            margin-right: 5px;
-        }
-
-        .buttonade:hover{
-	    background: url(images/addedged.png);
-        }
-        
-        .buttonremv {
-            width: 35px;
-            height: 33px;
-            color: transparent;
-            margin: 0;
-            border: 0;
-            background: url(images/remvert.png) no-repeat;
-            cursor: pointer;
-            margin-right: 5px;
-        }
-
-        .buttonremv:hover{
-	    background: url(images/remvertd.png);
-        }
-        
-        .buttonreme {
-            width: 35px;
-            height: 33px;
-            color: transparent;
-            margin: 0;
-            border: 0;
-            background: url(images/remedge.png) no-repeat;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-
-        .buttonreme:hover{
-	    background: url(images/remedged.png);
-        }
-        
-        .buttonmove {
-            width: 35px;
-            height: 33px;
-            color: transparent;
-            margin: 0;
-            border: 0;
-            background: url(images/move.png) no-repeat;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-
-        .buttonmove:hover{
-	    background: url(images/moved.png);
-        }
-        
-        .buttonzoom {
-            width: 35px;
-            height: 33px;
-            color: transparent;
-            margin: 0;
-            border: 0;
-            background: url(images/zoom.png) no-repeat;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-        
-        .buttonzoom:hover{
-	    background: url(images/zoomd.png);
-        }
-        
-        .stack {
-            background: #BBDAF0;
-        }
+		.pnlCont {
+			margin: 15px 0 0 25px;
+		}
 		
-        .horizPanel {
-            margin-left: 25px;
-            margin-top: 15px;
-            height: 35px;
-            background: url(images/toolgrad.png);
+        .pnlTools {
+            background: url(images/toolgrad.png) repeat-x +1px 0;
             border: 1px black solid;
+            margin-right: 10px;
         }
         
-        .header {
-            font-weight: bold;
+        .pnlOptions {
+        	margin-left: 15px;
         }
-		
-        .header2 {
+        
+    	.btnAddVert, .btnAddEd, .btnMove, .btnSelect, .btnZoom, .btnAutoLayout, .btnCluster, .btnDelete, .btnProcess, .btnDecision, .btnTerminator {
+            width: 35px;
+            height: 35px;
+            border: 0;
+            cursor: pointer;
+            margin: 0 2px;
+        }
+        
+        .btnAddVert {
+            background: url(images/addvert.png) no-repeat;
+        }
+        
+        .btnAddVert:hover {
+            background: url(images/addvertd.png) no-repeat;
+        }
+        
+        .btnAddEd {
+            background: url(images/addedge.png) no-repeat;
+        }
+        
+        .btnAddEd:hover {
+            background: url(images/addedged.png) no-repeat;
+        }
+        
+        .btnMove {
+            background: url(images/move.png) no-repeat;
+        }
+
+        .btnMove:hover {
+            background: url(images/moved.png) no-repeat;
+        }
+        
+        .btnSelect {
+        	background: url(images/select.png) no-repeat;
+        }
+
+        .btnSelect:hover {
+        	background: url(images/selectd.png) no-repeat;
+        }
+        
+        .btnZoom {
+        	background: url(images/zoom.png) no-repeat;
+        }
+
+        .btnZoom:hover {
+        	background: url(images/zoomd.png) no-repeat;
+        }
+        
+        .btnAutoLayout {
+        	background: url(images/autolayout.png) no-repeat;
+        }
+
+        .btnAutoLayout:hover {
+        	background: url(images/autolayoutd.png) no-repeat;
+        }
+        
+        .btnCluster {
+        	background: url(images/cluster.png) no-repeat;
+        }
+
+        .btnCluster:hover {
+        	background: url(images/clusterd.png) no-repeat;
+        }
+        
+        .btnDelete {
+        	background: url(images/erase.png) no-repeat;
+        }
+
+        .btnDelete:hover {
+        	background: url(images/erased.png) no-repeat;
+        }
+        
+        .btnProcess {
+        	background: url(images/process.png) no-repeat;
+        }
+
+        .btnProcess:hover {
+        	background: url(images/processd.png) no-repeat;
+        }
+        
+        .btnTerminator {
+        	background: url(images/terminator.png) no-repeat;
+        }
+
+        .btnTerminator:hover {
+        	background: url(images/terminatord.png) no-repeat;
+        }
+        
+        .btnDecision {
+        	background: url(images/decision.png) no-repeat;
+        }
+
+        .btnDecision:hover {
+        	background: url(images/decisiond.png) no-repeat;
+        }
+        
+        .btnOpts {
+			margin: 8px 0 0 5px;
+        }
+        
+        .lbl {
             font-weight: bold;
+            font-size: 13px;
+            margin: 12px 0 0 5px;
+        }
+        
+        .field {
+        	margin: 8px 0 0 5px;
         }
     </ui:style>
-    <g:HorizontalPanel styleName='{style.horizPanel}' ui:field="tools">
-                <g:Button styleName='{style.buttonadv}' ui:field="button1" >Add Vertex</g:Button>
-                <g:Button styleName='{style.buttonade}' ui:field="button2" >Add Edge</g:Button>
-                <g:Button styleName='{style.buttonremv}' ui:field="button3" >Remove Vertex</g:Button>
-                <g:Button styleName='{style.buttonreme}' ui:field="button4" >Remove Edge</g:Button>
-                <g:Button styleName='{style.buttonmove}' ui:field="button5" >Move Vertex</g:Button>
-                <g:Button styleName='{style.buttonzoom}' ui:field="button6" >Zoom</g:Button>
-		
-                <g:HorizontalPanel ui:field="options"/>
+    <g:HorizontalPanel styleName='{style.pnlCont}'>
+	    <g:HorizontalPanel styleName='{style.pnlTools}'>
+	    	<g:Button styleName='{style.btnSelect}' ui:field="btnSelect" />
+	    	<g:Button styleName='{style.btnMove}' ui:field="btnMove" />
+	    	<g:Button styleName='{style.btnZoom}' ui:field="btnZoom" />
+	    </g:HorizontalPanel>	
+	    <g:HorizontalPanel styleName='{style.pnlTools}'>
+		    <g:Button styleName='{style.btnAddVert}' ui:field="btnAddVert" />
+		    <g:Button styleName='{style.btnAddEd}' ui:field="btnAddEd" />
+		    <g:Button styleName='{style.btnDelete}' ui:field="btnDelete" />
+	    </g:HorizontalPanel>		   
+	    <g:HorizontalPanel styleName='{style.pnlTools}'>
+		    <g:Button styleName='{style.btnAutoLayout}' ui:field="btnAutoLayout" />
+		    <g:Button styleName='{style.btnCluster}' ui:field="btnCluster" />
+	    </g:HorizontalPanel>
+	    <g:HorizontalPanel styleName='{style.pnlTools}'>
+	    	<g:Button styleName='{style.btnProcess}' ui:field="btnProcess" />
+	    	<g:Button styleName='{style.btnTerminator}' ui:field="btnTerminator"/>
+	    	<g:Button styleName='{style.btnDecision}' ui:field="btnDecision"/>
+	    </g:HorizontalPanel>	 
+	    <g:HorizontalPanel styleName='{style.pnlOptions}' ui:field="pnlOptions">
+	    	<g:Button styleName='{style.btnOpts}' ui:field="btnOk" />
+	    	<g:Button styleName='{style.btnOpts}' ui:field="btnCancel" />
+	    	<g:Label styleName='{style.lbl}' ui:field="lblInstruction" />
+	    	<g:TextBox styleName='{style.field}' ui:field="txtParam" />
+	    </g:HorizontalPanel>
     </g:HorizontalPanel>
-
 </ui:UiBinder>

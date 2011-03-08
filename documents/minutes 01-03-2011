@@ -1,0 +1,29 @@
+------------------- MEETING MINUTES -------------------
+
+TIME/DATE: 01/03/11 - 14:00.
+DURATION: 1 hour.
+LOCATION: MVB
+ATTENDEES: Ben, Ed, Sam, John, Max, Mike
+
+
+AGENDA:
+  1) Claim hours.
+  2) See what people have been up to.
+  3) Set some targets.
+  
+
+HOURS:
+  Ben - 14 hours - UI refactoring.
+  Ed - 4 hours - Chat and other stuff.
+  Sam - 2 hours - Styles/branch integration/fixing chat
+  John - 2 hours - User authentication.
+  Max - 1 hour - Local storage.
+  Mike - 2 hours - Flow chart styles.
+
+
+Tasks set:
+  Ben & Mike - get flow charts working.
+  Ed - chat looking pretty.
+  Sam - clustering & odd jobs
+  John - user authentication & OpenID.
+  Max - Local storage.

@@ -9,7 +9,7 @@ public class VertexDrawable {
     
     public static final int UNDEFINED_STYLE = -1;
     public static final int FILLED_CIRCLE_STYLE = 0x01;
-    public static final int STROKED_CIRCLE_STYLE = 0x02;
+    public static final int STROKED_TERM_STYLE = 0x02;
     public static final int STROKED_SQUARE_STYLE = 0x03;
     public static final int STROKED_DIAMOND_STYLE = 0x04;
     public static final int COLORED_FILLED_CIRCLE = 0x05;
@@ -108,6 +108,11 @@ public class VertexDrawable {
         mWidth = width;
         mTop = top;
         mLeft = left;
+    }
+    
+    public void updateSize(int width, int height){
+    	mHeight = height;
+    	mWidth = width;
     }
     
     /**
