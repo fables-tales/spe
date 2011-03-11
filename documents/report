@@ -1,0 +1,15 @@
+Architecture
+------------
+
+The overall grapheme program is split into two fairly distinct parts, the
+client and the server. 
+
+The client consists of a webpage, which is the result of  a java to 
+javascript translation done by the google web toolkit. The client communicates
+with the server via a websocket type interface provided by orbited js. 
+The benefit of the websocket interface is that common polling loops that are
+seen in web applications are eliminated as well as providing an extremely 
+efficient transport mechanism.
+
+The server is written entirely in java and consists of modules to seperate
+incoming messages, outgoing messages and message processing. 
