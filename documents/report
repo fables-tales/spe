@@ -1,3 +1,11 @@
+Grapheme
+--------
+Grapheme is an advanced system for editing and managing graphs. We created
+it because we felt that all the other systems out there for acheiving the
+same thing were either unusable or not well suited to the purpose. Grapheme
+manages many types of graphs and allows for real time concurrent editing
+between multiple users.
+
 Architecture
 ------------
 
@@ -12,4 +20,30 @@ seen in web applications are eliminated as well as providing an extremely
 efficient transport mechanism.
 
 The server is written entirely in java and consists of modules to seperate
-incoming messages, outgoing messages and message processing. 
+incoming messages, outgoing messages and message processing. The job of the 
+server is to enable multi-client realtime editing over the internet.
+
+Client architecture
+===================
+
+The client is split into three layers: the frontend, the graph manager and the
+rendering layer. 
+
+The frontend is a simple html gui written in GWT using a technology called 
+UiBinder. UiBinder allows for UI to be designed celaritively and then 
+instantiated on the client side. We chose to use this technology because it
+allows for the UI to be quickly refactored without changing code and is
+generally very powerful.
+
+The graph manager is a component used on both the server and client sides, and
+deals with all the internal representation of graph data structures as well as
+the layout of the individual nodes. It is responsibility for passing 
+information to the rendering layer about how the entire graph is drawn.
+
+The rendering layer is implemented in WebGL which is a javascript equivalent of
+OpenGL ES for web-browsers, giving full graphics hardware acceleration. 
+We chose to implement the rendering layer this way because it gives extremely 
+high performance for rendering. During testing we used WebGL to render 10,000 
+nodes in our graph system which rendered faster than a user could notice. By 
+comparison trying to render 5000 nodes of the same type without hardware
+acelleration in this test the browser crashed.
