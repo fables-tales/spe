@@ -16,7 +16,7 @@
         	margin-left: 15px;
         }
         
-    	.btnAddVert, .btnAddEd, .btnMove, .btnSelect, .btnZoom, .btnAutoLayout, .btnCluster, .btnDelete, .btnProcess, .btnDecision, .btnTerminator {
+    	.btnAddVert, .btnAddEd, .btnMove, .btnSelect, .btnZoom, .btnAutoLayout, .btnCluster, .btnDelete, .btnProcess, .btnDecision, .btnTerminator, .btnNormal {
             width: 35px;
             height: 35px;
             border: 0;
@@ -110,6 +110,14 @@
 
         .btnDecision:hover {
         	background: url(images/decisiond.png) no-repeat;
+        }        
+        
+        .btnNormal {
+        	background: url(images/nostyle.png) no-repeat;
+        }
+
+        .btnNormal:hover {
+        	background: url(images/nostyled.png) no-repeat;
         }
         
         .btnOpts {
@@ -145,6 +153,7 @@
 	    	<g:Button styleName='{style.btnProcess}' ui:field="btnProcess" />
 	    	<g:Button styleName='{style.btnTerminator}' ui:field="btnTerminator"/>
 	    	<g:Button styleName='{style.btnDecision}' ui:field="btnDecision"/>
+	    	<g:Button styleName='{style.btnNormal}' ui:field="btnNormal"/>
 	    </g:HorizontalPanel>	 
 	    <g:HorizontalPanel styleName='{style.pnlOptions}' ui:field="pnlOptions">
 	    	<g:Button styleName='{style.btnOpts}' ui:field="btnOk" />
