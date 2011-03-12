@@ -64,7 +64,7 @@ public class DatabaseImpl implements Database{
     public OTGraphManager2d retrieve(int key) {
         //  Extract OtGraphManagerStore from DB
         List<OTGraphManager2dStore> retrieves = mData.find(OTGraphManager2dStore.class, "id =", key).asList();
-        if (retrieves.size() != 1)
+        if (retrieves == null || retrieves.size() != 1)
             return null;
         OTGraphManager2dStore retrieve = retrieves.get(0);
         List<GraphDB> operations = retrieve.getmOps();
@@ -121,7 +121,11 @@ public class DatabaseImpl implements Database{
         CompositeOperation history;
         // Check whether the graph exists in the database already
         List<OTGraphManager2dStore> retrieves = mData.find(OTGraphManager2dStore.class, "id =", manager.getGraphId()).asList();
-        if (retrieves.size() > 1)
+        if (retrieves == null) {
+            history = manager.getCompleteHistory();
+            return newgraph(convertOperations(history), toStore);   
+        }
+        else if (retrieves.size() > 1)
             throw new Error("Duplicate items");
         else if (retrieves.size() == 1) {
             // Check state id of update is greater than value in database
@@ -135,7 +139,6 @@ public class DatabaseImpl implements Database{
             history = manager.getCompleteHistory();
             return newgraph(convertOperations(history), toStore);
         }
-
     }
     
     private int newgraph (List<GraphDB> operations, OTGraphManager2dStore toStore) {
