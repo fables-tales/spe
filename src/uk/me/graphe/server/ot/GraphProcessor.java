@@ -42,7 +42,8 @@ public class GraphProcessor extends Thread {
                 int mGraphId = c.getCurrentGraphId();
 
                 // get the graph and get the history delta
-                System.err.println(mGraphId);
+                System.err.println("bees" + mGraphId);
+
                 OTGraphManager2d graph = DataManager.getGraph(mGraphId);
                 System.err.println(graph);
                 CompositeOperation historyDelta = graph.getOperationDelta(c
