@@ -110,7 +110,17 @@ public class VertexDrawable {
         mLeft = left;
     }
     
+    /**
+     * updates the bounding rectangle of the drawable
+     * 
+     * @param width
+     *            the width of the bounding rectangle
+     * @param height
+     *            the height of the bounding rectangle
+     */
     public void updateSize(int width, int height){
+    	mLeft = getCenterX()-width/2;
+    	mTop = getCenterY()-height/2;
     	mHeight = height;
     	mWidth = width;
     }

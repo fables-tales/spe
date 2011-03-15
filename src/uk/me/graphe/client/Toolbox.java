@@ -80,7 +80,7 @@ public class Toolbox extends Composite {
 				}else if(event.getSource() == btnNormal){
 					for(VertexDrawable vd : parent.selectedVertices){
 						vd.setStyle(VertexDrawable.UNDEFINED_STYLE);
-						vd.updateSize(300, 200);
+						vd.updateSize(200, 200);
 					}
 					parent.graphManager.invalidate();
 				}
