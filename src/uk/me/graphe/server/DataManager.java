@@ -29,6 +29,7 @@ public class DataManager {
                 return false;
             }
         };
+        create();
     }
     public static OTGraphManager2d getGraph(int mGraphId) {
         if (sGraphs.get(mGraphId) != null)
