@@ -26,7 +26,7 @@ public class Toolbox extends Composite {
 	@UiField
 	HorizontalPanel pnlOptions;
 	@UiField
-	Button btnAddVert, btnAddEd, btnSelect, btnMove, btnZoom, btnAutoLayout, btnCluster, btnDelete, btnOk, btnCancel;
+	Button btnAddVert, btnAddEd, btnSelect, btnMove, btnZoom, btnAutoLayout, btnCluster, btnDelete, btnProcess, btnTerminator, btnDecision, btnNormal, btnOk, btnCancel;
 	@UiField
 	TextBox txtParam;
 	@UiField
@@ -59,6 +59,30 @@ public class Toolbox extends Composite {
 					setTool(Tools.autolayout);
 				}else if(event.getSource() == btnCluster){
 					setTool(Tools.cluster);
+				}else if(event.getSource() == btnProcess){
+					for(VertexDrawable vd : parent.selectedVertices){
+						vd.setStyle(VertexDrawable.STROKED_SQUARE_STYLE);
+						vd.updateSize(300, 200);
+					}
+					parent.graphManager.invalidate();
+				}else if(event.getSource() == btnDecision){
+					for(VertexDrawable vd : parent.selectedVertices){
+						vd.setStyle(VertexDrawable.STROKED_DIAMOND_STYLE);
+						vd.updateSize(300, 200);
+					}
+					parent.graphManager.invalidate();
+				}else if(event.getSource() == btnTerminator){
+					for(VertexDrawable vd : parent.selectedVertices){
+						vd.setStyle(VertexDrawable.STROKED_TERM_STYLE);
+						vd.updateSize(300, 200);
+					}
+					parent.graphManager.invalidate();
+				}else if(event.getSource() == btnNormal){
+					for(VertexDrawable vd : parent.selectedVertices){
+						vd.setStyle(VertexDrawable.UNDEFINED_STYLE);
+						vd.updateSize(200, 200);
+					}
+					parent.graphManager.invalidate();
 				}
 			}
 		};
@@ -71,6 +95,10 @@ public class Toolbox extends Composite {
 		btnAutoLayout.addClickHandler(chTools);
 		btnCluster.addClickHandler(chTools);
 		btnDelete.addClickHandler(chTools);
+		btnDecision.addClickHandler(chTools);
+		btnTerminator.addClickHandler(chTools);
+		btnProcess.addClickHandler(chTools);
+		btnNormal.addClickHandler(chTools);
 		
 		ClickHandler chOptions = new ClickHandler() {
 			@Override
@@ -102,6 +130,10 @@ public class Toolbox extends Composite {
 					
 					if (e.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 						btnOk.click();
+						pnlOptions.setVisible(false);
+						if(currentTool == Tools.nameVertex){
+							setTool(Tools.addVertex);
+						}
 					}
 				} else {
 					btnOk.setEnabled(false);

@@ -1,0 +1,16 @@
+grapheme has a few dependencies, these are as follows:
+java, gwt, ant, gwt-voices, gwt-html5, java json library, junit
+and the mongo java driver as well as mongo db
+
+once this is complete, you can compile the project with "ant build"
+if this fails, it's commonly because you've missed a depend. If it's
+not a missing dependency it's possible that we've broken the build
+please check to see if revision a75b16abbc7852365eb3383ac builds.
+
+once the entire compile process is complete (can take upwards of a minute)
+copy the WAR folder to your webserver and then restart it. The remaining
+services that need to be brought up are orbited, mongo and the java server
+
+the java server can be launched with "run.sh" and this will probably only
+work in the grapheme directory for the moment, we'll make this into a proper
+deamon type service once we're done developing

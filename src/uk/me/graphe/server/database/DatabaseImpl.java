@@ -25,6 +25,7 @@ import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
 import com.google.code.morphia.query.Query;
 import com.google.code.morphia.query.UpdateOperations;
+import com.mongodb.DBCollection;
 import com.mongodb.Mongo;
 
 public class DatabaseImpl implements Database{
@@ -32,6 +33,7 @@ public class DatabaseImpl implements Database{
     private Mongo mMongo;
     private Morphia mMorphia = new Morphia();
     private Datastore mData;
+    DBCollection mCollection;
     
     public DatabaseImpl () {
         try {
@@ -40,18 +42,29 @@ public class DatabaseImpl implements Database{
             return;
         }
         mData = mMorphia.createDatastore(mMongo, "graphs");
+        mCollection = mMongo.getDB("graphs").getCollection("OTGraphManager2dStore");
     }
 
     @Override
     public void delete(int key) {
         mData.delete(mData.createQuery(OTGraphManager2dStore.class).filter("id =", key));
     }
+    
+    @Override
+    public void clean() {
+        mCollection.drop();
+    }
 
+    @Override
+    public int size() {
+        return (int) mCollection.getCount();
+    }
+    
     @Override
     public OTGraphManager2d retrieve(int key) {
         //  Extract OtGraphManagerStore from DB
         List<OTGraphManager2dStore> retrieves = mData.find(OTGraphManager2dStore.class, "id =", key).asList();
-        if (retrieves.size() != 1)
+        if (retrieves == null || retrieves.size() != 1)
             return null;
         OTGraphManager2dStore retrieve = retrieves.get(0);
         List<GraphDB> operations = retrieve.getmOps();
@@ -108,7 +121,11 @@ public class DatabaseImpl implements Database{
         CompositeOperation history;
         // Check whether the graph exists in the database already
         List<OTGraphManager2dStore> retrieves = mData.find(OTGraphManager2dStore.class, "id =", manager.getGraphId()).asList();
-        if (retrieves.size() > 1)
+        if (retrieves == null) {
+            history = manager.getCompleteHistory();
+            return newgraph(convertOperations(history), toStore);   
+        }
+        else if (retrieves.size() > 1)
             throw new Error("Duplicate items");
         else if (retrieves.size() == 1) {
             // Check state id of update is greater than value in database
@@ -122,7 +139,6 @@ public class DatabaseImpl implements Database{
             history = manager.getCompleteHistory();
             return newgraph(convertOperations(history), toStore);
         }
-
     }
     
     private int newgraph (List<GraphDB> operations, OTGraphManager2dStore toStore) {
