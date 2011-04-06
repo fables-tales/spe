@@ -40,7 +40,7 @@ public class Canvas extends Composite{
 	
 	@UiHandler("canvasPanel")
 	void onMouseDown(MouseDownEvent e){
-		if (parent.tools.currentTool != Tools.nameVertex)
+		if ((parent.tools.currentTool != Tools.nameVertex) && (!isMouseDown))
 		{
 			isMouseDown = true;
 			
@@ -62,12 +62,9 @@ public class Canvas extends Composite{
 					}
 					break;
 				case move:
-					if (parent.selectedVertices.size() > 0) {
-						// TODO: Move the nodes here by the offset.
-					} else if (parent.toggleSelectedVertexAt(lMouseDown[X], lMouseDown[Y])) {
-						// TODO: Move this one node then deselect it.
-					} else {
-						// TODO: User wants to pan.
+					if (parent.selectedVertices.size() > 0)
+					{
+						parent.toggleSelectedVertexAt(lMouseDown[X], lMouseDown[Y]); // try to select vertex.
 					}
 					break;
 				case select:
@@ -83,48 +80,38 @@ public class Canvas extends Composite{
 					break;
 			}
 		}
-		/*
-		//get initial click location
-		//x1 = (int)(e.getX()/zoom)-offsetX;
-		//y1 = (int)(e.getY()/zoom)-offsetY;
-		x1 = getMouseX(e.getX());
-		y1 = getMouseX(e.getY());
-		//make end point equal to start at beginning
-		x2 = x1;
-		y2 = y1;
-		//keeps track of previous end point for working out pan
-		panx = x1;
-		pany = y1;
-		
-       /* int left = x2 - panx;
-        int top = y2 - pany;
-        pan(left, top);
-        
-        */
 	}
 	
 	@UiHandler("canvasPanel")
-	void onMouseMove(MouseMoveEvent e){
-		if (parent.tools.currentTool != Tools.nameVertex){
-
-			
-			if (isMouseDown)
+	void onMouseMove(MouseMoveEvent e)
+	{
+		if (isMouseDown)
+		{
+			int x = getMouseX(e.getX());
+            int y = getMouseY(e.getY());
+            
+			switch (parent.tools.currentTool)
 			{
-                int x = getMouseX(e.getX());
-                int y = getMouseY(e.getY());
-				
-				parent.pan(-(lMouseMove[X] - x), -(lMouseMove[Y] -y));
-				
-				lMouseMove[X] = x;
-				lMouseMove[Y] = y;
+				case move:
+					if (parent.selectedVertices.size() > 0) {
+						// TODO: Move the nodes here by the offset.
+					} else {
+						// TODO: User wants to pan - fix this...it is jittery.
+						parent.pan(-(lMouseMove[X] - x), -(lMouseMove[Y] -y));
+					}
+					break;
+				default:
+					break;
 			}
 			
+			lMouseMove[X] = x;
+			lMouseMove[Y] = y;
 		}
 	}
 	
 	@UiHandler("canvasPanel")
 	void onMouseOut(MouseOutEvent e){
-		//isMouseDown = false;
+		isMouseDown = false;
 		//parent.moving = false;
 		//parent.movingVertex = null;
 	}
@@ -153,19 +140,6 @@ public class Canvas extends Composite{
 		//parent.moving = false;
 		//parent.movingVertex = null;
 		isMouseDown = false;
-		/*if (parent.tools.getOptionsPanel().getWidgetCount() != 0) {
-			parent.tools.getOptionsPanel().remove(0);
-		}
-		if (parent.tools.getTool() == 1) {
-			parent.initOptions(x1, y1, x2, y2);
-		}
-		if(parent.tools.getTool() == 6){
-			if(e.isControlKeyDown()){
-				parent.zoom(false, x1, y1);
-			} else {
-				parent.zoom(true, x1, y1);
-			}
-		}*/
 	}
 	
 	private int getMouseX(int x) {
