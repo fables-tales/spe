@@ -1229,7 +1229,7 @@ public class DrawingImpl implements Drawing {
             var top2;
             var j = 0;
             var i = 2;
-            var fHeight = 10*size;
+            var fHeight = 7*size;
             
             while(i<(verticesNeeded*2)+2)
             {
@@ -1260,9 +1260,6 @@ public class DrawingImpl implements Drawing {
         
         function printString(left,top,string,color,thickness,size)
         {
-            var wordArray = string.split(" ");
-            var numWords = wordArray.length;
-        
             var length = (stringPixelLength(string)/2)*size;
             var offset = -length;
             for(i=0;i<string.length;i++)
@@ -1270,6 +1267,115 @@ public class DrawingImpl implements Drawing {
                 offset += printChar(left+offset,top,string[i],color,thickness,size);
                 
             }
+        }
+        
+        function getLines(string, width, size)
+        {
+            var wordArray = string.split(" ");
+            var numWords = wordArray.length;
+            var lineArray = new Array();
+            var lineNum = 1;
+            var lineWidth = 0;
+            var wordNum =0;
+            var spaceWidth = stringPixelLength(" ")*size;
+            lineArray[0]=0;
+            lineArray[lineNum]="";
+            
+            for(var i = 0;i<numWords;i++)
+            {
+                var charWidth = spaceWidth+stringPixelLength(wordArray[i])*size;
+                
+                if(width<=lineWidth+charWidth && i>0)
+                {
+                    if(lineNum < numWords)
+                    {
+                        lineNum++;
+                        lineArray[lineNum] = "";
+                        lineWidth = 0;
+                        wordNum = 0;
+                    }
+                }
+                
+                if(wordNum > 0 && i>0)
+                {
+
+                    wordArray[i] = " "+wordArray[i];
+                }
+                lineArray[lineNum] += wordArray[i];
+                lineWidth += charWidth;
+                wordNum++;
+                if(stringPixelLength(wordArray[i]) > stringPixelLength(wordArray[lineArray[0]])) lineArray[0] = i;
+            }
+
+            return lineArray;
+            
+        }
+        
+        function printStringBox(left, top, width, height, string, color)
+        {
+            var sizeInc = 0.05;
+            var thickness = 2;
+            var bufferX = 5;
+            var bufferY = 0;
+            width-=bufferX;
+            height-=bufferY;
+            var cont = true;
+            var orginLength = stringPixelLength(string);
+            var origSize = (width/orginLength);
+            var size = origSize;
+            var lineHeight = size*35;
+            var lineArray = getLines(string, width, size);
+            var hOff;
+            var count = 0;
+            var wordArray = string.split(" ");
+            var numWords = wordArray.length;
+            
+            while(cont)
+            {
+                var longestWidth = stringPixelLength(wordArray[lineArray[0]])*size;
+                var tempSize = size+sizeInc;
+                lineArray = getLines(string, width, tempSize);
+                lineHeight = tempSize*35;
+                var vSpace = height-(lineHeight*(lineArray.length-1));
+                
+                if(vSpace>lineHeight && width>longestWidth+10)
+                {
+                    size=tempSize;
+                }
+                else if(vSpace < -10 || width<longestWidth )
+                {
+                    size=size*0.5;
+                }
+                else
+                {
+                    cont = false;
+                }
+                count++;
+            }
+
+            hOff = -((lineArray.length-2)*lineHeight)/2;
+            
+            for(var i =1;i<lineArray.length;i++)
+            {
+                printString(left,top+hOff,lineArray[i],color,thickness,size);
+                hOff+=lineHeight;
+            }
+            
+        }
+        
+        function printStringCircle(left, top, width, height, string, color)
+        {
+            if(width != height)
+            {
+                printStringBox(left,top,width/2,height/2, string, color);
+            }
+            else
+            {
+                var rad = width;
+                var dis = Math.sin(Math.PI/4)*rad;
+                printStringBox(left,top,dis,dis, string, color);
+            }
+        
         }
         
         //Styling functions
@@ -1346,9 +1452,6 @@ public class DrawingImpl implements Drawing {
                 // Draw line with Arrow at end - HIGHLIGHTED
                 drawLineArrow(left1,top1,left2,top2,2,getColor(6));
                 break;
-            case -10:
-                drawLine(left1,top1,left2,top2,2,getColor(6));
-                break;
             default:
                 //Default edge style: black line  
                 drawLine(left1,top1,left2,top2,2,getColor(0));
@@ -1362,6 +1465,9 @@ public class DrawingImpl implements Drawing {
             var flowColor = getColor(7);
             var flowStrokeSize = 2;
             var flowTextColor = getColor(0);
+            var yellow = getColor(5);
+            var black = getColor(0);
+            var white = getColor(1);
             
             var customColor = [c1,c2,c3,1.0];
             
@@ -1369,96 +1475,56 @@ public class DrawingImpl implements Drawing {
             case 100:  // (100 - 199) FLOW CHART SYMBOLS
                 // Terminator, start stop
                 flowTerminator(left,top,width,height,flowColor,flowStrokeSize,flowStrokeColor);
-                printString(left,top,text,flowTextColor,2,0.75);
+                printStringBox(left,top,((width/2)-(height/2))*2,height, text, flowTextColor);
                 break;
             case -100:  
                 // Terminator, start stop - HIGHLIGHTED
                 flowTerminator(left,top,width,height,flowColor,flowStrokeSize,flowStrokeHighColor);
-                printString(left,top,text,flowTextColor,2,0.75);
+                printStringBox(left,top,((width/2)-(height/2))*2,height, text, flowTextColor);
                 break;
             case 101:
                 // Process, process or action step
                 flowProcess(left,top,width,height,flowColor,flowStrokeSize,flowStrokeColor);
-                printString(left,top,text,flowTextColor,2,0.75);
+                printStringBox(left,top,width,height, text, flowTextColor);
                 break;
             case -101:
                 // Process, process or action step - HIGHLIGHTED
                 flowProcess(left,top,width,height,flowColor,flowStrokeSize,flowStrokeHighColor);
-                printString(left,top,text,flowTextColor,2,0.75);
+                printStringBox(left,top,width,height, text, flowTextColor);
                 break;
             case 102:
                 // Decision, question or branch
                 flowDecision(left,top,width,height,flowColor,flowStrokeSize,flowStrokeColor);
-                printString(left,top,text,flowTextColor,2,0.75);
+                printStringBox(left,top,width/2,height/2, text, flowTextColor);
                 break;
             case -102:
                 // Decision, question or branch - HIGHLIGHTED
                 flowDecision(left,top,width,height,flowColor,flowStrokeSize,flowStrokeHighColor);
-                printString(left,top,text,flowTextColor,2,0.75);
+                printStringBox(left,top,width/2,height/2, text, flowTextColor);
                 break;
             case 5:
-                // Circle
+                // Circle, Filled
                 var sOff = flowStrokeSize*2;
                 drawCircleDim(left,top,width,height,flowStrokeColor);
                 drawCircleDim(left,top,width-sOff,height-sOff,customColor);
-                printString(left,top,text,flowTextColor,2,0.75);
                 break;
             case -5:
-                // Circle
+                // Circle, Filled - HIGHLIGHTED
                 var sOff = flowStrokeSize*2;
                 drawCircleDim(left,top,width,height,flowStrokeHighColor);
                 drawCircleDim(left,top,width-sOff,height-sOff,customColor);
-                printString(left,top,text,flowTextColor,2,0.75);
                 break;
             case 1:
-                // Smiley Face
-                drawCircle(left,top,width,5);
-                drawCircle(left,top,width*0.7,0);
-                drawCircle(left,top,width*0.5,5);
-                drawSquare(left,top,width*0.7,width*0.2,0,5);
-                drawSquare(left,top-width*0.1,width*0.70,width*0.2,0,5);
-                drawSquare(left,top-width*0.2,width*0.60,width*0.2,0,5);
-                drawSquare(left,top-width*0.3,width*0.40,width*0.1,0,5);
-                drawCircle(left-(width*0.20),top-(width*0.2),width*0.2,0);
-                drawCircle(left+(width*0.20),top-(width*0.2),width*0.2,0);
+                drawCircleDim(left,top,width,height,black);
+                printStringCircle(left,top,width,height,text, white);
                 break;
-            case 2:
-                // Bart Simpson
-                drawSquare(left,top,width*0.9,width*1.1,0,0);
-                drawSquare(left,top,width*0.85,width*1.05,0,5);
-                drawSquare(left-width*0.27,top+width*0.2,width*0.35,width*1.2,0,0);
-                drawSquare(left-width*0.27,top+width*0.2,width*0.31,width*1.16,0,5);
-                drawCircle(left+width*0.15,top+width*0.45,width*0.6,0);
-                drawCircle(left+width*0.15,top+width*0.45,width*0.545,5);
-                drawSquare(left,top+width*0.27,width*0.85,width*0.5,0,5);
-                drawSquare(left-width*0.31,top-width*0.55,width*0.2,width*0.2,(Math.PI/4),0)
-                drawSquare(left-width*0.31,top-width*0.55,width*0.16,width*0.16,(Math.PI/4),5)
-                drawSquare(left-width*0.06,top-width*0.55,width*0.2,width*0.2,(Math.PI/4),0)
-                drawSquare(left-width*0.06,top-width*0.55,width*0.16,width*0.16,(Math.PI/4),5)
-                drawSquare(left+width*0.19,top-width*0.55,width*0.2,width*0.2,(Math.PI/4),0)
-                drawSquare(left+width*0.19,top-width*0.55,width*0.16,width*0.16,(Math.PI/4),5)
-                drawSquare(left+width*0.32,top-width*0.55,width*0.2,width*0.2,(Math.PI/4),0)
-                drawSquare(left+width*0.32,top-width*0.55,width*0.16,width*0.16,(Math.PI/4),5)
-                drawSquare(left,top-width*0.3,width*0.85,width*0.5,0,5);
-                drawSquare(left,top-width*0.23,width*0.85,width*0.5,0,5);
-                drawSquare(left-width*0.15,top+width*0.53,width*0.15,width*0.02,-(Math.PI/5),0)
-                drawCircle(left+width*0.3,top-width*0.1,width*0.4,0);
-                drawCircle(left+width*0.3,top-width*0.1,width*0.35,1);
-                drawCircle(left+width*0.3,top+width*0.1,width*0.2,0);
-                drawCircle(left+width*0.3,top+width*0.1,width*0.15,5);
-                drawSquare(left+width*0.2,top+width*0.1,width*0.2,width*0.2,0,0);
-                drawSquare(left+width*0.2,top+width*0.1,width*0.2,width*0.15,0,5);
-                drawCircle(left+width*0.05,top-width*0.1,width*0.4,0);
-                drawCircle(left+width*0.05,top-width*0.1,width*0.35,1);
-                drawCircle(left+width*0.3,top-width*0.1,width*0.05,0);
-                drawCircle(left+width*0.05,top-width*0.1,width*0.05,0);
-                break;
-            case -10:
-                drawCircleDim(left,top,width,height,6);
+            case -1:
+                drawCircleDim(left,top,width,height,yellow);
+                printStringCircle(left,top,width,height,text, black);
                 break;
             default:
                 // Default vertex style: black circle
-                drawCircleDim(left,top,width,height,0);
+                drawCircleDim(left,top,width,height,black);
             }
 
         }
@@ -1576,7 +1642,7 @@ public class DrawingImpl implements Drawing {
 						vertexStyle = 102;
 						break;
 					default:
-						vertexStyle = 100;
+						vertexStyle = 1;
 						break;
                 }
                 label = thisVertex.getLabel();
