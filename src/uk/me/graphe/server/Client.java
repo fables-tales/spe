@@ -39,7 +39,6 @@ public class Client {
     public List<String> readNextMessages() {
         try {
             int read = mChannel.read(mReadBuffer);
-
             if (read == -1) {
                 ClientManager.getInstance().disconnect(this);
                 return null;
@@ -52,8 +51,6 @@ public class Client {
                     read = mChannel.read(mReadBuffer);
                 }
 
-                
-                
                 sb.append(new String(mReadBuffer.array(), 0, read));
                 System.err.println(sb.length());
                 System.err.println("ponies: " + sb.toString());
@@ -74,7 +71,7 @@ public class Client {
         System.err.println(sb.length());
         while (start < sb.length()) {
             int nullIndex = sb.indexOf("\0", start);
-            if (nullIndex == -1) nullIndex = sb.indexOf("u\0000", start); 
+            if (nullIndex == -1) nullIndex = sb.indexOf("u\0000", start);
             if (nullIndex == -1) nullIndex = sb.length();
             String ss = sb.substring(start, nullIndex);
             result.add(ss);
