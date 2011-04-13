@@ -17,8 +17,13 @@ public class AddEdgeFactory implements ConversionFactory {
             Vertex v1 = new Vertex(o.getString("from"));
             Vertex v2 = new Vertex(o.getString("to"));
             VertexDirection dir = VertexDirection.valueOf(o.getString("dir"));
+            int weight = o.getInt("weight");
             System.err.println(dir);
-            return new AddEdgeOperation(new Edge(v1, v2, dir));
+            Edge e = new Edge(v1, v2, dir);
+            e.setWeight(weight);
+            System.err.println("got weight:" + weight);
+            System.err.println("e-weight:" + e.getWeight());
+            return new AddEdgeOperation(e);
         } catch (JSONException e) {
             e.printStackTrace();
             throw new Error(e);
