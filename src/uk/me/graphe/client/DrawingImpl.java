@@ -1603,7 +1603,7 @@ public class DrawingImpl implements Drawing {
 
         // Do a (kind of reliable) check for webgl
 
-        if (webglCheck() == 1) { // Can do WebGL
+        if (webglCheck() == -1) { // Can do WebGL
 
             // At the moment coordinates are passed to JavaScript as comma
             // separated strings // This will most probably change in the
