@@ -33,13 +33,14 @@ public class GraphManager2dImpl implements GraphManager2d {
     }
 
     @Override
-    public void addEdge(Vertex v1, Vertex v2, VertexDirection dir) {
+    public void addEdge(Vertex v1, Vertex v2, VertexDirection dir, int weight) {
         Edge e = new Edge(v1, v2, dir);
         if (!mEdges.contains(e)) {
             mEdges.add(e);
             mVertexEdgeMap.get(v1).add(e);
             mVertexEdgeMap.get(v2).add(e);
         }
+        e.setWeight(weight);
         this.invalidate();
     }
 
