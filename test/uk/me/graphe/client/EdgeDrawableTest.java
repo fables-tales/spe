@@ -2,10 +2,9 @@ package uk.me.graphe.client;
 
 import java.util.Random;
 
-import uk.me.graphe.shared.VertexDirection;
-
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import uk.me.graphe.shared.VertexDirection;
 
 public class EdgeDrawableTest extends TestCase {
     static int[] sTestValues = new int[] { 0, -10, 7, Integer.MAX_VALUE,
@@ -76,5 +75,10 @@ public class EdgeDrawableTest extends TestCase {
                 sRand.nextInt(), 0, VertexDirection.toFrom);
         Assert.assertEquals(false, e.needsFromToArrow());
         Assert.assertEquals(true, e.needsToFromArrow());
+    }
+    
+    public void testWeight() {
+        EdgeDrawable ed = new EdgeDrawable(1, 2, 3, 4, 7);
+        Assert.assertEquals(7, ed.getWeight());
     }
 }
