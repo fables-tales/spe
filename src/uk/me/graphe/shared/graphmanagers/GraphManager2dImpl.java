@@ -29,7 +29,7 @@ public class GraphManager2dImpl implements GraphManager2d {
         if (GWT.isClient()) {
             Console.log("graphmanager2d constructed");
         }
-        
+
     }
 
     @Override
@@ -55,9 +55,9 @@ public class GraphManager2dImpl implements GraphManager2d {
                 Console.log("adding a vertex in graphmanager2dimpl: " + this);
                 Console.log("before size is: " + mVertices.size());
             }
-            
+
             mVertices.add(v);
-            
+
             if (GWT.isClient()) {
                 Console.log("after size is: " + mVertices.size());
             }
@@ -66,7 +66,8 @@ public class GraphManager2dImpl implements GraphManager2d {
             int left = xPosition - halfSize;
             int top = yPosition - halfSize;
 
-            mVertexRenderMap.put(v, new VertexDrawable(left, top, size, size, v.getLabel()));
+            mVertexRenderMap.put(v, new VertexDrawable(left, top, size, size, v
+                    .getLabel()));
             mVertexEdgeMap.put(v, new ArrayList<Edge>());
             if (GWT.isClient()) {
                 Console.log("vertices size:" + mVertices.size());
