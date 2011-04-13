@@ -8,10 +8,17 @@ import uk.me.graphe.shared.Vertex;
 
 public class ShortestPathDjikstras implements Algorithm {
 
+    private Graph mGraph = null;
+    
     @Override
     public List<Edge> getHilightedEdges() {
         // TODO Auto-generated method stub
         return null;
+    }
+    
+    @Override
+    public boolean hasFinished() {
+        return false;
     }
 
     @Override
@@ -28,8 +35,7 @@ public class ShortestPathDjikstras implements Algorithm {
 
     @Override
     public void initialise(Graph g) {
-        // TODO Auto-generated method stub
-        
+        mGraph = g;
     }
 
     @Override

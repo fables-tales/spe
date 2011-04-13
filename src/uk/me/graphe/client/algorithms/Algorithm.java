@@ -17,6 +17,8 @@ public interface Algorithm {
     public List<Edge> getHilightedEdges();
 
     public List<Vertex> getHilightedVerticies();
+    
+    public boolean hasFinished();
 
     /**
      * perform all the steps of the algorithm until it finishes
