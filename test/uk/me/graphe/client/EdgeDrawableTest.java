@@ -2,6 +2,8 @@ package uk.me.graphe.client;
 
 import java.util.Random;
 
+import uk.me.graphe.shared.VertexDirection;
+
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
@@ -55,12 +57,19 @@ public class EdgeDrawableTest extends TestCase {
     public void testArrow() {
         EdgeDrawable e = new EdgeDrawable(sRand.nextInt(), sRand.nextInt(), sRand.nextInt(), sRand
                 .nextInt());
-        Assert.assertEquals(false, e.needsArrow());
+        Assert.assertEquals(false, e.needsFromToArrow());
+        Assert.assertEquals(false, e.needsToFromArrow());
         e = new EdgeDrawable(sRand.nextInt(), sRand.nextInt(), sRand.nextInt(), sRand.nextInt(),
-                false);
-        Assert.assertEquals(false, e.needsArrow());
+                VertexDirection.both);
+        Assert.assertEquals(false, e.needsFromToArrow());
+        Assert.assertEquals(false, e.needsToFromArrow());
         e = new EdgeDrawable(sRand.nextInt(), sRand.nextInt(), sRand.nextInt(), sRand.nextInt(),
-                true);
-        Assert.assertEquals(true, e.needsArrow());
+                VertexDirection.fromTo);
+        Assert.assertEquals(true, e.needsFromToArrow());
+        Assert.assertEquals(false, e.needsToFromArrow());
+        e = new EdgeDrawable(sRand.nextInt(), sRand.nextInt(), sRand.nextInt(), sRand.nextInt(),
+                VertexDirection.toFrom);
+        Assert.assertEquals(false, e.needsFromToArrow());
+        Assert.assertEquals(true, e.needsToFromArrow());
     }
 }
