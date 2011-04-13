@@ -110,7 +110,8 @@ public class GraphManager2dImpl implements GraphManager2d {
                 t1 ^= t2;
             }
 
-            result.add(new EdgeDrawable(l1, t1, l2, t2, e.getWeight(), e.getDirection()));
+            result.add(new EdgeDrawable(l1, t1, l2, t2, e.getWeight(), e
+                    .getDirection()));
         }
 
         return result;
@@ -207,4 +208,5 @@ public class GraphManager2dImpl implements GraphManager2d {
     public VertexDrawable getVertexDrawable(String s) {
         return mVertexRenderMap.get(new Vertex(s));
     }
+
 }
