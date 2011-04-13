@@ -16,6 +16,7 @@ public class EdgeDrawable {
      */
     private VertexDirection mArrowDirection;
     private boolean mHilighted;
+    private int mWeight;
 
     /**
      * creates a new EdgeDrawable, with no arrow
@@ -29,8 +30,8 @@ public class EdgeDrawable {
      * @param endY
      *            the end y of the edge
      */
-    public EdgeDrawable(int startX, int startY, int endX, int endY) {
-        this(startX, startY, endX, endY, VertexDirection.both);
+    public EdgeDrawable(int startX, int startY, int endX, int endY, int weight) {
+        this(startX, startY, endX, endY, weight, VertexDirection.both);
     }
 
     /**
@@ -47,13 +48,13 @@ public class EdgeDrawable {
      * @param arrowDir
      *            the direction in which the arrow should be drawn
      */
-    public EdgeDrawable(int startX, int startY, int endX, int endY, VertexDirection arrowDir) {
+    public EdgeDrawable(int startX, int startY, int endX, int endY, int weight, VertexDirection arrowDir) {
         mStartX = startX;
         mStartY = startY;
 
         mEndX = endX;
         mEndY = endY;
-
+        mWeight = weight;
         mArrowDirection = arrowDir;
     }
 
@@ -106,6 +107,9 @@ public class EdgeDrawable {
         return mArrowDirection == VertexDirection.toFrom;
     }
     
+    public int getWeight() {
+        return mWeight;
+    }
     
     public boolean isHilighted() {
         return mHilighted;
