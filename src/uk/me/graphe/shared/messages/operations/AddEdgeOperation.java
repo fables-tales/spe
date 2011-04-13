@@ -24,6 +24,7 @@ public class AddEdgeOperation extends EdgeOperation {
             repr.put("message", "addEdge");
             repr.put("from", this.getEdge().getFromVertex().getLabel());
             repr.put("to", this.getEdge().getToVertex().getLabel());
+            repr.put("dir", this.getEdge().getDirection().name());
         } catch (JSONException e) {
             throw new Error(e);
         }
