@@ -58,7 +58,8 @@ public class Canvas extends Composite{
 					parent.toggleSelectedVertexAt(lMouseDown[X], lMouseDown[Y]);
 					
 					if (parent.selectedVertices.size() > 1) {
-						parent.addEdge(parent.selectedVertices.get(0),parent.selectedVertices.get(1));
+						//parent.addEdge(parent.selectedVertices.get(0),parent.selectedVertices.get(1));
+						parent.tools.setTool(Tools.weightEdge);
 					}
 					break;
 				case move:
@@ -121,6 +122,11 @@ public class Canvas extends Composite{
 		switch (parent.tools.currentTool){
 			case addVertex:
 				parent.tools.setTool(Tools.nameVertex);
+				break;
+			case addEdge:
+				if (parent.selectedVertices.size() == 2) {
+					parent.tools.setTool(Tools.weightEdge);
+				}
 				break;
 			case move:
 				break;

@@ -109,6 +109,12 @@ public class Toolbox extends Composite {
 							parent.addVertex(txtParam.getText());
 							setTool(Tools.addVertex);
 							break;
+						case weightEdge:
+							//TODO: Set weight of edge here
+							parent.addEdge(parent.selectedVertices.get(0), parent.selectedVertices.get(1));
+							parent.clearSelectedObjects();
+							setTool(Tools.addEdge);
+							break;
 						default:
 							break;
 					}
@@ -131,11 +137,18 @@ public class Toolbox extends Composite {
 					if (e.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 						btnOk.click();
 						pnlOptions.setVisible(false);
-						if(currentTool == Tools.nameVertex){
-							setTool(Tools.addVertex);
-						}
+						//TODO: Not sure this is needed
+						/*
+						switch (currentTool) {
+							case nameVertex:
+								setTool(Tools.addVertex);
+								break;
+							case weightEdge:
+								setTool(Tools.addEdge);
+								break;
+						}*/
 					}
-				} else {
+				} else if (currentTool != Tools.weightEdge) {
 					btnOk.setEnabled(false);
 				}
 			}
@@ -175,10 +188,21 @@ public class Toolbox extends Composite {
 				pnlOptions.add(lblInstruction);
 				parent.clearSelectedEdges();
 				if (parent.selectedVertices.size() == 2) {
-					parent.addEdge(parent.selectedVertices.get(0), parent.selectedVertices.get(1));
+					setTool(Tools.weightEdge);
 				} else if (parent.selectedVertices.size() > 2) {
 					parent.clearSelectedVertices();
 				}
+				break;
+			case weightEdge:
+				lblInstruction.setText("Edge weight:");
+				pnlOptions.add(lblInstruction);
+				txtParam.setText("");
+				pnlOptions.add(txtParam);
+				btnOk.setEnabled(true);
+				btnOk.setText("Add");
+				pnlOptions.add(btnOk);
+				pnlOptions.add(btnCancel);
+				parent.isHotkeysEnabled = false;
 				break;
 			case autolayout:
 				// TODO: Implement
@@ -207,7 +231,7 @@ public class Toolbox extends Composite {
 		}
 		
 		pnlOptions.setVisible(true);
-		if (tool == Tools.nameVertex) txtParam.setFocus(true);
+		if (tool == Tools.nameVertex || tool == Tools.weightEdge) txtParam.setFocus(true);
 	}
 	
 	public void setLabel(String text)
