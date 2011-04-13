@@ -150,9 +150,18 @@ public class DataManagerNetworkTest extends TestCase {
         Assert.assertTrue(ed.needsFromToArrow());
         Assert.assertFalse(ed.needsToFromArrow());
     }
+    
+    public void testAddEdge_noEdges_weight() {
+        EdgeDrawable ed = makeServerEdge(VertexDirection.both, 12);
+        Assert.assertEquals(12, ed.getWeight());
+    }
 
 
     private EdgeDrawable makeServerEdge(VertexDirection vd) {
+        return makeServerEdge(vd, 1);
+    }
+    
+    private EdgeDrawable makeServerEdge(VertexDirection vd, int weight) {
         mClient.sendMessage(new MakeGraphMessage());
         Message m = mClient.readNextMessage();
         OpenGraphMessage ogr = (OpenGraphMessage)m;
@@ -186,14 +195,17 @@ public class DataManagerNetworkTest extends TestCase {
         }
         
         Assert.assertEquals(2, serverGraph.getVertexDrawables().size());
-        
-        AddEdgeOperation aeo = new AddEdgeOperation(new Edge(a,b,vd));
+        Edge e = new Edge(a,b,vd);
+        e.setWeight(weight);
+        Assert.assertEquals(weight, e.getWeight());
+        AddEdgeOperation aeo = new AddEdgeOperation(e);
         g.applyOperation(aeo);
+        System.err.println(aeo.toJson());
         mClient.sendMessage(aeo);
         assertNullCompositeOperation();
         assertStateIdMessage(ogr.getId());
-        
         EdgeDrawable ed = (EdgeDrawable) serverGraph.getEdgeDrawables().toArray()[0];
+        System.err.println("got ed:" + ed.getWeight());
         return ed;
     }
 
