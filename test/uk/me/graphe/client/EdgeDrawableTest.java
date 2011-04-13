@@ -8,7 +8,8 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class EdgeDrawableTest extends TestCase {
-    static int[] sTestValues = new int[] { 0, -10, 7, Integer.MAX_VALUE, Integer.MIN_VALUE };
+    static int[] sTestValues = new int[] { 0, -10, 7, Integer.MAX_VALUE,
+            Integer.MIN_VALUE };
     static Random sRand = new Random();
 
     /**
@@ -16,7 +17,8 @@ public class EdgeDrawableTest extends TestCase {
      */
     public void testStartX() {
         for (int i : sTestValues) {
-            EdgeDrawable ed = new EdgeDrawable(i, sRand.nextInt(), sRand.nextInt(), sRand.nextInt());
+            EdgeDrawable ed = new EdgeDrawable(i, sRand.nextInt(), sRand
+                    .nextInt(), sRand.nextInt(), 0);
             Assert.assertEquals(i, ed.getStartX());
         }
     }
@@ -26,7 +28,8 @@ public class EdgeDrawableTest extends TestCase {
      */
     public void testStartY() {
         for (int i : sTestValues) {
-            EdgeDrawable ed = new EdgeDrawable(sRand.nextInt(), i, sRand.nextInt(), sRand.nextInt());
+            EdgeDrawable ed = new EdgeDrawable(sRand.nextInt(), i, sRand
+                    .nextInt(), sRand.nextInt(), 0);
             Assert.assertEquals(i, ed.getStartY());
         }
     }
@@ -36,7 +39,8 @@ public class EdgeDrawableTest extends TestCase {
      */
     public void testEndX() {
         for (int i : sTestValues) {
-            EdgeDrawable ed = new EdgeDrawable(sRand.nextInt(), sRand.nextInt(), i, sRand.nextInt());
+            EdgeDrawable ed = new EdgeDrawable(sRand.nextInt(),
+                    sRand.nextInt(), i, sRand.nextInt(), 0);
             Assert.assertEquals(i, ed.getEndX());
         }
     }
@@ -46,7 +50,8 @@ public class EdgeDrawableTest extends TestCase {
      */
     public void testEndY() {
         for (int i : sTestValues) {
-            EdgeDrawable ed = new EdgeDrawable(sRand.nextInt(), sRand.nextInt(), sRand.nextInt(), i);
+            EdgeDrawable ed = new EdgeDrawable(sRand.nextInt(),
+                    sRand.nextInt(), sRand.nextInt(), i, 0);
             Assert.assertEquals(i, ed.getEndY());
         }
     }
@@ -55,20 +60,20 @@ public class EdgeDrawableTest extends TestCase {
      * tests the use of needsarrow in an edge drawable
      */
     public void testArrow() {
-        EdgeDrawable e = new EdgeDrawable(sRand.nextInt(), sRand.nextInt(), sRand.nextInt(), sRand
-                .nextInt());
+        EdgeDrawable e = new EdgeDrawable(sRand.nextInt(), sRand.nextInt(),
+                sRand.nextInt(), sRand.nextInt(), 0);
         Assert.assertEquals(false, e.needsFromToArrow());
         Assert.assertEquals(false, e.needsToFromArrow());
-        e = new EdgeDrawable(sRand.nextInt(), sRand.nextInt(), sRand.nextInt(), sRand.nextInt(),
-                VertexDirection.both);
+        e = new EdgeDrawable(sRand.nextInt(), sRand.nextInt(), sRand.nextInt(),
+                sRand.nextInt(), 0, VertexDirection.both);
         Assert.assertEquals(false, e.needsFromToArrow());
         Assert.assertEquals(false, e.needsToFromArrow());
-        e = new EdgeDrawable(sRand.nextInt(), sRand.nextInt(), sRand.nextInt(), sRand.nextInt(),
-                VertexDirection.fromTo);
+        e = new EdgeDrawable(sRand.nextInt(), sRand.nextInt(), sRand.nextInt(),
+                sRand.nextInt(), 0, VertexDirection.fromTo);
         Assert.assertEquals(true, e.needsFromToArrow());
         Assert.assertEquals(false, e.needsToFromArrow());
-        e = new EdgeDrawable(sRand.nextInt(), sRand.nextInt(), sRand.nextInt(), sRand.nextInt(),
-                VertexDirection.toFrom);
+        e = new EdgeDrawable(sRand.nextInt(), sRand.nextInt(), sRand.nextInt(),
+                sRand.nextInt(), 0, VertexDirection.toFrom);
         Assert.assertEquals(false, e.needsFromToArrow());
         Assert.assertEquals(true, e.needsToFromArrow());
     }
