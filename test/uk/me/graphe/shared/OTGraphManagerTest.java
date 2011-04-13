@@ -83,7 +83,7 @@ public class OTGraphManagerTest extends TestCase {
         mManager.addVertex(v2, 0, 0, 10);
 
         for (int i = 0; i < 1024; i++) {
-            mManager.addEdge(v1, v2, VertexDirection.both);
+            mManager.addEdge(v1, v2, VertexDirection.both, 0);
             Assert.assertEquals(i, mManager.getStateId());
             mManager.applyOperation(new DeleteEdgeOperation(new Edge(v1, v2)));
         }
@@ -144,7 +144,7 @@ public class OTGraphManagerTest extends TestCase {
         Vertex v2 = new Vertex("cows");
         mManager.addVertex(v1, 0, 0, 10);
         mManager.addVertex(v2, 0, 0, 10);
-        mManager.addEdge(v1, v2, VertexDirection.both);
+        mManager.addEdge(v1, v2, VertexDirection.both, 0);
         mManager.applyOperation(new DeleteEdgeOperation(new Edge(v1, v2)));
         Assert.assertEquals(0, mManager.getEdgeDrawables().size());
     }
