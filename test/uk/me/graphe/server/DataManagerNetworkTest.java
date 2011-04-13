@@ -2,12 +2,14 @@ package uk.me.graphe.server;
 
 import java.util.List;
 
-import org.apache.tools.ant.taskdefs.Mkdir;
-
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import uk.me.graphe.client.EdgeDrawable;
+import uk.me.graphe.client.VertexDrawable;
+import uk.me.graphe.shared.Edge;
 import uk.me.graphe.shared.Graph;
 import uk.me.graphe.shared.Vertex;
+import uk.me.graphe.shared.VertexDirection;
 import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
 import uk.me.graphe.shared.graphmanagers.OTGraphManagerFactory;
 import uk.me.graphe.shared.messages.MakeGraphMessage;
@@ -16,6 +18,7 @@ import uk.me.graphe.shared.messages.NoSuchGraphMessage;
 import uk.me.graphe.shared.messages.OpenGraphMessage;
 import uk.me.graphe.shared.messages.RequestGraphMessage;
 import uk.me.graphe.shared.messages.StateIdMessage;
+import uk.me.graphe.shared.messages.operations.AddEdgeOperation;
 import uk.me.graphe.shared.messages.operations.AddNodeOperation;
 import uk.me.graphe.shared.messages.operations.CompositeOperation;
 import uk.me.graphe.shared.messages.operations.GraphOperation;
@@ -132,6 +135,85 @@ public class DataManagerNetworkTest extends TestCase {
         Graph underLyingSrv = serverGraph.getUnderlyingGraph();
         Assert.assertEquals(underLyingCli.getVertices(), underLyingSrv.getVertices());
         
+    }
+    
+    public void testAddEdge_noEdges_bidirectional() {
+        VertexDirection vd = VertexDirection.both;
+        EdgeDrawable ed = makeServerEdge(vd);
+        Assert.assertFalse(ed.needsFromToArrow());
+        Assert.assertFalse(ed.needsToFromArrow());
+    }
+    
+    public void testAddEdge_noEdges_fromTo() {
+        VertexDirection vd = VertexDirection.fromTo;
+        EdgeDrawable ed = makeServerEdge(vd);
+        Assert.assertTrue(ed.needsFromToArrow());
+        Assert.assertFalse(ed.needsToFromArrow());
+    }
+    
+    public void testAddEdge_noEdges_weight() {
+        EdgeDrawable ed = makeServerEdge(VertexDirection.both, 12);
+        Assert.assertEquals(12, ed.getWeight());
+    }
+
+
+    private EdgeDrawable makeServerEdge(VertexDirection vd) {
+        return makeServerEdge(vd, 1);
+    }
+    
+    private EdgeDrawable makeServerEdge(VertexDirection vd, int weight) {
+        mClient.sendMessage(new MakeGraphMessage());
+        Message m = mClient.readNextMessage();
+        OpenGraphMessage ogr = (OpenGraphMessage)m;
+        OTGraphManager2d g = OTGraphManagerFactory.newInstance(ogr.getId());
+        assertNullCompositeOperation();
+        
+        m = mClient.readNextMessage();
+        Assert.assertEquals("updateStateId", m.getMessage());
+        StateIdMessage sim = (StateIdMessage)m;
+        Assert.assertEquals(ogr.getId(), sim.getGraphId());
+        
+        OTGraphManager2d serverGraph = DataManager.getGraph(ogr.getId());
+        Vertex a = new Vertex("bees");
+        Vertex b = new Vertex("faces");
+        
+        AddNodeOperation ano1 = new AddNodeOperation(a, 3, 7);
+        AddNodeOperation ano2 = new AddNodeOperation(b, 300, 700);
+        g.applyOperation(ano1);
+        g.applyOperation(ano2);
+        Assert.assertEquals(2, g.getVertexDrawables().size());
+        mClient.sendMessage(ano1);
+        
+        assertNullCompositeOperation();
+        assertStateIdMessage(ogr.getId());
+        mClient.sendMessage(ano2);
+        assertNullCompositeOperation();
+        assertStateIdMessage(ogr.getId());
+        
+        for (VertexDrawable vds : serverGraph.getVertexDrawables()) {
+            System.err.println("thing: " + vds.getLabel());
+        }
+        
+        Assert.assertEquals(2, serverGraph.getVertexDrawables().size());
+        Edge e = new Edge(a,b,vd);
+        e.setWeight(weight);
+        Assert.assertEquals(weight, e.getWeight());
+        AddEdgeOperation aeo = new AddEdgeOperation(e);
+        g.applyOperation(aeo);
+        System.err.println(aeo.toJson());
+        mClient.sendMessage(aeo);
+        assertNullCompositeOperation();
+        assertStateIdMessage(ogr.getId());
+        EdgeDrawable ed = (EdgeDrawable) serverGraph.getEdgeDrawables().toArray()[0];
+        System.err.println("got ed:" + ed.getWeight());
+        return ed;
+    }
+
+
+    private void assertStateIdMessage(int id) {
+        Message m = mClient.readNextMessage();
+        Assert.assertEquals(new StateIdMessage(0, 0).getMessage(), m.getMessage());
+        Assert.assertEquals(id, ((StateIdMessage)m).getGraphId());
     }
 
 
