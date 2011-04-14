@@ -10,6 +10,7 @@ public class DrawingImpl implements Drawing {
 	//used for panning
 	public int offsetX, offsetY;
 	public double zoom;
+	private boolean mIsFlowChart;
 	
 	private static native void runJavascript(String script) /*-{
 	    eval(script);
@@ -1631,19 +1632,23 @@ public class DrawingImpl implements Drawing {
                 double width = (0.5 * thisVertex.getWidth())*zoom;
                 double height = (0.5 * thisVertex.getHeight())*zoom;
                 vertexStyle = thisVertex.getStyle();
-                switch (vertexStyle) {
-					case VertexDrawable.STROKED_TERM_STYLE:
-						vertexStyle = 100;
-						break;
-					case VertexDrawable.STROKED_SQUARE_STYLE:
-						vertexStyle = 101;
-						break;
-					case VertexDrawable.STROKED_DIAMOND_STYLE:
-						vertexStyle = 102;
-						break;
-					default:
-						vertexStyle = 1;
-						break;
+                if(mIsFlowChart){
+	                switch (vertexStyle) {
+						case VertexDrawable.STROKED_TERM_STYLE:
+							vertexStyle = 100;
+							break;
+						case VertexDrawable.STROKED_SQUARE_STYLE:
+							vertexStyle = 101;
+							break;
+						case VertexDrawable.STROKED_DIAMOND_STYLE:
+							vertexStyle = 102;
+							break;
+						default:
+							vertexStyle = 1;
+							break;
+	                }
+                }else{
+                	vertexStyle = 1;
                 }
                 label = thisVertex.getLabel();
                 int[] customColor = {0,0,0};
@@ -1736,6 +1741,11 @@ public class DrawingImpl implements Drawing {
     // getters for offsets
     public int getOffsetX() {
         return offsetX;
+    }
+    
+    //set the mode
+    public void setFlowChart(boolean mode){
+    	mIsFlowChart = mode;
     }
 
     public int getOffsetY() {

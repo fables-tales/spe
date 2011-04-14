@@ -12,6 +12,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -30,7 +31,9 @@ public class Toolbox extends Composite {
 	@UiField
 	TextBox txtParam;
 	@UiField
-	Label lblInstruction;
+	Label lblInstruction, lblChkFlowChart;
+	@UiField
+	CheckBox chkFlowChart;
 
 	public Tools currentTool;
 	
@@ -83,6 +86,8 @@ public class Toolbox extends Composite {
 						vd.updateSize(200, 200);
 					}
 					parent.graphManager.invalidate();
+				}else if(event.getSource() == chkFlowChart){
+					parent.drawing.setFlowChart(chkFlowChart.getValue());
 				}
 			}
 		};
@@ -99,6 +104,7 @@ public class Toolbox extends Composite {
 		btnTerminator.addClickHandler(chTools);
 		btnProcess.addClickHandler(chTools);
 		btnNormal.addClickHandler(chTools);
+		chkFlowChart.addClickHandler(chTools);
 		
 		ClickHandler chOptions = new ClickHandler() {
 			@Override
@@ -142,6 +148,7 @@ public class Toolbox extends Composite {
 		});
 	
 		btnCancel.setText("Cancel");
+		lblChkFlowChart.setText("Flow Chart Mode");
 		
 		setTool(Tools.select);
 	}

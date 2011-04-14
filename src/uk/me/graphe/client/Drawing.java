@@ -54,4 +54,11 @@ public interface Drawing {
      * @return the current level of zoom (1 = no zoom)
      */
     public double getZoom();
+
+    /**
+     * 
+     * @param value - determines whether user is in 
+     * flow chart mode or not
+     */
+	public void setFlowChart(boolean value);
 }

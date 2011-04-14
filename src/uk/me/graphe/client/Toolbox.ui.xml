@@ -120,6 +120,13 @@
         	background: url(images/nostyled.png) no-repeat;
         }
         
+        .chkFlowChart {
+  			width: 25px;
+  			height: 35px;
+  			padding: 0px 0px 0px 0px;
+  			display: block;
+        }
+        
         .btnOpts {
 			margin: 8px 0 0 5px;
         }
@@ -155,6 +162,10 @@
 	    	<g:Button styleName='{style.btnDecision}' ui:field="btnDecision"/>
 	    	<g:Button styleName='{style.btnNormal}' ui:field="btnNormal"/>
 	    </g:HorizontalPanel>	 
+	    <g:HorizontalPanel styleName='{style.pnlTools}'>
+	        <g:Label styleName='{style.lbl}' ui:field="lblChkFlowChart"></g:Label>
+	        <g:CheckBox styleName='{style.chkFlowChart}' ui:field="chkFlowChart"></g:CheckBox>
+	    </g:HorizontalPanel>
 	    <g:HorizontalPanel styleName='{style.pnlOptions}' ui:field="pnlOptions">
 	    	<g:Button styleName='{style.btnOpts}' ui:field="btnOk" />
 	    	<g:Button styleName='{style.btnOpts}' ui:field="btnCancel" />
