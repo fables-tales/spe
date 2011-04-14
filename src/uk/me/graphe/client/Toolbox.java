@@ -149,6 +149,7 @@ public class Toolbox extends Composite {
 	
 		btnCancel.setText("Cancel");
 		lblChkFlowChart.setText("Flow Chart Mode");
+		parent.drawing.setFlowChart(false);
 		
 		setTool(Tools.select);
 	}
