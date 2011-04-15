@@ -19,7 +19,7 @@
 		
 	</ui:style>
 	<g:VerticalPanel>
-		<g:Label styleName='{style.lblTitle}' ui:field='lblTitle'></g:Label>
-		<g:Label styleName='{style.lblUsers}' ui:field='lblUsers'></g:Label>
+		<g:Label styleName='{style.lblTitle}' ui:field='lblTitle' />
+		<g:Label styleName='{style.lblUsers}' ui:field='lblUsers' />
 	</g:VerticalPanel>
 </ui:UiBinder>
