@@ -7,6 +7,7 @@
 			color: #111111;
 			padding-top: 15px;
 			text-shadow: 0px 2px 2px #cccccc;
+			font-size: 15px;
 		}
 		
 		.lblUsers {
@@ -17,8 +18,8 @@
 		}
 		
 	</ui:style>
-	<g:HorizontalPanel>
+	<g:VerticalPanel>
 		<g:Label styleName='{style.lblTitle}' ui:field='lblTitle'></g:Label>
 		<g:Label styleName='{style.lblUsers}' ui:field='lblUsers'></g:Label>
-	</g:HorizontalPanel>
+	</g:VerticalPanel>
 </ui:UiBinder>

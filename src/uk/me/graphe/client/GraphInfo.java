@@ -14,25 +14,25 @@ public class GraphInfo extends Composite {
 	@UiField
 	Label lblTitle, lblUsers;
 	
-	private static GraphInfo sInstance;
+	private final Graphemeui parent;
 	
-	private GraphInfo(Graphemeui parent) {
-		initWidget(uiBinder.createAndBindUi(this));
-		lblTitle.setText("Test Title");
+	public GraphInfo(Graphemeui gUI) {
+		initWidget(uiBinder.createAndBindUi(this));		
+		this.parent = gUI;
+		
+		lblTitle.setText("Unknown graph title");
 		lblUsers.setText("Unknown number of users viewing");
-	}
-	
-	public static GraphInfo getInstance(Graphemeui parent){
-		if(sInstance == null) sInstance = new GraphInfo(parent);
-		return sInstance;
-	}
-	
-	public static GraphInfo getInstance(){
-		return sInstance;
 	}
 	
 	public void update(String title, int users){
 		lblTitle.setText(title);
-		lblTitle.setText(users + " users viewing.");
-	}
+		if (users > 0)
+		{
+			lblTitle.setText(users + " users viewing.");
+		}
+		else
+		{
+			lblUsers.setText("Unknown number of users viewing");
+		}
+	}	
 }
