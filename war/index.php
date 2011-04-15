@@ -34,7 +34,7 @@
     </div>
   </div>
   <div id="footer">
-  	<div id="description"></div>
+  	<div id="toolInfo"></div>
   	<div id="chat"></div>
   </div>
 </body>
