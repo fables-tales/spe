@@ -23,11 +23,11 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 public class Graphemeui implements EntryPoint {
 
+	public final ToolInfo toolInfo;
     public final Toolbox tools;
     public final Canvas canvas;
     public final Chat chat;    
     public final GraphInfo graphInfo;
-    public final Description description;
     public final GraphManager2d graphManager;
     public final GraphManager2dFactory graphManagerFactory;
     public final Drawing drawing;
@@ -45,7 +45,7 @@ public class Graphemeui implements EntryPoint {
 	private static final int X = 0, Y = 1;
 
     public Graphemeui() {
-        description = new Description();
+    	toolInfo = new ToolInfo(this);
         tools = new Toolbox(this);
         canvas = new Canvas(this);
         chat = Chat.getInstance(this);
@@ -63,7 +63,7 @@ public class Graphemeui implements EntryPoint {
                 // here!
             }
         });
-        graphInfo = GraphInfo.getInstance(this);
+        graphInfo = new GraphInfo(this);
     	selectedVertices = new ArrayList<VertexDrawable>();
     	selectedEdges = new ArrayList<EdgeDrawable>();
     	isHotkeysEnabled = true;
@@ -74,8 +74,9 @@ public class Graphemeui implements EntryPoint {
         RootPanel.get("toolbox").add(this.tools);
         RootPanel.get("canvas").add(this.canvas);
         RootPanel.get("chat").add(this.chat);
-        RootPanel.get("description").add(this.description);
+        //RootPanel.get("description").add(this.description);
         RootPanel.get("graphInfo").add(this.graphInfo);
+        RootPanel.get("toolInfo").add(this.toolInfo);
         
         mStore = LocalStoreFactory.newInstance();
         mStore.store(new AddNodeOperation(new Vertex("test"), 10, 10));
@@ -127,12 +128,22 @@ public class Graphemeui implements EntryPoint {
     }
     
     
-    public void addEdge(VertexDrawable from, VertexDrawable to) {
+    public void addEdge(VertexDrawable from, VertexDrawable to, Integer weight) {
     	Vertex vFrom = graphManager.getVertexFromDrawable(from);
     	Vertex vTo = graphManager.getVertexFromDrawable(to);
-    	//TODO: change this value to an actual value from the user
-        graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo, 1  );
-        ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo);
+    	
+    	if (weight == null)
+    	{
+    		// TODO: There is weight
+            graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo, weight  );
+            ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo);	   		
+    	}
+    	else
+    	{
+    		// TODO: No weight
+            graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo, weight  );
+            ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo);		
+    	}
         
         clearSelectedObjects();
     }
