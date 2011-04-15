@@ -87,14 +87,22 @@ h1 {
 #footer {
   position: fixed;
   bottom: 0;
-  height: 35px;
+  height: 30px;
   z-index: 1000;
   background-color: #f0f0f0;
   border-top: 1px solid #ccc;
   width: 100%;
 }
 
-#chat { float: right; }
+#chat {
+  float: right;
+  margin-right: 30px;
+}
+
+#toolInfo {
+  float: left;
+  margin-left: 30px;
+}
 
 #chat hr{
   margin: 6px 0 4px 0;
@@ -105,7 +113,6 @@ h1 {
 
 .btnChatOnline, .btnChatOffline, .btnChatWriting {
 	font-weight: bold;
-	margin-right: 30px;
 	text-decoration: none;
 	color: #333;
 	padding: 7px 8px 7px 25px;
