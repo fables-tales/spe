@@ -1,0 +1,17 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		
+		.lblText {
+			font-weight: bold;
+			text-decoration: none;
+			color: #333;
+			padding: 7px 0 7px 0;
+		}
+		
+	</ui:style>
+	<g:HorizontalPanel ui:field='pnlToolInfo'>
+		<g:Label styleName='{style.lblText}' ui:field='lblText' />
+	</g:HorizontalPanel>
+</ui:UiBinder>
