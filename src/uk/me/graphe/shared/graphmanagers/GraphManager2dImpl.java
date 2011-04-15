@@ -29,17 +29,18 @@ public class GraphManager2dImpl implements GraphManager2d {
         if (GWT.isClient()) {
             Console.log("graphmanager2d constructed");
         }
-        
+
     }
 
     @Override
-    public void addEdge(Vertex v1, Vertex v2, VertexDirection dir) {
+    public void addEdge(Vertex v1, Vertex v2, VertexDirection dir, int weight) {
         Edge e = new Edge(v1, v2, dir);
         if (!mEdges.contains(e)) {
             mEdges.add(e);
             mVertexEdgeMap.get(v1).add(e);
             mVertexEdgeMap.get(v2).add(e);
         }
+        e.setWeight(weight);
         this.invalidate();
     }
 
@@ -55,9 +56,9 @@ public class GraphManager2dImpl implements GraphManager2d {
                 Console.log("adding a vertex in graphmanager2dimpl: " + this);
                 Console.log("before size is: " + mVertices.size());
             }
-            
+
             mVertices.add(v);
-            
+
             if (GWT.isClient()) {
                 Console.log("after size is: " + mVertices.size());
             }
@@ -66,7 +67,8 @@ public class GraphManager2dImpl implements GraphManager2d {
             int left = xPosition - halfSize;
             int top = yPosition - halfSize;
 
-            mVertexRenderMap.put(v, new VertexDrawable(left, top, size, size, v.getLabel()));
+            mVertexRenderMap.put(v, new VertexDrawable(left, top, size, size, v
+                    .getLabel()));
             mVertexEdgeMap.put(v, new ArrayList<Edge>());
             if (GWT.isClient()) {
                 Console.log("vertices size:" + mVertices.size());
@@ -108,7 +110,8 @@ public class GraphManager2dImpl implements GraphManager2d {
                 t1 ^= t2;
             }
 
-            result.add(new EdgeDrawable(l1, t1, l2, t2, e.hasDirection()));
+            result.add(new EdgeDrawable(l1, t1, l2, t2, e.getWeight(), e
+                    .getDirection()));
         }
 
         return result;
@@ -205,4 +208,5 @@ public class GraphManager2dImpl implements GraphManager2d {
     public VertexDrawable getVertexDrawable(String s) {
         return mVertexRenderMap.get(new Vertex(s));
     }
+
 }

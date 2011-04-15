@@ -4,6 +4,7 @@ public class Edge {
     private Vertex mVertex1;
     private Vertex mVertex2;
     private VertexDirection mDir;
+    private int mWeight = 1;
 
     /**
      * creates an edge without direction
@@ -41,8 +42,11 @@ public class Edge {
      * @return true if this edge exits v, else false
      */
     public boolean exits(Vertex v) {
-        if (mDir == VertexDirection.both && (v.equals(mVertex1) || v.equals(mVertex2))) return true;
-        else return v.equals((mDir == VertexDirection.fromTo) ? mVertex1 : mVertex2);
+        if (mDir == VertexDirection.both
+                && (v.equals(mVertex1) || v.equals(mVertex2))) return true;
+        else
+            return v.equals((mDir == VertexDirection.fromTo) ? mVertex1
+                    : mVertex2);
     }
 
     /**
@@ -53,8 +57,11 @@ public class Edge {
      * @return true if this edge enters v, else false
      */
     public boolean enters(Vertex v) {
-        if (mDir == VertexDirection.both && (v.equals(mVertex1) || v.equals(mVertex2))) return true;
-        else return v.equals((mDir == VertexDirection.toFrom) ? mVertex1 : mVertex2);
+        if (mDir == VertexDirection.both
+                && (v.equals(mVertex1) || v.equals(mVertex2))) return true;
+        else
+            return v.equals((mDir == VertexDirection.toFrom) ? mVertex1
+                    : mVertex2);
     }
 
     /**
@@ -83,17 +90,27 @@ public class Edge {
     public boolean hasDirection() {
         return mDir != VertexDirection.both;
     }
-    
+
     public VertexDirection getDirection() {
         return mDir;
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (o instanceof Edge) {
-            Edge cmp = (Edge)o;
-            return cmp.mVertex1.equals(mVertex1) && cmp.mVertex2.equals(mVertex2) && cmp.mDir == mDir;
-        } else return false;
+            Edge cmp = (Edge) o;
+            return cmp.mVertex1.equals(mVertex1)
+                    && cmp.mVertex2.equals(mVertex2) && cmp.mDir == mDir;
+        } else
+            return false;
+    }
+
+    public void setWeight(int i) {
+        if (i >= 0) mWeight = i;
+    }
+
+    public int getWeight() {
+        return mWeight;
     }
 
 }

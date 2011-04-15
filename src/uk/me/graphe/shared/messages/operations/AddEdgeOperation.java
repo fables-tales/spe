@@ -24,6 +24,8 @@ public class AddEdgeOperation extends EdgeOperation {
             repr.put("message", "addEdge");
             repr.put("from", this.getEdge().getFromVertex().getLabel());
             repr.put("to", this.getEdge().getToVertex().getLabel());
+            repr.put("dir", this.getEdge().getDirection().name());
+            repr.put("weight", this.getEdge().getWeight());
         } catch (JSONException e) {
             throw new Error(e);
         }
@@ -38,7 +40,7 @@ public class AddEdgeOperation extends EdgeOperation {
     @Override
     public void applyTo(GraphManager2d mGraph) {
         mGraph.addEdge(this.getEdge().getFromVertex(), getEdge().getToVertex(),
-                getEdge().getDirection());
+                getEdge().getDirection(), getEdge().getWeight());
     }
 
 }

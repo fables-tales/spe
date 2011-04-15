@@ -46,7 +46,6 @@ public class TestClient {
 
             do {
                 int i = is.read();
-                System.err.println(sb.toString());
                 if (i == -1) throw new Error("disconnected");
                 sb.append((char) i);
                 

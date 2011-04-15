@@ -69,7 +69,7 @@ public class GraphManager2dTest extends TestCase {
         Vertex v2 = new Vertex("cheese");
         mManager.addVertex(v1, 0, 0, 10);
         mManager.addVertex(v2, 0, 0, 10);
-        mManager.addEdge(v1, v2, VertexDirection.both);
+        mManager.addEdge(v1, v2, VertexDirection.both, 0);
         mManager.removeVertex(new Vertex("bees"));
         Assert.assertEquals(false, mManager.getUnderlyingGraph().getVertices().contains(new Vertex("bees")));
         Assert.assertEquals(0, mManager.getUnderlyingGraph().getEdges().size());
@@ -82,8 +82,8 @@ public class GraphManager2dTest extends TestCase {
         mManager.addVertex(v1, 0, 0, 10);
         mManager.addVertex(v2, 0, 0, 10);
         mManager.addVertex(v3, 0, 0, 10);
-        mManager.addEdge(v1, v2, VertexDirection.both);
-        mManager.addEdge(v2, v3, VertexDirection.both);
+        mManager.addEdge(v1, v2, VertexDirection.both, 0);
+        mManager.addEdge(v2, v3, VertexDirection.both, 0);
         mManager.removeVertex(v3);
         Assert.assertEquals(false, mManager.getUnderlyingGraph().getVertices().contains(v3));
         for (Edge e : mManager.getUnderlyingGraph().getEdges()) {
@@ -98,9 +98,9 @@ public class GraphManager2dTest extends TestCase {
         mManager.addVertex(v1, 0, 0, 10);
         mManager.addVertex(v2, 0, 0, 10);
         mManager.addVertex(v3, 0, 0, 10);
-        mManager.addEdge(v1, v2, VertexDirection.both);
-        mManager.addEdge(v2, v3, VertexDirection.both);
-        mManager.addEdge(v1, v3, VertexDirection.both);
+        mManager.addEdge(v1, v2, VertexDirection.both, 0);
+        mManager.addEdge(v2, v3, VertexDirection.both, 0);
+        mManager.addEdge(v1, v3, VertexDirection.both, 0);
         mManager.removeVertex(v3);
         Assert.assertEquals(false, mManager.getUnderlyingGraph().getVertices().contains(v3));
         for (Edge e : mManager.getUnderlyingGraph().getEdges()) {
@@ -111,7 +111,7 @@ public class GraphManager2dTest extends TestCase {
     public void testAddEdge_singleBothDir() {
         mManager.addVertex(new Vertex("cake"), 0, -1, 0);
         mManager.addVertex(new Vertex("faces"), 100, 17, 0);
-        mManager.addEdge(new Vertex("faces"), new Vertex("cake"), VertexDirection.both);
+        mManager.addEdge(new Vertex("faces"), new Vertex("cake"), VertexDirection.both, 0);
         EdgeDrawable e = mManager.getEdgeDrawables().toArray(new EdgeDrawable[0])[0];
         Assert.assertEquals(0, e.getStartX());
         Assert.assertEquals(-1, e.getStartY());
@@ -136,7 +136,7 @@ public class GraphManager2dTest extends TestCase {
         mManager.addRedrawCallback(mCheckCalled);
         mManager.addVertex(new Vertex("a"), 0, 0, 10);
         mManager.addVertex(new Vertex("b"), 3, 7, 10);
-        mManager.addEdge(new Vertex("a"), new Vertex("b"), VertexDirection.fromTo);
+        mManager.addEdge(new Vertex("a"), new Vertex("b"), VertexDirection.fromTo, 0);
         Assert.assertEquals(true, mCalled);
     }
 
@@ -156,7 +156,7 @@ public class GraphManager2dTest extends TestCase {
     public void testInvalidate_removeAllEdges() {
         mManager.addVertex(new Vertex("faces"), 0, 0, 10);
         mManager.addVertex(new Vertex("bees"), 0, 0, 10);
-        mManager.addEdge(new Vertex("bees"), new Vertex("faces"), VertexDirection.both);
+        mManager.addEdge(new Vertex("bees"), new Vertex("faces"), VertexDirection.both, 0);
         mManager.addRedrawCallback(mCheckCalled);
         mManager.removeAllEdges(new Vertex("faces"), new Vertex("bees"));
         Assert.assertEquals(true, mCalled);
