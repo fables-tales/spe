@@ -136,3 +136,15 @@ h1 {
 .btnChatWriting {
 	background: #f0f0f0 url(../images/chatwriting.png) no-repeat +5px center;
 }
+
+.helpDialog { 
+  background-color: #fff;
+  border: 3px solid #c6d1df;
+  cursor: pointer;
+  font: bold 13px arial;
+  padding: 3px 6px;  
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  opacity:0.8;
+  filter:alpha(opacity=80);
+}
