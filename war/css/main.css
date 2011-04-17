@@ -168,3 +168,107 @@ h1 {
 .paramDialog button {
   margin-right: 5px;
 }
+
+.btnAddVert, .btnAddEdge, .btnMove, .btnSelect, .btnZoom, .btnAutoLayout, .btnCluster, .btnDelete, .btnProcess, .btnDecision, .btnTerminator, .btnNormal {
+  width: 35px;
+  height: 35px;
+  border: 0;
+  cursor: pointer;
+  margin: 0 2px;
+}
+
+.btnAddVert {
+  background: url(../images/addvert.png) no-repeat;
+}
+
+.btnAddVert:hover {
+  background: url(../images/addvertd.png) no-repeat;
+}
+
+.btnAddEdge {
+  background: url(../images/addedge.png) no-repeat;
+}
+
+.btnAddEdge:hover {
+  background: url(../images/addedged.png) no-repeat;
+}
+
+.btnMove {
+  background: url(../images/move.png) no-repeat;
+}
+
+.btnMove:hover {
+  background: url(../images/moved.png) no-repeat;
+}
+
+.btnSelect {
+  background: url(../images/select.png) no-repeat;
+}
+
+.btnSelect:hover {
+  background: url(../images/selectd.png) no-repeat;
+}
+
+.btnZoom {
+  background: url(../images/zoom.png) no-repeat;
+}
+
+.btnZoom:hover {
+	background: url(../images/zoomd.png) no-repeat;
+}
+
+.btnAutoLayout {
+	background: url(../images/autolayout.png) no-repeat;
+}
+
+.btnAutoLayout:hover {
+	background: url(../images/autolayoutd.png) no-repeat;
+}
+
+.btnCluster {
+	background: url(../images/cluster.png) no-repeat;
+}
+
+.btnCluster:hover {
+	background: url(../images/clusterd.png) no-repeat;
+}
+
+.btnDelete {
+	background: url(../images/erase.png) no-repeat;
+}
+
+.btnDelete:hover {
+	background: url(../images/erased.png) no-repeat;
+}
+
+.btnProcess {
+	background: url(../images/process.png) no-repeat;
+}
+
+.btnProcess:hover {
+	background: url(../images/processd.png) no-repeat;
+}
+
+.btnTerminator {
+	background: url(../images/terminator.png) no-repeat;
+}
+
+.btnTerminator:hover {
+	background: url(../images/terminatord.png) no-repeat;
+}
+
+.btnDecision {
+	background: url(../images/decision.png) no-repeat;
+}
+
+.btnDecision:hover {
+	background: url(../images/decisiond.png) no-repeat;
+}        
+
+.btnNormal {
+	background: url(../images/nostyle.png) no-repeat;
+}
+
+.btnNormal:hover {
+	background: url(../images/nostyled.png) no-repeat;
+}
