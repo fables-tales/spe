@@ -52,12 +52,15 @@ public class Dialog extends PopupPanel
 				switch (currentType)
 				{
 					case edgeWeight:
-						// TODO: Add edge and hide.
+						parent.addEdge(parent.selectedVertices.get(0), parent.selectedVertices.get(1), Integer.parseInt(txtParam.getText()));
+						parent.clearSelectedObjects();
 						break;
 					case vertexName:
-						// TODO: Add vertex and hide.
+						parent.addVertex(txtParam.getText());
 						break;
 				}
+				
+				parent.dialog.hide();
 			}			
 		});
 		
