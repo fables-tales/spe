@@ -60,6 +60,7 @@ public class Dialog extends PopupPanel
 						break;
 				}
 				
+				parent.isHotkeysEnabled = true;
 				parent.dialog.hide();
 			}			
 		});
@@ -69,6 +70,7 @@ public class Dialog extends PopupPanel
 			@Override
 			public void onClick(ClickEvent arg0)
 			{
+				parent.isHotkeysEnabled = true;
 				parent.dialog.hide();
 			}			
 		});
@@ -135,6 +137,7 @@ public class Dialog extends PopupPanel
 		switch (type)
 		{
 			case edgeWeight:
+				parent.isHotkeysEnabled = false;
 				this.setTitle("Edge weight");
 				this.setAutoHideEnabled(false);
 				this.setGlassEnabled(true);
@@ -148,6 +151,7 @@ public class Dialog extends PopupPanel
 				btnOk.setEnabled(true);
 				break;
 			case help:
+				parent.isHotkeysEnabled = true;
 				this.setTitle("Help");
 				this.setAutoHideEnabled(true);
 				this.setGlassEnabled(false);
@@ -157,6 +161,7 @@ public class Dialog extends PopupPanel
 				pnlCont.add(lblTitle);
 				break;
 			case vertexName:
+				parent.isHotkeysEnabled = false;
 				this.setTitle("Vertex name");
 				this.setAutoHideEnabled(false);
 				this.setGlassEnabled(true);
