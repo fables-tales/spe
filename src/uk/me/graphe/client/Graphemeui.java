@@ -18,20 +18,20 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
-public class Graphemeui implements EntryPoint {
-
-	public final ToolInfo toolInfo;
-    public final Toolbox tools;
+public class Graphemeui implements EntryPoint
+{   
     public final Canvas canvas;
-    public final Chat chat;    
+    public final Chat chat;  
+    public final Dialog dialog;
     public final GraphInfo graphInfo;
+    public final Toolbox tools;
+    public final ToolInfo toolInfo;   
     public final GraphManager2d graphManager;
     public final GraphManager2dFactory graphManagerFactory;
     public final Drawing drawing;
-
+    
     private LocalStore mStore;
     
     public ArrayList<VertexDrawable> selectedVertices;
@@ -45,10 +45,12 @@ public class Graphemeui implements EntryPoint {
 	private static final int X = 0, Y = 1;
 
     public Graphemeui() {
+    	dialog = new Dialog(this);
     	toolInfo = new ToolInfo(this);
         tools = new Toolbox(this);
         canvas = new Canvas(this);
         chat = Chat.getInstance(this);
+        graphInfo = new GraphInfo(this);
         drawing = new DrawingImpl();
         graphManagerFactory = GraphManager2dFactory.getInstance();
         graphManager = graphManagerFactory.makeDefaultGraphManager();
@@ -63,7 +65,7 @@ public class Graphemeui implements EntryPoint {
                 // here!
             }
         });
-        graphInfo = new GraphInfo(this);
+        
     	selectedVertices = new ArrayList<VertexDrawable>();
     	selectedEdges = new ArrayList<EdgeDrawable>();
     	isHotkeysEnabled = true;
@@ -74,7 +76,6 @@ public class Graphemeui implements EntryPoint {
         RootPanel.get("toolbox").add(this.tools);
         RootPanel.get("canvas").add(this.canvas);
         RootPanel.get("chat").add(this.chat);
-        //RootPanel.get("description").add(this.description);
         RootPanel.get("graphInfo").add(this.graphInfo);
         RootPanel.get("toolInfo").add(this.toolInfo);
         
@@ -109,7 +110,6 @@ public class Graphemeui implements EntryPoint {
 							tools.setTool(Tools.zoom);
 							break;
 						case KeyCodes.KEY_DELETE:
-							// TODO: Is this really the desired action?
 							tools.setTool(Tools.delete);
 							break;
 						default:
@@ -135,13 +135,13 @@ public class Graphemeui implements EntryPoint {
     	if (weight == null)
     	{
     		// TODO: There is weight
-            graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo, weight  );
+            graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo, weight);
             ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo);	   		
     	}
     	else
     	{
     		// TODO: No weight
-            graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo, weight  );
+            graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo, weight);
             ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo);		
     	}
         
@@ -153,17 +153,7 @@ public class Graphemeui implements EntryPoint {
         graphManager.addVertex(v, canvas.lMouseDown[X], canvas.lMouseDown[Y], VERTEX_SIZE);
         ClientOT.getInstance().notifyAddVertex(v, canvas.lMouseDown[X], canvas.lMouseDown[Y], VERTEX_SIZE);    	
     }
-    
-    public void autoLayout()
-    {
-    	// TODO: Implement graph autolayout.
-    }
-    
-    public void clusterVertices()
-    {
-    	// TODO: Implement graph clustering
-    }
-    
+
     public void clearSelectedEdges()
     {
     	for(EdgeDrawable ed : selectedEdges){
@@ -209,9 +199,7 @@ public class Graphemeui implements EntryPoint {
     	
     	selectedVertices.clear();
     	selectedEdges.clear();
-    	
-    	tools.setTool(Tools.select);
-    	
+
     	graphManager.invalidate(); // TODO: does this need to be here?  	
     }
     

@@ -32,7 +32,7 @@ public class Canvas extends Composite{
 	public Canvas(Graphemeui gUI) {
 		initWidget(uiBinder.createAndBindUi(this));
 		this.parent = gUI;
-		
+
 		lMouseDown = new int[2];
 		lMouseMove = new int[2];
 		lMouseUp = new int[2];
@@ -40,7 +40,7 @@ public class Canvas extends Composite{
 	
 	@UiHandler("canvasPanel")
 	void onMouseDown(MouseDownEvent e){
-		if ((parent.tools.currentTool != Tools.nameVertex) && (!isMouseDown))
+		if (!isMouseDown)
 		{
 			isMouseDown = true;
 			
@@ -59,7 +59,7 @@ public class Canvas extends Composite{
 					
 					if (parent.selectedVertices.size() > 1) {
 						//parent.addEdge(parent.selectedVertices.get(0),parent.selectedVertices.get(1));
-						parent.tools.setTool(Tools.weightEdge);
+						//parent.tools.setTool(Tools.weightEdge);
 					}
 					break;
 				case move:
@@ -88,6 +88,8 @@ public class Canvas extends Composite{
 	{
 		if (isMouseDown)
 		{
+			this.setTitle("");
+			
 			int x = getMouseX(e.getX());
             int y = getMouseY(e.getY());
             
@@ -121,11 +123,11 @@ public class Canvas extends Composite{
 	void onMouseUp(MouseUpEvent e){
 		switch (parent.tools.currentTool){
 			case addVertex:
-				parent.tools.setTool(Tools.nameVertex);
+				parent.dialog.show(DialogType.vertexName,"");
 				break;
 			case addEdge:
 				if (parent.selectedVertices.size() == 2) {
-					parent.tools.setTool(Tools.weightEdge);
+					parent.dialog.show(DialogType.edgeWeight,"");
 				}
 				break;
 			case move:
