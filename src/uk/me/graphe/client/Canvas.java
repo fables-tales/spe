@@ -39,47 +39,45 @@ public class Canvas extends Composite{
 	}
 	
 	@UiHandler("canvasPanel")
-	void onMouseDown(MouseDownEvent e){
-		if (!isMouseDown)
-		{
-			isMouseDown = true;
-			
-			lMouseDown[X] = getMouseX(e.getX());
-			lMouseDown[Y] = getMouseY(e.getY());
-			
-			lMouseMove[X] = lMouseDown[X];
-			lMouseMove[Y] = lMouseDown[Y];
-			
-			lMouseUp[X] = lMouseDown[X];
-			lMouseUp[Y] = lMouseDown[Y];	
-			
-			switch (parent.tools.currentTool) {
-				case addEdge:
-					parent.toggleSelectedVertexAt(lMouseDown[X], lMouseDown[Y]);
-					
-					if (parent.selectedVertices.size() > 1) {
-						//parent.addEdge(parent.selectedVertices.get(0),parent.selectedVertices.get(1));
-						//parent.tools.setTool(Tools.weightEdge);
-					}
-					break;
-				case move:
-					if (parent.selectedVertices.size() > 0)
-					{
-						parent.toggleSelectedVertexAt(lMouseDown[X], lMouseDown[Y]); // try to select vertex.
-					}
-					break;
-				case select:
-					if (e.isControlKeyDown())
-					{
-						parent.toggleSelectedObjectAt(lMouseDown[X], lMouseDown[Y]);
-					} else {
-						parent.clearSelectedObjects(); // clearing because we are selecting object on own.
-						parent.toggleSelectedObjectAt(lMouseDown[X], lMouseDown[Y]);
-					}
-					break;
-				default:
-					break;
-			}
+	void onMouseDown(MouseDownEvent e)
+	{
+		isMouseDown = true;
+		
+		lMouseDown[X] = getMouseX(e.getX());
+		lMouseDown[Y] = getMouseY(e.getY());
+		
+		lMouseMove[X] = lMouseDown[X];
+		lMouseMove[Y] = lMouseDown[Y];
+		
+		lMouseUp[X] = lMouseDown[X];
+		lMouseUp[Y] = lMouseDown[Y];	
+		
+		switch (parent.tools.currentTool) {
+			case addEdge:
+				parent.toggleSelectedVertexAt(lMouseDown[X], lMouseDown[Y]);
+				
+				if (parent.selectedVertices.size() > 1) {
+					//parent.addEdge(parent.selectedVertices.get(0),parent.selectedVertices.get(1));
+					//parent.tools.setTool(Tools.weightEdge);
+				}
+				break;
+			case move:
+				if (parent.selectedVertices.size() > 0)
+				{
+					parent.toggleSelectedVertexAt(lMouseDown[X], lMouseDown[Y]); // try to select vertex.
+				}
+				break;
+			case select:
+				if (e.isControlKeyDown())
+				{
+					parent.toggleSelectedObjectAt(lMouseDown[X], lMouseDown[Y]);
+				} else {
+					parent.clearSelectedObjects(); // clearing because we are selecting object on own.
+					parent.toggleSelectedObjectAt(lMouseDown[X], lMouseDown[Y]);
+				}
+				break;
+			default:
+				break;
 		}
 	}
 	
@@ -100,7 +98,7 @@ public class Canvas extends Composite{
 						// TODO: Move the nodes here by the offset.
 					} else {
 						// TODO: User wants to pan - fix this...it is jittery.
-						parent.pan(-(lMouseMove[X] - x), -(lMouseMove[Y] -y));
+						parent.pan(-(lMouseDown[X] - x), -(lMouseDown[Y] -y));
 					}
 					break;
 				default:
