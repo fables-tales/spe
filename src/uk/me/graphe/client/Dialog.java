@@ -31,6 +31,8 @@ public class Dialog extends PopupPanel
 		
 		this.addStyleName("helpDialog");
 		this.addStyleName("paramDialog");
+		
+		this.setAnimationEnabled(true);
 				
 		pnlCont = new VerticalPanel();
 		pnlBtns = new HorizontalPanel();
@@ -131,7 +133,6 @@ public class Dialog extends PopupPanel
 		{
 			case edgeWeight:
 				this.setTitle("Edge weight");
-				this.setAnimationEnabled(true);
 				this.setAutoHideEnabled(false);
 				this.setGlassEnabled(true);
 				this.setPopupPosition(parent.canvas.lMouseDown[0], parent.canvas.lMouseDown[1]);
@@ -145,7 +146,6 @@ public class Dialog extends PopupPanel
 				break;
 			case help:
 				this.setTitle("Help");
-				this.setAnimationEnabled(true);
 				this.setAutoHideEnabled(true);
 				this.setGlassEnabled(false);
 				this.setPopupPosition(50, 125);
@@ -155,7 +155,6 @@ public class Dialog extends PopupPanel
 				break;
 			case vertexName:
 				this.setTitle("Vertex name");
-				this.setAnimationEnabled(true);
 				this.setAutoHideEnabled(false);
 				this.setGlassEnabled(true);
 				this.setPopupPosition(parent.canvas.lMouseDown[0], parent.canvas.lMouseDown[1]);
