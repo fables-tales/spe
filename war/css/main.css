@@ -12,6 +12,8 @@ body {
   font-family:"Verdana", Verdana, Arial;
   line-height: 1.2;
   color: #0f116d;
+  -moz-user-select: none;
+  -khtml-user-select: none;
 }
 
 h1 {
@@ -87,14 +89,22 @@ h1 {
 #footer {
   position: fixed;
   bottom: 0;
-  height: 35px;
+  height: 30px;
   z-index: 1000;
   background-color: #f0f0f0;
   border-top: 1px solid #ccc;
   width: 100%;
 }
 
-#chat { float: right; }
+#chat {
+  float: right;
+  margin-right: 30px;
+}
+
+#toolInfo {
+  float: left;
+  margin-left: 30px;
+}
 
 #chat hr{
   margin: 6px 0 4px 0;
@@ -105,7 +115,6 @@ h1 {
 
 .btnChatOnline, .btnChatOffline, .btnChatWriting {
 	font-weight: bold;
-	margin-right: 30px;
 	text-decoration: none;
 	color: #333;
 	padding: 7px 8px 7px 25px;
@@ -128,4 +137,140 @@ h1 {
 
 .btnChatWriting {
 	background: #f0f0f0 url(../images/chatwriting.png) no-repeat +5px center;
+}
+
+.helpDialog { 
+  background-color: #fff;
+  border: 3px solid #c6d1df;
+  cursor: pointer;
+  font: bold 13px arial;
+  padding: 3px 6px;  
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  opacity:0.8;
+  filter:alpha(opacity=80);
+}
+
+.paramDialog {
+  background-color: #fff;
+  border: 3px solid #c6d1df;
+  font: bold 13px arial;
+  padding: 4px 8px;  
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  opacity:0.8;
+  filter:alpha(opacity=80);
+}
+
+.paramDialog input {
+  border: 1px solid #ccc;
+  margin: 5px 0;
+}
+
+.paramDialog button {
+  margin-right: 5px;
+}
+
+.btnAddVert, .btnAddEdge, .btnMove, .btnSelect, .btnZoom, .btnAutoLayout, .btnCluster, .btnDelete, .btnProcess, .btnDecision, .btnTerminator, .btnNormal {
+  width: 35px;
+  height: 35px;
+  border: 0;
+  cursor: pointer;
+  margin: 0 2px;
+}
+
+.btnAddVert {
+  background: url(../images/addvert.png) no-repeat;
+}
+
+.btnAddVert:hover {
+  background: url(../images/addvertd.png) no-repeat;
+}
+
+.btnAddEdge {
+  background: url(../images/addedge.png) no-repeat;
+}
+
+.btnAddEdge:hover {
+  background: url(../images/addedged.png) no-repeat;
+}
+
+.btnMove {
+  background: url(../images/move.png) no-repeat;
+}
+
+.btnMove:hover {
+  background: url(../images/moved.png) no-repeat;
+}
+
+.btnSelect {
+  background: url(../images/select.png) no-repeat;
+}
+
+.btnSelect:hover {
+  background: url(../images/selectd.png) no-repeat;
+}
+
+.btnZoom {
+  background: url(../images/zoom.png) no-repeat;
+}
+
+.btnZoom:hover {
+	background: url(../images/zoomd.png) no-repeat;
+}
+
+.btnAutoLayout {
+	background: url(../images/autolayout.png) no-repeat;
+}
+
+.btnAutoLayout:hover {
+	background: url(../images/autolayoutd.png) no-repeat;
+}
+
+.btnCluster {
+	background: url(../images/cluster.png) no-repeat;
+}
+
+.btnCluster:hover {
+	background: url(../images/clusterd.png) no-repeat;
+}
+
+.btnDelete {
+	background: url(../images/erase.png) no-repeat;
+}
+
+.btnDelete:hover {
+	background: url(../images/erased.png) no-repeat;
+}
+
+.btnProcess {
+	background: url(../images/process.png) no-repeat;
+}
+
+.btnProcess:hover {
+	background: url(../images/processd.png) no-repeat;
+}
+
+.btnTerminator {
+	background: url(../images/terminator.png) no-repeat;
+}
+
+.btnTerminator:hover {
+	background: url(../images/terminatord.png) no-repeat;
+}
+
+.btnDecision {
+	background: url(../images/decision.png) no-repeat;
+}
+
+.btnDecision:hover {
+	background: url(../images/decisiond.png) no-repeat;
+}        
+
+.btnNormal {
+	background: url(../images/nostyle.png) no-repeat;
+}
+
+.btnNormal:hover {
+	background: url(../images/nostyled.png) no-repeat;
 }
