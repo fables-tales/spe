@@ -12,6 +12,8 @@ body {
   font-family:"Verdana", Verdana, Arial;
   line-height: 1.2;
   color: #0f116d;
+  -moz-user-select: none;
+  -khtml-user-select: none;
 }
 
 h1 {
