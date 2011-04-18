@@ -67,22 +67,23 @@ public class Toolbox extends Composite {
 		{
 			case addVertex:
 				parent.clearSelectedObjects();
-				parent.dialog.show(DialogType.help, "Click the canvas to add a vertex.");
+				parent.dialog.show(DialogType.help, "Click the canvas to add a vertex.", 50, 125);
 				break;
 			case addEdge:
 				parent.clearSelectedEdges();
 				if (parent.selectedVertices.size() == 2)
 				{
-					parent.dialog.show(DialogType.edgeWeight, "");
+					// TODO: position this is right place.
+					parent.dialog.show(DialogType.edgeWeight, "", 125, 125);
 				}
 				else if (parent.selectedVertices.size() > 2)
 				{
 					parent.clearSelectedVertices();
-					parent.dialog.show(DialogType.help, "Click to select the vertices you would like to connect.");
+					parent.dialog.show(DialogType.help, "Click to select the vertices you would like to connect.", 50, 125);
 				}
 				else
 				{
-					parent.dialog.show(DialogType.help, "Click to select the vertices you would like to connect.");
+					parent.dialog.show(DialogType.help, "Click to select the vertices you would like to connect.", 50, 125);
 				}
 				break;
 			case delete:
@@ -90,13 +91,13 @@ public class Toolbox extends Composite {
 				this.setTool(Tools.select);
 				break;
 			case move:
-				parent.dialog.show(DialogType.help, "Click and drag to pan the canvas or move a vertex.");
+				parent.dialog.show(DialogType.help, "Click and drag to pan the canvas or move a vertex.", 50, 125);
 				break;
 			case select:
-				parent.dialog.show(DialogType.help, "Click to select objects. Hold 'CTRL' and click to deselect or multi-select.");
+				parent.dialog.show(DialogType.help, "Click to select objects. Hold 'CTRL' and click to deselect or multi-select.", 50, 125);
 				break;
 			case zoom:
-				parent.dialog.show(DialogType.help, "Click where you like to zoom in. Hold 'CTRL' and click to zoom out.");
+				parent.dialog.show(DialogType.help, "Click where you like to zoom in. Hold 'CTRL' and click to zoom out.", 50, 125);
 				break;
 			case autolayout:
 				// TODO: Implement
