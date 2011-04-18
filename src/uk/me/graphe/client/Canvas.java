@@ -22,20 +22,19 @@ public class Canvas extends Composite{
 	
 	public final Graphemeui parent;
 	
-	public int lMouseDown[], lMouseMove[], lMouseUp[]; // last mouse positions.
+	public int lMouseDown[];
 		
 	private static final int X = 0, Y = 1;
 
 	private boolean isMouseDown;
 
 	
-	public Canvas(Graphemeui gUI) {
+	public Canvas (Graphemeui gUI)
+	{
 		initWidget(uiBinder.createAndBindUi(this));
 		this.parent = gUI;
 
 		lMouseDown = new int[2];
-		lMouseMove = new int[2];
-		lMouseUp = new int[2];
 	}
 	
 	@UiHandler("canvasPanel")
@@ -46,113 +45,93 @@ public class Canvas extends Composite{
 		lMouseDown[X] = getMouseX(e.getX());
 		lMouseDown[Y] = getMouseY(e.getY());
 		
-		lMouseMove[X] = lMouseDown[X];
-		lMouseMove[Y] = lMouseDown[Y];
-		
-		lMouseUp[X] = lMouseDown[X];
-		lMouseUp[Y] = lMouseDown[Y];	
-		
-		switch (parent.tools.currentTool) {
-			case addEdge:
-				parent.toggleSelectedVertexAt(lMouseDown[X], lMouseDown[Y]);
-				
-				if (parent.selectedVertices.size() > 1) {
-					//parent.addEdge(parent.selectedVertices.get(0),parent.selectedVertices.get(1));
-					//parent.tools.setTool(Tools.weightEdge);
-				}
-				break;
-			case move:
-				if (parent.selectedVertices.size() > 0)
-				{
-					parent.toggleSelectedVertexAt(lMouseDown[X], lMouseDown[Y]); // try to select vertex.
-				}
-				break;
-			case select:
-				if (e.isControlKeyDown())
-				{
-					parent.toggleSelectedObjectAt(lMouseDown[X], lMouseDown[Y]);
-				} else {
-					parent.clearSelectedObjects(); // clearing because we are selecting object on own.
-					parent.toggleSelectedObjectAt(lMouseDown[X], lMouseDown[Y]);
-				}
-				break;
-			default:
-				break;
+		if ((parent.tools.currentTool == Tools.move) && (parent.selectedVertices.size() < 1))
+		{
+			parent.toggleSelectedVertexAt(lMouseDown[X], lMouseDown[Y]); // try to select vertex.
 		}
 	}
 	
 	@UiHandler("canvasPanel")
 	void onMouseMove(MouseMoveEvent e)
 	{
-		if (isMouseDown)
-		{
-			this.setTitle("");
-			
+		if (isMouseDown && (parent.tools.currentTool == Tools.move))
+		{		
 			int x = getMouseX(e.getX());
             int y = getMouseY(e.getY());
             
-			switch (parent.tools.currentTool)
+			if (parent.selectedVertices.size() > 0)
 			{
-				case move:
-					if (parent.selectedVertices.size() > 0) {
-						// TODO: Move the nodes here by the offset.
-					} else {
-						// TODO: User wants to pan - fix this...it is jittery.
-						parent.pan(-(lMouseDown[X] - x), -(lMouseDown[Y] -y));
-					}
-					break;
-				default:
-					break;
+				// TODO: Move the nodes here by the offset.
+				for (VertexDrawable vd : parent.selectedVertices)
+				{
+					int xC = vd.getLeft() -(lMouseDown[X] - x);
+					int yC = vd.getTop() -(lMouseDown[Y] -y);
+					
+					parent.moveNode(vd, xC, yC);
+				}
 			}
-			
-			lMouseMove[X] = x;
-			lMouseMove[Y] = y;
+			else
+			{
+				parent.pan(-(lMouseDown[X] - x), -(lMouseDown[Y] -y));
+			}
 		}
 	}
 	
 	@UiHandler("canvasPanel")
-	void onMouseOut(MouseOutEvent e){
+	void onMouseOut (MouseOutEvent e)
+	{
 		isMouseDown = false;
-		//parent.moving = false;
-		//parent.movingVertex = null;
 	}
 	
 	@UiHandler("canvasPanel")
-	void onMouseUp(MouseUpEvent e){
-		switch (parent.tools.currentTool){
+	void onMouseUp (MouseUpEvent e)
+	{
+		switch (parent.tools.currentTool)
+		{
 			case addVertex:
-				parent.dialog.show(DialogType.vertexName,"");
+				parent.dialog.show(DialogType.vertexName,"", e.getX(), e.getY());
 				break;
 			case addEdge:
-				if (parent.selectedVertices.size() == 2) {
-					parent.dialog.show(DialogType.edgeWeight,"");
+				parent.toggleSelectedVertexAt(lMouseDown[X], lMouseDown[Y]);
+				
+				if (parent.selectedVertices.size() == 2) 
+				{
+					parent.dialog.show(DialogType.edgeWeight,"", e.getX(), e.getY());
 				}
 				break;
-			case move:
-				break;
 			case select:
+				if (e.isControlKeyDown())
+				{
+					parent.toggleSelectedObjectAt(lMouseDown[X], lMouseDown[Y]);
+				}
+				else
+				{
+					parent.clearSelectedObjects(); // clearing because we are selecting object on own.
+					parent.toggleSelectedObjectAt(lMouseDown[X], lMouseDown[Y]);
+				}
 				break;
 			case zoom:
-				if(e.isControlKeyDown()){
+				if (e.isControlKeyDown())
+				{
 					parent.zoomOut();
-				} else {
+				}
+				else
+				{
 					parent.zoomIn();
 				}
 				break;
-			default:
-				break;
 		}
-		//parent.tools.setTool(Tools.nameVertex);
-		//parent.moving = false;
-		//parent.movingVertex = null;
+
 		isMouseDown = false;
 	}
 	
-	private int getMouseX(int x) {
+	private int getMouseX (int x)
+	{
 		return (int)(x / parent.drawing.getZoom()) - parent.drawing.getOffsetX();
 	}
 	
-	private int getMouseY(int y) {
+	private int getMouseY (int y)
+	{
 		return (int)(y / parent.drawing.getZoom()) - parent.drawing.getOffsetY();
 	}
 }
