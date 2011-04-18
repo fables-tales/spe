@@ -128,7 +128,7 @@ public class Dialog extends PopupPanel
 		this.add(pnlCont);
 	}
 
-	public void show (DialogType type, String initialValue)
+	public void show (DialogType type, String initialValue, int left, int top)
 	{
 		pnlCont.clear();
 		
@@ -141,7 +141,6 @@ public class Dialog extends PopupPanel
 				this.setTitle("Edge weight");
 				this.setAutoHideEnabled(false);
 				this.setGlassEnabled(true);
-				this.setPopupPosition(parent.canvas.lMouseDown[0], parent.canvas.lMouseDown[1]);
 				this.setStyleName("paramDialog");
 				lblTitle.setText("Edge weight:");
 				txtParam.setText(initialValue);
@@ -155,7 +154,7 @@ public class Dialog extends PopupPanel
 				this.setTitle("Help");
 				this.setAutoHideEnabled(true);
 				this.setGlassEnabled(false);
-				this.setPopupPosition(50, 125);
+				//this.setPopupPosition(50, 125);
 				this.setStyleName("helpDialog");
 				lblTitle.setText(initialValue);
 				pnlCont.add(lblTitle);
@@ -165,7 +164,6 @@ public class Dialog extends PopupPanel
 				this.setTitle("Vertex name");
 				this.setAutoHideEnabled(false);
 				this.setGlassEnabled(true);
-				this.setPopupPosition(parent.canvas.lMouseDown[0], parent.canvas.lMouseDown[1]);
 				this.setStyleName("paramDialog");
 				lblTitle.setText("Vertex name:");
 				txtParam.setText(initialValue);				
@@ -182,6 +180,8 @@ public class Dialog extends PopupPanel
 				pnlCont.add(pnlBtns);
 				break;
 		}
+		
+		this.setPopupPosition(left, top);
 		
 		this.show();
 		
