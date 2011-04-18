@@ -44,10 +44,10 @@ public class Graphemeui implements EntryPoint {
 
     public Graphemeui() {
         description = new Description();
-        tools = new Toolbox(this);
         canvas = new Canvas(this);
         chat = Chat.getInstance(this);
         drawing = new DrawingImpl();
+        tools = new Toolbox(this);
         graphManagerFactory = GraphManager2dFactory.getInstance();
         graphManager = graphManagerFactory.makeDefaultGraphManager();
         drawing.setOffset(0, 0);
