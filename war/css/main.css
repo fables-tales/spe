@@ -151,6 +151,19 @@ h1 {
   filter:alpha(opacity=80);
 }
 
+.errorDialog {
+  color: #f00;
+  background-color: #fff;
+  border: 3px solid #f00;
+  cursor: pointer;
+  font: bold 13px arial;
+  padding: 3px 6px;  
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  opacity:0.8;
+  filter:alpha(opacity=80);
+}
+
 .paramDialog {
   background-color: #fff;
   border: 3px solid #c6d1df;
