@@ -174,6 +174,8 @@ public class Graphemeui implements EntryPoint
     		vd.setHilighted(false);
     	}
     	
+    	tools.pnlTools4.setVisible(false);
+    	
     	selectedVertices.clear();
     }
     
@@ -245,9 +247,17 @@ public class Graphemeui implements EntryPoint
         		selectedVertices.add(vd);
         	}
         	graphManager.invalidate();
+        	
+        	tools.pnlTools4.setVisible(true);
+        	
             return true;
         }
         
+        if (selectedVertices.isEmpty())
+        {
+        	tools.pnlTools4.setVisible(false);
+        }
+
         return false;
     }
     
