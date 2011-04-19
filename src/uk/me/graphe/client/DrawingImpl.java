@@ -12,6 +12,10 @@ public class DrawingImpl implements Drawing {
 	public double zoom;
 	private boolean mIsFlowChart;
 	
+	// used for UI line
+    private double[] mUIline = {0,0,0,0};
+    private boolean mShowUILine = false;
+	
 	private static native void runJavascript(String script) /*-{
 	    eval(script);
 	}-*/;
@@ -1445,6 +1449,9 @@ public class DrawingImpl implements Drawing {
         function drawEdge(left1,top1, left2,top2,style){
             
             switch(style){
+            case 50:
+                drawLine(left1,top1,left2,top2,2,getColor(7));
+                break;
             case 100: // FLOW CHART
                 // Draw line with Arrow at end
                 drawLineArrow(left1,top1,left2,top2,2,getColor(0));
@@ -1598,12 +1605,50 @@ public class DrawingImpl implements Drawing {
         if (typeof Float32Array != "undefined")return 1;
         return 0;
     }-*/;
+    
+    /**
+     * set the coordinates of the UI line, and displays it
+     * 
+     * @param startX
+     *            x coordinate of start point
+     * @param startY
+     *            y coordinate of start point
+     * @param endX
+     *            x coordinate of end point
+     * @param endY
+     *            y coordinate of end point
+     */
+    public void setUILine(double startX,double startY,double endX,double endY)
+    {
+        mUIline[0] = startX;
+        mUIline[1] = startY;
+        mUIline[2] = endX;
+        mUIline[3] = endY;
+        mShowUILine = true;
+    }
+    
+    /**
+     * displays the UI line
+     * 
+     */
+    public void showUIline()
+    {
+        mShowUILine = true;
+    }
+    
+    /**
+     * hides the UI line
+     * 
+     */
+    public void hideUIline()
+    {
+        mShowUILine = false;
+    }
 
     public void renderGraph(GWTCanvas canvas, Collection<EdgeDrawable> edges,
             Collection<VertexDrawable> vertices) {
-
+        
         // Do a (kind of reliable) check for webgl
-
         if (webglCheck() == 1) { // Can do WebGL
 
             // At the moment coordinates are passed to JavaScript as comma
@@ -1625,6 +1670,14 @@ public class DrawingImpl implements Drawing {
                 edgeStyle = 100;
                 if(thisEdge.isHilighted())edgeStyle = -100;
                 addEdge(startX,startY,endX,endY,edgeStyle);
+            }
+            if(mShowUILine)
+            {
+                addEdge((mUIline[0]+ offsetX)*zoom,
+                        (mUIline[1]+ offsetY)*zoom,
+                        (mUIline[2]+ offsetX)*zoom,
+                        (mUIline[3]+ offsetY)*zoom,
+                        50);
             }
             for (VertexDrawable thisVertex : vertices) {
                 double centreX = (thisVertex.getCenterX() + offsetX)*zoom;
