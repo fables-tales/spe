@@ -35,6 +35,7 @@ public class Dialog extends PopupPanel
 		
 		this.addStyleName("helpDialog");
 		this.addStyleName("paramDialog");
+		this.addStyleName("errorDialog");
 		
 		this.setAnimationEnabled(true);
 				
@@ -86,7 +87,7 @@ public class Dialog extends PopupPanel
 			@Override
 			public void onClick(ClickEvent arg0)
 			{
-				if (parent.dialog.getType() == DialogType.help)
+				if ((parent.dialog.getType() == DialogType.help) || (parent.dialog.getType() == DialogType.error))
 				{
 					parent.isHotkeysEnabled = true;
 					parent.dialog.hide();
@@ -173,16 +174,27 @@ public class Dialog extends PopupPanel
 				pnlCont.add(txtParam);
 				pnlCont.add(pnlBtns);
 				btnOk.setEnabled(true);
+				this.setPopupPosition(left, top);
+				break;
+			case error:
+				parent.isHotkeysEnabled = false;
+				this.setTitle("Error occured");
+				this.setAutoHideEnabled(true);
+				this.setGlassEnabled(true);
+				this.setStyleName("errorDialog");
+				lblTitle.setText(initialValue);
+				pnlCont.add(lblTitle);
+				this.center();
 				break;
 			case help:
 				parent.isHotkeysEnabled = true;
 				this.setTitle("Help");
 				this.setAutoHideEnabled(true);
 				this.setGlassEnabled(false);
-				//this.setPopupPosition(50, 125);
 				this.setStyleName("helpDialog");
 				lblTitle.setText(initialValue);
 				pnlCont.add(lblTitle);
+				this.setPopupPosition(left, top);
 				break;
 			case vertexName:
 				parent.isHotkeysEnabled = false;
@@ -203,10 +215,9 @@ public class Dialog extends PopupPanel
 				pnlCont.add(lblTitle);
 				pnlCont.add(txtParam);
 				pnlCont.add(pnlBtns);
+				this.setPopupPosition(left, top);
 				break;
 		}
-		
-		this.setPopupPosition(left, top);
 		
 		this.show();
 		
