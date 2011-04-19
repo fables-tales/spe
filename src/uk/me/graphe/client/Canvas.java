@@ -107,6 +107,11 @@ public class Canvas extends Composite{
 					parent.dialog.show(DialogType.edgeWeight,"", e.getX(), e.getY());
 				}
 				break;
+			case move:
+				if (parent.selectedVertices.size() == 1)
+				{
+					parent.clearSelectedObjects(); //deselect the moved vertex if only one moved.
+				}
 			case select:
 				if (e.isControlKeyDown())
 				{
