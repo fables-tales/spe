@@ -48,7 +48,7 @@ public class ToolInfo extends Composite {
 				lblText.setText("Cluster");
 				break;
 			case delete:
-				lblText.setText("Delete (d)");
+				lblText.setText("Delete (DEL)");
 				break;
 			case move:
 				lblText.setText("Move/Pan (m)");
