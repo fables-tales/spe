@@ -43,7 +43,7 @@ public class Dialog extends PopupPanel
 		pnlBtns = new HorizontalPanel();
 		lblTitle = new Label();
 		txtParam = new TextBox();
-		btnOk = new Button("Add");
+		btnOk = new Button("Set");
 		btnCancel = new Button("Cancel");
 		
 		pnlBtns.add(btnOk);
@@ -63,6 +63,9 @@ public class Dialog extends PopupPanel
 						parent.addEdge(parent.selectedVertices.get(0), parent.selectedVertices.get(1), Integer.parseInt(txtParam.getText()));
 						parent.clearSelectedObjects();
 						parent.tools.setTool(Tools.addEdge);
+						break;
+					case graphName:
+						// TODO: set the graph name here
 						break;
 					case vertexName:
 						parent.addVertex(txtParam.getText());
@@ -105,6 +108,9 @@ public class Dialog extends PopupPanel
 					case edgeWeight:
 						// TODO: text validation
 						break;
+					case graphName:
+						// TODO: text validation
+						break;
 					case vertexName:
 						// TODO: text validation
 						
@@ -121,32 +127,37 @@ public class Dialog extends PopupPanel
 				{
 					btnCancel.click();
 				}
+				else if (e.getNativeKeyCode() == KeyCodes.KEY_ENTER)
+				{
+					btnOk.click();
+				}
 				else
 				{
 					switch (currentType)
 					{
 						case edgeWeight:
-							if (e.getNativeKeyCode() == KeyCodes.KEY_ENTER)
-							{
-								btnOk.click();
-							}
 							break;
-						case vertexName:
+						case graphName:
 							if (txtParam.getText().trim().length() > 0)
 							{
 								btnOk.setEnabled(true);
-								
-								if (e.getNativeKeyCode() == KeyCodes.KEY_ENTER)
-								{
-									btnOk.click();
-								}
 							}
 							else
 							{
 								btnOk.setEnabled(false);
 							}
 							break;
-					}
+						case vertexName:
+							if (txtParam.getText().trim().length() > 0)
+							{
+								btnOk.setEnabled(true);
+							}
+							else
+							{
+								btnOk.setEnabled(false);
+							}
+							break;
+					}				
 				}
 			}
 		});
@@ -175,6 +186,7 @@ public class Dialog extends PopupPanel
 				pnlCont.add(lblTitle);
 				pnlCont.add(txtParam);
 				pnlCont.add(pnlBtns);
+				btnOk.setText("Add");
 				btnOk.setEnabled(true);
 				this.setPopupPosition(left, top);
 				break;
@@ -186,6 +198,27 @@ public class Dialog extends PopupPanel
 				this.setStyleName("errorDialog");
 				lblTitle.setText(initialValue);
 				pnlCont.add(lblTitle);
+				this.center();
+				break;
+			case graphName:
+				parent.isHotkeysEnabled = false;
+				this.setTitle("Graph name");
+				this.setAutoHideEnabled(false);
+				this.setGlassEnabled(true);
+				this.setStyleName("paramDialog");
+				lblTitle.setText("Graph name:");
+				txtParam.setText(initialValue);				
+				if (initialValue.length() > 0)
+				{
+					btnOk.setEnabled(true);
+				}
+				else
+				{
+					btnOk.setEnabled(false);
+				}				
+				pnlCont.add(lblTitle);
+				pnlCont.add(txtParam);
+				pnlCont.add(pnlBtns);
 				this.center();
 				break;
 			case help:
