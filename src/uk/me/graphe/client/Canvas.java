@@ -66,11 +66,11 @@ public class Canvas extends Composite{
 	@UiHandler("canvasPanel")
 	void onMouseMove(MouseMoveEvent e)
 	{
+		int x = getMouseX(e.getX());
+        int y = getMouseY(e.getY());
+        
 		if (isMouseDown)
-		{		
-			int x = getMouseX(e.getX());
-            int y = getMouseY(e.getY());
-            
+		{	 
             switch (parent.tools.currentTool)
             {
 	            case addEdge:
@@ -96,6 +96,21 @@ public class Canvas extends Composite{
 			
 			lMouseMove[X] = x;
 			lMouseMove[Y] = y;
+		}
+		else
+		{
+			VertexDrawable vd = parent.graphManager.getDrawableAt(x, y);
+			
+			setTitle(null);
+			
+			if (vd != null)
+			{
+				setTitle(vd.getLabel());
+			}
+			else
+			{
+				setTitle(null);
+			}
 		}
 	}
 	
