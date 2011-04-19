@@ -97,31 +97,37 @@ public class Dialog extends PopupPanel
 		{
 			public void onKeyUp(KeyUpEvent e)
 			{
-				switch (currentType)
+				if (e.getNativeKeyCode() == KeyCodes.KEY_ESCAPE)
 				{
-					case edgeWeight:
-						if (e.getNativeKeyCode() == KeyCodes.KEY_ENTER)
-						{
-							btnOk.click();
-						}
-						break;
-					case vertexName:
-						if (txtParam.getText().trim().length() > 0)
-						{
-							btnOk.setEnabled(true);
-							
+					btnCancel.click();
+				}
+				else
+				{
+					switch (currentType)
+					{
+						case edgeWeight:
 							if (e.getNativeKeyCode() == KeyCodes.KEY_ENTER)
 							{
 								btnOk.click();
 							}
-						}
-						else
-						{
-							btnOk.setEnabled(false);
-						}
-						break;
+							break;
+						case vertexName:
+							if (txtParam.getText().trim().length() > 0)
+							{
+								btnOk.setEnabled(true);
+								
+								if (e.getNativeKeyCode() == KeyCodes.KEY_ENTER)
+								{
+									btnOk.click();
+								}
+							}
+							else
+							{
+								btnOk.setEnabled(false);
+							}
+							break;
+					}
 				}
-
 			}
 		});
 		
