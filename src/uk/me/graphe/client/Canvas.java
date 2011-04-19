@@ -50,35 +50,49 @@ public class Canvas extends Composite{
 		lMouseMove[X] = getMouseX(e.getX());
 		lMouseMove[Y] = getMouseY(e.getY());
 		
-		if ((parent.tools.currentTool == Tools.move) && (parent.selectedVertices.size() < 1))
+		switch (parent.tools.currentTool)
 		{
-			parent.toggleSelectedVertexAt(lMouseDown[X], lMouseDown[Y]); // try to select vertex.
+			case addEdge:
+				break;
+			case move:
+				if (parent.selectedVertices.size() < 1)
+				{
+					parent.toggleSelectedVertexAt(lMouseDown[X], lMouseDown[Y]); // try to select vertex.
+				}
+				break;
 		}
 	}
 	
 	@UiHandler("canvasPanel")
 	void onMouseMove(MouseMoveEvent e)
 	{
-		if (isMouseDown && (parent.tools.currentTool == Tools.move))
+		if (isMouseDown)
 		{		
 			int x = getMouseX(e.getX());
             int y = getMouseY(e.getY());
             
-			if (parent.selectedVertices.size() > 0)
-			{
-				// TODO: Move the nodes here by the offset.
-				for (VertexDrawable vd : parent.selectedVertices)
-				{
-					int xC = vd.getCenterX() -(lMouseMove[X] - x);
-					int yC = vd.getCenterY() -(lMouseMove[Y] -y);
-					
-					parent.moveNode(vd, xC, yC);
-				}
-			}
-			else
-			{
-				parent.pan(-(lMouseDown[X] - x), -(lMouseDown[Y] -y));
-			}
+            switch (parent.tools.currentTool)
+            {
+	            case addEdge:
+	            	break;
+	            case move:
+					if (parent.selectedVertices.size() > 0)
+					{
+						// TODO: Move the nodes here by the offset.
+						for (VertexDrawable vd : parent.selectedVertices)
+						{
+							int xC = vd.getCenterX() -(lMouseMove[X] - x);
+							int yC = vd.getCenterY() -(lMouseMove[Y] -y);
+							
+							parent.moveNode(vd, xC, yC);
+						}
+					}
+					else
+					{
+						parent.pan(-(lMouseDown[X] - x), -(lMouseDown[Y] -y));
+					}
+					break;
+            }
 			
 			lMouseMove[X] = x;
 			lMouseMove[Y] = y;
