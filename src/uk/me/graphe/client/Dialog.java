@@ -155,7 +155,9 @@ public class Dialog extends PopupPanel
 	}
 
 	public void show (DialogType type, String initialValue, int left, int top)
-	{
+	{		
+		if (this.isVisible()) this.hide();
+		
 		pnlCont.clear();
 		
 		currentType = type;
