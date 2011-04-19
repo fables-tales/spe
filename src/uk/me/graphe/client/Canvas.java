@@ -23,6 +23,7 @@ public class Canvas extends Composite{
 	public final Graphemeui parent;
 	
 	public int lMouseDown[];
+	private int lMouseMove[];
 		
 	private static final int X = 0, Y = 1;
 
@@ -35,6 +36,7 @@ public class Canvas extends Composite{
 		this.parent = gUI;
 
 		lMouseDown = new int[2];
+		lMouseMove = new int[2];
 	}
 	
 	@UiHandler("canvasPanel")
@@ -44,6 +46,9 @@ public class Canvas extends Composite{
 		
 		lMouseDown[X] = getMouseX(e.getX());
 		lMouseDown[Y] = getMouseY(e.getY());
+		
+		lMouseMove[X] = getMouseX(e.getX());
+		lMouseMove[Y] = getMouseY(e.getY());
 		
 		if ((parent.tools.currentTool == Tools.move) && (parent.selectedVertices.size() < 1))
 		{
@@ -64,8 +69,8 @@ public class Canvas extends Composite{
 				// TODO: Move the nodes here by the offset.
 				for (VertexDrawable vd : parent.selectedVertices)
 				{
-					int xC = vd.getLeft() -(lMouseDown[X] - x);
-					int yC = vd.getTop() -(lMouseDown[Y] -y);
+					int xC = vd.getCenterX() -(lMouseMove[X] - x);
+					int yC = vd.getCenterY() -(lMouseMove[Y] -y);
 					
 					parent.moveNode(vd, xC, yC);
 				}
@@ -74,6 +79,9 @@ public class Canvas extends Composite{
 			{
 				parent.pan(-(lMouseDown[X] - x), -(lMouseDown[Y] -y));
 			}
+			
+			lMouseMove[X] = x;
+			lMouseMove[Y] = y;
 		}
 	}
 	
