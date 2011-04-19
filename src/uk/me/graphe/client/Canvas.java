@@ -100,16 +100,12 @@ public class Canvas extends Composite{
 		else
 		{
 			VertexDrawable vd = parent.graphManager.getDrawableAt(x, y);
-			
-			setTitle(null);
+
+			setTitle("");
 			
 			if (vd != null)
 			{
 				setTitle(vd.getLabel());
-			}
-			else
-			{
-				setTitle(null);
 			}
 		}
 	}
