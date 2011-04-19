@@ -61,6 +61,7 @@ public class Dialog extends PopupPanel
 					case edgeWeight:
 						parent.addEdge(parent.selectedVertices.get(0), parent.selectedVertices.get(1), Integer.parseInt(txtParam.getText()));
 						parent.clearSelectedObjects();
+						parent.tools.setTool(Tools.addEdge);
 						break;
 					case vertexName:
 						parent.addVertex(txtParam.getText());
