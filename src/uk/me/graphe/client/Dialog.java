@@ -81,6 +81,19 @@ public class Dialog extends PopupPanel
 			}			
 		});
 		
+		lblTitle.addClickHandler(new ClickHandler()
+		{
+			@Override
+			public void onClick(ClickEvent arg0)
+			{
+				if (parent.dialog.getType() == DialogType.help)
+				{
+					parent.isHotkeysEnabled = true;
+					parent.dialog.hide();
+				}
+			}			
+		});
+		
 		txtParam.addKeyDownHandler(new KeyDownHandler()
 		{
 			@Override
@@ -198,5 +211,10 @@ public class Dialog extends PopupPanel
 		this.show();
 		
 		txtParam.setFocus(true);
+	}
+	
+	public DialogType getType()
+	{
+		return currentType;
 	}
 }
