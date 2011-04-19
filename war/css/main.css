@@ -152,16 +152,16 @@ h1 {
 }
 
 .errorDialog {
-  color: #f00;
-  background-color: #fff;
+  color: #333;
+  background-color: #f5d0d0;
   border: 3px solid #f00;
   cursor: pointer;
   font: bold 13px arial;
   padding: 3px 6px;  
   -moz-border-radius: 6px;
   border-radius: 6px;
-  opacity:0.8;
-  filter:alpha(opacity=80);
+  opacity:1.0;
+  filter:alpha(opacity=100);
 }
 
 .paramDialog {
