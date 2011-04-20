@@ -22,10 +22,12 @@ public class Dialog extends PopupPanel
 {
 	private final Graphemeui parent;
 	private final VerticalPanel pnlCont;
-	private final HorizontalPanel pnlBtns;
+	//private final HorizontalPanel pnlBtns;
 	private final Label lblTitle;
 	private final TextBox txtParam;
-	private final Button btnOk, btnCancel;
+	//private final Button btnOk, btnCancel;
+	
+	private boolean isOk;
 	
 	private DialogType currentType;
 	
@@ -40,10 +42,10 @@ public class Dialog extends PopupPanel
 		this.setAnimationEnabled(true);
 				
 		pnlCont = new VerticalPanel();
-		pnlBtns = new HorizontalPanel();
+		//pnlBtns = new HorizontalPanel();
 		lblTitle = new Label();
 		txtParam = new TextBox();
-		btnOk = new Button("Set");
+		/*btnOk = new Button("Set");
 		btnCancel = new Button("Cancel");
 		
 		pnlBtns.add(btnOk);
@@ -54,24 +56,7 @@ public class Dialog extends PopupPanel
 			@Override
 			public void onClick(ClickEvent arg0)
 			{
-				parent.isHotkeysEnabled = true;
-				parent.dialog.hide();
-				
-				switch (currentType)
-				{
-					case edgeWeight:
-						parent.addEdge(parent.selectedVertices.get(0), parent.selectedVertices.get(1), Integer.parseInt(txtParam.getText()));
-						parent.clearSelectedObjects();
-						parent.tools.setTool(Tools.addEdge);
-						break;
-					case graphName:
-						// TODO: set the graph name here
-						break;
-					case vertexName:
-						parent.addVertex(txtParam.getText());
-						parent.tools.setTool(Tools.addVertex);
-						break;
-				}
+				ok();
 			}			
 		});
 		
@@ -80,10 +65,9 @@ public class Dialog extends PopupPanel
 			@Override
 			public void onClick(ClickEvent arg0)
 			{
-				parent.isHotkeysEnabled = true;
-				parent.dialog.hide();
+				cancel();
 			}			
-		});
+		});*/
 		
 		lblTitle.addClickHandler(new ClickHandler()
 		{
@@ -125,11 +109,11 @@ public class Dialog extends PopupPanel
 			{
 				if (e.getNativeKeyCode() == KeyCodes.KEY_ESCAPE)
 				{
-					btnCancel.click();
+					cancel();
 				}
 				else if (e.getNativeKeyCode() == KeyCodes.KEY_ENTER)
 				{
-					btnOk.click();
+					ok();
 				}
 				else
 				{
@@ -140,21 +124,25 @@ public class Dialog extends PopupPanel
 						case graphName:
 							if (txtParam.getText().trim().length() > 0)
 							{
-								btnOk.setEnabled(true);
+								//btnOk.setEnabled(true);
+								isOk = true;
 							}
 							else
 							{
-								btnOk.setEnabled(false);
+								//btnOk.setEnabled(false);
+								isOk = false;
 							}
 							break;
 						case vertexName:
 							if (txtParam.getText().trim().length() > 0)
 							{
-								btnOk.setEnabled(true);
+								//btnOk.setEnabled(true);
+								isOk = true;
 							}
 							else
 							{
-								btnOk.setEnabled(false);
+								//btnOk.setEnabled(false);
+								isOk = false;
 							}
 							break;
 					}				
@@ -185,9 +173,10 @@ public class Dialog extends PopupPanel
 				txtParam.setText(initialValue);
 				pnlCont.add(lblTitle);
 				pnlCont.add(txtParam);
-				pnlCont.add(pnlBtns);
+				/*pnlCont.add(pnlBtns);
 				btnOk.setText("Add");
-				btnOk.setEnabled(true);
+				btnOk.setEnabled(true);*/
+				isOk = true;
 				this.setPopupPosition(left, top);
 				break;
 			case error:
@@ -210,15 +199,17 @@ public class Dialog extends PopupPanel
 				txtParam.setText(initialValue);				
 				if (initialValue.length() > 0)
 				{
-					btnOk.setEnabled(true);
+					//btnOk.setEnabled(true);
+					isOk = true;
 				}
 				else
 				{
-					btnOk.setEnabled(false);
-				}				
+					//btnOk.setEnabled(false);
+					isOk = false;
+				}	
 				pnlCont.add(lblTitle);
 				pnlCont.add(txtParam);
-				pnlCont.add(pnlBtns);
+				//pnlCont.add(pnlBtns);
 				this.center();
 				break;
 			case help:
@@ -241,15 +232,17 @@ public class Dialog extends PopupPanel
 				txtParam.setText(initialValue);				
 				if (initialValue.length() > 0)
 				{
-					btnOk.setEnabled(true);
+					//btnOk.setEnabled(true);
+					isOk = true;
 				}
 				else
 				{
-					btnOk.setEnabled(false);
-				}				
+					//btnOk.setEnabled(false);
+					isOk = false;
+				}		
 				pnlCont.add(lblTitle);
 				pnlCont.add(txtParam);
-				pnlCont.add(pnlBtns);
+				//pnlCont.add(pnlBtns);
 				this.setPopupPosition(left, top);
 				break;
 		}
@@ -262,5 +255,36 @@ public class Dialog extends PopupPanel
 	public DialogType getType()
 	{
 		return currentType;
+	}
+	
+	private void ok()
+	{
+		if (isOk)
+		{
+			parent.isHotkeysEnabled = true;
+			parent.dialog.hide();
+			
+			switch (currentType)
+			{
+				case edgeWeight:
+					parent.addEdge(parent.selectedVertices.get(0), parent.selectedVertices.get(1), Integer.parseInt(txtParam.getText()));
+					parent.clearSelectedObjects();
+					parent.tools.setTool(Tools.addEdge);
+					break;
+				case graphName:
+					// TODO: set the graph name here
+					break;
+				case vertexName:
+					parent.addVertex(txtParam.getText());
+					parent.tools.setTool(Tools.addVertex);
+					break;
+			}
+		}
+	}
+	
+	private void cancel()
+	{
+		parent.isHotkeysEnabled = true;
+		parent.dialog.hide();		
 	}
 }
