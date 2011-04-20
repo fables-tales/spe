@@ -1,7 +1,5 @@
 package uk.me.graphe.client;
 
-import uk.me.graphe.shared.Tools;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -28,7 +26,6 @@ public class Canvas extends Composite{
 	private static final int X = 0, Y = 1;
 
 	private boolean isMouseDown;
-
 	
 	public Canvas (Graphemeui gUI)
 	{
@@ -52,7 +49,9 @@ public class Canvas extends Composite{
 		
 		switch (parent.tools.currentTool)
 		{
-			case addEdge:
+			case addEdge:				
+				parent.drawing.setUILine(lMouseDown[X], lMouseDown[Y], lMouseDown[X], lMouseDown[Y]);
+				parent.graphManager.invalidate();
 				break;
 			case move:
 				if (parent.selectedVertices.size() < 1)
@@ -74,6 +73,8 @@ public class Canvas extends Composite{
             switch (parent.tools.currentTool)
             {
 	            case addEdge:
+	            	parent.drawing.setUILine(lMouseDown[X], lMouseDown[Y], x, y);
+	            	parent.graphManager.invalidate();
 	            	break;
 	            case move:
 					if (parent.selectedVertices.size() > 0)
@@ -100,12 +101,16 @@ public class Canvas extends Composite{
 		else
 		{
 			VertexDrawable vd = parent.graphManager.getDrawableAt(x, y);
-
-			setTitle("");
 			
 			if (vd != null)
+			{				
+				parent.tooltip.setText(vd.getLabel());
+				parent.tooltip.setPopupPosition((e.getX() + 60), (e.getY() + 140));
+				parent.tooltip.show();
+			}
+			else
 			{
-				setTitle(vd.getLabel());
+				parent.tooltip.hide();
 			}
 		}
 	}
@@ -114,6 +119,7 @@ public class Canvas extends Composite{
 	void onMouseOut (MouseOutEvent e)
 	{
 		isMouseDown = false;
+		parent.drawing.hideUIline();
 	}
 	
 	@UiHandler("canvasPanel")
@@ -125,12 +131,14 @@ public class Canvas extends Composite{
 				parent.dialog.show(DialogType.vertexName,"", e.getX(), e.getY());
 				break;
 			case addEdge:
+				parent.drawing.hideUIline();
 				parent.toggleSelectedVertexAt(lMouseDown[X], lMouseDown[Y]);
 				
 				if (parent.selectedVertices.size() == 2) 
 				{
 					parent.dialog.show(DialogType.edgeWeight,"", e.getX(), e.getY());
 				}
+				parent.graphManager.invalidate();
 				break;
 			case move:
 				if (parent.selectedVertices.size() == 1)
