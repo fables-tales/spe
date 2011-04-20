@@ -104,8 +104,8 @@ public class Canvas extends Composite{
 			
 			if (vd != null)
 			{				
-				parent.tooltip.setText(vd.getLabel());
 				parent.tooltip.setPopupPosition((e.getX() + 60), (e.getY() + 140));
+				parent.tooltip.setText(vd.getLabel());
 				parent.tooltip.show();
 			}
 			else
@@ -120,6 +120,7 @@ public class Canvas extends Composite{
 	{
 		isMouseDown = false;
 		parent.drawing.hideUIline();
+		parent.tooltip.hide();
 	}
 	
 	@UiHandler("canvasPanel")
