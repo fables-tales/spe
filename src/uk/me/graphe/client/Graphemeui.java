@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 public class Graphemeui implements EntryPoint
 {   
     public final Canvas canvas;
+    public final CanvasTooltip tooltip;
     public final Chat chat;  
     public final Dialog dialog;
     public final GraphInfo graphInfo;
@@ -52,6 +53,7 @@ public class Graphemeui implements EntryPoint
         chat = Chat.getInstance(this);
         graphInfo = new GraphInfo(this);
         drawing = new DrawingImpl();
+        tooltip = new CanvasTooltip(this);
         graphManagerFactory = GraphManager2dFactory.getInstance();
         graphManager = graphManagerFactory.makeDefaultGraphManager();
         drawing.setOffset(0, 0);
