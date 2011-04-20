@@ -287,3 +287,14 @@ h1 {
 .btnNormal:hover {
 	background: url(../images/nostyled.png) no-repeat;
 }
+
+.canvasTooltip {
+  background-color: #c6d1df;
+  border: 1px solid #c6d1df;
+  font: bold 13px arial;
+  padding: 3px;  
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  opacity:0.85;
+  filter:alpha(opacity=85);
+}
