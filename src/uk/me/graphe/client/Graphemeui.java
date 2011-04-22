@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 public class Graphemeui implements EntryPoint
 {   
     public final Canvas canvas;
+    public final CanvasTooltip tooltip;
     public final Chat chat;  
     public final Dialog dialog;
     public final GraphInfo graphInfo;
@@ -52,6 +53,7 @@ public class Graphemeui implements EntryPoint
         graphInfo = new GraphInfo(this);
         drawing = new DrawingImpl();
         tools = new Toolbox(this);
+        tooltip = new CanvasTooltip(this);
         graphManagerFactory = GraphManager2dFactory.getInstance();
         graphManager = graphManagerFactory.makeDefaultGraphManager();
         drawing.setOffset(0, 0);
@@ -174,6 +176,8 @@ public class Graphemeui implements EntryPoint
     		vd.setHilighted(false);
     	}
     	
+    	tools.pnlTools4.setVisible(false);
+    	
     	selectedVertices.clear();
     }
     
@@ -245,9 +249,17 @@ public class Graphemeui implements EntryPoint
         		selectedVertices.add(vd);
         	}
         	graphManager.invalidate();
+        	
+        	tools.pnlTools4.setVisible(true);
+        	
             return true;
         }
         
+        if (selectedVertices.isEmpty())
+        {
+        	tools.pnlTools4.setVisible(false);
+        }
+
         return false;
     }
     

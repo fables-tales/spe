@@ -55,6 +55,8 @@ public class Toolbox extends Composite {
 		pnlTools4.add(btnDecision);
 		pnlTools4.add(btnNormal);
 		
+		pnlTools4.setVisible(false);
+		
 		setTool(Tools.select);
 	}
 	

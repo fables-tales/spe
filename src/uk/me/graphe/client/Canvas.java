@@ -1,7 +1,5 @@
 package uk.me.graphe.client;
 
-import uk.me.graphe.shared.Tools;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -23,11 +21,11 @@ public class Canvas extends Composite{
 	public final Graphemeui parent;
 	
 	public int lMouseDown[];
+	private int lMouseMove[];
 		
 	private static final int X = 0, Y = 1;
 
 	private boolean isMouseDown;
-
 	
 	public Canvas (Graphemeui gUI)
 	{
@@ -35,6 +33,7 @@ public class Canvas extends Composite{
 		this.parent = gUI;
 
 		lMouseDown = new int[2];
+		lMouseMove = new int[2];
 	}
 	
 	@UiHandler("canvasPanel")
@@ -45,34 +44,73 @@ public class Canvas extends Composite{
 		lMouseDown[X] = getMouseX(e.getX());
 		lMouseDown[Y] = getMouseY(e.getY());
 		
-		if ((parent.tools.currentTool == Tools.move) && (parent.selectedVertices.size() < 1))
+		lMouseMove[X] = getMouseX(e.getX());
+		lMouseMove[Y] = getMouseY(e.getY());
+		
+		switch (parent.tools.currentTool)
 		{
-			parent.toggleSelectedVertexAt(lMouseDown[X], lMouseDown[Y]); // try to select vertex.
+			case addEdge:				
+				parent.drawing.setUILine(lMouseDown[X], lMouseDown[Y], lMouseDown[X], lMouseDown[Y]);
+				parent.graphManager.invalidate();
+				break;
+			case move:
+				if (parent.selectedVertices.size() < 1)
+				{
+					parent.toggleSelectedVertexAt(lMouseDown[X], lMouseDown[Y]); // try to select vertex.
+				}
+				break;
 		}
 	}
 	
 	@UiHandler("canvasPanel")
 	void onMouseMove(MouseMoveEvent e)
 	{
-		if (isMouseDown && (parent.tools.currentTool == Tools.move))
-		{		
-			int x = getMouseX(e.getX());
-            int y = getMouseY(e.getY());
-            
-			if (parent.selectedVertices.size() > 0)
-			{
-				// TODO: Move the nodes here by the offset.
-				for (VertexDrawable vd : parent.selectedVertices)
-				{
-					int xC = vd.getLeft() -(lMouseDown[X] - x);
-					int yC = vd.getTop() -(lMouseDown[Y] -y);
-					
-					parent.moveNode(vd, xC, yC);
-				}
+		int x = getMouseX(e.getX());
+        int y = getMouseY(e.getY());
+        
+		if (isMouseDown)
+		{	 
+            switch (parent.tools.currentTool)
+            {
+	            case addEdge:
+	            	parent.drawing.setUILine(lMouseDown[X], lMouseDown[Y], x, y);
+	            	parent.graphManager.invalidate();
+	            	break;
+	            case move:
+					if (parent.selectedVertices.size() > 0)
+					{
+						// TODO: Move the nodes here by the offset.
+						for (VertexDrawable vd : parent.selectedVertices)
+						{
+							int xC = vd.getCenterX() -(lMouseMove[X] - x);
+							int yC = vd.getCenterY() -(lMouseMove[Y] -y);
+							
+							parent.moveNode(vd, xC, yC);
+						}
+					}
+					else
+					{
+						parent.pan(-(lMouseDown[X] - x), -(lMouseDown[Y] -y));
+					}
+					break;
+            }
+			
+			lMouseMove[X] = x;
+			lMouseMove[Y] = y;
+		}
+		else
+		{
+			VertexDrawable vd = parent.graphManager.getDrawableAt(x, y);
+			
+			if (vd != null)
+			{				
+				parent.tooltip.setPopupPosition((e.getX() + 60), (e.getY() + 140));
+				parent.tooltip.setText(vd.getLabel());
+				parent.tooltip.show();
 			}
 			else
 			{
-				parent.pan(-(lMouseDown[X] - x), -(lMouseDown[Y] -y));
+				parent.tooltip.hide();
 			}
 		}
 	}
@@ -81,6 +119,8 @@ public class Canvas extends Composite{
 	void onMouseOut (MouseOutEvent e)
 	{
 		isMouseDown = false;
+		parent.drawing.hideUIline();
+		parent.tooltip.hide();
 	}
 	
 	@UiHandler("canvasPanel")
@@ -92,13 +132,20 @@ public class Canvas extends Composite{
 				parent.dialog.show(DialogType.vertexName,"", e.getX(), e.getY());
 				break;
 			case addEdge:
+				parent.drawing.hideUIline();
 				parent.toggleSelectedVertexAt(lMouseDown[X], lMouseDown[Y]);
 				
 				if (parent.selectedVertices.size() == 2) 
 				{
 					parent.dialog.show(DialogType.edgeWeight,"", e.getX(), e.getY());
 				}
+				parent.graphManager.invalidate();
 				break;
+			case move:
+				if (parent.selectedVertices.size() == 1)
+				{
+					parent.clearSelectedObjects(); //deselect the moved vertex if only one moved.
+				}
 			case select:
 				if (e.isControlKeyDown())
 				{

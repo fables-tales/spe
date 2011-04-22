@@ -27,39 +27,51 @@ public class ToolboxButton extends Button
 		{
 			case select:
 				this.setStyleName("btnSelect");
+				this.setTitle("Select (s)");
 				break;
 			case move:
 				this.setStyleName("btnMove");
+				this.setTitle("Move (m)");
 				break;
 			case zoom:
 				this.setStyleName("btnZoom");
+				this.setTitle("Zoom (z)");
 				break;
 			case addVertex:
 				this.setStyleName("btnAddVert");
+				this.setTitle("Add Vertex (v)");
 				break;
 			case addEdge:
 				this.setStyleName("btnAddEdge");
+				this.setTitle("Add Edge (e)");
 				break;
 			case delete:
 				this.setStyleName("btnDelete");
+				this.setTitle("Delete (DEL)");
 				break;
 			case autolayout:
 				this.setStyleName("btnAutoLayout");
+				this.setTitle("Auto Layout");
 				break;
 			case cluster:
 				this.setStyleName("btnCluster");
+				this.setTitle("Cluster");
 				break;
 			case styleProcess:
 				this.setStyleName("btnProcess");
+				this.setTitle("Set Process Style");
 				break;
 			case styleTerminator:
 				this.setStyleName("btnTerminator");
+				this.setTitle("Set Terminator Style");
 				break;
 			case styleDecision:
 				this.setStyleName("btnDecision");
+				this.setTitle("Set Decision Style");
 				break;
 			case styleNormal:
 				this.setStyleName("btnNormal");
+				this.setTitle("Set Normal Style");
 				break;			
 		}
 		
