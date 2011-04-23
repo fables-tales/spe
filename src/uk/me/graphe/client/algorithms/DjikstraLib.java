@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class DjikstraLib {
-    public static void main(String[] args) throws IOException {
+  /*  public static void main(String[] args) throws IOException {
         if (args.length >= 3) {
             String file = args[0];
             int nodeFrom = Integer.parseInt(args[1]) - 1;
@@ -329,6 +329,6 @@ public class DjikstraLib {
         nfe[nfe[0] * 2 + 1] = edges[i + 1];
         nfe[nfe[0] * 2 + 2] = edges[i + 2];
         nfe[0] += 1;
-    }
+    }*/
 
 }
