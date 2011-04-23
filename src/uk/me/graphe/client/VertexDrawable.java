@@ -148,7 +148,8 @@ public class VertexDrawable {
      * @return
      */
     public boolean contains(int x, int y) {
-        return x >= mLeft && x <= mLeft + mWidth && y >= mTop && y <= mTop + mHeight;
+        //return x >= mLeft && x <= mLeft + mWidth && y >= mTop && y <= mTop + mHeight;
+        return (x-getCenterX())*(x-getCenterX()) + (y - getCenterY())*(y - getCenterY()) < (mWidth/2)*(mWidth/2);
     }
 
     public void setStyle(int style) {
