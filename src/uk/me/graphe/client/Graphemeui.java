@@ -186,8 +186,6 @@ public class Graphemeui implements EntryPoint
     	selectedVertices.clear();
     }
     
-    
-    
     public void doAutoLayout()
     {
     	lay.run();
@@ -230,6 +228,14 @@ public class Graphemeui implements EntryPoint
     public void pan(int left, int top) {
         drawing.setOffset(drawing.getOffsetX() + left, drawing.getOffsetY() + top);        
         graphManager.invalidate();
+    }
+    
+    public void setSelectedSyle (int style)
+    {
+    	for (VertexDrawable vd : selectedVertices)
+    	{
+    		vd.setStyle(style);
+    	}
     }
     
     public boolean toggleSelectedEdgeAt(int x, int y) {
