@@ -128,6 +128,8 @@ public class Canvas extends Composite{
 	@UiHandler("canvasPanel")
 	void onMouseUp (MouseUpEvent e)
 	{
+		isMouseDown = false;
+		
 		switch (parent.tools.currentTool)
 		{
 			case addVertex:
@@ -170,8 +172,6 @@ public class Canvas extends Composite{
 				}
 				break;
 		}
-
-		isMouseDown = false;
 	}
 	
 	private int getMouseX (int x)
