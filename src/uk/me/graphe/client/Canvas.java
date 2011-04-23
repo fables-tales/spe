@@ -81,7 +81,6 @@ public class Canvas extends Composite{
 	            case move:
 					if (parent.selectedVertices.size() > 0)
 					{
-						// TODO: Move the nodes here by the offset.
 						for (VertexDrawable vd : parent.selectedVertices)
 						{
 							int xC = vd.getCenterX() -(lMouseMove[X] - x);
