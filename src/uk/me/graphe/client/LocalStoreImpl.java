@@ -22,6 +22,7 @@ public class LocalStoreImpl implements LocalStore {
     private enum State {Server, Local};
     HashMap<Integer, State> mStates = new HashMap<Integer, State>();
     HashMap<Integer, GraphOperation> mOps = new HashMap<Integer, GraphOperation>();
+    LinkedList<Integer> mLocal = new LinkedList<Integer>();
     
     public LocalStoreImpl() {
         if (Storage.isSupported() == false )
@@ -71,6 +72,7 @@ public class LocalStoreImpl implements LocalStore {
         mStorage.setItem("itemID", id);
         mStates = new HashMap<Integer, State>();
         mOps = new HashMap<Integer, GraphOperation>();
+        mLocal = new LinkedList<Integer>();
         maxHistoryId = 0;
         return false;
     }
@@ -160,14 +162,18 @@ public class LocalStoreImpl implements LocalStore {
     	for(int i = 0; i < st.length; i++)
     		mStates.put(Integer.parseInt(st[i]), State.Server);
     	st = local.split(" ");
-    	for(int i = 0; i < st.length; i++)
-    		mStates.put(Integer.parseInt(st[i]), State.Local);
+    	for(int i = 0; i < st.length; i++) {
+    		Integer j = Integer.parseInt(st[i]);
+    		mStates.put(j, State.Local);
+    		mLocal.add(j);
+    	}
     }
     
     @Override
     public void toLocal(GraphOperation o) {
     	int historyID = o.getHistoryId();
     	mStates.put(historyID, State.Local);
+    	mLocal.add(historyID);
     }
     
     @Override
@@ -186,6 +192,14 @@ public class LocalStoreImpl implements LocalStore {
 		if (local != null)
 			for (GraphOperation item : local)
 				store(item, false);;
+	}
+
+	@Override
+	public void Ack() {
+		for (Integer item : mLocal) {
+			mStates.put(item, State.Server);
+		}
+		mLocal = new LinkedList<Integer>();
 	}
     
 }

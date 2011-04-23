@@ -55,4 +55,9 @@ public interface LocalStore {
 	 */
 	void store(GraphOperation op, boolean server);
 
+	/**
+	 * Converts the state of all the local operations to server acknowledged operations
+	 */
+	void Ack();
+
 }
