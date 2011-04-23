@@ -152,8 +152,8 @@ public class DrawingImpl implements Drawing {
             // Add UI line if required
             if (mShowUILine) {
                 addEdge((mUIline[0]+ mOffsetX)*mZoom, (mUIline[1]+ mOffsetY)*mZoom, 
-                        (mUIline[2]+ mOffsetX)*mZoom, (mUIline[0]+ mOffsetY)*mZoom,
-                        5, true, DrawingConstants.BLACK);
+                        (mUIline[2]+ mOffsetX)*mZoom, (mUIline[3]+ mOffsetY)*mZoom,
+                         5, true, DrawingConstants.GREY);
             }
             
             for (VertexDrawable thisVertex : mVerticesToDraw) {
