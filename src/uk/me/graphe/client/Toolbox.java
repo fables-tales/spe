@@ -102,7 +102,7 @@ public class Toolbox extends Composite {
 				parent.dialog.show(DialogType.help, "Click where you like to zoom in. Hold 'CTRL' and click to zoom out.", 50, 125);
 				break;
 			case autolayout:
-				// TODO: Implement
+				parent.doAutoLayout();
 				this.setTool(Tools.select);
 				break;
 			case cluster:
