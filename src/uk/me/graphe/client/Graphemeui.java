@@ -2,6 +2,7 @@ package uk.me.graphe.client;
 
 import java.util.ArrayList;
 
+import uk.me.graphe.client.algorithms.AutoLayout;
 import uk.me.graphe.client.communications.ServerChannel;
 import uk.me.graphe.client.json.wrapper.JSOFactory;
 import uk.me.graphe.shared.Edge;
@@ -45,6 +46,8 @@ public class Graphemeui implements EntryPoint
     
 	private static final int X = 0, Y = 1;
 
+	private AutoLayout lay;
+	
     public Graphemeui() {
     	dialog = new Dialog(this);
     	toolInfo = new ToolInfo(this);
@@ -71,6 +74,8 @@ public class Graphemeui implements EntryPoint
     	selectedVertices = new ArrayList<VertexDrawable>();
     	selectedEdges = new ArrayList<EdgeDrawable>();
     	isHotkeysEnabled = true;
+    	
+    	lay = new AutoLayout(graphManager);
     }
     
     public void onModuleLoad() {
@@ -179,6 +184,13 @@ public class Graphemeui implements EntryPoint
     	tools.pnlTools4.setVisible(false);
     	
     	selectedVertices.clear();
+    }
+    
+    
+    
+    public void doAutoLayout()
+    {
+    	lay.run();
     }
     
     public void deleteSelected()
