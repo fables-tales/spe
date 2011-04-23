@@ -51,7 +51,6 @@ public class Canvas extends Composite{
 		{
 			case addEdge:				
 				parent.drawing.setUILine(lMouseDown[X], lMouseDown[Y], lMouseDown[X], lMouseDown[Y]);
-				parent.graphManager.invalidate();
 				break;
 			case move:
 				if (parent.selectedVertices.size() < 1)
