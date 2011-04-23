@@ -105,6 +105,7 @@ public class ClientOT {
                         + mGraph.getEdgeDrawables().size());
                 mServerOperations.add(o);
                 mSentUnAcked.clear();
+                mStore.Ack();
             } else if (m.getMessage().equals(new StateIdMessage(0, 0).getMessage())) {
                 mServerStateId = ((StateIdMessage) m).getState();
             } else if (m.getMessage().equals("chat")) {
@@ -157,19 +158,19 @@ public class ClientOT {
     public void notifyRemoveEdge(Edge edge) {
     	DeleteEdgeOperation newop = new DeleteEdgeOperation((edge));
         mUnsentOps.add(newop);
-        mStore.store(newop);
+        mStore.store(newop, false);
     }
 
     public void notifyRemoveVertex(Vertex vertex) {
     	DeleteNodeOperation newop = new DeleteNodeOperation(vertex);
         mUnsentOps.add(newop);
-        mStore.store(newop);
+        mStore.store(newop, false);
     }
 
     public void notifyAddEdge(Vertex vertex, Vertex vertex2, VertexDirection fromto) {
     	AddEdgeOperation newop = new AddEdgeOperation(new Edge(vertex, vertex2, fromto));
         mUnsentOps.add(newop);
-    	mStore.store(newop);
+    	mStore.store(newop, false);
 
     }
 
@@ -177,7 +178,7 @@ public class ClientOT {
         Console.log("notified of adding vertex:" + v.getLabel());
         AddNodeOperation newop = new AddNodeOperation(v, i, j);
         mUnsentOps.add(newop);
-        mStore.store(newop);
+        mStore.store(newop, false);
 
     }
 
