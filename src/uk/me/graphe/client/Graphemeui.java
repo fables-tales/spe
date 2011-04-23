@@ -173,6 +173,8 @@ public class Graphemeui implements EntryPoint
     {
     	clearSelectedEdges();
 		clearSelectedVertices();
+		
+		graphManager.invalidate();
     }
     
     public void clearSelectedVertices()
