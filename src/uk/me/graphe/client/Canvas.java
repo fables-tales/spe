@@ -60,6 +60,8 @@ public class Canvas extends Composite{
 				}
 				break;
 		}
+		
+		parent.tooltip.hide();
 	}
 	
 	@UiHandler("canvasPanel")
