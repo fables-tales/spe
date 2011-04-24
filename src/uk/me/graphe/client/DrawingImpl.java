@@ -251,19 +251,21 @@ public class DrawingImpl implements Drawing {
 
                         doRendering();
                         mCurrentTime = System.currentTimeMillis();
-                        if (mFramesDone % 50 == 0) {
-                            float fps =
-                                    1 /(((float)(System.currentTimeMillis()-mOldTime))/(float)1000);
-                            fps = (float) (Math.round(((double) fps) * 100.0) / 100.0);
-                            RootPanel.get("frameRate").clear();
-                            VerticalPanel panel = new VerticalPanel();
-                            HTML gLabel =
-                                    new HTML("TotalFrames:" + mFramesDone + " Nodes:"
-                                            + mNumVertices + " FPS:" + fps);
-                            gLabel.setHorizontalAlignment(HasAlignment.ALIGN_RIGHT);
-                            panel.add(gLabel);
-                            RootPanel.get("frameRate").add(panel);
-                        }
+                        
+                        float fps =
+                                1 /(((float)(System.currentTimeMillis()-mOldTime))/(float)1000);
+                        fps = (float) (Math.round(((double) fps) * 100.0) / 100.0);
+                        RootPanel.get("frameRate").clear();
+                        VerticalPanel panel = new VerticalPanel();
+                        HTML gLabel =
+                                new HTML("TotalFrames:" + mFramesDone + 
+                                        " Nodes:"+ mNumVertices + 
+                                        " Zoom:"+ mZoom +
+                                        " FPS:" + fps);
+                        gLabel.setHorizontalAlignment(HasAlignment.ALIGN_RIGHT);
+                        panel.add(gLabel);
+                        RootPanel.get("frameRate").add(panel);
+                        
                         mOldTime = System.currentTimeMillis();
                         mRenderRequest = false;
                     }
