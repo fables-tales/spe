@@ -181,23 +181,40 @@ public class GraphManager2dImpl implements GraphManager2d {
     @Override
     public void removeEdge(Edge e) {
         mEdges.remove(e);
+        mEdgeRenderMap.remove(e);
         mVertexEdgeMap.get(e.getFromVertex()).remove(e);
         mVertexEdgeMap.get(e.getToVertex()).remove(e);
         this.invalidate();
     }
 
     @Override
-    public void removeVertex(Vertex v) {
+    public void removeVertex(Vertex v)
+    {        
         mVertices.remove(v);
         mVertexRenderMap.remove(v);
+        
         if (mVertexEdgeMap.containsKey(v)) {
-            for (Edge e : mVertexEdgeMap.get(v)) {
+        	Console.log("Vertex " + v.getLabel() + "has " + String.valueOf(mVertexEdgeMap.get(v).size()) + " edges");
+            for (Edge e : mVertexEdgeMap.get(v))
+            {
+            	Console.log("Remove edge: " + e.getFromVertex().getLabel() + " to "+ e.getToVertex().getLabel());
                 mEdges.remove(e);
+                Console.log("Removed from edges list");
+                mEdgeRenderMap.remove(e);
+                
+                if (e.getToVertex().equals(v))
+                {
+                	mVertexEdgeMap.get(e.getFromVertex()).remove(e);
+                }
+                else
+                {
+                	mVertexEdgeMap.get(e.getToVertex()).remove(e);
+                }
             }
 
             mVertexEdgeMap.remove(v);
         }
-
+        
         this.invalidate();
     }
 
