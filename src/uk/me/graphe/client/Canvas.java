@@ -50,7 +50,7 @@ public class Canvas extends Composite{
 		switch (parent.tools.currentTool)
 		{
 			case addEdge:
-				if (!parent.selectedVertices.contains(parent.graphManager.getDrawableAt(lMouseDown[X], lMouseDown[Y])))
+				if (!parent.selectedVertices.contains(parent.graphManager.getVertexDrawableAt(lMouseDown[X], lMouseDown[Y])))
 				{
 					parent.toggleSelectedVertexAt(lMouseDown[X], lMouseDown[Y]);
 				}
@@ -79,7 +79,7 @@ public class Canvas extends Composite{
             switch (parent.tools.currentTool)
             {
 	            case addEdge:        	
-	            	VertexDrawable vHover = parent.graphManager.getDrawableAt(x, y);
+	            	VertexDrawable vHover = parent.graphManager.getVertexDrawableAt(x, y);
 	            	if ((vHover == null) && (parent.selectedVertices.size() == 2))
 	            	{
 	            		parent.selectedVertices.get(1).setHilighted(false);
@@ -112,7 +112,7 @@ public class Canvas extends Composite{
 		}
 		else
 		{
-			VertexDrawable vd = parent.graphManager.getDrawableAt(x, y);
+			VertexDrawable vd = parent.graphManager.getVertexDrawableAt(x, y);
 			
 			if (vd != null)
 			{				

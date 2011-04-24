@@ -259,7 +259,7 @@ public class Graphemeui implements EntryPoint
     }
     
     public boolean toggleSelectedVertexAt(int x, int y) {
-        VertexDrawable vd = graphManager.getDrawableAt(x, y);
+        VertexDrawable vd = graphManager.getVertexDrawableAt(x, y);
         
         if (vd != null) {
         	if (selectedVertices.contains(vd))
