@@ -44,14 +44,18 @@ public class Canvas extends Composite{
 		lMouseDown[X] = getMouseX(e.getX());
 		lMouseDown[Y] = getMouseY(e.getY());
 		
-		lMouseMove[X] = getMouseX(e.getX());
-		lMouseMove[Y] = getMouseY(e.getY());
+		lMouseMove[X] = lMouseDown[X];
+		lMouseMove[Y] = lMouseDown[Y];
 		
 		switch (parent.tools.currentTool)
 		{
-			case addEdge:				
+			case addEdge:
+				if (!parent.selectedVertices.contains(parent.graphManager.getDrawableAt(lMouseDown[X], lMouseDown[Y])))
+				{
+					parent.toggleSelectedVertexAt(lMouseDown[X], lMouseDown[Y]);
+				}
 				parent.drawing.setUILine(lMouseDown[X], lMouseDown[Y], lMouseDown[X], lMouseDown[Y]);
-				parent.graphManager.invalidate();
+
 				break;
 			case move:
 				if (parent.selectedVertices.size() < 1)
@@ -74,14 +78,23 @@ public class Canvas extends Composite{
 		{	 
             switch (parent.tools.currentTool)
             {
-	            case addEdge:
+	            case addEdge:        	
+	            	VertexDrawable vHover = parent.graphManager.getDrawableAt(x, y);
+	            	if ((vHover == null) && (parent.selectedVertices.size() == 2))
+	            	{
+	            		parent.selectedVertices.get(1).setHilighted(false);
+	            		parent.selectedVertices.remove(1);
+	            	}
+	            	else if (!parent.selectedVertices.contains(vHover))
+					{
+						parent.toggleSelectedVertexAt(x, y);
+					}
 	            	parent.drawing.setUILine(lMouseDown[X], lMouseDown[Y], x, y);
 	            	parent.graphManager.invalidate();
 	            	break;
 	            case move:
 					if (parent.selectedVertices.size() > 0)
 					{
-						// TODO: Move the nodes here by the offset.
 						for (VertexDrawable vd : parent.selectedVertices)
 						{
 							int xC = vd.getCenterX() -(lMouseMove[X] - x);
@@ -96,9 +109,6 @@ public class Canvas extends Composite{
 					}
 					break;
             }
-			
-			lMouseMove[X] = x;
-			lMouseMove[Y] = y;
 		}
 		else
 		{
@@ -115,6 +125,9 @@ public class Canvas extends Composite{
 				parent.tooltip.hide();
 			}
 		}
+		
+		lMouseMove[X] = x;
+		lMouseMove[Y] = y;
 	}
 	
 	@UiHandler("canvasPanel")
@@ -128,6 +141,8 @@ public class Canvas extends Composite{
 	@UiHandler("canvasPanel")
 	void onMouseUp (MouseUpEvent e)
 	{
+		isMouseDown = false;
+		
 		switch (parent.tools.currentTool)
 		{
 			case addVertex:
@@ -135,19 +150,23 @@ public class Canvas extends Composite{
 				break;
 			case addEdge:
 				parent.drawing.hideUIline();
-				parent.toggleSelectedVertexAt(lMouseDown[X], lMouseDown[Y]);
-				
 				if (parent.selectedVertices.size() == 2) 
 				{
 					parent.dialog.show(DialogType.edgeWeight,"", e.getX(), e.getY());
+				}				
+				else if ((lMouseDown[X] != lMouseMove[X]) || (lMouseDown[Y] != lMouseMove[Y]))
+				{
+					parent.clearSelectedObjects();
 				}
-				parent.graphManager.invalidate();
+				
+				parent.graphManager.invalidate();	
 				break;
 			case move:
 				if (parent.selectedVertices.size() == 1)
 				{
 					parent.clearSelectedObjects(); //deselect the moved vertex if only one moved.
 				}
+				break;
 			case select:
 				if (e.isControlKeyDown())
 				{
@@ -170,8 +189,6 @@ public class Canvas extends Composite{
 				}
 				break;
 		}
-
-		isMouseDown = false;
 	}
 	
 	private int getMouseX (int x)
