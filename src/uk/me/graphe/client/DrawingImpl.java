@@ -169,54 +169,71 @@ public class DrawingImpl implements Drawing {
                 double centreY = (thisVertex.getCenterY() + mOffsetY) * mZoom;
                 double width = (thisVertex.getWidth()) * mZoom;
                 double height = (thisVertex.getHeight()) * mZoom;
+                label = thisVertex.getLabel();
                 vertexStyle = thisVertex.getStyle();
-
+                float[] customColor = { 0, 0, 0, 1};
+                
                 switch (vertexStyle) {
-                case VertexDrawable.STROKED_TERM_STYLE:
-                    vertexStyle = 100;
-                    break;
-                case VertexDrawable.STROKED_SQUARE_STYLE:
-                    vertexStyle = 101;
-                    break;
-                case VertexDrawable.STROKED_DIAMOND_STYLE:
-                    vertexStyle = 102;
-                    break;
-                default:
-                    vertexStyle = 1;
-                    break;
+                    case VertexDrawable.STROKED_TERM_STYLE:
+                        if (thisVertex.isHilighted()) {
+                            addTerm(centreX, centreY,width,height, DrawingConstants.YELLOW);
+                            addTerm(centreX, centreY,width-4,height-4, DrawingConstants.GREY);
+                        } else {
+                            addTerm(centreX, centreY,width,height, DrawingConstants.BLACK);
+                            addTerm(centreX, centreY,width-4,height-4, DrawingConstants.GREY);
+                        }
+                        addStringBox(centreX, centreY, width-height,height, label, DrawingConstants.BLACK);
+                        break;
+                    case VertexDrawable.STROKED_SQUARE_STYLE:
+                        if (thisVertex.isHilighted()) {
+                            addSquare(centreX, centreY,width,height, DrawingConstants.YELLOW);
+                            addSquare(centreX, centreY,width-4,height-4, DrawingConstants.GREY);
+                        } else {
+                            addSquare(centreX, centreY,width,height, DrawingConstants.BLACK);
+                            addSquare(centreX, centreY,width-4,height-4, DrawingConstants.GREY);
+                        }
+                        addStringBox(centreX, centreY, width,height, label, DrawingConstants.BLACK);
+                        break;
+                    case VertexDrawable.STROKED_DIAMOND_STYLE:
+                        if (thisVertex.isHilighted()) {
+                            addDiamondStroke(centreX, centreY, width,height,DrawingConstants.GREY,
+                                    2,DrawingConstants.YELLOW);
+                        } else {
+                            addDiamondStroke(centreX, centreY, width,height,DrawingConstants.GREY,
+                                    2,DrawingConstants.BLACK);
+                            
+                        }
+                        addStringCircle(centreX, centreY, width/2, label, DrawingConstants.BLACK);
+                        break;
+                    case VertexDrawable.COLORED_FILLED_CIRCLE:
+                        customColor = thisVertex.getColor();
+                        addCircle(centreX, centreY, width, customColor);
+                        break; 
+                    default:
+                        if (thisVertex.isHilighted()) {
+                            addCircle(centreX, centreY, width, DrawingConstants.BLACK);
+                            addCircle(centreX, centreY, width - 4, DrawingConstants.YELLOW);
+                            addStringCircle(centreX, centreY, width, label, DrawingConstants.BLACK);
+                        } else {
+                            addCircle(centreX, centreY, width, DrawingConstants.BLACK);
+                            addStringCircle(centreX, centreY, width, label, DrawingConstants.WHITE);
+                        }
+                        break;
                 }
                 
-                label = thisVertex.getLabel();
-                int[] customColor = { 0, 0, 0 };
-                if (thisVertex.getStyle() == VertexDrawable.COLORED_FILLED_CIRCLE) {
-                    vertexStyle = 5;
-                    customColor = thisVertex.getColor();
-                }
-                if (thisVertex.isHilighted()) {
-                    addCircle(centreX, centreY, width, DrawingConstants.BLACK);
-                    addCircle(centreX, centreY, width - 4, DrawingConstants.YELLOW);
-                    addStringCircle(centreX, centreY, width, label, DrawingConstants.BLACK);
-                } else {
-
-                    addCircle(centreX, centreY, width, DrawingConstants.BLACK);
-                    addStringCircle(centreX, centreY, width, label, DrawingConstants.WHITE);
-                }
-                // addVertice(centreX,centreY,width,height,vertexStyle,label,
-                // customColor[0],customColor[1],customColor[2]);
             }
 
-            
             renderGraph();
-
             mCanRender = true;
 
         } else {
-            // Cant do webGL so draw on 2d Canvas
-
+            // Can't do webGL so draw on 2d Canvas
             renderGraph2d(m2dCanvas, mEdgesToDraw, mVerticesToDraw);
         }
 
     }
+    
+
 
     public void renderGraph(GWTCanvas canvasNew, Collection<EdgeDrawable> edgesNew,
             Collection<VertexDrawable> verticesNew) {
@@ -448,8 +465,7 @@ public class DrawingImpl implements Drawing {
         double top2=0;
         int j = 0;
         int i = 2;
-        double fHeight = 7*size;
-        
+        double fHeight = 9*size;
         double thickness = 1.5;
         
         while(i<(verticesNeeded*2)+2)
@@ -477,6 +493,14 @@ public class DrawingImpl implements Drawing {
             }
         }
         return width*size;
+    }
+    
+    private void addTerm(double x, double y, double width, double height, float[] color){
+        double squareWidth = width-height;
+        addSquare(x,y, squareWidth, height,color);
+        addCircle(x-squareWidth/2,y,height,color);
+        addCircle(x+squareWidth/2,y,height,color);
+        
     }
 
     private void addTriangle(double centreX, double centreY, double width, double height,
@@ -586,12 +610,64 @@ public class DrawingImpl implements Drawing {
         }
 
     }
+    
+    double diamondStrokeAlgorithm(double width, double height, double strokeSize)
+    {
+        double angle1 = Math.atan(height/width);
+        double angle2 = Math.PI/2 - angle1;
+        double opp = strokeSize*Math.sin(angle2);
+        double width1Sq = (strokeSize*strokeSize)-(opp*opp);
+        double width1 = Math.sqrt(width1Sq);
+        double width2 = opp/(Math.tan(angle1));
+        double fWidth = (width1+width2)*2;
+        return fWidth;
+    }
+    
+    private void addDiamondStroke(double x, double y, double width, double height, float[] color,
+            double strokeSize, float[] strokeColor){
+        
+        double wOff = diamondStrokeAlgorithm(width/2, height/2, strokeSize);
+        double hOff = diamondStrokeAlgorithm(height/2, width/2, strokeSize);
+        
+        addDiamond(x,y,width,height,strokeColor);
+        addDiamond(x,y,width-wOff,height-hOff,color);
+    }
+    
+    private void addDiamond(double x, double y, double width, double height, float[] color){
+        
+        float halfWidth = (float) (width/2);
+        float halfHeight = (float) (height/2);
+        int startIndex = verticesIndex();
+
+        mVerticesList.add((float) x-halfWidth);
+        mVerticesList.add((float) y);
+        mVerticesList.add((float) x);
+        mVerticesList.add((float) y-halfHeight);
+        mVerticesList.add((float) x+halfWidth);
+        mVerticesList.add((float) y);
+        mVerticesList.add((float) x);
+        mVerticesList.add((float) y+halfHeight);
+
+        mIndicesList.add(startIndex + 0);
+        mIndicesList.add(startIndex + 1);
+        mIndicesList.add(startIndex + 2);
+        mIndicesList.add(startIndex + 0);
+        mIndicesList.add(startIndex + 2);
+        mIndicesList.add(startIndex + 3);
+
+        for (int i = 0; i < 4; i++) {
+            mColorsList.add(color[0]);
+            mColorsList.add(color[1]);
+            mColorsList.add(color[2]);
+            mColorsList.add(color[3]);
+
+        }
+    }
 
     private void addEdge(double x1, double y1, double x2, double y2, double thickness,
             boolean arrow, float[] color) {
         double height = y2 - y1;
         double width = x2 - x1;
-
         double length = Math.sqrt((height * height) + (width * width));
         double halfThick = thickness / 2;
         double halfLength = length / 2;
@@ -615,7 +691,7 @@ public class DrawingImpl implements Drawing {
             coords[i][1] = (oldX * Math.sin(lineAngle)) + (oldY * Math.cos(lineAngle));
         }
 
-        drawSquare(coords[0][0] + xOffset, coords[0][1] + yOffset, coords[1][0] + xOffset,
+        addSquare(coords[0][0] + xOffset, coords[0][1] + yOffset, coords[1][0] + xOffset,
                 coords[1][1] + yOffset, coords[2][0] + xOffset, coords[2][1] + yOffset,
                 coords[3][0] + xOffset, coords[3][1] + yOffset, color);
 
@@ -626,23 +702,20 @@ public class DrawingImpl implements Drawing {
         }
     }
 
-    private void drawSquare(double x, double y, double width, double height, float[] color) {
+    private void addSquare(double x, double y, double width, double height, float[] color) {
         float halfWidth = (float) (width / 2);
         float halfHeight = (float) (height / 2);
 
-        drawSquare(x - halfWidth, y - halfHeight, x + halfWidth, y - halfHeight, x - halfWidth, y
+        addSquare(x - halfWidth, y - halfHeight, x + halfWidth, y - halfHeight, x - halfWidth, y
                 + halfHeight, x + halfWidth, y + halfHeight, color);
 
     }
 
-    private void drawSquare(double topLeftX, double topLeftY, double topRightX, double topRightY,
+    private void addSquare(double topLeftX, double topLeftY, double topRightX, double topRightY,
             double bottomLeftX, double bottomLeftY, double bottomRightX, double bottomRightY,
             float[] color) {
-        int startIndex;
-        if (mVerticesList.size() == 0)
-            startIndex = 0;
-        else
-            startIndex = mVerticesList.size() / 2;
+        
+        int startIndex = verticesIndex();
 
         mVerticesList.add((float) topLeftX);
         mVerticesList.add((float) topLeftY);
