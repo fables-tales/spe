@@ -243,8 +243,23 @@ public class Graphemeui implements EntryPoint
     }
     
     public boolean toggleSelectedEdgeAt(int x, int y) {
-    	// TODO: Implement.
-    	return false;
+        EdgeDrawable ed = graphManager.getEdgeDrawableAt(x, y);
+        
+        if (ed != null) {
+        	if (selectedEdges.contains(ed))
+        	{
+        		ed.setHilighted(false);
+        		selectedEdges.remove(ed);
+        	} else {
+        		ed.setHilighted(true);
+        		selectedEdges.add(ed);
+        	}
+        	graphManager.invalidate();
+
+            return true;
+        }
+
+        return false;
     }
     
     public boolean toggleSelectedObjectAt(int x, int y) {
