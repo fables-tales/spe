@@ -232,12 +232,14 @@ public class Graphemeui implements EntryPoint
         graphManager.invalidate();
     }
     
-    public void setSelectedSyle (int style)
+    public void setSelectedSyle (int style, int width, int height)
     {
     	for (VertexDrawable vd : selectedVertices)
     	{
     		vd.setStyle(style);
+    		vd.updateSize(width,height);
     	}
+    	graphManager.invalidate();
     }
     
     public boolean toggleSelectedEdgeAt(int x, int y) {
