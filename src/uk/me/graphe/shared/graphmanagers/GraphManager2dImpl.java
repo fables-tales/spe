@@ -95,11 +95,16 @@ public class GraphManager2dImpl implements GraphManager2d {
     }
 
     @Override
-    public VertexDrawable getDrawableAt(int x, int y) {
+    public VertexDrawable getVertexDrawableAt(int x, int y) {
         for (VertexDrawable vd : mVertexRenderMap.values()) {
             if (vd.contains(x, y)) return vd;
         }
 
+        return null;
+    }
+    
+    @Override
+    public EdgeDrawable getEdgeDrawableAt(int x, int y) {
         return null;
     }
 

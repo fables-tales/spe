@@ -128,7 +128,15 @@ public interface GraphManager2d {
 	* @param y
 	* @return the vertex at the location
 	*/
-    public VertexDrawable getDrawableAt(int x, int y);
+    public VertexDrawable getVertexDrawableAt(int x, int y);
+    
+	/**
+	* gets the drawable at a specific position
+	* @param x
+	* @param y
+	* @return the vertex at the location
+	*/
+    public EdgeDrawable getEdgeDrawableAt(int x, int y);
     
     /**
      * Gets the vertex associated with the given drawable
