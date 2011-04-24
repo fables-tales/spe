@@ -214,9 +214,7 @@ public class Graphemeui implements EntryPoint
     	}
     	
     	selectedVertices.clear();
-    	selectedEdges.clear();
-
-    	graphManager.invalidate(); // TODO: does this need to be here?  	
+    	selectedEdges.clear(); 	
     }
     
     public void moveNode(VertexDrawable vd, int x, int y) {
