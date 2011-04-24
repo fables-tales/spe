@@ -208,7 +208,7 @@ public class Graphemeui implements EntryPoint
     	
     	for (EdgeDrawable ed: selectedEdges)
     	{
-			e = null; // TODO: Get edge from edge drawable.
+			e = graphManager.getEdgeFromDrawable(ed);
 			graphManager.removeEdge(e);
 			ClientOT.getInstance().notifyRemoveEdge(e);	
     	}
