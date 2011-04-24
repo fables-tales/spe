@@ -146,6 +146,13 @@ public interface GraphManager2d {
     public Vertex getVertexFromDrawable(VertexDrawable vd);
 
     /**
+     * Gets the edge associated with the given drawable
+     * @param ed
+     * @return the edge
+     */
+    public Edge getEdgeFromDrawable(EdgeDrawable ed);
+    
+    /**
      * forces graph to be redrawn
      */
 	public void invalidate();

@@ -220,6 +220,15 @@ public class GraphManager2dImpl implements GraphManager2d {
         }
         return null;
     }
+    
+    public Edge getEdgeFromDrawable(EdgeDrawable ed) {
+        for (Edge e : mEdges) {
+            if (mEdgeRenderMap.get(e) == ed) {
+                return e;
+            }
+        }
+        return null;
+    }
 
     public void invalidate() {
         for (final Runnable r : mRedrawCallbacks) {
