@@ -23,6 +23,9 @@ import uk.me.graphe.client.webglUtil.math.MatrixUtil;
 
 public class DrawingImpl implements Drawing {
 
+    // The level of zoom at which the edges begin to get thinner
+    public static final double EDGE_ZOOM_LIMIT = 0.61;
+    
     private WebGLRenderingContext mGlContext;
     private WebGLProgram mShaderProgram;
     private int mVertexPositionAttribute;
@@ -63,7 +66,7 @@ public class DrawingImpl implements Drawing {
     // used for panning
     private int mOffsetX, mOffsetY;
     private double mZoom;
-
+    
     // Edits the HTML to ensure 3d canvas is visible
     private static native int setUpCanvas()
     /*-{
@@ -121,11 +124,14 @@ public class DrawingImpl implements Drawing {
 
         // Do a (kind of reliable) check for webgl
         if (webglCheck() == 1) {
+            // Can do WebGL
             mNumVertices = 0;
             String label = "";
             int vertexStyle;
             int edgeStyle;
-            // Can do WebGL
+            double edgeThickness = 6; 
+            if(mZoom <= EDGE_ZOOM_LIMIT) edgeThickness = edgeThickness*mZoom; 
+            
             // Clear coordinates from last render
             mVerticesList.clear();
             mIndicesList.clear();
@@ -148,11 +154,11 @@ public class DrawingImpl implements Drawing {
                     edgeStyle = -edgeStyle;
                 // Add edge to lists to be rendered
                 if(thisEdge.needsToFromArrow()){
-                    addEdge(startX, startY, endX, endY, 5, true, DrawingConstants.BLACK);
+                    addEdge(startX, startY, endX, endY, edgeThickness, true, DrawingConstants.BLACK);
                 } else if(thisEdge.needsToFromArrow()){
-                    addEdge(endX, endY, startX, startY, 5, true, DrawingConstants.BLACK);
+                    addEdge(endX, endY, startX, startY, edgeThickness, true, DrawingConstants.BLACK);
                 } else {
-                    addEdge(startX, startY, endX, endY, 5, true, DrawingConstants.BLACK);
+                    addEdge(startX, startY, endX, endY, edgeThickness, true, DrawingConstants.BLACK);
                 }
             }
 
@@ -160,7 +166,7 @@ public class DrawingImpl implements Drawing {
             if (mShowUILine) {
                 addEdge((mUIline[0]+ mOffsetX)*mZoom, (mUIline[1]+ mOffsetY)*mZoom, 
                         (mUIline[2]+ mOffsetX)*mZoom, (mUIline[3]+ mOffsetY)*mZoom,
-                         5, true, DrawingConstants.GREY);
+                        edgeThickness, true, DrawingConstants.GREY);
             }
             
             for (VertexDrawable thisVertex : mVerticesToDraw) {
@@ -700,7 +706,7 @@ public class DrawingImpl implements Drawing {
         if (arrow) {
             if (x1 > x2)
                 arrowAngle -= Math.PI;
-            addTriangle(xOffset, yOffset, 30, 30, arrowAngle - Math.PI / 2, color);
+            addTriangle(xOffset, yOffset, thickness*5, thickness*5, arrowAngle - Math.PI / 2, color);
         }
     }
 
