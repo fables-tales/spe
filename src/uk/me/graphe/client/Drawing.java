@@ -93,10 +93,4 @@ public interface Drawing {
      * 
      */
     public String getUrl();
-    
-    /**
-     * returns the GraphML code of the graph
-     * 
-     */
-    public String getGraphML();
 }

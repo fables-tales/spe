@@ -879,10 +879,6 @@ public class DrawingImpl implements Drawing {
                 D,
                 0.0f };
     };
-    
-    public String getGraphML(){
-        return DrawingGraphML.getString(mEdgesToDraw,mVerticesToDraw);
-    }
 
     // old 2d canvas functions
     public void renderGraph2d(GWTCanvas canvas, Collection<EdgeDrawable> edges,
