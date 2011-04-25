@@ -6,6 +6,7 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.widgetideas.graphics.client.Color;
@@ -239,7 +240,17 @@ public class DrawingImpl implements Drawing {
 
     }
     
-
+    private static native String getUrlJsni()
+    /*-{
+        canvas = document.getElementsByTagName("canvas")[0];
+        return canvas.toDataURL();
+    }-*/;
+    
+    public String getUrl(){
+        getUrlJsni();
+        String url  = getUrlJsni();
+        return url;
+    }
 
     public void renderGraph(GWTCanvas canvasNew, Collection<EdgeDrawable> edgesNew,
             Collection<VertexDrawable> verticesNew) {
