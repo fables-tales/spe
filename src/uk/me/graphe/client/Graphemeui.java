@@ -19,6 +19,7 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
 public class Graphemeui implements EntryPoint
@@ -113,9 +114,12 @@ public class Graphemeui implements EntryPoint
 						case 86: // v
 							tools.setTool(Tools.addVertex);
 							break;
-						case 90: // z
-							tools.setTool(Tools.zoom);
-							break;
+                        case 90: // z
+                            tools.setTool(Tools.zoom);
+                            break;
+                        case 68: // d
+                            Window.open(drawing.getUrl(), "_blank", null);
+                            break;
 						case KeyCodes.KEY_DELETE:
 							tools.setTool(Tools.delete);
 							break;
