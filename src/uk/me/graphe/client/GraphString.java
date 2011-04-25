@@ -7,6 +7,20 @@ import uk.me.graphe.shared.graphmanagers.GraphManager2d;
 
 public class GraphString{ 
     
+    
+    /**
+     * returns the "DOT language" (http://en.wikipedia.org/wiki/DOT_language) 
+     * representation of the graph
+     *
+     * @param graphManager
+     *            the graph manager containing the graph
+     * @param graphName
+     *            name to use in the DOT code
+     * @param directed
+     *            true if the graph to be coded is directed
+     * @param showWeights
+     *            true if the graph should display edge waits
+     */
     public static String getDot(GraphManager2d graphManager, String graphName, boolean directed, boolean showWeights){
         
         VertexDrawable vertexToDraw;
