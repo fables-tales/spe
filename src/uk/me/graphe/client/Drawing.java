@@ -87,4 +87,10 @@ public interface Drawing {
      * 
      */
     public void hideUIline();
+    
+    /**
+     * returns the data URL of the graph
+     * 
+     */
+    public String getUrl();
 }
