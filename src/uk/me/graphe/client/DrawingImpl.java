@@ -53,10 +53,12 @@ public class DrawingImpl implements Drawing {
     private long mCurrentTime = -1;
     private long mOldTime = -1;
     private int mFramesDone = 0;
-    private int mCanvasWidth = 2000;
-    private int mCanvasHeight = 2000;
+    private int mCanvasWidth = Window.getClientWidth();
+    private int mCanvasHeight = Window.getClientHeight();
     private boolean mWebglReady = false;
 
+    WebGLCanvas webGLCanvas;
+    
     // used for styles
     private boolean mIsFlowChart;
 
@@ -78,7 +80,7 @@ public class DrawingImpl implements Drawing {
     // Does one time set up to make page ready for repeated rendering of graph
     private void setUpWebGL() {
         setUpCanvas();
-        final WebGLCanvas webGLCanvas = new WebGLCanvas(mCanvasWidth + "px", mCanvasHeight + "px");
+        webGLCanvas = new WebGLCanvas(mCanvasWidth + "px", mCanvasHeight + "px");
         mGlContext = webGLCanvas.getGlContext();
         RootPanel.get("gwtGL").add(webGLCanvas);
         mGlContext.viewport(0, 0, mCanvasWidth, mCanvasHeight);
@@ -125,6 +127,7 @@ public class DrawingImpl implements Drawing {
 
         // Do a (kind of reliable) check for webgl
         if (webglCheck() == 1) {
+            
             // Can do WebGL
             mNumVertices = 0;
             String label = "";
