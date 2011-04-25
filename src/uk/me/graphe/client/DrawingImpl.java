@@ -54,7 +54,7 @@ public class DrawingImpl implements Drawing {
     private long mOldTime = -1;
     private int mFramesDone = 0;
     private int mCanvasWidth = Window.getClientWidth();
-    private int mCanvasHeight = Window.getClientHeight();
+    private int mCanvasHeight = Window.getClientWidth(); // Deliberate
     private boolean mWebglReady = false;
 
     WebGLCanvas webGLCanvas;
@@ -879,6 +879,10 @@ public class DrawingImpl implements Drawing {
                 D,
                 0.0f };
     };
+    
+    public String getGraphML(){
+        return DrawingGraphML.getString(mEdgesToDraw,mVerticesToDraw);
+    }
 
     // old 2d canvas functions
     public void renderGraph2d(GWTCanvas canvas, Collection<EdgeDrawable> edges,
