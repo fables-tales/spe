@@ -247,7 +247,6 @@ public class DrawingImpl implements Drawing {
     }-*/;
     
     public String getUrl(){
-        getUrlJsni();
         String url  = getUrlJsni();
         return url;
     }
