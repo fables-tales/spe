@@ -121,7 +121,7 @@ public class Graphemeui implements EntryPoint
                             Window.open(drawing.getUrl(), "_blank", null);
                             break;
                         case 71: // g
-                            Window.prompt("GraphML Code", DrawingGraphML.getString(graphManager.getUnderlyingGraph()));
+                            Window.prompt("GraphML Code", GraphString.getString(graphManager.getUnderlyingGraph()));
                             break;
 						case KeyCodes.KEY_DELETE:
 							tools.setTool(Tools.delete);
