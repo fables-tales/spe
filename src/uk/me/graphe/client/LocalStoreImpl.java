@@ -31,8 +31,10 @@ public class LocalStoreImpl implements LocalStore {
         if (mStorage.getItem("itemID") == null || mStorage.getItem("itemID").equals("none")) {
             mStorage.clear();
         	mStorage.setItem("itemID", "none");
-        } else
+        } else {
+        	Window.alert("Existing graph found restoring");
         	restore();
+        }
     }
     
     @Override
@@ -93,12 +95,13 @@ public class LocalStoreImpl implements LocalStore {
     	int i;
     	String server = "";
     	String local = "";
+    	Console.log(mStates.toString());
     	for (i = 0; i < maxHistoryId; i++) {
 			State curState = mStates.get(Integer.valueOf(i));
 			if (curState == State.Server)
-				server = server.concat(Integer.toString(i) + " ");
+				server += Integer.toString(i) + " "; 
 			else if (curState == State.Local)
-				local = local.concat(Integer.toString(i) + " ");
+				local += Integer.toString(i) + " "; 
 		};
 		mStorage.setItem("Local", local);
 		mStorage.setItem("Server", server);
@@ -171,14 +174,14 @@ public class LocalStoreImpl implements LocalStore {
     
     @Override
     public void toLocal(GraphOperation o) {
-    	int historyID = o.getHistoryId();
+    	int historyID = maxHistoryId -1;
     	mStates.put(historyID, State.Local);
     	mLocal.add(historyID);
     }
     
     @Override
     public void toServer(GraphOperation o) {
-        int historyID = o.getHistoryId();
+        int historyID = maxHistoryId -1;
         mStates.put(historyID, State.Server);
     }
 
