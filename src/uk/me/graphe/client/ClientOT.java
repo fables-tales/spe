@@ -44,6 +44,7 @@ public class ClientOT {
     private LocalStore mStore = LocalStoreFactory.newInstance();
 
     private boolean mInited = true;
+    private boolean mServer = false;
 
     public ClientOT() {
         mSc = ServerChannel.getInstance();
@@ -55,6 +56,20 @@ public class ClientOT {
             }
         });
 
+         //Timer waits to see if server connection has been established
+        new Timer() {
+            @Override
+            public void run() {
+                if (mServer = false) {
+                    Console.log("No server connection, offline mode enabled");
+                    List<GraphOperation> ops = mStore.getInformation().getServer();
+                    for (GraphOperation item : ops) {
+                        item.applyTo(mGraph);
+                    }
+                }
+            }
+        }.schedule(1500);
+        
         new Timer() {
 
             @Override
@@ -62,6 +77,7 @@ public class ClientOT {
                 mSc.send(new RequestGraphMessage(1, 0).toJson());
                 Console.log("sent ogm");
                 Window.alert("SENT OGM");
+                mServer = true;
                 new Timer() {
 
                     @Override

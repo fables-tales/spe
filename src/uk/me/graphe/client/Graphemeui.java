@@ -78,8 +78,6 @@ public class Graphemeui implements EntryPoint {
         RootPanel.get("graphInfo").add(this.graphInfo);
         
         mStore = LocalStoreFactory.newInstance();
-        mStore.setgraph(1);
-        //mStore.store(new AddNodeOperation(new Vertex("test"), 10, 10), false);
         Timer t = new Timer() {
 
             @Override
