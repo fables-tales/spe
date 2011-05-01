@@ -130,7 +130,8 @@ public class Graphemeui implements EntryPoint {
     public void addEdge(VertexDrawable from, VertexDrawable to) {
     	Vertex vFrom = graphManager.getVertexFromDrawable(from);
     	Vertex vTo = graphManager.getVertexFromDrawable(to);
-        graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo);
+    	//TODO: change this value to an actual value from the user
+        graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo, 1  );
         ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo);
         
         clearSelectedObjects();

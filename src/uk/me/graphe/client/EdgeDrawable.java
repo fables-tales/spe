@@ -1,5 +1,7 @@
 package uk.me.graphe.client;
 
+import uk.me.graphe.shared.VertexDirection;
+
 public class EdgeDrawable {
     private int mStartX;
     private int mStartY;
@@ -12,8 +14,9 @@ public class EdgeDrawable {
      * 
      * arrows are always at the end edge
      */
-    private boolean mArrow;
+    private VertexDirection mArrowDirection;
     private boolean mHilighted;
+    private int mWeight;
 
     /**
      * creates a new EdgeDrawable, with no arrow
@@ -27,8 +30,8 @@ public class EdgeDrawable {
      * @param endY
      *            the end y of the edge
      */
-    public EdgeDrawable(int startX, int startY, int endX, int endY) {
-        this(startX, startY, endX, endY, false);
+    public EdgeDrawable(int startX, int startY, int endX, int endY, int weight) {
+        this(startX, startY, endX, endY, weight, VertexDirection.both);
     }
 
     /**
@@ -42,17 +45,17 @@ public class EdgeDrawable {
      *            the end x of the edge
      * @param endY
      *            the end y of the edge
-     * @param needsArrow
-     *            whether the end of the line needs an arrow
+     * @param arrowDir
+     *            the direction in which the arrow should be drawn
      */
-    public EdgeDrawable(int startX, int startY, int endX, int endY, boolean needsArrow) {
+    public EdgeDrawable(int startX, int startY, int endX, int endY, int weight, VertexDirection arrowDir) {
         mStartX = startX;
         mStartY = startY;
 
         mEndX = endX;
         mEndY = endY;
-
-        mArrow = needsArrow;
+        mWeight = weight;
+        mArrowDirection = arrowDir;
     }
 
     /**
@@ -92,14 +95,21 @@ public class EdgeDrawable {
     }
 
     /**
-     * determines if the line needs an arrow at the end
+     * determines if the line needs an arrow in the fromTo direction
      * 
-     * @return true if the line needs an arrow at the end else false
+     * @return true if the line needs an arrow in the fromTo direction
      */
-    public boolean needsArrow() {
-        return mArrow;
+    public boolean needsFromToArrow() {
+        return mArrowDirection == VertexDirection.fromTo;
     }
     
+    public boolean needsToFromArrow() {
+        return mArrowDirection == VertexDirection.toFrom;
+    }
+    
+    public int getWeight() {
+        return mWeight;
+    }
     
     public boolean isHilighted() {
         return mHilighted;

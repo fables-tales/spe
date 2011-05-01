@@ -79,7 +79,9 @@ public interface GraphManager2d {
 	* @param dir
 	* the edge direction
 	*/
-    public void addEdge(Vertex v1, Vertex v2, VertexDirection dir);
+    
+    
+    public void addEdge(Vertex v1, Vertex v2, VertexDirection dir, int weight);
 
     /**
 	* removes an edge from the graphmanager

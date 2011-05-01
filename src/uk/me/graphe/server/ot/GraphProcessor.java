@@ -68,6 +68,7 @@ public class GraphProcessor extends Thread {
                 DataManager.save(graph);
                 List<Client> otherClients = ClientManager.getInstance()
                         .clientsForGraph(c.getCurrentGraphId());
+                otherClients.remove(c);
                 for (Client cl : otherClients) {
                     int state = cl.getCurrentStateId();
                     System.err.println("updating other clients");
