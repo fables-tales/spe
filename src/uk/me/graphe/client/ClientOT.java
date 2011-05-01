@@ -60,12 +60,23 @@ public class ClientOT {
         new Timer() {
             @Override
             public void run() {
-                if (mServer = false) {
+                if (mServer == false) {
                     Console.log("No server connection, offline mode enabled");
                     List<GraphOperation> ops = mStore.getInformation().getServer();
-                    for (GraphOperation item : ops) {
-                        item.applyTo(mGraph);
+                    if (!ops.isEmpty()) {
+                        for (GraphOperation item : ops) {
+                            item.applyTo(mGraph);
+                        }
                     }
+                }
+                else
+                    Console.log("Server connection established");
+                List<GraphOperation> ops = mStore.getInformation().getLocal();
+                if (!ops.isEmpty()) {
+                   for (GraphOperation op : ops) {
+                       op.applyTo(mGraph);
+                       mUnsentOps.add(op);
+                   }
                 }
             }
         }.schedule(1500);

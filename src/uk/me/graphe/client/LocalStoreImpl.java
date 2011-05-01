@@ -17,12 +17,13 @@ import com.google.gwt.user.client.Window;
 
 public class LocalStoreImpl implements LocalStore {
     
-	int maxHistoryId = 0;
-    Storage mStorage;
+	private int maxHistoryId = 0;
+    private Storage mStorage;
     private enum State {Server, Local};
-    HashMap<Integer, State> mStates = new HashMap<Integer, State>();
-    HashMap<Integer, GraphOperation> mOps = new HashMap<Integer, GraphOperation>();
-    LinkedList<Integer> mLocal = new LinkedList<Integer>();
+    private HashMap<Integer, State> mStates = new HashMap<Integer, State>();
+    private HashMap<Integer, GraphOperation> mOps = new HashMap<Integer, GraphOperation>();
+    private LinkedList<Integer> mLocal = new LinkedList<Integer>();
+    
     
     public LocalStoreImpl() {
         if (Storage.isSupported() == false )
@@ -32,17 +33,16 @@ public class LocalStoreImpl implements LocalStore {
             mStorage.clear();
         	mStorage.setItem("itemID", "none");
         } else {
-        	Window.alert("Existing graph found restoring");
-        	restore();
+        	if (Window.confirm("A previous graph has been found. Press OK to load"))
+        	    restore();
+        	else
+        	    setup(1,null,null);
         }
     }
     
     @Override
     public void store(GraphOperation op, boolean server) {
-        //int id = op.getHistoryId();
         mOps.put(Integer.valueOf(maxHistoryId),op);
-        //if (id > maxHistoryId)
-        //  maxHistoryId = id;
         maxHistoryId++;
     	if (server == true)
     		toServer(op);
@@ -68,8 +68,6 @@ public class LocalStoreImpl implements LocalStore {
     
     private boolean setgraph(int graphId) {
         String id = Integer.toString(graphId);
-        if (mStorage.getItem("itemID").equalsIgnoreCase(id))
-            return true;
         mStorage.clear();
         mStorage.setItem("itemID", id);
         mStates = new HashMap<Integer, State>();
@@ -95,7 +93,6 @@ public class LocalStoreImpl implements LocalStore {
     	int i;
     	String server = "";
     	String local = "";
-    	Console.log(mStates.toString());
     	for (i = 0; i < maxHistoryId; i++) {
 			State curState = mStates.get(Integer.valueOf(i));
 			if (curState == State.Server)
@@ -109,12 +106,10 @@ public class LocalStoreImpl implements LocalStore {
     
     //TODO: Remove debug code
     private void saveOps(){
-        //Console.log(mOps.toString());
     	for (int i = 0; i < maxHistoryId; i++) {
     		Integer id = Integer.valueOf(i);
     		GraphOperation op = mOps.get(id);
     		String jsonOp = op.toJson();
-    		//Console.log(jsonOp);
     		String historyId= id.toString();
     		mStorage.setItem(historyId, jsonOp);
     	}
@@ -124,8 +119,10 @@ public class LocalStoreImpl implements LocalStore {
     public void restore() {
     	String max = mStorage.getItem("maxHistory");
     	maxHistoryId = Integer.parseInt(max);
-    	restoreOps();
-    	restoreState();
+    	if (maxHistoryId > 0) {
+    	    restoreOps();
+    	    restoreState();
+    	}
     }
     private void restoreOps() {
     	List<JSONObject> objects = new LinkedList<JSONObject>();
@@ -142,9 +139,13 @@ public class LocalStoreImpl implements LocalStore {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		for (Message item : messages)
+		int i = 0;
+		for (Message item : messages) {
 			// Store all operations as local, map to server in restoreState()
-			store((GraphOperation) item, false);
+		    Console.log(item.toString());
+			mOps.put(new Integer(i), (GraphOperation) item);
+			i++;
+		}
     }
     
     private JSONObject parseItem (String json) {
@@ -161,14 +162,20 @@ public class LocalStoreImpl implements LocalStore {
     private void restoreState() {
     	String server = mStorage.getItem("Server");
     	String local = mStorage.getItem("Local");
-    	String[] st = server.split(" ");
-    	for(int i = 0; i < st.length; i++)
-    		mStates.put(Integer.parseInt(st[i]), State.Server);
-    	st = local.split(" ");
-    	for(int i = 0; i < st.length; i++) {
-    		Integer j = Integer.parseInt(st[i]);
-    		mStates.put(j, State.Local);
-    		mLocal.add(j);
+    	String[] st;
+    	if (!server.equalsIgnoreCase("")) {
+        	st = server.split("\\s");
+        	for(int i = 0; i < st.length; i++)
+        		mStates.put(Integer.parseInt(st[i]), State.Server);
+    	}
+    	if (!local.equalsIgnoreCase("")) {
+        	st = local.split("\\s");
+        	for(int i = 0; i < st.length; i++) {
+        		Integer j = Integer.parseInt(st[i]);
+        		Console.log("Local: " + Integer.toString(j));
+        		mStates.put(j, State.Local);
+        		mLocal.add(j);
+        	}
     	}
     }
     
