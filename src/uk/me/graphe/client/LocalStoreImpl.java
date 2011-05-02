@@ -29,14 +29,11 @@ public class LocalStoreImpl implements LocalStore {
         if (Storage.isSupported() == false )
             Window.alert("Warning your broswer does not support local storage, all changes made offline will not be tracked");
         mStorage = Storage.getLocalStorage();
-        if (mStorage.getItem("itemID") == null || mStorage.getItem("itemID").equals("none")) {
+        if (mStorage.getItem("itemID") == null) {
             mStorage.clear();
-        	mStorage.setItem("itemID", "none");
+        	mStorage.setItem("itemID", "1");
         } else {
-        	if (Window.confirm("A previous graph has been found. Press OK to load"))
-        	    restore();
-        	else
-        	    setup(1,null,null);
+            restore();
         }
     }
     
@@ -66,7 +63,7 @@ public class LocalStoreImpl implements LocalStore {
     	return new StorePackage(server, local);
     }
     
-    private boolean setgraph(int graphId) {
+    private void setgraph(int graphId) {
         String id = Integer.toString(graphId);
         mStorage.clear();
         mStorage.setItem("itemID", id);
@@ -74,7 +71,7 @@ public class LocalStoreImpl implements LocalStore {
         mOps = new HashMap<Integer, GraphOperation>();
         mLocal = new LinkedList<Integer>();
         maxHistoryId = 0;
-        return false;
+        mStorage.setItem("maxHistory", "0");
     }
     
     @Override
@@ -104,7 +101,6 @@ public class LocalStoreImpl implements LocalStore {
 		mStorage.setItem("Server", server);
     }
     
-    //TODO: Remove debug code
     private void saveOps(){
     	for (int i = 0; i < maxHistoryId; i++) {
     		Integer id = Integer.valueOf(i);
@@ -136,13 +132,11 @@ public class LocalStoreImpl implements LocalStore {
     	try {
     		messages = MessageFactory.makeOperationsFromJson(objects);
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		int i = 0;
 		for (Message item : messages) {
 			// Store all operations as local, map to server in restoreState()
-		    Console.log(item.toString());
 			mOps.put(new Integer(i), (GraphOperation) item);
 			i++;
 		}
@@ -172,7 +166,6 @@ public class LocalStoreImpl implements LocalStore {
         	st = local.split("\\s");
         	for(int i = 0; i < st.length; i++) {
         		Integer j = Integer.parseInt(st[i]);
-        		Console.log("Local: " + Integer.toString(j));
         		mStates.put(j, State.Local);
         		mLocal.add(j);
         	}
@@ -193,7 +186,6 @@ public class LocalStoreImpl implements LocalStore {
     }
 
 	@Override
-	// Since historyId doesn't appear to be set up correctly, performing this operation may cause operations to become out of sync.
 	public void setup(int GraphId, List<GraphOperation> local, List<GraphOperation> server) {
 		setgraph(GraphId);
 		if (server != null)
@@ -212,4 +204,11 @@ public class LocalStoreImpl implements LocalStore {
 		mLocal = new LinkedList<Integer>();
 	}
     
+	@Override
+	public void resetServer() {
+	    List<GraphOperation> local = new LinkedList<GraphOperation>();
+	    for (Integer i : mLocal)
+	        local.add(mOps.get(i));
+	    setup(1,local,null);
+	}
 }

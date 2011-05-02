@@ -59,5 +59,11 @@ public interface LocalStore {
 	 * Converts the state of all the local operations to server acknowledged operations
 	 */
 	void Ack();
+	
+	/**
+	 * Removes server information from the localstore in preparation for receiving updated graph
+	 */
+	void resetServer();
+	
 
 }
