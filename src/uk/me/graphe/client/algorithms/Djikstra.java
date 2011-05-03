@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+import uk.me.graphe.client.Console;
 import uk.me.graphe.shared.Edge;
 import uk.me.graphe.shared.Graph;
 import uk.me.graphe.shared.Vertex;
@@ -12,16 +13,25 @@ import uk.me.graphe.shared.Vertex;
 public class Djikstra {
     private Hashtable<String,ArrayList<ListItem>> matrix;
     private Node[] heap;
-    private Hashtable<String,Node> lookup;
+    private Hashtable<String,Node> nlookup;
+    private Hashtable<String,Vertex> vlookup;
+    private Hashtable<ListItem,Edge> elookup;
+    private ArrayList<Vertex> processedVertices;
+    private ArrayList<Edge> processedEdges;
     private int noNodes;
+    private boolean mFinished = false;
     String source, dest;
     
-    @SuppressWarnings("unchecked")
-    public void start (Graph graph, Vertex start, Vertex finish) {
+    public Djikstra (Graph graph, Vertex start, Vertex finish) {
         // Store the source and destination nodes
         source = start.getLabel();
         dest = finish.getLabel();
         List<Vertex> vertices = graph.getVertices();
+        // Create lookup table for vertices from name
+        vlookup = new Hashtable<String,Vertex>();
+        elookup = new Hashtable<ListItem,Edge>();
+        for (Vertex v : vertices)
+            vlookup.put(v.getLabel(), v);
         List<Edge> edges = graph.getEdges();
         noNodes = vertices.size();
         matrix = new Hashtable<String,ArrayList<ListItem>>((int)Math.ceil((double) edges.size()/0.75));
@@ -33,46 +43,72 @@ public class Djikstra {
         int i = 1;
         for (Vertex v : vertices) {
             heap[i] = new Node(v.getLabel(), i);
-            lookup.put(v.getLabel(),heap[i]);
+            nlookup.put(v.getLabel(),heap[i]);
             i++;
         }
         // Set source node to 0
-        lookup.get(source).distance(0);
+        nlookup.get(source).distance(0);
         
         // Set source node at position 1
-        swap (lookup.get(source), heap[1]);
-        // Call Dijkstra's algorithm
-        dijkstra();
-        // Print shortest path
-        if (lookup.get(dest).getDistance() != Integer.MAX_VALUE)
-            System.out.println(lookup.get(dest).getDistance());
-        else
-            System.out.println("No path exists");
+        swap (nlookup.get(source), heap[1]);
     }
     
+    public boolean hasFinished() {
+        return mFinished;
+    }
     
+    public void step() {
+        if (!mFinished && noNodes > 0)
+            dijkstra();
+    }
+    
+    public void iterate() {
+        while (noNodes > 0 && !mFinished)
+            dijkstra();
+    }
+    
+    public String getResult() throws Exception {
+        // Print shortest path
+        if (mFinished == true) {
+            if (nlookup.get(dest).getDistance() != Integer.MAX_VALUE)
+                return Integer.toString(nlookup.get(dest).getDistance());
+            else
+                return "No path exists";
+        }
+        else
+            throw new Exception("Algorithm not done executing");
+    }
+    
+    public List<Edge> getProcessedEdges() {
+        return processedEdges;
+    }
+    
+    public List<Vertex> getProcessedVertex() {
+        return processedVertices;
+    }
     private void processLine (Edge e) {
         // Initialise the adjacency matrix
         String tail = e.getFromVertex().getLabel();
         String head = e.getToVertex().getLabel();
         int weight = e.getWeight();
         ArrayList<ListItem> list = matrix.get(tail);
+        ListItem listitem = new ListItem(head,tail,weight);
         if (list == null) {
             list = new ArrayList<ListItem>();
-            list.add(new ListItem(head,tail,weight));
+            list.add(listitem);
             matrix.put(tail, list);
         } else
-            matrix.get(tail).add(new ListItem(head, tail, weight));
+            matrix.get(tail).add(listitem);
+        elookup.put(listitem, e);
     }
     
-    private void dijkstra () {
+    private void dijkstra() {
         Node currentNode;
-        while (noNodes > 0) {
-            currentNode = extractmin();
-            relaxadj (currentNode);
-            if (currentNode.getId().equalsIgnoreCase(dest))
-                break;
-        }
+        currentNode = extractmin();
+        relaxadj (currentNode);
+        processedVertices.add(vlookup.get(currentNode.getId()));
+        if (currentNode.getId().equalsIgnoreCase(dest))
+            mFinished = true;
     }
 
     private void relaxadj (Node node) {
@@ -85,10 +121,10 @@ public class Djikstra {
         for (int j = 0; j < edges.size(); j++) {;
             // For any edge adjacent to the current node 
             // Distance via new node
-            distance = node.getDistance() + edges.get(j).getWeight();
+            ListItem e = edges.get(j);
+            distance = node.getDistance() + e.getWeight();
             // Find the head in the array
-            head = null;
-            head = lookup.get(edges.get(j).getHead());
+            head = nlookup.get(e.getHead());
             if (head == null) { 
                 return;
             }
@@ -96,6 +132,8 @@ public class Djikstra {
             if (head.getDistance() > distance) {;
                 decreasekey (head, distance);
             }
+            // Mark the edge as processed
+            processedEdges.add(elookup.get(e));
         }
     }
     
@@ -139,7 +177,7 @@ public class Djikstra {
     private void decreasekey (Node node, int distance) {
         
         if (node.getDistance() < distance) {
-            System.err.println("Key is larger than current value, cannot decrease");
+            Console.log("Key is larger than current value, cannot decrease");
             return;
         }
         heap[node.getLocation()].distance(distance);
