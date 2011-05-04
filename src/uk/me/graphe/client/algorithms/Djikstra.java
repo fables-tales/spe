@@ -1,8 +1,10 @@
 package uk.me.graphe.client.algorithms;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import uk.me.graphe.client.Console;
 import uk.me.graphe.shared.Edge;
@@ -11,11 +13,11 @@ import uk.me.graphe.shared.Vertex;
 
 
 public class Djikstra {
-    private Hashtable<String,ArrayList<ListItem>> matrix;
+    private Map<String,ArrayList<ListItem>> matrix;
     private Node[] heap;
-    private Hashtable<String,Node> nlookup;
-    private Hashtable<String,Vertex> vlookup;
-    private Hashtable<ListItem,Edge> elookup;
+    private Map<String,Node> nlookup;
+    private Map<String,Vertex> vlookup;
+    private Map<ListItem,Edge> elookup;
     private ArrayList<Vertex> processedVertices;
     private ArrayList<Edge> processedEdges;
     private int noNodes;
@@ -28,13 +30,13 @@ public class Djikstra {
         dest = finish.getLabel();
         List<Vertex> vertices = graph.getVertices();
         // Create lookup table for vertices from name
-        vlookup = new Hashtable<String,Vertex>();
-        elookup = new Hashtable<ListItem,Edge>();
+        vlookup = new HashMap<String,Vertex>();
+        elookup = new HashMap<ListItem,Edge>();
         for (Vertex v : vertices)
             vlookup.put(v.getLabel(), v);
         List<Edge> edges = graph.getEdges();
         noNodes = vertices.size();
-        matrix = new Hashtable<String,ArrayList<ListItem>>((int)Math.ceil((double) edges.size()/0.75));
+        matrix = new HashMap<String,ArrayList<ListItem>>();
         for (Edge e : edges)
             processLine(e);
         
