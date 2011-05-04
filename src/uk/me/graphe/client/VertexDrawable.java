@@ -17,7 +17,7 @@ public class VertexDrawable {
 
     private String mLabel;
     private boolean mHilighted;
-    private int[] mColor = new int[]{0,0,0};
+    private float[] mColor = new float[]{0,0,0,1};
 
     /**
      * create a new VertexDrawable
@@ -150,6 +150,11 @@ public class VertexDrawable {
     public boolean contains(int x, int y) {
         return x >= mLeft && x <= mLeft + mWidth && y >= mTop && y <= mTop + mHeight;
     }
+    
+    public void setCoords(){
+        
+        
+    }
 
     public void setStyle(int style) {
         mStyle = style;
@@ -168,14 +173,14 @@ public class VertexDrawable {
     }
     
     
-    public int[] getColor() {
-        int[] ret = new int[3];
-        for (int i = 0; i < 3; i++) ret[i] = mColor[i];
+    public float[] getColor() {
+        float[] ret = new float[4];
+        for (int i = 0; i < 4; i++) ret[i] = mColor[i];
         return mColor;
     }
     
-    public void setColor(int[] color) {
-        for (int i = 0; i < 3; i++) {
+    public void setColor(float[] color) {
+        for (int i = 0; i < 4; i++) {
             mColor[i] = color[i];
         }
     }

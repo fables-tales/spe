@@ -2,6 +2,7 @@ package uk.me.graphe.client;
 
 import java.util.ArrayList;
 
+import uk.me.graphe.client.algorithms.AutoLayout;
 import uk.me.graphe.client.communications.ServerChannel;
 import uk.me.graphe.client.json.wrapper.JSOFactory;
 import uk.me.graphe.shared.Edge;
@@ -19,35 +20,42 @@ import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.RootPanel;
 
-public class Graphemeui implements EntryPoint {
-
-    public final Toolbox tools;
+public class Graphemeui implements EntryPoint
+{   
     public final Canvas canvas;
-    public final Chat chat;    
+    public final CanvasTooltip tooltip;
+    public final Chat chat;  
+    public final Dialog dialog;
     public final GraphInfo graphInfo;
-    public final Description description;
+    public final Toolbox tools;
+    public final ToolInfo toolInfo;   
     public final GraphManager2d graphManager;
     public final GraphManager2dFactory graphManagerFactory;
     public final Drawing drawing;
-
+    
     private LocalStore mStore;
     
     public ArrayList<VertexDrawable> selectedVertices;
     public ArrayList<EdgeDrawable> selectedEdges;
     
-    public static final int VERTEX_SIZE = 200;
+    public static final int VERTEX_SIZE = 50;
     public static final double ZOOM_STRENGTH = 0.2;
     
     public boolean isHotkeysEnabled;
     
 	private static final int X = 0, Y = 1;
 
+	private AutoLayout lay;
+	
     public Graphemeui() {
-        description = new Description();
+    	dialog = new Dialog(this);
+    	toolInfo = new ToolInfo(this);
         tools = new Toolbox(this);
         canvas = new Canvas(this);
         chat = Chat.getInstance(this);
+        graphInfo = new GraphInfo(this);
         drawing = new DrawingImpl();
+        tooltip = new CanvasTooltip(this);
         graphManagerFactory = GraphManager2dFactory.getInstance();
         graphManager = graphManagerFactory.makeDefaultGraphManager();
         drawing.setOffset(0, 0);
@@ -61,10 +69,12 @@ public class Graphemeui implements EntryPoint {
                 // here!
             }
         });
-        graphInfo = GraphInfo.getInstance(this);
+        
     	selectedVertices = new ArrayList<VertexDrawable>();
     	selectedEdges = new ArrayList<EdgeDrawable>();
     	isHotkeysEnabled = true;
+    	
+    	lay = new AutoLayout(graphManager);
     }
     
     public void onModuleLoad() {
@@ -72,8 +82,8 @@ public class Graphemeui implements EntryPoint {
         RootPanel.get("toolbox").add(this.tools);
         RootPanel.get("canvas").add(this.canvas);
         RootPanel.get("chat").add(this.chat);
-        RootPanel.get("description").add(this.description);
         RootPanel.get("graphInfo").add(this.graphInfo);
+        RootPanel.get("toolInfo").add(this.toolInfo);
         
         mStore = LocalStoreFactory.newInstance();
         Timer t = new Timer() {
@@ -101,11 +111,16 @@ public class Graphemeui implements EntryPoint {
 						case 86: // v
 							tools.setTool(Tools.addVertex);
 							break;
-						case 90: // z
-							tools.setTool(Tools.zoom);
-							break;
+                        case 90: // z
+                            tools.setTool(Tools.zoom);
+                            break;
+                        case 68: // d
+                            Window.open(drawing.getUrl(), "_blank", null);
+                            break;
+                        case 71: // g
+                            Window.prompt("DOT graph Code", GraphString.getDot(graphManager, "Grapheme",true,true));
+                            break;
 						case KeyCodes.KEY_DELETE:
-							// TODO: Is this really the desired action?
 							tools.setTool(Tools.delete);
 							break;
 						default:
@@ -124,12 +139,22 @@ public class Graphemeui implements EntryPoint {
     }
     
     
-    public void addEdge(VertexDrawable from, VertexDrawable to) {
+    public void addEdge(VertexDrawable from, VertexDrawable to, Integer weight) {
     	Vertex vFrom = graphManager.getVertexFromDrawable(from);
     	Vertex vTo = graphManager.getVertexFromDrawable(to);
-    	//TODO: change this value to an actual value from the user
-        graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo, 1  );
-        ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo);
+    	
+    	if (weight == null)
+    	{
+    		// TODO: There is weight
+            graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo, weight);
+            ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo);	   		
+    	}
+    	else
+    	{
+    		// TODO: No weight
+            graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo, weight);
+            ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo);		
+    	}
         
         clearSelectedObjects();
     }
@@ -139,17 +164,7 @@ public class Graphemeui implements EntryPoint {
         graphManager.addVertex(v, canvas.lMouseDown[X], canvas.lMouseDown[Y], VERTEX_SIZE);
         ClientOT.getInstance().notifyAddVertex(v, canvas.lMouseDown[X], canvas.lMouseDown[Y], VERTEX_SIZE);    	
     }
-    
-    public void autoLayout()
-    {
-    	// TODO: Implement graph autolayout.
-    }
-    
-    public void clusterVertices()
-    {
-    	// TODO: Implement graph clustering
-    }
-    
+
     public void clearSelectedEdges()
     {
     	for(EdgeDrawable ed : selectedEdges){
@@ -162,6 +177,8 @@ public class Graphemeui implements EntryPoint {
     {
     	clearSelectedEdges();
 		clearSelectedVertices();
+		
+		graphManager.invalidate();
     }
     
     public void clearSelectedVertices()
@@ -170,7 +187,14 @@ public class Graphemeui implements EntryPoint {
     		vd.setHilighted(false);
     	}
     	
+    	tools.pnlTools4.setVisible(false);
+    	
     	selectedVertices.clear();
+    }
+    
+    public void doAutoLayout()
+    {
+    	lay.run();
     }
     
     public void deleteSelected()
@@ -195,9 +219,7 @@ public class Graphemeui implements EntryPoint {
     	
     	selectedVertices.clear();
     	selectedEdges.clear();
-    	
-    	tools.setTool(Tools.select);
-    	
+
     	graphManager.invalidate(); // TODO: does this need to be here?  	
     }
     
@@ -212,6 +234,16 @@ public class Graphemeui implements EntryPoint {
     public void pan(int left, int top) {
         drawing.setOffset(drawing.getOffsetX() + left, drawing.getOffsetY() + top);        
         graphManager.invalidate();
+    }
+    
+    public void setSelectedSyle (int style, int width, int height)
+    {
+    	for (VertexDrawable vd : selectedVertices)
+    	{
+    		vd.setStyle(style);
+    		vd.updateSize(width,height);
+    	}
+    	graphManager.invalidate();
     }
     
     public boolean toggleSelectedEdgeAt(int x, int y) {
@@ -243,9 +275,17 @@ public class Graphemeui implements EntryPoint {
         		selectedVertices.add(vd);
         	}
         	graphManager.invalidate();
+        	
+        	tools.pnlTools4.setVisible(true);
+        	
             return true;
         }
         
+        if (selectedVertices.isEmpty())
+        {
+        	tools.pnlTools4.setVisible(false);
+        }
+
         return false;
     }
     

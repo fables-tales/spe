@@ -141,4 +141,7 @@ public interface GraphManager2d {
      * forces graph to be redrawn
      */
 	public void invalidate();
+
+	public boolean isEdgeBetween(Vertex vertexFromDrawable,
+			Vertex vertexFromDrawable2);
 }

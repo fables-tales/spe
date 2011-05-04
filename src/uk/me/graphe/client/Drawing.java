@@ -54,4 +54,43 @@ public interface Drawing {
      * @return the current level of zoom (1 = no zoom)
      */
     public double getZoom();
+
+    /**
+     * 
+     * @param value - determines whether user is in 
+     * flow chart mode or not
+     */
+	public void setFlowChart(boolean value);
+	
+    /**
+     * set the coordinates of the UI line, and displays it
+     * 
+     * @param startX
+     *            x coordinate of start point
+     * @param startY
+     *            y coordinate of start point
+     * @param endX
+     *            x coordinate of end point
+     * @param endY
+     *            y coordinate of end point
+     */
+    public void setUILine(double startX,double startY,double endX,double endY);
+    
+    /**
+     * displays the UI line
+     * 
+     */
+    public void showUIline();
+    
+    /**
+     * hides the UI line
+     * 
+     */
+    public void hideUIline();
+    
+    /**
+     * returns the data URL of the graph
+     * 
+     */
+    public String getUrl();
 }
