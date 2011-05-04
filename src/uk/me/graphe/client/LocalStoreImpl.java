@@ -17,75 +17,61 @@ import com.google.gwt.user.client.Window;
 
 public class LocalStoreImpl implements LocalStore {
     
-	int maxHistoryId = 0;
-    Storage mStorage;
-    private enum State {Sent, Unsent, Unacked};
-    HashMap<Integer, State> mStates = new HashMap<Integer, State>();
-    HashMap<Integer, GraphOperation> mOps = new HashMap<Integer, GraphOperation>();
+	private int maxHistoryId = 0;
+    private Storage mStorage;
+    private enum State {Server, Local};
+    private HashMap<Integer, State> mStates = new HashMap<Integer, State>();
+    private HashMap<Integer, GraphOperation> mOps = new HashMap<Integer, GraphOperation>();
+    private LinkedList<Integer> mLocal = new LinkedList<Integer>();
+    
     
     public LocalStoreImpl() {
         if (Storage.isSupported() == false )
-            Window.alert("Warning your broswer does not support local storage, permanent high speed internet connection will be required to play");
+            Window.alert("Warning your broswer does not support local storage, all changes made offline will not be tracked");
         mStorage = Storage.getLocalStorage();
-        if (mStorage.getItem("itemID") == null || mStorage.getItem("itemID").equals("none")) {
+        if (mStorage.getItem("itemID") == null) {
             mStorage.clear();
-        	mStorage.setItem("itemID", "none");
-        } else
-        	restore();
-    }
-
-    @Override
-    public void store(GraphOperation op) {
-    	//int id = op.getHistoryId();
-    	mOps.put(Integer.valueOf(maxHistoryId),op);
-    	//if (id > maxHistoryId)
-    	//	maxHistoryId = id;
-    	maxHistoryId++;
-    	toUnsent(op);
+        	mStorage.setItem("itemID", "1");
+        } else {
+            restore();
+        }
     }
     
     @Override
-    public void store(GraphOperation op, boolean Acked) {
-        //int id = op.getHistoryId();
+    public void store(GraphOperation op, boolean server) {
         mOps.put(Integer.valueOf(maxHistoryId),op);
-        //if (id > maxHistoryId)
-        //  maxHistoryId = id;
         maxHistoryId++;
-    	if (Acked == true)
-    		toSent(op);
+    	if (server == true)
+    		toServer(op);
 		else
-			toUnack(op);
+			toLocal(op);
     	
     }
     
     @Override
     public StorePackage getInformation() {
-    	List<GraphOperation> sent = new ArrayList<GraphOperation>();
-    	List<GraphOperation> unsent = new ArrayList<GraphOperation>();
-    	List<GraphOperation> unacked = new ArrayList<GraphOperation>();
+    	List<GraphOperation> server = new ArrayList<GraphOperation>();
+    	List<GraphOperation> local = new ArrayList<GraphOperation>();
     	for (int i = 0; i <= maxHistoryId; i++) {
     		Integer id = Integer.valueOf(i);
 			State curState = mStates.get(id);
-			if (curState == State.Sent)
-				sent.add(mOps.get(id));
-			else if (curState == State.Unacked)
-				unacked.add(mOps.get(id));
-			else if (curState == State.Unsent)
-				unsent.add(mOps.get(id));
+			if (curState == State.Server)
+				server.add(mOps.get(id));
+			else if (curState == State.Local)
+				local.add(mOps.get(id));
     	}
-    	return new StorePackage(sent, unsent, unacked);
+    	return new StorePackage(server, local);
     }
     
-    private boolean setgraph(int graphId) {
+    private void setgraph(int graphId) {
         String id = Integer.toString(graphId);
-        if (mStorage.getItem("itemID").equalsIgnoreCase(id))
-            return true;
         mStorage.clear();
         mStorage.setItem("itemID", id);
         mStates = new HashMap<Integer, State>();
         mOps = new HashMap<Integer, GraphOperation>();
+        mLocal = new LinkedList<Integer>();
         maxHistoryId = 0;
-        return false;
+        mStorage.setItem("maxHistory", "0");
     }
     
     @Override
@@ -102,31 +88,24 @@ public class LocalStoreImpl implements LocalStore {
     
     private void saveState() {
     	int i;
-    	String sent = "";
-    	String unacked = "";
-    	String unsent = "";
+    	String server = "";
+    	String local = "";
     	for (i = 0; i < maxHistoryId; i++) {
 			State curState = mStates.get(Integer.valueOf(i));
-			if (curState == State.Sent)
-				sent = sent.concat(Integer.toString(i) + " ");
-			else if (curState == State.Unacked)
-				unacked = unacked.concat(Integer.toString(i) + " ");
-			else if (curState == State.Unsent)
-				unsent = unsent.concat(Integer.toString(i) + " ");
+			if (curState == State.Server)
+				server += Integer.toString(i) + " "; 
+			else if (curState == State.Local)
+				local += Integer.toString(i) + " "; 
 		};
-		mStorage.setItem("unAcked", unacked);
-		mStorage.setItem("unSent", unsent);
-		mStorage.setItem("Sent", sent);
+		mStorage.setItem("Local", local);
+		mStorage.setItem("Server", server);
     }
     
-    //TODO: Remove debug code
     private void saveOps(){
-        //Console.log(mOps.toString());
     	for (int i = 0; i < maxHistoryId; i++) {
     		Integer id = Integer.valueOf(i);
     		GraphOperation op = mOps.get(id);
     		String jsonOp = op.toJson();
-    		//Console.log(jsonOp);
     		String historyId= id.toString();
     		mStorage.setItem(historyId, jsonOp);
     	}
@@ -136,8 +115,10 @@ public class LocalStoreImpl implements LocalStore {
     public void restore() {
     	String max = mStorage.getItem("maxHistory");
     	maxHistoryId = Integer.parseInt(max);
-    	restoreOps();
-    	restoreState();
+    	if (maxHistoryId > 0) {
+    	    restoreOps();
+    	    restoreState();
+    	}
     }
     private void restoreOps() {
     	List<JSONObject> objects = new LinkedList<JSONObject>();
@@ -151,11 +132,14 @@ public class LocalStoreImpl implements LocalStore {
     	try {
     		messages = MessageFactory.makeOperationsFromJson(objects);
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		for (Message item : messages)
-			store((GraphOperation) item);
+		int i = 0;
+		for (Message item : messages) {
+			// Store all operations as local, map to server in restoreState()
+			mOps.put(new Integer(i), (GraphOperation) item);
+			i++;
+		}
     }
     
     private JSONObject parseItem (String json) {
@@ -170,52 +154,61 @@ public class LocalStoreImpl implements LocalStore {
     }
     
     private void restoreState() {
-    	String sent = mStorage.getItem("Sent");
-    	String unsent = mStorage.getItem("Unsent");
-    	String unacked = mStorage.getItem("Unacked");
-    	String[] st = sent.split(" ");
-    	for(int i = 0; i < st.length; i++)
-    		mStates.put(Integer.parseInt(st[i]), State.Sent);
-    	st = unsent.split(" ");
-    	for(int i = 0; i < st.length; i++)
-    		mStates.put(Integer.parseInt(st[i]), State.Unsent);
-    	st = unacked.split(" ");
-    	for(int i = 0; i < st.length; i++)
-    		mStates.put(Integer.parseInt(st[i]), State.Unacked);
+    	String server = mStorage.getItem("Server");
+    	String local = mStorage.getItem("Local");
+    	String[] st;
+    	if (!server.equalsIgnoreCase("")) {
+        	st = server.split("\\s");
+        	for(int i = 0; i < st.length; i++)
+        		mStates.put(Integer.parseInt(st[i]), State.Server);
+    	}
+    	if (!local.equalsIgnoreCase("")) {
+        	st = local.split("\\s");
+        	for(int i = 0; i < st.length; i++) {
+        		Integer j = Integer.parseInt(st[i]);
+        		mStates.put(j, State.Local);
+        		mLocal.add(j);
+        	}
+    	}
     }
     
     @Override
-    public void toUnsent(GraphOperation o) {
-    	int historyID = o.getHistoryId();
-    	mStates.put(historyID, State.Unsent);
+    public void toLocal(GraphOperation o) {
+    	int historyID = maxHistoryId -1;
+    	mStates.put(historyID, State.Local);
+    	mLocal.add(historyID);
     }
     
     @Override
-    public void toUnack(GraphOperation o) {
-        int historyID = o.getHistoryId();
-        mStates.put(historyID, State.Unacked);
-    }
-    
-    @Override
-    public void toSent(GraphOperation o) {
-        int historyID = o.getHistoryId();
-        mStates.put(historyID, State.Sent);
+    public void toServer(GraphOperation o) {
+        int historyID = maxHistoryId -1;
+        mStates.put(historyID, State.Server);
     }
 
 	@Override
-	// Since historyId doesn't appear to be set up correctly, performing this operation may cause operations to become out of sync.
-	public void setup(int GraphId, List<GraphOperation> sent,
-			List<GraphOperation> unsent, List<GraphOperation> unacked) {
+	public void setup(int GraphId, List<GraphOperation> local, List<GraphOperation> server) {
 		setgraph(GraphId);
-		if (sent != null)
-			for (GraphOperation item : sent)
+		if (server != null)
+			for (GraphOperation item : server)
 				store(item, true);
-		if (unacked != null)
-			for (GraphOperation item : unacked)
-				store(item, false);
-      if (unsent != null)
-            for (GraphOperation item : unsent)
-                store(item);
+		if (local != null)
+			for (GraphOperation item : local)
+				store(item, false);;
+	}
+
+	@Override
+	public void Ack() {
+		for (Integer item : mLocal) {
+			mStates.put(item, State.Server);
+		}
+		mLocal = new LinkedList<Integer>();
 	}
     
+	@Override
+	public void resetServer() {
+	    List<GraphOperation> local = new LinkedList<GraphOperation>();
+	    for (Integer i : mLocal)
+	        local.add(mOps.get(i));
+	    setup(1,local,null);
+	}
 }
