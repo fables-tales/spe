@@ -158,6 +158,25 @@ public class GraphManager2dImpl implements GraphManager2d {
         int left = xPosition - halfWidth;
         int top = yPosition - halfHeight;
         vd.updateBoundingRectangle(left, top, vd.getWidth(), vd.getHeight());
+        
+        //update edges
+        //VertexDrawable vd1 = mVertexRenderMap.get(e.getFromVertex());
+        for (Edge e : mVertexEdgeMap.get(v))
+        {
+        	EdgeDrawable ed = mEdgeRenderMap.get(e);
+        	
+        	if (v.equals(e.getFromVertex()))
+        	{
+        		ed.setStartX(vd.getCenterX());
+        		ed.setStartY(vd.getCenterY());
+        	}
+        	else
+        	{
+        		ed.setEndX(vd.getCenterX());
+        		ed.setEndY(vd.getCenterY());
+        	}
+        }
+        
         this.invalidate();
     }
 
