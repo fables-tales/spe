@@ -87,17 +87,36 @@ public class Dialog extends PopupPanel
 			@Override
 			public void onKeyDown(KeyDownEvent arg0)
 			{
+				isOk = true;
+				int i;
 				switch (currentType)
 				{
 					case edgeWeight:
-						// TODO: text validation
+						if(txtParam.getText().length() == 0){
+							isOk = false;
+						} else {
+							try{
+								i = Integer.parseInt(txtParam.getText());
+								
+							} catch(Exception e){
+								//edgeweight is not an integer
+								isOk = false;
+							}
+						}
 						break;
 					case graphName:
-						// TODO: text validation
+						if(txtParam.getText().length() == 0){
+							isOk = false;
+						}
 						break;
 					case vertexName:
-						// TODO: text validation
-						
+						if(txtParam.getText().length() == 0){
+							isOk = false;
+						}else{
+							if(!parent.graphManager.isVertexNameAvailable(txtParam.getText())){
+								isOk = false;
+							}
+						}						
 						break;
 				}				
 			}

@@ -276,4 +276,18 @@ public class GraphManager2dImpl implements GraphManager2d {
     public VertexDrawable getVertexDrawable(String s) {
         return mVertexRenderMap.get(new Vertex(s));
     }
+    
+    /*
+     * checks if a vertex name is already taken
+     */
+    public boolean isVertexNameAvailable(String s){
+    	boolean b = true;
+    	for(Vertex v : mVertices) {
+    		if(v.toString().equals(s)){
+    			b = false;
+    			break;
+    		}
+    	}
+    	return b;
+    }
 }

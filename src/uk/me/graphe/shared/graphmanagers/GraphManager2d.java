@@ -157,6 +157,12 @@ public interface GraphManager2d {
      */
 	public void invalidate();
 
+    
+    /**
+     * checks if a vertex name is already taken
+     */
+    public boolean isVertexNameAvailable(String s);
+    
 	public boolean isEdgeBetween(Vertex vertexFromDrawable,
 			Vertex vertexFromDrawable2);
 }
