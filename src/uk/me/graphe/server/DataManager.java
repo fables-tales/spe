@@ -1,7 +1,10 @@
 package uk.me.graphe.server;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import uk.me.graphe.server.database.Database;
 import uk.me.graphe.server.database.DatabaseFactory;
@@ -12,16 +15,21 @@ public class DataManager {
 
     private static Map<Integer, OTGraphManager2d> sGraphs;
     private static int sHighestId = 0;
-    private static Database mDatabase= DatabaseFactory.newInstance();
+    private static Database mDatabase = DatabaseFactory.newInstance();
+    private static OTGraphManager2d sInstance = OTGraphManagerFactory.newInstance(1);
+    private static Timer mTimer = new Timer();
     
     static {
         newMap();
+        create();
     }
-    
+
     private static void newMap() {
-        sGraphs = new LinkedHashMap<Integer, OTGraphManager2d>(20,(float)0.75,true){
+        sGraphs = new LinkedHashMap<Integer, OTGraphManager2d>(20, (float) 0.75, true) {
             private static final long serialVersionUID = 1L;
-            @Override protected boolean removeEldestEntry (Map.Entry<Integer, OTGraphManager2d> eldest) {
+
+            @Override
+            protected boolean removeEldestEntry(Map.Entry<Integer, OTGraphManager2d> eldest) {
                 if (size() > 15) {
                     mDatabase.store(eldest.getValue());
                     return true;
@@ -29,29 +37,34 @@ public class DataManager {
                 return false;
             }
         };
-        create();
     }
+
     public static OTGraphManager2d getGraph(int mGraphId) {
-        if (sGraphs.get(mGraphId) != null)
-            return sGraphs.get(mGraphId);
-        else 
-            return mDatabase.retrieve(mGraphId);
+        return sInstance;
     }
 
     public static void save(OTGraphManager2d graph) {
-        if (sGraphs.containsKey(graph.getGraphId()))
-            sGraphs.remove(graph.getGraphId());
+        if (sGraphs.containsKey(graph.getGraphId())) sGraphs.remove(graph.getGraphId());
         sGraphs.put(graph.getGraphId(), graph);
     }
-    
+
     public static int create() {
-        
+
         int id = ++sHighestId;
         sGraphs.put(id, OTGraphManagerFactory.newInstance(id));
+        mTimer.scheduleAtFixedRate(new Backup(), 1000, 5000);
         return id;
     }
-    
+
     public static void flush() {
         newMap();
     }
+    
+    static class Backup extends TimerTask {
+        public void run() {
+            Collection<OTGraphManager2d> iterator = sGraphs.values();
+            for (OTGraphManager2d g : iterator)
+                mDatabase.store(g);
+        }
+      }
 }

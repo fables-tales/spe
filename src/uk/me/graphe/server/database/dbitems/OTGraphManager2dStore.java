@@ -12,8 +12,7 @@ import com.google.code.morphia.annotations.Entity;
 public class OTGraphManager2dStore {
     private int id;
     private int stateid;
-    @Embedded
-    private List<GraphDB> mOps;
+    private List<String> mOps;
     
     public OTGraphManager2dStore (OTGraphManager2d graph) {
         id = graph.getGraphId();
@@ -40,11 +39,11 @@ public class OTGraphManager2dStore {
         this.id = id;
     }
 
-    public List<GraphDB> getmOps() {
+    public List<String> getmOps() {
         return mOps;
     }
 
-    public void setmOps(List<GraphDB> mOps) {
+    public void setmOps(List<String> mOps) {
         this.mOps = mOps;
     }
 
