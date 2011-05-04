@@ -93,6 +93,16 @@ public class EdgeDrawable {
     public int getEndY() {
         return mEndY;
     }
+    
+    /**
+     * determines if a ed contains a specific co-ordinate 
+     * @param x
+     * @param y
+     * @return
+     */
+    public boolean contains(int x, int y) {
+        return false;
+    }
 
     /**
      * determines if the line needs an arrow in the fromTo direction
@@ -117,5 +127,23 @@ public class EdgeDrawable {
     
     public void setHilighted(boolean h) {
         mHilighted = h;
-    } 
+    }
+    
+    public void setStartX(int x) {
+        mStartX = x;
+    }
+
+    public void setStartY(int y) {
+        mStartY = y;
+    }
+
+    public void setEndX(int x) {
+        mEndX = x;
+    }
+    
+    public void setEndY(int y) {
+        mEndY = y;
+    }
+    
+    
 }
