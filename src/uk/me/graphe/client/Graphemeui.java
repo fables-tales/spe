@@ -190,6 +190,7 @@ public class Graphemeui implements EntryPoint
     
     public void doAutoLayout()
     {
+    	lay.initialize();
     	lay.run();
     }
     

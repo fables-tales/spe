@@ -159,7 +159,6 @@ public class GraphManager2dImpl implements GraphManager2d {
         int top = yPosition - halfHeight;
         vd.updateBoundingRectangle(left, top, vd.getWidth(), vd.getHeight());
         this.invalidate();
-
     }
 
     @Override
