@@ -2,6 +2,7 @@ package uk.me.graphe.client;
 
 import java.util.ArrayList;
 
+import uk.me.graphe.client.algorithms.AutoLayout;
 import uk.me.graphe.client.communications.ServerChannel;
 import uk.me.graphe.client.json.wrapper.JSOFactory;
 import uk.me.graphe.shared.Edge;
@@ -38,13 +39,15 @@ public class Graphemeui implements EntryPoint
     public ArrayList<VertexDrawable> selectedVertices;
     public ArrayList<EdgeDrawable> selectedEdges;
     
-    public static final int VERTEX_SIZE = 200;
+    public static final int VERTEX_SIZE = 50;
     public static final double ZOOM_STRENGTH = 0.2;
     
     public boolean isHotkeysEnabled;
     
 	private static final int X = 0, Y = 1;
 
+	private AutoLayout lay;
+	
     public Graphemeui() {
     	dialog = new Dialog(this);
     	toolInfo = new ToolInfo(this);
@@ -71,6 +74,8 @@ public class Graphemeui implements EntryPoint
     	selectedVertices = new ArrayList<VertexDrawable>();
     	selectedEdges = new ArrayList<EdgeDrawable>();
     	isHotkeysEnabled = true;
+    	
+    	lay = new AutoLayout(graphManager);
     }
     
     public void onModuleLoad() {
@@ -168,6 +173,8 @@ public class Graphemeui implements EntryPoint
     {
     	clearSelectedEdges();
 		clearSelectedVertices();
+		
+		graphManager.invalidate();
     }
     
     public void clearSelectedVertices()
@@ -179,6 +186,11 @@ public class Graphemeui implements EntryPoint
     	tools.pnlTools4.setVisible(false);
     	
     	selectedVertices.clear();
+    }
+    
+    public void doAutoLayout()
+    {
+    	lay.run();
     }
     
     public void deleteSelected()
@@ -218,6 +230,14 @@ public class Graphemeui implements EntryPoint
     public void pan(int left, int top) {
         drawing.setOffset(drawing.getOffsetX() + left, drawing.getOffsetY() + top);        
         graphManager.invalidate();
+    }
+    
+    public void setSelectedSyle (int style)
+    {
+    	for (VertexDrawable vd : selectedVertices)
+    	{
+    		vd.setStyle(style);
+    	}
     }
     
     public boolean toggleSelectedEdgeAt(int x, int y) {

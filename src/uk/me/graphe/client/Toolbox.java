@@ -102,7 +102,7 @@ public class Toolbox extends Composite {
 				parent.dialog.show(DialogType.help, "Click where you like to zoom in. Hold 'CTRL' and click to zoom out.", 50, 125);
 				break;
 			case autolayout:
-				// TODO: Implement
+				parent.doAutoLayout();
 				this.setTool(Tools.select);
 				break;
 			case cluster:
@@ -110,19 +110,19 @@ public class Toolbox extends Composite {
 				this.setTool(Tools.select);
 				break;
 			case styleProcess:
-				// TODO: Implement
+				parent.setSelectedSyle(VertexDrawable.STROKED_SQUARE_STYLE);
 				this.setTool(Tools.select);
 				break;
 			case styleTerminator:
-				// TODO: Implement
+				parent.setSelectedSyle(VertexDrawable.STROKED_TERM_STYLE);
 				this.setTool(Tools.select);
 				break;
 			case styleDecision:
-				// TODO: Implement
+				parent.setSelectedSyle(VertexDrawable.STROKED_DIAMOND_STYLE);
 				this.setTool(Tools.select);
 				break;
 			case styleNormal:
-				// TODO: Implement
+				parent.setSelectedSyle(VertexDrawable.FILLED_CIRCLE_STYLE);
 				this.setTool(Tools.select);
 				break;
 		}
