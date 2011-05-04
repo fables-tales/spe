@@ -152,18 +152,22 @@ public class DrawingImpl implements Drawing {
                 double endX = (thisEdge.getEndX() + mOffsetX) * mZoom;
                 double endY = (thisEdge.getEndY() + mOffsetY) * mZoom;
                 int weight = thisEdge.getWeight();
+                float[] edgeColour = DrawingConstants.BLACK;
                 // edgeStyle = thisEdge.getStyle();
                 edgeStyle = 100;
                 // If edge is highlighted apply set it to negative
-                if (thisEdge.isHilighted())
+                if (thisEdge.isHilighted()){
                     edgeStyle = -edgeStyle;
+                    edgeColour = DrawingConstants.PINK;
+                    Window.alert("highlighted");
+                }
                 // Add edge to lists to be rendered
                 if(thisEdge.needsToFromArrow()){
-                    addEdge(startX, startY, endX, endY, edgeThickness, true,weight+"", DrawingConstants.BLACK);
+                    addEdge(startX, startY, endX, endY, edgeThickness, true,weight+"", edgeColour);
                 } else if(thisEdge.needsToFromArrow()){
-                    addEdge(endX, endY, startX, startY, edgeThickness, true,weight+"", DrawingConstants.BLACK);
+                    addEdge(endX, endY, startX, startY, edgeThickness, true,weight+"", edgeColour);
                 } else {
-                    addEdge(startX, startY, endX, endY, edgeThickness, true,weight+"", DrawingConstants.BLACK);
+                    addEdge(startX, startY, endX, endY, edgeThickness, true,weight+"", edgeColour);
                 }
             }
 

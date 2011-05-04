@@ -8,6 +8,7 @@ public class EdgeDrawable {
 
     private int mEndX;
     private int mEndY;
+    
 
     /**
      * determines of the edge needs an arrow
@@ -102,6 +103,21 @@ public class EdgeDrawable {
      */
     public boolean contains(int x, int y) {
         return false;
+    }
+    
+    
+    boolean in_or_out_of_polygon(int X[], int Y[], int x, int y)
+    {
+        int i, j;
+        boolean c = false;
+        for (i = 0, j = X.length-2; i < X.length-1; j = i++)
+        {
+    
+        if (( ((Y[i]<=y) && (y<Y[j])) || ((Y[j]<=y) && (y<Y[i])) ) &&
+                (x < (X[j]-X[i]) * (y-Y[i]) / (Y[j]-Y[i]) + X[i]))
+            c = !c;
+        }
+        return c;
     }
 
     /**
