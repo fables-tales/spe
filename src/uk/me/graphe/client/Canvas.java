@@ -42,6 +42,7 @@ public class Canvas extends Composite{
 	@UiHandler("canvasPanel")
 	public void onDoubleClick(DoubleClickEvent e)
 	{
+		Console.log("Double click");
 		if (parent.tools.currentTool == Tools.select)
 		{
 			parent.clearSelectedObjects();
@@ -49,12 +50,14 @@ public class Canvas extends Composite{
 			if (parent.toggleSelectedVertexAt(lMouseDown[X], lMouseDown[Y]))
 			{
 				parent.dialog.show(DialogType.vertexName, parent.selectedVertices.get(0).getLabel()
-						, e.getX(), e.getY());			
+						, e.getX(), e.getY());	
+				Console.log("Double click 1");
 			}
 			else if (parent.toggleSelectedEdgeAt(lMouseDown[X], lMouseDown[Y]))
 			{
 				parent.dialog.show(DialogType.edgeWeight, String.valueOf(parent.selectedEdges.get(0).getWeight())
 						, e.getX(), e.getY());
+				Console.log("Double click 2");
 			}
 			
 			parent.clearSelectedObjects();
