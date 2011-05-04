@@ -1,6 +1,9 @@
 package uk.me.graphe.client;
 
+import uk.me.graphe.shared.Tools;
+
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -34,6 +37,28 @@ public class Canvas extends Composite{
 
 		lMouseDown = new int[2];
 		lMouseMove = new int[2];
+	}
+	
+	@UiHandler("canvasPanel")
+	public void onDoubleClick(DoubleClickEvent e)
+	{
+		if (parent.tools.currentTool == Tools.select)
+		{
+			parent.clearSelectedObjects();
+			
+			if (parent.toggleSelectedVertexAt(lMouseDown[X], lMouseDown[Y]))
+			{
+				parent.dialog.show(DialogType.vertexName, parent.selectedVertices.get(0).getLabel()
+						, e.getX(), e.getY());			
+			}
+			else if (parent.toggleSelectedEdgeAt(lMouseDown[X], lMouseDown[Y]))
+			{
+				parent.dialog.show(DialogType.edgeWeight, String.valueOf(parent.selectedEdges.get(0).getWeight())
+						, e.getX(), e.getY());
+			}
+			
+			parent.clearSelectedObjects();
+		}
 	}
 	
 	@UiHandler("canvasPanel")
