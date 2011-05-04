@@ -110,19 +110,23 @@ public class Toolbox extends Composite {
 				this.setTool(Tools.select);
 				break;
 			case styleProcess:
-				parent.setSelectedSyle(VertexDrawable.STROKED_SQUARE_STYLE);
+				parent.setSelectedSyle(VertexDrawable.STROKED_SQUARE_STYLE,
+				        Graphemeui.VERTEX_SIZE*2,Graphemeui.VERTEX_SIZE);
 				this.setTool(Tools.select);
 				break;
 			case styleTerminator:
-				parent.setSelectedSyle(VertexDrawable.STROKED_TERM_STYLE);
+				parent.setSelectedSyle(VertexDrawable.STROKED_TERM_STYLE,
+				        Graphemeui.VERTEX_SIZE*2,Graphemeui.VERTEX_SIZE);
 				this.setTool(Tools.select);
 				break;
 			case styleDecision:
-				parent.setSelectedSyle(VertexDrawable.STROKED_DIAMOND_STYLE);
+				parent.setSelectedSyle(VertexDrawable.STROKED_DIAMOND_STYLE,
+				        Graphemeui.VERTEX_SIZE*2,Graphemeui.VERTEX_SIZE);
 				this.setTool(Tools.select);
 				break;
 			case styleNormal:
-				parent.setSelectedSyle(VertexDrawable.FILLED_CIRCLE_STYLE);
+				parent.setSelectedSyle(VertexDrawable.FILLED_CIRCLE_STYLE,
+				        Graphemeui.VERTEX_SIZE,Graphemeui.VERTEX_SIZE);
 				this.setTool(Tools.select);
 				break;
 		}

@@ -3,8 +3,10 @@ package uk.me.graphe.client;
 import java.util.ArrayList;
 import java.util.Collection;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.widgetideas.graphics.client.Color;
@@ -22,6 +24,9 @@ import uk.me.graphe.client.webglUtil.math.MatrixUtil;
 
 public class DrawingImpl implements Drawing {
 
+    // The level of zoom at which the edges begin to get thinner
+    public static final double EDGE_ZOOM_LIMIT = 0.61;
+    
     private WebGLRenderingContext mGlContext;
     private WebGLProgram mShaderProgram;
     private int mVertexPositionAttribute;
@@ -48,10 +53,12 @@ public class DrawingImpl implements Drawing {
     private long mCurrentTime = -1;
     private long mOldTime = -1;
     private int mFramesDone = 0;
-    private int mCanvasWidth = 2000;
-    private int mCanvasHeight = 2000;
+    private int mCanvasWidth = Window.getClientWidth();
+    private int mCanvasHeight = Window.getClientWidth(); // Deliberate
     private boolean mWebglReady = false;
-
+    
+    WebGLCanvas webGLCanvas;
+    
     // used for styles
     private boolean mIsFlowChart;
 
@@ -62,7 +69,7 @@ public class DrawingImpl implements Drawing {
     // used for panning
     private int mOffsetX, mOffsetY;
     private double mZoom;
-
+    
     // Edits the HTML to ensure 3d canvas is visible
     private static native int setUpCanvas()
     /*-{
@@ -73,7 +80,7 @@ public class DrawingImpl implements Drawing {
     // Does one time set up to make page ready for repeated rendering of graph
     private void setUpWebGL() {
         setUpCanvas();
-        final WebGLCanvas webGLCanvas = new WebGLCanvas(mCanvasWidth + "px", mCanvasHeight + "px");
+        webGLCanvas = new WebGLCanvas(mCanvasWidth + "px", mCanvasHeight + "px");
         mGlContext = webGLCanvas.getGlContext();
         RootPanel.get("gwtGL").add(webGLCanvas);
         mGlContext.viewport(0, 0, mCanvasWidth, mCanvasHeight);
@@ -120,11 +127,15 @@ public class DrawingImpl implements Drawing {
 
         // Do a (kind of reliable) check for webgl
         if (webglCheck() == 1) {
+            
+            // Can do WebGL
             mNumVertices = 0;
             String label = "";
             int vertexStyle;
             int edgeStyle;
-            // Can do WebGL
+            double edgeThickness = 6; 
+            if(mZoom <= EDGE_ZOOM_LIMIT) edgeThickness = edgeThickness*mZoom; 
+            
             // Clear coordinates from last render
             mVerticesList.clear();
             mIndicesList.clear();
@@ -140,20 +151,27 @@ public class DrawingImpl implements Drawing {
                 double startY = (thisEdge.getStartY() + mOffsetY) * mZoom;
                 double endX = (thisEdge.getEndX() + mOffsetX) * mZoom;
                 double endY = (thisEdge.getEndY() + mOffsetY) * mZoom;
+                int weight = thisEdge.getWeight();
                 // edgeStyle = thisEdge.getStyle();
                 edgeStyle = 100;
                 // If edge is highlighted apply set it to negative
                 if (thisEdge.isHilighted())
                     edgeStyle = -edgeStyle;
                 // Add edge to lists to be rendered
-                addEdge(startX, startY, endX, endY, 5, true, DrawingConstants.BLACK);
+                if(thisEdge.needsToFromArrow()){
+                    addEdge(startX, startY, endX, endY, edgeThickness, true,weight+"", DrawingConstants.BLACK);
+                } else if(thisEdge.needsToFromArrow()){
+                    addEdge(endX, endY, startX, startY, edgeThickness, true,weight+"", DrawingConstants.BLACK);
+                } else {
+                    addEdge(startX, startY, endX, endY, edgeThickness, true,weight+"", DrawingConstants.BLACK);
+                }
             }
 
             // Add UI line if required
             if (mShowUILine) {
                 addEdge((mUIline[0]+ mOffsetX)*mZoom, (mUIline[1]+ mOffsetY)*mZoom, 
                         (mUIline[2]+ mOffsetX)*mZoom, (mUIline[3]+ mOffsetY)*mZoom,
-                         5, true, DrawingConstants.GREY);
+                        edgeThickness, true,"", DrawingConstants.GREY);
             }
             
             for (VertexDrawable thisVertex : mVerticesToDraw) {
@@ -162,52 +180,79 @@ public class DrawingImpl implements Drawing {
                 double centreY = (thisVertex.getCenterY() + mOffsetY) * mZoom;
                 double width = (thisVertex.getWidth()) * mZoom;
                 double height = (thisVertex.getHeight()) * mZoom;
+                label = thisVertex.getLabel();
                 vertexStyle = thisVertex.getStyle();
-                if (mIsFlowChart) {
-                    switch (vertexStyle) {
+                float[] customColor = { 0, 0, 0, 1};
+                
+                switch (vertexStyle) {
                     case VertexDrawable.STROKED_TERM_STYLE:
-                        vertexStyle = 100;
+                        if (thisVertex.isHilighted()) {
+                            addTerm(centreX, centreY,width,height, DrawingConstants.YELLOW);
+                            addTerm(centreX, centreY,width-4,height-4, DrawingConstants.GREY);
+                        } else {
+                            addTerm(centreX, centreY,width,height, DrawingConstants.BLACK);
+                            addTerm(centreX, centreY,width-4,height-4, DrawingConstants.GREY);
+                        }
+                        addStringBox(centreX, centreY, width-height,height, label, DrawingConstants.BLACK);
                         break;
                     case VertexDrawable.STROKED_SQUARE_STYLE:
-                        vertexStyle = 101;
+                        if (thisVertex.isHilighted()) {
+                            addSquare(centreX, centreY,width,height, DrawingConstants.YELLOW);
+                            addSquare(centreX, centreY,width-4,height-4, DrawingConstants.GREY);
+                        } else {
+                            addSquare(centreX, centreY,width,height, DrawingConstants.BLACK);
+                            addSquare(centreX, centreY,width-4,height-4, DrawingConstants.GREY);
+                        }
+                        addStringBox(centreX, centreY, width,height, label, DrawingConstants.BLACK);
                         break;
                     case VertexDrawable.STROKED_DIAMOND_STYLE:
-                        vertexStyle = 102;
+                        if (thisVertex.isHilighted()) {
+                            addDiamondStroke(centreX, centreY, width,height,DrawingConstants.GREY,
+                                    2,DrawingConstants.YELLOW);
+                        } else {
+                            addDiamondStroke(centreX, centreY, width,height,DrawingConstants.GREY,
+                                    2,DrawingConstants.BLACK);
+                            
+                        }
+                        addStringCircle(centreX, centreY, width/2, label, DrawingConstants.BLACK);
                         break;
+                    case VertexDrawable.COLORED_FILLED_CIRCLE:
+                        customColor = thisVertex.getColor();
+                        addCircle(centreX, centreY, width, customColor);
+                        break; 
                     default:
-                        vertexStyle = 1;
+                        if (thisVertex.isHilighted()) {
+                            addCircle(centreX, centreY, width, DrawingConstants.BLACK);
+                            addCircle(centreX, centreY, width - 4, DrawingConstants.YELLOW);
+                            addStringCircle(centreX, centreY, width, label, DrawingConstants.BLACK);
+                        } else {
+                            addCircle(centreX, centreY, width, DrawingConstants.BLACK);
+                            addStringCircle(centreX, centreY, width, label, DrawingConstants.WHITE);
+                        }
                         break;
-                    }
-                } else {
-                    vertexStyle = 1;
                 }
-                label = thisVertex.getLabel();
-                int[] customColor = { 0, 0, 0 };
-                if (thisVertex.getStyle() == VertexDrawable.COLORED_FILLED_CIRCLE) {
-                    vertexStyle = 5;
-                    customColor = thisVertex.getColor();
-                }
-                if (thisVertex.isHilighted()) {
-                    addCircle(centreX, centreY, width, DrawingConstants.BLACK);
-                    addCircle(centreX, centreY, width - 4, DrawingConstants.YELLOW);
-                } else {
-
-                    addCircle(centreX, centreY, width, DrawingConstants.BLACK);
-                }
-                // addVertice(centreX,centreY,width,height,vertexStyle,label,
-                // customColor[0],customColor[1],customColor[2]);
+                
             }
 
             renderGraph();
-
             mCanRender = true;
 
         } else {
-            // Cant do webGL so draw on 2d Canvas
-
+            // Can't do webGL so draw on 2d Canvas
             renderGraph2d(m2dCanvas, mEdgesToDraw, mVerticesToDraw);
         }
 
+    }
+    
+    private static native String getUrlJsni()
+    /*-{
+        canvas = document.getElementsByTagName("canvas")[0];
+        return canvas.toDataURL();
+    }-*/;
+    
+    public String getUrl(){
+        String url  = getUrlJsni();
+        return url;
     }
 
     public void renderGraph(GWTCanvas canvasNew, Collection<EdgeDrawable> edgesNew,
@@ -226,19 +271,21 @@ public class DrawingImpl implements Drawing {
 
                         doRendering();
                         mCurrentTime = System.currentTimeMillis();
-                        if (mFramesDone % 50 == 0) {
-                            float fps =
-                                    1 /(((float)(System.currentTimeMillis()-mOldTime))/(float)1000);
-                            fps = (float) (Math.round(((double) fps) * 100.0) / 100.0);
-                            RootPanel.get("frameRate").clear();
-                            VerticalPanel panel = new VerticalPanel();
-                            HTML gLabel =
-                                    new HTML("TotalFrames:" + mFramesDone + " Nodes:"
-                                            + mNumVertices + " FPS:" + fps);
-                            gLabel.setHorizontalAlignment(HasAlignment.ALIGN_RIGHT);
-                            panel.add(gLabel);
-                            RootPanel.get("frameRate").add(panel);
-                        }
+                        
+                        float fps =
+                                1 /(((float)(System.currentTimeMillis()-mOldTime))/(float)1000);
+                        fps = (float) (Math.round(((double) fps) * 100.0) / 100.0);
+                        RootPanel.get("frameRate").clear();
+                        VerticalPanel panel = new VerticalPanel();
+                        HTML gLabel =
+                                new HTML("TotalFrames:" + mFramesDone + 
+                                        " Nodes:"+ mNumVertices + 
+                                        " Zoom:"+ mZoom +
+                                        " FPS:" + fps);
+                        gLabel.setHorizontalAlignment(HasAlignment.ALIGN_RIGHT);
+                        panel.add(gLabel);
+                        RootPanel.get("frameRate").add(panel);
+                        
                         mOldTime = System.currentTimeMillis();
                         mRenderRequest = false;
                     }
@@ -298,6 +345,184 @@ public class DrawingImpl implements Drawing {
             return 0;
         else
             return mVerticesList.size() / 2;
+    }
+    
+    private double stringPixelLength(String string)
+    {
+        int code;
+        double width = 0;
+        for(int i=0;i<string.length();i++)
+        {
+            code = string.codePointAt(i)-32;
+            width += DrawingConstants.HERSHEY_FONT[code][1];
+        }
+        
+        return width;
+    }
+    
+    private ArrayList<String> getLines(String string, double width, double size)
+    {
+        String[] wordArray = string.split(" ");
+        int numWords = wordArray.length;
+        ArrayList<String> lineList = new ArrayList<String>();
+        String[] lineArray = new String[100];
+        int lineNum = 1;
+        double lineWidth = 0;
+        int wordNum =0;
+        double spaceWidth = stringPixelLength(" ")*size;
+        lineArray[0]="0";
+        lineList.add("0");
+        lineArray[lineNum]="";
+        lineList.add("");
+        
+        for(int i = 0;i<numWords;i++)
+        {
+            double charWidth = spaceWidth+stringPixelLength(wordArray[i])*size;
+            
+            if(width<=lineWidth+charWidth && i>0)
+            {
+                if(lineNum < numWords)
+                {
+                    lineNum++;
+                    lineArray[lineNum] = "";
+                    lineList.add("");
+                    lineWidth = 0;
+                    wordNum = 0;
+                }
+            }
+            
+            if(wordNum > 0 && i>0)
+            {
+
+                wordArray[i] = " "+wordArray[i];
+            }
+            lineArray[lineNum] += wordArray[i];
+            lineList.set(lineNum, lineList.get(lineNum)+""+wordArray[i]);
+            lineWidth += charWidth;
+            wordNum++;
+            if(stringPixelLength(wordArray[i]) > stringPixelLength(wordArray[Integer.parseInt(lineArray[0])])) lineArray[0] = ""+i;
+            if(stringPixelLength(wordArray[i]) > stringPixelLength(wordArray[Integer.parseInt(lineList.get(0))])) lineList.set(0, ""+i);
+        }
+        
+        return lineList;
+        
+    }
+    
+    private void addStringCircle(double left, double top, double width, String string, float[] color)
+    {
+
+        double rad = width;
+        double dis = Math.sin(Math.PI/4)*rad;
+        addStringBox(left,top,dis,dis, string, color);
+    }
+    
+    private void addStringBox(double left, double top, double width, double height,String string, float[] color)
+    {
+        double sizeInc = 0.05;
+        double bufferX = 5;
+        double bufferY = 0;
+        width-=bufferX;
+        height-=bufferY;
+        boolean cont = true;
+        double orginLength = stringPixelLength(string);
+        double origSize = (width/orginLength);
+        double size = origSize;
+        double lineHeight = size*35;
+        ArrayList<String> lineList = getLines(string, width, size);
+        double hOff;
+        int count = 0;
+        String[] wordArray = string.split(" ");
+        double longestWidth = 0;
+        while(cont)
+        {
+            longestWidth = stringPixelLength(wordArray[Integer.parseInt(lineList.get(0))])*size;
+            double tempSize = size+sizeInc;
+            lineList = getLines(string, width, tempSize);
+            lineHeight = tempSize*35;
+            double vSpace = height-(lineHeight*(lineList.size()-1));
+            
+            if(vSpace>lineHeight && width>longestWidth+10)
+            {
+                size=tempSize;
+            }
+            else if(vSpace < -10 || width<longestWidth )
+            {
+                size=size*0.5;
+            }
+            else
+            {
+                cont = false;
+            }
+            count++;
+        }
+
+        hOff = -((lineList.size()-2)*lineHeight)/2;
+        
+        for(int i =1;i<lineList.size();i++)
+        {
+            addString(left,top+hOff,lineList.get(i),color,size);
+            hOff+=lineHeight;
+        }
+        
+    }
+    
+    private void addString(double left,double top,String string,float[] color, double size)
+    {
+        double offset = -((stringPixelLength(string)/2)*size); 
+        for(int i=0;i<string.length();i++)
+        {
+            offset += addChar(left+offset,top,string.charAt(i)+"",color,size);
+            
+        }
+    }
+    
+    private double addChar(double left,double top,String character,float[] color, double size){
+        
+        int code = character.codePointAt(0)-32;
+        int verticesNeeded = DrawingConstants.HERSHEY_FONT[code][0];
+        double width = DrawingConstants.HERSHEY_FONT[code][1];
+        double left1;
+        double top1;
+        double left2=0;
+        double top2=0;
+        int j = 0;
+        int i = 2;
+        double fHeight = 9*size;
+        double thickness = 1.5;
+        
+        while(i<(verticesNeeded*2)+2)
+        {
+            j++;
+            left1 = DrawingConstants.HERSHEY_FONT[code][i]*size+left;
+            top1 = (fHeight-DrawingConstants.HERSHEY_FONT[code][i+1]*size)+top;
+            if(DrawingConstants.HERSHEY_FONT[code][i] != -1 && DrawingConstants.HERSHEY_FONT[code][i+1] != -1)
+            {
+                if(i>2 && DrawingConstants.HERSHEY_FONT[code][i-1] != -1 && DrawingConstants.HERSHEY_FONT[code][i-2] != -1)
+                {
+                    addEdge(left2,top2,left1,top1,thickness,false,"",color);
+                }
+                if(DrawingConstants.HERSHEY_FONT[code][i+2] != -1 && DrawingConstants.HERSHEY_FONT[code][i+3] != -1)
+                {
+                    left2 = DrawingConstants.HERSHEY_FONT[code][i+2]*size+left;
+                    top2 = (fHeight-DrawingConstants.HERSHEY_FONT[code][i+3]*size)+top;
+                    addEdge(left1,top1,left2,top2,thickness,false,"",color);
+                }
+                i+=4;
+            }
+            else
+            {
+                i+=2;
+            }
+        }
+        return width*size;
+    }
+    
+    private void addTerm(double x, double y, double width, double height, float[] color){
+        double squareWidth = width-height;
+        addSquare(x,y, squareWidth, height,color);
+        addCircle(x-squareWidth/2,y,height,color);
+        addCircle(x+squareWidth/2,y,height,color);
+        
     }
 
     private void addTriangle(double centreX, double centreY, double width, double height,
@@ -407,12 +632,64 @@ public class DrawingImpl implements Drawing {
         }
 
     }
+    
+    double diamondStrokeAlgorithm(double width, double height, double strokeSize)
+    {
+        double angle1 = Math.atan(height/width);
+        double angle2 = Math.PI/2 - angle1;
+        double opp = strokeSize*Math.sin(angle2);
+        double width1Sq = (strokeSize*strokeSize)-(opp*opp);
+        double width1 = Math.sqrt(width1Sq);
+        double width2 = opp/(Math.tan(angle1));
+        double fWidth = (width1+width2)*2;
+        return fWidth;
+    }
+    
+    private void addDiamondStroke(double x, double y, double width, double height, float[] color,
+            double strokeSize, float[] strokeColor){
+        
+        double wOff = diamondStrokeAlgorithm(width/2, height/2, strokeSize);
+        double hOff = diamondStrokeAlgorithm(height/2, width/2, strokeSize);
+        
+        addDiamond(x,y,width,height,strokeColor);
+        addDiamond(x,y,width-wOff,height-hOff,color);
+    }
+    
+    private void addDiamond(double x, double y, double width, double height, float[] color){
+        
+        float halfWidth = (float) (width/2);
+        float halfHeight = (float) (height/2);
+        int startIndex = verticesIndex();
+
+        mVerticesList.add((float) x-halfWidth);
+        mVerticesList.add((float) y);
+        mVerticesList.add((float) x);
+        mVerticesList.add((float) y-halfHeight);
+        mVerticesList.add((float) x+halfWidth);
+        mVerticesList.add((float) y);
+        mVerticesList.add((float) x);
+        mVerticesList.add((float) y+halfHeight);
+
+        mIndicesList.add(startIndex + 0);
+        mIndicesList.add(startIndex + 1);
+        mIndicesList.add(startIndex + 2);
+        mIndicesList.add(startIndex + 0);
+        mIndicesList.add(startIndex + 2);
+        mIndicesList.add(startIndex + 3);
+
+        for (int i = 0; i < 4; i++) {
+            mColorsList.add(color[0]);
+            mColorsList.add(color[1]);
+            mColorsList.add(color[2]);
+            mColorsList.add(color[3]);
+
+        }
+    }
 
     private void addEdge(double x1, double y1, double x2, double y2, double thickness,
-            boolean arrow, float[] color) {
+            boolean arrow, String label, float[] color) {
         double height = y2 - y1;
         double width = x2 - x1;
-
         double length = Math.sqrt((height * height) + (width * width));
         double halfThick = thickness / 2;
         double halfLength = length / 2;
@@ -436,34 +713,55 @@ public class DrawingImpl implements Drawing {
             coords[i][1] = (oldX * Math.sin(lineAngle)) + (oldY * Math.cos(lineAngle));
         }
 
-        drawSquare(coords[0][0] + xOffset, coords[0][1] + yOffset, coords[1][0] + xOffset,
-                coords[1][1] + yOffset, coords[2][0] + xOffset, coords[2][1] + yOffset,
+        addSquare(coords[0][0] + xOffset, coords[0][1] + yOffset, 
+                coords[1][0] + xOffset, coords[1][1] + yOffset,
+                coords[2][0] + xOffset, coords[2][1] + yOffset,
                 coords[3][0] + xOffset, coords[3][1] + yOffset, color);
 
         if (arrow) {
             if (x1 > x2)
                 arrowAngle -= Math.PI;
-            addTriangle(xOffset, yOffset, 30, 30, arrowAngle - Math.PI / 2, color);
+            addTriangle(xOffset, yOffset, thickness*5, thickness*5, arrowAngle - Math.PI / 2, color);
+        }
+
+        if(!label.equals("")){
+            double lX;
+            double lY;
+            double nlX;
+            double nlY;
+            double lLength;
+            double halfLLength;
+            lLength = stringPixelLength(label);
+            halfLLength = lLength/2;
+            double dLine = thickness*2; 
+            lX = 0;
+            lY = -dLine;
+            nlX = (lX * Math.cos(lineAngle)) - (lY * Math.sin(lineAngle))+xOffset;
+            nlY = (lX * Math.sin(lineAngle)) + (lY * Math.cos(lineAngle))+yOffset;
+
+            if(x2>=x1 && y1<y2)nlX+=halfLLength*0.7;
+            else if(x2<x1 && y1<y2)nlX-=halfLLength*0.7;
+            else if(x2<x1 && y1>y2)nlX+=halfLLength*0.7;
+            else if(x2>=x1 && y1>y2)nlX-=halfLLength*0.7;
+
+            addString(nlX, nlY-(thickness*1.6),label,color,thickness*0.1);
         }
     }
 
-    private void drawSquare(double x, double y, double width, double height, float[] color) {
+    private void addSquare(double x, double y, double width, double height, float[] color) {
         float halfWidth = (float) (width / 2);
         float halfHeight = (float) (height / 2);
 
-        drawSquare(x - halfWidth, y - halfHeight, x + halfWidth, y - halfHeight, x - halfWidth, y
+        addSquare(x - halfWidth, y - halfHeight, x + halfWidth, y - halfHeight, x - halfWidth, y
                 + halfHeight, x + halfWidth, y + halfHeight, color);
 
     }
 
-    private void drawSquare(double topLeftX, double topLeftY, double topRightX, double topRightY,
+    private void addSquare(double topLeftX, double topLeftY, double topRightX, double topRightY,
             double bottomLeftX, double bottomLeftY, double bottomRightX, double bottomRightY,
             float[] color) {
-        int startIndex;
-        if (mVerticesList.size() == 0)
-            startIndex = 0;
-        else
-            startIndex = mVerticesList.size() / 2;
+        
+        int startIndex = verticesIndex();
 
         mVerticesList.add((float) topLeftX);
         mVerticesList.add((float) topLeftY);

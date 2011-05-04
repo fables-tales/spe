@@ -19,6 +19,7 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
 public class Graphemeui implements EntryPoint
@@ -113,9 +114,15 @@ public class Graphemeui implements EntryPoint
 						case 86: // v
 							tools.setTool(Tools.addVertex);
 							break;
-						case 90: // z
-							tools.setTool(Tools.zoom);
-							break;
+                        case 90: // z
+                            tools.setTool(Tools.zoom);
+                            break;
+                        case 68: // d
+                            Window.open(drawing.getUrl(), "_blank", null);
+                            break;
+                        case 71: // g
+                            Window.prompt("DOT graph Code", GraphString.getDot(graphManager, "Grapheme",true,true));
+                            break;
 						case KeyCodes.KEY_DELETE:
 							tools.setTool(Tools.delete);
 							break;
@@ -232,12 +239,14 @@ public class Graphemeui implements EntryPoint
         graphManager.invalidate();
     }
     
-    public void setSelectedSyle (int style)
+    public void setSelectedSyle (int style, int width, int height)
     {
     	for (VertexDrawable vd : selectedVertices)
     	{
     		vd.setStyle(style);
+    		vd.updateSize(width,height);
     	}
+    	graphManager.invalidate();
     }
     
     public boolean toggleSelectedEdgeAt(int x, int y) {
