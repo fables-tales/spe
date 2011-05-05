@@ -3,7 +3,6 @@ package uk.me.graphe.server.database;
 import java.net.UnknownHostException;
 import java.util.List;
 
-import uk.me.graphe.server.database.dbitems.OTGraphManager2dStore;
 import uk.me.graphe.server.database.dbitems.UserDB;
 
 import com.google.code.morphia.Datastore;

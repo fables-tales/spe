@@ -17,16 +17,8 @@ import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
 import uk.me.graphe.shared.jsonwrapper.JSONObject;
 import uk.me.graphe.shared.messages.Message;
 import uk.me.graphe.shared.messages.MessageFactory;
-import uk.me.graphe.shared.messages.operations.AddEdgeOperation;
-import uk.me.graphe.shared.messages.operations.AddNodeOperation;
 import uk.me.graphe.shared.messages.operations.CompositeOperation;
-import uk.me.graphe.shared.messages.operations.DeleteEdgeOperation;
-import uk.me.graphe.shared.messages.operations.DeleteNodeOperation;
-import uk.me.graphe.shared.messages.operations.EdgeOperation;
 import uk.me.graphe.shared.messages.operations.GraphOperation;
-import uk.me.graphe.shared.messages.operations.MoveNodeOperation;
-import uk.me.graphe.shared.messages.operations.NoOperation;
-import uk.me.graphe.shared.messages.operations.NodeOperation;
 
 import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;

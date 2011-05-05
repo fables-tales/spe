@@ -13,22 +13,17 @@ import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
 public class UserTest extends TestCase {
 
     private UserDatabase db = new UserDatabase();
-    private OTGraphManager2d mManager;
-    private int graphId = 0;
 
     @Override
     protected void setUp() throws Exception {
         // TODO Auto-generated method stub
         super.setUp();
-        JSONImplHolder.initialise(new JSONWrapperFactory());
-        mManager = OTGraphManagerFactory.newInstance(17);
     }
 
     @Override
     protected void tearDown() throws Exception {
         // TODO Auto-generated method stub
         super.tearDown();
-        mManager = null;
     }
 
     public void testUser() {
@@ -47,7 +42,7 @@ public class UserTest extends TestCase {
     	
     }
     
-    public void storeGraph() {
+    public void testStore() {
     	db.newUser("graphtest", "email@example.com");
     	db.addGraph("graphtest", "key");
     	List<String> graphs = db.getGraphs("graphtest");
