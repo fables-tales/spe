@@ -13,6 +13,16 @@ public class OTGraphManager2dStore {
     private int id;
     private int stateid;
     private List<String> mOps;
+    private String name;
+    
+    
+    public void setName(String n) {
+    	name = n;
+    }
+    
+    public String getName() {
+    	return name;
+    }
     
     public OTGraphManager2dStore (OTGraphManager2d graph) {
         id = graph.getGraphId();
