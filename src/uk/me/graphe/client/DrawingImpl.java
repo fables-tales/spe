@@ -135,7 +135,8 @@ public class DrawingImpl implements Drawing {
             String label = "";
             int vertexStyle;
             int edgeStyle;
-            double edgeThickness = 6; 
+            double edgeThickness = 6;
+            float[] highlightColour = DrawingConstants.YELLOW;
             if(mZoom <= EDGE_ZOOM_LIMIT) edgeThickness = edgeThickness*mZoom; 
             
             // Clear coordinates from last render
@@ -157,6 +158,7 @@ public class DrawingImpl implements Drawing {
                 int weight = thisEdge.getWeight();
                 float[] edgeColour = DrawingConstants.BLACK;
                 float[] textColour = DrawingConstants.BLACK;
+                
                 int strokeThickness = 4;
                 // edgeStyle = thisEdge.getStyle();
                 edgeStyle = 100;
@@ -168,21 +170,21 @@ public class DrawingImpl implements Drawing {
                 // Add edge to lists to be rendered
                 if(thisEdge.needsToFromArrow()){
                     if (thisEdge.isHilighted()){
-                        addEdge(startX, startY, endX, endY, edgeThickness, true,true,(edgeThickness*5),(edgeThickness*5),weight+"", textColour, textColour);
+                        addEdge(startX, startY, endX, endY, edgeThickness, true,true,(edgeThickness*5),(edgeThickness*5),weight+"", highlightColour, textColour);
                         addEdge(startX, startY, endX, endY, edgeThickness-strokeThickness, false,false,(edgeThickness*5)-strokeThickness,0,"", edgeColour, textColour);
                     }else{
                         addEdge(startX, startY, endX, endY, edgeThickness, true,true,(edgeThickness*5),(edgeThickness*5),weight+"", edgeColour, textColour);
                     }
                 } else if(thisEdge.needsToFromArrow()){
                     if (thisEdge.isHilighted()){
-                        addEdge(endX, endY, startX, startY, edgeThickness, true,true,(edgeThickness*5),(edgeThickness*5),weight+"", textColour, textColour);
+                        addEdge(endX, endY, startX, startY, edgeThickness, true,true,(edgeThickness*5),(edgeThickness*5),weight+"", highlightColour, textColour);
                         addEdge(endX, endY, startX, startY, edgeThickness-strokeThickness, false,false,(edgeThickness*5)-strokeThickness,0,"", edgeColour, textColour);
                     }else{
                         addEdge(endX, endY, startX, startY, edgeThickness, true,true,(edgeThickness*5),(edgeThickness*5),weight+"", edgeColour, textColour);
                     }
                 } else {
                     if (thisEdge.isHilighted()){
-                        addEdge(startX, startY, endX, endY, edgeThickness, true,true,(edgeThickness*5),(edgeThickness*5),weight+"", textColour, textColour);
+                        addEdge(startX, startY, endX, endY, edgeThickness, true,true,(edgeThickness*5),(edgeThickness*5),weight+"", highlightColour, textColour);
                         addEdge(startX, startY, endX, endY, edgeThickness-strokeThickness, false,false,(edgeThickness*5)-strokeThickness,0,"", edgeColour, textColour);
                     }else{
                         addEdge(startX, startY, endX, endY, edgeThickness, true,true,(edgeThickness*5),(edgeThickness*5),weight+"", edgeColour, textColour);
@@ -247,7 +249,7 @@ public class DrawingImpl implements Drawing {
                         break; 
                     default:
                         if (thisVertex.isHilighted()) {
-                            addCircle(centreX, centreY, width, DrawingConstants.BLACK);
+                            addCircle(centreX, centreY, width, highlightColour);
                             addCircle(centreX, centreY, width - 4, DrawingConstants.YELLOW);
                         } else {
                             addCircle(centreX, centreY, width, DrawingConstants.BLACK);
