@@ -93,15 +93,11 @@ public class DatabaseImpl implements Database{
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        int i = 0;
+        OTGraphManager2d toReturn = OTGraphManagerFactory.newInstance(key);
         for (Message item : messages) {
             // Store all operations as local, map to server in restoreState()
-            operations.add((GraphOperation) item);
-            i++;
+            toReturn.applyOperation((GraphOperation) item);
         }
-        OTGraphManager2d toReturn = OTGraphManagerFactory.newInstance(key);
-        toReturn.setHistory(operations);
-        toReturn.setStateId(retrieve.getStateid());
         System.out.println("Returning graph: " + toReturn.getGraphId());
         return toReturn;
     }
