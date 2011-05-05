@@ -1,18 +1,25 @@
 package uk.me.graphe.client;
 
+import com.google.gwt.user.client.Window;
+
 public class DrawingPolygon {
 
     int[] mXArray = {0};
     int[] mYArray = {0};
+    double mZoom = 1;
+    private int mOffsetX, mOffsetY;
     
     /**
      * Set the polygon coordinates
      * @param newXArray
      * @param newYArray
      */
-    public void set(int[] newXArray, int[] newYArray){
+    public void set(int[] newXArray, int[] newYArray, double newZoom, int newOffsetX, int newOffsetY){
         mXArray = newXArray;
         mYArray = newYArray;
+        mOffsetX = newOffsetX;
+        mOffsetY = newOffsetY;
+        mZoom = newZoom;
     }
     
     /**
@@ -22,7 +29,10 @@ public class DrawingPolygon {
      * @return true if point is in polygon
      */
     public boolean contains(int x, int y){
-        return pointInPoly(mXArray, mYArray, x, y);
+        x = (int) ((x+mOffsetX)*mZoom);
+        y = (int) ((y+mOffsetY)*mZoom);
+        Boolean cont = pointInPoly(mXArray, mYArray, x, y);
+        return cont;
     }
     
     private boolean pointInPoly(int X[], int Y[], int x, int y){
