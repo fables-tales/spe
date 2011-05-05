@@ -49,9 +49,4 @@ public class DatabaseTest extends TestCase {
         Assert.assertNotNull(m.getVertexDrawables());
         Assert.assertEquals(mManager.getVertexDrawables().size(), m.getVertexDrawables().size());
     }
-
-    public void testRetrieve() {
-        // OTGraphManager2d retrieve = db.retrieve(graphId);
-
-    }
 }
