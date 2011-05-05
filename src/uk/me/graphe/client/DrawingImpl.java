@@ -135,7 +135,7 @@ public class DrawingImpl implements Drawing {
             String label = "";
             int vertexStyle;
             int edgeStyle;
-            double edgeThickness = 15; 
+            double edgeThickness = 6; 
             if(mZoom <= EDGE_ZOOM_LIMIT) edgeThickness = edgeThickness*mZoom; 
             
             // Clear coordinates from last render
@@ -724,18 +724,18 @@ public class DrawingImpl implements Drawing {
                 coords[2][0] + xOffset, coords[2][1] + yOffset,
                 coords[3][0] + xOffset, coords[3][1] + yOffset, color);
 
-        int[] xArray = {(int) (coords[0][0] + xOffset),
-                (int) (coords[2][0] + xOffset),
-                (int) (coords[3][0] + xOffset),
-                (int) (coords[1][0] + xOffset)};
+        int[] xArray = {(int) ((coords[0][0] + xOffset)),
+                (int) ((coords[2][0] + xOffset)),
+                (int) ((coords[3][0] + xOffset)),
+                (int) ((coords[1][0] + xOffset))};
         
-        int[] yArray = {(int) (coords[0][1] + yOffset),
-                (int) (coords[2][1] + yOffset),
-                (int) (coords[3][1] + yOffset),
-                (int) (coords[1][1] + yOffset)
+        int[] yArray = {(int) ((coords[0][1] + yOffset)),
+                (int) ((coords[2][1] + yOffset)),
+                (int) ((coords[3][1] + yOffset)),
+                (int) ((coords[1][1] + yOffset))
         };
         
-        if(addToPolygon)mCurrentPolygon.set(xArray, yArray);
+        if(addToPolygon)mCurrentPolygon.set(xArray, yArray,mZoom, mOffsetX,mOffsetY);
         
         if (arrow) {
             if (x1 > x2)
@@ -803,7 +803,6 @@ public class DrawingImpl implements Drawing {
             mColorsList.add(color[1]);
             mColorsList.add(color[2]);
             mColorsList.add(color[3]);
-
         }
     }
 
