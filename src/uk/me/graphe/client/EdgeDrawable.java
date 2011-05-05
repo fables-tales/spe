@@ -9,7 +9,8 @@ public class EdgeDrawable {
     private int mEndX;
     private int mEndY;
     
-
+    private DrawingPolygon mPolygon;
+    
     /**
      * determines of the edge needs an arrow
      * 
@@ -57,6 +58,8 @@ public class EdgeDrawable {
         mEndY = endY;
         mWeight = weight;
         mArrowDirection = arrowDir;
+        
+        mPolygon = new DrawingPolygon();
     }
 
     /**
@@ -99,25 +102,18 @@ public class EdgeDrawable {
      * determines if a ed contains a specific co-ordinate 
      * @param x
      * @param y
-     * @return
+     * @return true if x and y in edge
      */
     public boolean contains(int x, int y) {
-        return false;
+        return mPolygon.contains(x, y);
     }
     
-    
-    boolean in_or_out_of_polygon(int X[], int Y[], int x, int y)
-    {
-        int i, j;
-        boolean c = false;
-        for (i = 0, j = X.length-2; i < X.length-1; j = i++)
-        {
-    
-        if (( ((Y[i]<=y) && (y<Y[j])) || ((Y[j]<=y) && (y<Y[i])) ) &&
-                (x < (X[j]-X[i]) * (y-Y[i]) / (Y[j]-Y[i]) + X[i]))
-            c = !c;
-        }
-        return c;
+    /**
+     * Returns the polygon of the edge
+     * @return the polygon of edge
+     */
+    public DrawingPolygon getPolygon(){
+        return mPolygon;
     }
 
     /**
