@@ -2,6 +2,7 @@ package uk.me.graphe.server.database;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -10,6 +11,12 @@ import uk.me.graphe.shared.Edge;
 import uk.me.graphe.shared.Vertex;
 import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
 import uk.me.graphe.shared.graphmanagers.OTGraphManager2dImpl;
+import uk.me.graphe.shared.graphmanagers.OTGraphManagerFactory;
+import uk.me.graphe.shared.jsonwrapper.JSONException;
+import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
+import uk.me.graphe.shared.jsonwrapper.JSONObject;
+import uk.me.graphe.shared.messages.Message;
+import uk.me.graphe.shared.messages.MessageFactory;
 import uk.me.graphe.shared.messages.operations.AddEdgeOperation;
 import uk.me.graphe.shared.messages.operations.AddNodeOperation;
 import uk.me.graphe.shared.messages.operations.CompositeOperation;
@@ -67,52 +74,50 @@ public class DatabaseImpl implements Database{
         if (retrieves == null || retrieves.size() != 1)
             return null;
         OTGraphManager2dStore retrieve = retrieves.get(0);
-        List<GraphDB> operations = retrieve.getmOps();
-        // Create new 2d Graph manager
-        OTGraphManager2d toReturn = new OTGraphManager2dImpl(retrieve.getId());
-        toReturn.setStateId(retrieve.getStateid());
-        List<GraphOperation> graphOperations = new ArrayList<GraphOperation>();
-        
-        for (GraphDB item : operations) {
-            GraphOperation toAdd = null;
-            int itemId = item.getHistoryId();
-            if (item.isEdgeOperation()) {
-                EdgeDB edgeOp = item.asEdgeOperation();
-                DBEdge edge = edgeOp.getEdge();
-                Edge thisEdge = new Edge(new Vertex(edge.getFrom().getLabel()), new Vertex(edge.getTo().getLabel()), edge.getDir());
-                if (edgeOp.createsEdge(edge)) {
-                    toAdd = new AddEdgeOperation(thisEdge);
-                    }
-                if (edgeOp.deletesEdge(edge)) {
-                    toAdd = new DeleteEdgeOperation(thisEdge);
-                }
-            }
-            if (item.isNodeOperation()) {
-                NodeDB nodeOp = item.asNodeOperation();
-                DBVertex vertex = nodeOp.getNode();
-                Vertex thisVertex = new Vertex(vertex.getLabel());
-                if (nodeOp.createsNode(vertex)) {
-                    AddNodeDB addOp = (AddNodeDB) nodeOp;
-                    toAdd = new AddNodeOperation(thisVertex, addOp.getX(), addOp.getY());
-                }        
-                if(nodeOp.deletesNode(vertex)) {
-                    toAdd = new DeleteNodeOperation(thisVertex);
-                }
-                    
-                if(nodeOp.movesNode(vertex)) {
-                    MoveNodeDB moveOp = (MoveNodeDB) nodeOp;
-                    toAdd = new MoveNodeOperation(thisVertex, moveOp.getToX(), moveOp.getToY());
-                }
-            }
-            if (item.isNoOperation()) {
-                toAdd = new NoOperation();
-            }
-            toAdd.setHistoryId(itemId);
-            graphOperations.add(toAdd);
+        List<GraphOperation> operations = new ArrayList<GraphOperation>();
+        List<JSONObject> objects = new LinkedList<JSONObject>();
+        List<Message> messages = null;
+        if (retrieve.getmOps() == null)
+            return OTGraphManagerFactory.newInstance(key);
+        for (String s : retrieve.getmOps()) {
+            s = s.substring(s.indexOf('{'), s.lastIndexOf('}')+1);
+            String st = "";
+            for (int i=0; i < s.length(); i++)
+                if (s.charAt(i) != '\\')
+                    st += s.charAt(i);
+            JSONObject item = parseItem(st);
+            objects.add(item);
         }
-        toReturn.setHistory(graphOperations);
+        try {
+            messages = MessageFactory.makeOperationsFromJson(objects);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        int i = 0;
+        for (Message item : messages) {
+            // Store all operations as local, map to server in restoreState()
+            operations.add((GraphOperation) item);
+            i++;
+        }
+        OTGraphManager2d toReturn = OTGraphManagerFactory.newInstance(key);
+        toReturn.setHistory(operations);
+        toReturn.setStateId(retrieve.getStateid());
+        System.out.println("Returning graph: " + toReturn.getGraphId());
         return toReturn;
     }
+    
+    private JSONObject parseItem (String json) {
+        JSONObject object = null;
+        try {
+            object = JSONImplHolder.make(json) ;
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            System.out.println("Error " + json);
+            e.printStackTrace();
+        }
+        return object;
+    }
+    
 
     @Override
     public int store(OTGraphManager2d manager) {
@@ -120,8 +125,10 @@ public class DatabaseImpl implements Database{
         OTGraphManager2dStore toStore = new OTGraphManager2dStore(manager);
         CompositeOperation history;
         // Check whether the graph exists in the database already
-        List<OTGraphManager2dStore> retrieves = mData.find(OTGraphManager2dStore.class, "id =", manager.getGraphId()).asList();
-        if (retrieves == null) {
+        List<OTGraphManager2dStore> retrieves = null;
+        Query<OTGraphManager2dStore> exists =  mData.find(OTGraphManager2dStore.class, "id =", manager.getGraphId());
+        retrieves = exists.asList();
+        if (retrieves == null || retrieves.isEmpty()) {
             history = manager.getCompleteHistory();
             return newgraph(convertOperations(history), toStore);   
         }
@@ -141,58 +148,24 @@ public class DatabaseImpl implements Database{
         }
     }
     
-    private int newgraph (List<GraphDB> operations, OTGraphManager2dStore toStore) {
+    private int newgraph (List<String> operations, OTGraphManager2dStore toStore) {
         toStore.setmOps(operations);
         mData.save(toStore);
         return toStore.getId();
     }
     
-    private int updategraph (List<GraphDB> operations, int id, int newid) {
+    private int updategraph (List<String> operations, int id, int newid) {
         Query<OTGraphManager2dStore> updateQuery = mData.createQuery(OTGraphManager2dStore.class).filter("id =", id);
         UpdateOperations<OTGraphManager2dStore> ops = 
             mData.createUpdateOperations(OTGraphManager2dStore.class).add("mOps", operations, true).set("stateid", newid);
         mData.update(updateQuery, ops);
         return id;
     }
-    private List<GraphDB> convertOperations(CompositeOperation history) {
+    private List<String> convertOperations(CompositeOperation history) {
         List<GraphOperation> operations = history.asIndividualOperations();
-        List<GraphDB> storedOperations = new ArrayList<GraphDB>();
-        for (GraphOperation item : operations) {
-            GraphDB toAdd = null;
-            int itemId = item.getHistoryId();
-            if (item.isEdgeOperation()) {
-                EdgeOperation edgeOp = item.asEdgeOperation();
-                Edge edge = edgeOp.getEdge();
-                DBEdge storeEdge = new DBEdge(edge, new DBVertex(edge.getFromVertex()), new DBVertex(edge.getToVertex()));
-                if (edgeOp.createsEdge(edge)) {
-                    toAdd = new AddEdgeDB(storeEdge);
-                    }
-                if (edgeOp.deletesEdge(edge)) {
-                    toAdd = new DeleteEdgeDB(storeEdge);
-                }
-            }
-            if (item.isNodeOperation()) {
-                NodeOperation nodeOp = item.asNodeOperation();
-                Vertex vertex = nodeOp.getNode();
-                DBVertex storeVertex = new DBVertex(vertex);
-                if (nodeOp.createsNode(vertex)) {
-                    AddNodeOperation addOp = (AddNodeOperation) nodeOp;
-                    toAdd = new AddNodeDB(storeVertex, addOp.getX(), addOp.getY());
-                }        
-                if(nodeOp.deletesNode(vertex)) {
-                    toAdd = new DeleteNodeDB(storeVertex);
-                }
-                    
-                if(nodeOp.movesNode(vertex)) {
-                    MoveNodeOperation moveOp = (MoveNodeOperation) nodeOp;
-                    toAdd = new MoveNodeDB(storeVertex, moveOp.getToX(), moveOp.getToY());
-                }
-            }
-            if (item.isNoOperation()) {
-                toAdd = new NoOpDB();
-            }
-            toAdd.setHistoryId(itemId);
-            storedOperations.add(toAdd);
+        List<String> storedOperations = new ArrayList<String>();
+        for (GraphOperation op : operations) {
+            storedOperations.add(op.toJson());
         }
         return storedOperations;
     }
