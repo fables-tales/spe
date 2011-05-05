@@ -57,6 +57,8 @@ public class DrawingImpl implements Drawing {
     private int mCanvasHeight = Window.getClientWidth(); // Deliberate
     private boolean mWebglReady = false;
     
+    private DrawingPolygon mCurrentPolygon;
+    
     WebGLCanvas webGLCanvas;
     
     // used for styles
@@ -133,7 +135,7 @@ public class DrawingImpl implements Drawing {
             String label = "";
             int vertexStyle;
             int edgeStyle;
-            double edgeThickness = 6; 
+            double edgeThickness = 15; 
             if(mZoom <= EDGE_ZOOM_LIMIT) edgeThickness = edgeThickness*mZoom; 
             
             // Clear coordinates from last render
@@ -146,24 +148,29 @@ public class DrawingImpl implements Drawing {
 
             // Loop through all edges and draw them
             for (EdgeDrawable thisEdge : mEdgesToDraw) {
+                mCurrentPolygon = thisEdge.getPolygon();
                 // Apply offset and zoom factors
                 double startX = (thisEdge.getStartX() + mOffsetX) * mZoom;
                 double startY = (thisEdge.getStartY() + mOffsetY) * mZoom;
                 double endX = (thisEdge.getEndX() + mOffsetX) * mZoom;
                 double endY = (thisEdge.getEndY() + mOffsetY) * mZoom;
                 int weight = thisEdge.getWeight();
+                float[] edgeColour = DrawingConstants.BLACK;
+                float[] textColour = DrawingConstants.BLACK;
                 // edgeStyle = thisEdge.getStyle();
                 edgeStyle = 100;
                 // If edge is highlighted apply set it to negative
-                if (thisEdge.isHilighted())
+                if (thisEdge.isHilighted()){
                     edgeStyle = -edgeStyle;
+                    edgeColour = DrawingConstants.YELLOW;
+                }
                 // Add edge to lists to be rendered
                 if(thisEdge.needsToFromArrow()){
-                    addEdge(startX, startY, endX, endY, edgeThickness, true,weight+"", DrawingConstants.BLACK);
+                    addEdge(startX, startY, endX, endY, edgeThickness, true,true,weight+"", edgeColour, textColour);
                 } else if(thisEdge.needsToFromArrow()){
-                    addEdge(endX, endY, startX, startY, edgeThickness, true,weight+"", DrawingConstants.BLACK);
+                    addEdge(endX, endY, startX, startY, edgeThickness, true,true,weight+"", edgeColour, textColour);
                 } else {
-                    addEdge(startX, startY, endX, endY, edgeThickness, true,weight+"", DrawingConstants.BLACK);
+                    addEdge(startX, startY, endX, endY, edgeThickness, true,true,weight+"", edgeColour, textColour);
                 }
             }
 
@@ -171,7 +178,7 @@ public class DrawingImpl implements Drawing {
             if (mShowUILine) {
                 addEdge((mUIline[0]+ mOffsetX)*mZoom, (mUIline[1]+ mOffsetY)*mZoom, 
                         (mUIline[2]+ mOffsetX)*mZoom, (mUIline[3]+ mOffsetY)*mZoom,
-                        edgeThickness, true,"", DrawingConstants.GREY);
+                        edgeThickness, true,false,"", DrawingConstants.GREY, DrawingConstants.BLACK);
             }
             
             for (VertexDrawable thisVertex : mVerticesToDraw) {
@@ -224,10 +231,8 @@ public class DrawingImpl implements Drawing {
                         if (thisVertex.isHilighted()) {
                             addCircle(centreX, centreY, width, DrawingConstants.BLACK);
                             addCircle(centreX, centreY, width - 4, DrawingConstants.YELLOW);
-                            addStringCircle(centreX, centreY, width, label, DrawingConstants.BLACK);
                         } else {
                             addCircle(centreX, centreY, width, DrawingConstants.BLACK);
-                            addStringCircle(centreX, centreY, width, label, DrawingConstants.WHITE);
                         }
                         break;
                 }
@@ -499,13 +504,13 @@ public class DrawingImpl implements Drawing {
             {
                 if(i>2 && DrawingConstants.HERSHEY_FONT[code][i-1] != -1 && DrawingConstants.HERSHEY_FONT[code][i-2] != -1)
                 {
-                    addEdge(left2,top2,left1,top1,thickness,false,"",color);
+                    addEdge(left2,top2,left1,top1,thickness,false,false,"",color, color);
                 }
                 if(DrawingConstants.HERSHEY_FONT[code][i+2] != -1 && DrawingConstants.HERSHEY_FONT[code][i+3] != -1)
                 {
                     left2 = DrawingConstants.HERSHEY_FONT[code][i+2]*size+left;
                     top2 = (fHeight-DrawingConstants.HERSHEY_FONT[code][i+3]*size)+top;
-                    addEdge(left1,top1,left2,top2,thickness,false,"",color);
+                    addEdge(left1,top1,left2,top2,thickness,false,false,"",color, color);
                 }
                 i+=4;
             }
@@ -687,7 +692,7 @@ public class DrawingImpl implements Drawing {
     }
 
     private void addEdge(double x1, double y1, double x2, double y2, double thickness,
-            boolean arrow, String label, float[] color) {
+            boolean arrow, boolean addToPolygon,String label, float[] color, float[] textColor) {
         double height = y2 - y1;
         double width = x2 - x1;
         double length = Math.sqrt((height * height) + (width * width));
@@ -699,7 +704,8 @@ public class DrawingImpl implements Drawing {
         double oldY;
         double lineAngle = Math.atan(height / width);
         double arrowAngle = lineAngle;
-
+        
+        
         double[][] coords =
                 { { -halfLength, halfThick },
                         { halfLength, halfThick },
@@ -718,6 +724,19 @@ public class DrawingImpl implements Drawing {
                 coords[2][0] + xOffset, coords[2][1] + yOffset,
                 coords[3][0] + xOffset, coords[3][1] + yOffset, color);
 
+        int[] xArray = {(int) (coords[0][0] + xOffset),
+                (int) (coords[2][0] + xOffset),
+                (int) (coords[3][0] + xOffset),
+                (int) (coords[1][0] + xOffset)};
+        
+        int[] yArray = {(int) (coords[0][1] + yOffset),
+                (int) (coords[2][1] + yOffset),
+                (int) (coords[3][1] + yOffset),
+                (int) (coords[1][1] + yOffset)
+        };
+        
+        if(addToPolygon)mCurrentPolygon.set(xArray, yArray);
+        
         if (arrow) {
             if (x1 > x2)
                 arrowAngle -= Math.PI;
@@ -744,7 +763,7 @@ public class DrawingImpl implements Drawing {
             else if(x2<x1 && y1>y2)nlX+=halfLLength*0.7;
             else if(x2>=x1 && y1>y2)nlX-=halfLLength*0.7;
 
-            addString(nlX, nlY-(thickness*1.6),label,color,thickness*0.1);
+            addString(nlX, nlY-(thickness*1.6),label,textColor,thickness*0.1);
         }
     }
 

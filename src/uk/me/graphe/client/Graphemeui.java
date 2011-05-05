@@ -195,6 +195,7 @@ public class Graphemeui implements EntryPoint
     
     public void doAutoLayout()
     {
+    	lay.initialize();
     	lay.run();
     }
     
@@ -213,15 +214,13 @@ public class Graphemeui implements EntryPoint
     	
     	for (EdgeDrawable ed: selectedEdges)
     	{
-			e = null; // TODO: Get edge from edge drawable.
+			e = graphManager.getEdgeFromDrawable(ed);
 			graphManager.removeEdge(e);
 			ClientOT.getInstance().notifyRemoveEdge(e);	
     	}
     	
     	selectedVertices.clear();
-    	selectedEdges.clear();
-
-    	graphManager.invalidate(); // TODO: does this need to be here?  	
+    	selectedEdges.clear(); 	
     }
     
     public void moveNode(VertexDrawable vd, int x, int y) {
@@ -248,8 +247,23 @@ public class Graphemeui implements EntryPoint
     }
     
     public boolean toggleSelectedEdgeAt(int x, int y) {
-    	// TODO: Implement.
-    	return false;
+        EdgeDrawable ed = graphManager.getEdgeDrawableAt(x, y);
+        
+        if (ed != null) {
+        	if (selectedEdges.contains(ed))
+        	{
+        		ed.setHilighted(false);
+        		selectedEdges.remove(ed);
+        	} else {
+        		ed.setHilighted(true);
+        		selectedEdges.add(ed);
+        	}
+        	graphManager.invalidate();
+
+            return true;
+        }
+
+        return false;
     }
     
     public boolean toggleSelectedObjectAt(int x, int y) {
@@ -264,7 +278,7 @@ public class Graphemeui implements EntryPoint
     }
     
     public boolean toggleSelectedVertexAt(int x, int y) {
-        VertexDrawable vd = graphManager.getDrawableAt(x, y);
+        VertexDrawable vd = graphManager.getVertexDrawableAt(x, y);
         
         if (vd != null) {
         	if (selectedVertices.contains(vd))
