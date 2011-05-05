@@ -531,7 +531,7 @@ public class DrawingImpl implements Drawing {
     }
 
     private void addTriangle(double centreX, double centreY, double width, double height,
-            double angle, float[] color) {
+            double angle, boolean addToPolygon,float[] color) {
 
         int startIndex = verticesIndex();
         double halfHeight = (height / 2);
@@ -561,6 +561,16 @@ public class DrawingImpl implements Drawing {
         mIndicesList.add(startIndex + 1);
         mIndicesList.add(startIndex + 2);
 
+        Integer[] xArray = {(int) ((coords[0][0] + centreX)),
+                (int) ((coords[2][0] + centreX)),
+                (int) ((coords[1][0] + centreX))};
+        
+        Integer[] yArray = {(int) ((coords[0][1] + centreY)),
+                (int) ((coords[2][1] + centreY)),
+                (int) ((coords[1][1] + centreY))};
+        
+        if(addToPolygon)mCurrentPolygon.set(xArray, yArray,mZoom, mOffsetX,mOffsetY);   
+        
         for (int i = 0; i < 3; i++) {
             mColorsList.add(color[0]);
             mColorsList.add(color[1]);
@@ -724,23 +734,26 @@ public class DrawingImpl implements Drawing {
                 coords[2][0] + xOffset, coords[2][1] + yOffset,
                 coords[3][0] + xOffset, coords[3][1] + yOffset, color);
 
-        int[] xArray = {(int) ((coords[0][0] + xOffset)),
+        Integer[] xArray = {(int) ((coords[0][0] + xOffset)),
                 (int) ((coords[2][0] + xOffset)),
                 (int) ((coords[3][0] + xOffset)),
                 (int) ((coords[1][0] + xOffset))};
         
-        int[] yArray = {(int) ((coords[0][1] + yOffset)),
+        Integer[] yArray = {(int) ((coords[0][1] + yOffset)),
                 (int) ((coords[2][1] + yOffset)),
                 (int) ((coords[3][1] + yOffset)),
                 (int) ((coords[1][1] + yOffset))
         };
         
-        if(addToPolygon)mCurrentPolygon.set(xArray, yArray,mZoom, mOffsetX,mOffsetY);
+        if(addToPolygon){
+            mCurrentPolygon.clear();
+            mCurrentPolygon.set(xArray, yArray,mZoom, mOffsetX,mOffsetY);
+        }
         
         if (arrow) {
             if (x1 > x2)
                 arrowAngle -= Math.PI;
-            addTriangle(xOffset, yOffset, thickness*5, thickness*5, arrowAngle - Math.PI / 2, color);
+            addTriangle(xOffset, yOffset, thickness*5, thickness*5, arrowAngle - Math.PI / 2, addToPolygon,color);
         }
 
         if(!label.equals("")){
