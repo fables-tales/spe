@@ -21,6 +21,7 @@ public class DataManager {
     
     static {
         newMap();
+        mTimer.scheduleAtFixedRate(new Backup(), 1000, 5000);
         create();
     }
 
@@ -40,7 +41,14 @@ public class DataManager {
     }
 
     public static OTGraphManager2d getGraph(int mGraphId) {
-        return sInstance;
+        if (sGraphs.containsKey(mGraphId))
+            return sGraphs.get(mGraphId);
+        OTGraphManager2d graph = mDatabase.retrieve(mGraphId);
+        if (graph == null)
+            return OTGraphManagerFactory.newInstance(mGraphId);
+        else
+            return graph;
+        
     }
 
     public static void save(OTGraphManager2d graph) {
@@ -51,8 +59,8 @@ public class DataManager {
     public static int create() {
 
         int id = ++sHighestId;
-        sGraphs.put(id, OTGraphManagerFactory.newInstance(id));
-        mTimer.scheduleAtFixedRate(new Backup(), 1000, 5000);
+        OTGraphManager2d graph = getGraph(id);
+        sGraphs.put(id, graph);
         return id;
     }
 

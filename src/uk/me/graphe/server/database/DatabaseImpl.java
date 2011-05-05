@@ -77,8 +77,15 @@ public class DatabaseImpl implements Database{
         List<GraphOperation> operations = new ArrayList<GraphOperation>();
         List<JSONObject> objects = new LinkedList<JSONObject>();
         List<Message> messages = null;
+        if (retrieve.getmOps() == null)
+            return OTGraphManagerFactory.newInstance(key);
         for (String s : retrieve.getmOps()) {
-            JSONObject item = parseItem(s);
+            s = s.substring(s.indexOf('{'), s.lastIndexOf('}')+1);
+            String st = "";
+            for (int i=0; i < s.length(); i++)
+                if (s.charAt(i) != '\\')
+                    st += s.charAt(i);
+            JSONObject item = parseItem(st);
             objects.add(item);
         }
         try {
@@ -94,6 +101,8 @@ public class DatabaseImpl implements Database{
         }
         OTGraphManager2d toReturn = OTGraphManagerFactory.newInstance(key);
         toReturn.setHistory(operations);
+        toReturn.setStateId(retrieve.getStateid());
+        System.out.println("Returning graph: " + toReturn.getGraphId());
         return toReturn;
     }
     
@@ -103,6 +112,7 @@ public class DatabaseImpl implements Database{
             object = JSONImplHolder.make(json) ;
         } catch (JSONException e) {
             // TODO Auto-generated catch block
+            System.out.println("Error " + json);
             e.printStackTrace();
         }
         return object;
@@ -127,8 +137,6 @@ public class DatabaseImpl implements Database{
         else if (retrieves.size() == 1) {
             // Check state id of update is greater than value in database
             toStore = retrieves.get(0);
-            System.out.println(toStore);
-            System.out.println(toStore.getId());
             if (manager.getStateId() <= toStore.getStateid())
                 return manager.getGraphId();
             history = manager.getOperationDelta(toStore.getStateid());
