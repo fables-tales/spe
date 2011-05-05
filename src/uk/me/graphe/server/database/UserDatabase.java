@@ -3,6 +3,7 @@ package uk.me.graphe.server.database;
 import java.net.UnknownHostException;
 import java.util.List;
 
+import uk.me.graphe.server.database.dbitems.OTGraphManager2dStore;
 import uk.me.graphe.server.database.dbitems.UserDB;
 
 import com.google.code.morphia.Datastore;
@@ -49,8 +50,8 @@ public class UserDatabase {
     	return (users.get(0)).getKeys();
     }
     
-	public void newUser(String key) {
-		UserDB user = new UserDB(key);
+	public void newUser(String userID, String email) {
+		UserDB user = new UserDB(userID, email);
 		mData.save(user);
 	}
 	
@@ -59,4 +60,26 @@ public class UserDatabase {
 		UpdateOperations<UserDB> update = mData.createUpdateOperations(UserDB.class).add("mKeys", graphID, true);
 		mData.update(query, update);
 	}
+	
+	public String getEmailFromId(String userID) {
+		Query<UserDB> users = mData.find(UserDB.class,"mUserID =", userID);
+		return users.get().getEmail();
+		
+	}
+	
+//	public String getIdFromEmail(String userEmail) {
+//		Query<UserDB> users = mData.find(UserDB.class,"mEmail =", userEmail);
+//		return users.get().getId();
+//	}
+	
+	public void setGraphsToUsers(String email, String graphId) {
+		Query<UserDB> query = mData.createQuery(UserDB.class).filter("mEmail =", email);
+		UpdateOperations<UserDB> update = mData.createUpdateOperations(UserDB.class).add("mKeys", graphId, true);
+		mData.update(query, update);
+	}
+	
+	public void deleteUser(String userID) {
+		mData.delete(mData.createQuery(UserDB.class).filter("mUserID =", userID));
+	}
+	 
 }

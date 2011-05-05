@@ -25,8 +25,9 @@ public class UserDB {
 		mEmail = email;
 	}
 	
-	public UserDB(String id) {
+	public UserDB(String id, String e) {
 		mUserID = id;
+		mEmail = e;
 	}
 	
 	public String getId() {
