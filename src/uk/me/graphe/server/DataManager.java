@@ -8,6 +8,7 @@ import java.util.TimerTask;
 
 import uk.me.graphe.server.database.Database;
 import uk.me.graphe.server.database.DatabaseFactory;
+import uk.me.graphe.server.database.dbitems.OTGraphManager2dStore;
 import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
 import uk.me.graphe.shared.graphmanagers.OTGraphManagerFactory;
 
@@ -22,7 +23,9 @@ public class DataManager {
     static {
         newMap();
         mTimer.scheduleAtFixedRate(new Backup(), 1000, 5000);
-        create();
+        sHighestId = mDatabase.size();
+        if (sHighestId < 1)
+        	create();
     }
 
     private static void newMap() {
@@ -59,7 +62,7 @@ public class DataManager {
     public static int create() {
 
         int id = ++sHighestId;
-        OTGraphManager2d graph = getGraph(id);
+        OTGraphManager2d  graph = OTGraphManagerFactory.newInstance(id);
         sGraphs.put(id, graph);
         return id;
     }
