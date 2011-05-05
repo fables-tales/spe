@@ -157,6 +157,7 @@ public class DrawingImpl implements Drawing {
                 int weight = thisEdge.getWeight();
                 float[] edgeColour = DrawingConstants.BLACK;
                 float[] textColour = DrawingConstants.BLACK;
+                int strokeThickness = 4;
                 // edgeStyle = thisEdge.getStyle();
                 edgeStyle = 100;
                 // If edge is highlighted apply set it to negative
@@ -166,11 +167,28 @@ public class DrawingImpl implements Drawing {
                 }
                 // Add edge to lists to be rendered
                 if(thisEdge.needsToFromArrow()){
-                    addEdge(startX, startY, endX, endY, edgeThickness, true,true,weight+"", edgeColour, textColour);
+                    if (thisEdge.isHilighted()){
+                        addEdge(startX, startY, endX, endY, edgeThickness, true,true,(edgeThickness*5),(edgeThickness*5),weight+"", textColour, textColour);
+                        addEdge(startX, startY, endX, endY, edgeThickness-strokeThickness, false,false,(edgeThickness*5)-strokeThickness,0,"", edgeColour, textColour);
+                    }else{
+                        addEdge(startX, startY, endX, endY, edgeThickness, true,true,(edgeThickness*5),(edgeThickness*5),weight+"", edgeColour, textColour);
+                    }
                 } else if(thisEdge.needsToFromArrow()){
-                    addEdge(endX, endY, startX, startY, edgeThickness, true,true,weight+"", edgeColour, textColour);
+                    if (thisEdge.isHilighted()){
+                        addEdge(endX, endY, startX, startY, edgeThickness, true,true,(edgeThickness*5),(edgeThickness*5),weight+"", textColour, textColour);
+                        addEdge(endX, endY, startX, startY, edgeThickness-strokeThickness, false,false,(edgeThickness*5)-strokeThickness,0,"", edgeColour, textColour);
+                    }else{
+                        addEdge(endX, endY, startX, startY, edgeThickness, true,true,(edgeThickness*5),(edgeThickness*5),weight+"", edgeColour, textColour);
+                    }
                 } else {
-                    addEdge(startX, startY, endX, endY, edgeThickness, true,true,weight+"", edgeColour, textColour);
+                    if (thisEdge.isHilighted()){
+                        addEdge(startX, startY, endX, endY, edgeThickness, true,true,(edgeThickness*5),(edgeThickness*5),weight+"", textColour, textColour);
+                        addEdge(startX, startY, endX, endY, edgeThickness-strokeThickness, false,false,(edgeThickness*5)-strokeThickness,0,"", edgeColour, textColour);
+                    }else{
+                        addEdge(startX, startY, endX, endY, edgeThickness, true,true,(edgeThickness*5),(edgeThickness*5),weight+"", edgeColour, textColour);
+                    }
+                        
+                    
                 }
             }
 
@@ -178,7 +196,7 @@ public class DrawingImpl implements Drawing {
             if (mShowUILine) {
                 addEdge((mUIline[0]+ mOffsetX)*mZoom, (mUIline[1]+ mOffsetY)*mZoom, 
                         (mUIline[2]+ mOffsetX)*mZoom, (mUIline[3]+ mOffsetY)*mZoom,
-                        edgeThickness, true,false,"", DrawingConstants.GREY, DrawingConstants.BLACK);
+                        edgeThickness, true,false,edgeThickness*5,edgeThickness*5,"", DrawingConstants.GREY, DrawingConstants.BLACK);
             }
             
             for (VertexDrawable thisVertex : mVerticesToDraw) {
@@ -504,13 +522,13 @@ public class DrawingImpl implements Drawing {
             {
                 if(i>2 && DrawingConstants.HERSHEY_FONT[code][i-1] != -1 && DrawingConstants.HERSHEY_FONT[code][i-2] != -1)
                 {
-                    addEdge(left2,top2,left1,top1,thickness,false,false,"",color, color);
+                    addEdge(left2,top2,left1,top1,thickness,false,false,0,0,"",color, color);
                 }
                 if(DrawingConstants.HERSHEY_FONT[code][i+2] != -1 && DrawingConstants.HERSHEY_FONT[code][i+3] != -1)
                 {
                     left2 = DrawingConstants.HERSHEY_FONT[code][i+2]*size+left;
                     top2 = (fHeight-DrawingConstants.HERSHEY_FONT[code][i+3]*size)+top;
-                    addEdge(left1,top1,left2,top2,thickness,false,false,"",color, color);
+                    addEdge(left1,top1,left2,top2,thickness,false,false,0,0,"",color, color);
                 }
                 i+=4;
             }
@@ -702,7 +720,7 @@ public class DrawingImpl implements Drawing {
     }
 
     private void addEdge(double x1, double y1, double x2, double y2, double thickness,
-            boolean arrow, boolean addToPolygon,String label, float[] color, float[] textColor) {
+            boolean arrow, boolean addToPolygon,double arrowThickness,double arrowHeight,String label, float[] color, float[] textColor) {
         double height = y2 - y1;
         double width = x2 - x1;
         double length = Math.sqrt((height * height) + (width * width));
@@ -753,7 +771,7 @@ public class DrawingImpl implements Drawing {
         if (arrow) {
             if (x1 > x2)
                 arrowAngle -= Math.PI;
-            addTriangle(xOffset, yOffset, thickness*5, thickness*5, arrowAngle - Math.PI / 2, addToPolygon,color);
+            addTriangle(xOffset, yOffset, arrowThickness, arrowHeight, arrowAngle - Math.PI / 2, addToPolygon,color);
         }
 
         if(!label.equals("")){
