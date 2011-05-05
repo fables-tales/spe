@@ -135,7 +135,7 @@ public class DrawingImpl implements Drawing {
             String label = "";
             int vertexStyle;
             int edgeStyle;
-            double edgeThickness = 6; 
+            double edgeThickness = 15; 
             if(mZoom <= EDGE_ZOOM_LIMIT) edgeThickness = edgeThickness*mZoom; 
             
             // Clear coordinates from last render
@@ -231,10 +231,8 @@ public class DrawingImpl implements Drawing {
                         if (thisVertex.isHilighted()) {
                             addCircle(centreX, centreY, width, DrawingConstants.BLACK);
                             addCircle(centreX, centreY, width - 4, DrawingConstants.YELLOW);
-                            addStringCircle(centreX, centreY, width, label, DrawingConstants.BLACK);
                         } else {
                             addCircle(centreX, centreY, width, DrawingConstants.BLACK);
-                            addStringCircle(centreX, centreY, width, label, DrawingConstants.WHITE);
                         }
                         break;
                 }
