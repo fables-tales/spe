@@ -45,7 +45,7 @@ public class DataManager {
             return sGraphs.get(mGraphId);
         OTGraphManager2d graph = mDatabase.retrieve(mGraphId);
         if (graph == null)
-            return OTGraphManagerFactory.newInstance(mGraphId);
+            return null;
         else
             return graph;
         
