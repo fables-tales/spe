@@ -118,6 +118,7 @@ public class ClientOT {
     }
     
     public void connect(){
+    	
         JSONImplHolder.initialise(new JSOFactory());
         ServerChannel sc = ServerChannel.getInstance();
         ClientOT.getInstance();

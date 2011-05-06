@@ -22,7 +22,6 @@ public class Entry implements EntryPoint {
     public void onModuleLoad() {
     	    	
     	ClientOT.getInstance().connect();
-    	
         
         if(Window.Location.getParameter("action") == "userauth"){
         	
