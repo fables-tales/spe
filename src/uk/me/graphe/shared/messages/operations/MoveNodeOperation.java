@@ -52,7 +52,7 @@ public class MoveNodeOperation extends NodeOperation {
 
     @Override
     public void applyTo(GraphManager2d mGraph) {
-        mGraph.moveVertexTo(getNode(), mToY, mToX);
+        mGraph.moveVertexTo(getNode(), mToX, mToY);
     }
 
 }

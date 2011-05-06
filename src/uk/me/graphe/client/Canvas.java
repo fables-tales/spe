@@ -1,6 +1,9 @@
 package uk.me.graphe.client;
 
+import uk.me.graphe.shared.Tools;
+
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -37,6 +40,31 @@ public class Canvas extends Composite{
 	}
 	
 	@UiHandler("canvasPanel")
+	public void onDoubleClick(DoubleClickEvent e)
+	{
+		Console.log("Double click");
+		if (parent.tools.currentTool == Tools.select)
+		{
+			parent.clearSelectedObjects();
+			
+			if (parent.toggleSelectedVertexAt(lMouseDown[X], lMouseDown[Y]))
+			{
+				parent.dialog.show(DialogType.vertexName, parent.selectedVertices.get(0).getLabel()
+						, e.getX(), e.getY());	
+				Console.log("Double click 1");
+			}
+			else if (parent.toggleSelectedEdgeAt(lMouseDown[X], lMouseDown[Y]))
+			{
+				parent.dialog.show(DialogType.edgeWeight, String.valueOf(parent.selectedEdges.get(0).getWeight())
+						, e.getX(), e.getY());
+				Console.log("Double click 2");
+			}
+			
+			parent.clearSelectedObjects();
+		}
+	}
+	
+	@UiHandler("canvasPanel")
 	void onMouseDown(MouseDownEvent e)
 	{
 		isMouseDown = true;
@@ -50,7 +78,7 @@ public class Canvas extends Composite{
 		switch (parent.tools.currentTool)
 		{
 			case addEdge:
-				if (!parent.selectedVertices.contains(parent.graphManager.getDrawableAt(lMouseDown[X], lMouseDown[Y])))
+				if (!parent.selectedVertices.contains(parent.graphManager.getVertexDrawableAt(lMouseDown[X], lMouseDown[Y])))
 				{
 					parent.toggleSelectedVertexAt(lMouseDown[X], lMouseDown[Y]);
 				}
@@ -79,7 +107,7 @@ public class Canvas extends Composite{
             switch (parent.tools.currentTool)
             {
 	            case addEdge:        	
-	            	VertexDrawable vHover = parent.graphManager.getDrawableAt(x, y);
+	            	VertexDrawable vHover = parent.graphManager.getVertexDrawableAt(x, y);
 	            	if ((vHover == null) && (parent.selectedVertices.size() == 2))
 	            	{
 	            		parent.selectedVertices.get(1).setHilighted(false);
@@ -112,7 +140,7 @@ public class Canvas extends Composite{
 		}
 		else
 		{
-			VertexDrawable vd = parent.graphManager.getDrawableAt(x, y);
+			VertexDrawable vd = parent.graphManager.getVertexDrawableAt(x, y);
 			
 			if (vd != null)
 			{				

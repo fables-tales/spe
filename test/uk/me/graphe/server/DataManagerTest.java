@@ -4,6 +4,7 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
 import uk.me.graphe.shared.graphmanagers.OTGraphManagerFactory;
+import uk.me.graphe.shared.graphmanagers.OTStyleGraphManager2d;
 import uk.me.graphe.shared.messages.operations.NoOperation;
 
 public class DataManagerTest extends TestCase {
@@ -24,7 +25,7 @@ public class DataManagerTest extends TestCase {
     
     public void testSave() {
         int key = DataManager.create();
-        OTGraphManager2d manager = OTGraphManagerFactory.newInstance(key);
+        OTStyleGraphManager2d manager = OTGraphManagerFactory.newInstance(key);
         manager.applyOperation(new NoOperation());
         Assert.assertNotSame(DataManager.getGraph(key), manager);
         DataManager.save(manager);

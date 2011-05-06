@@ -43,4 +43,8 @@ public class AddEdgeOperation extends EdgeOperation {
                 getEdge().getDirection(), getEdge().getWeight());
     }
 
+    public void setWeight(int weight) {
+        this.getEdge().setWeight(weight);
+    }
+
 }

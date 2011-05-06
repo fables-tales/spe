@@ -1,5 +1,7 @@
 package uk.me.graphe.shared.messages.operations;
 
+import com.google.gwt.core.client.GWT;
+
 import uk.me.graphe.client.Console;
 import uk.me.graphe.client.Graphemeui;
 import uk.me.graphe.shared.Vertex;
@@ -70,7 +72,7 @@ public class AddNodeOperation extends NodeOperation {
 
     @Override
     public void applyTo(GraphManager2d mGraph) {
-        Console.log("add node: " + getNode().getLabel());
+        if (GWT.isClient()) Console.log("add node: " + getNode().getLabel());
         mGraph.addVertex(getNode(), mNodeX, mNodeY, Graphemeui.VERTEX_SIZE);
     }
 }

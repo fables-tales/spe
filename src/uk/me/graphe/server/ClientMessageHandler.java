@@ -15,7 +15,9 @@ import uk.me.graphe.shared.messages.MessageFactory;
 import uk.me.graphe.shared.messages.NoSuchGraphMessage;
 import uk.me.graphe.shared.messages.OpenGraphMessage;
 import uk.me.graphe.shared.messages.RequestGraphMessage;
+import uk.me.graphe.shared.messages.SetNameForIdMessage;
 import uk.me.graphe.shared.messages.StateIdMessage;
+import uk.me.graphe.shared.messages.factories.SetNameForIdFactory;
 import uk.me.graphe.shared.messages.operations.CompositeOperation;
 import uk.me.graphe.shared.messages.operations.GraphOperation;
 
@@ -116,7 +118,13 @@ public class ClientMessageHandler extends Thread {
         	for (Client otherClients : ClientManager.getInstance().clientsForGraph(1)) {
         		if (c != otherClients) ClientMessageSender.getInstance().sendMessage(otherClients, cm);
         	}
-        	
+        } else if (message.getMessage().equals("setNameForId")) {
+            SetNameForIdMessage snfi = (SetNameForIdMessage) message;
+            DataManager.renameGraph(snfi.getId(), snfi.getTitle());
+            List<Client> clients = ClientManager.getInstance().getClientsWith(snfi.getId());
+            for (Client cOut : clients) {
+                ClientMessageSender.getInstance().sendMessage(c, snfi);
+            }
         } else if (message.isOperation()) {
             mProcessor.submit(c, (GraphOperation) message);
         } else {

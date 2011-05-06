@@ -11,29 +11,29 @@ import uk.me.graphe.server.database.DatabaseFactory;
 import uk.me.graphe.server.database.dbitems.OTGraphManager2dStore;
 import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
 import uk.me.graphe.shared.graphmanagers.OTGraphManagerFactory;
+import uk.me.graphe.shared.graphmanagers.OTStyleGraphManager2d;
 
 public class DataManager {
 
-    private static Map<Integer, OTGraphManager2d> sGraphs;
+    private static Map<Integer, OTStyleGraphManager2d> sGraphs;
     private static int sHighestId = 0;
     private static Database mDatabase = DatabaseFactory.newInstance();
-    private static OTGraphManager2d sInstance = OTGraphManagerFactory.newInstance(1);
+    private static OTStyleGraphManager2d sInstance = OTGraphManagerFactory.newInstance(1);
     private static Timer mTimer = new Timer();
     
     static {
         newMap();
+        create();
         mTimer.scheduleAtFixedRate(new Backup(), 1000, 5000);
         sHighestId = mDatabase.size();
-        if (sHighestId < 1)
-        	create();
     }
 
     private static void newMap() {
-        sGraphs = new LinkedHashMap<Integer, OTGraphManager2d>(20, (float) 0.75, true) {
+        sGraphs = new LinkedHashMap<Integer, OTStyleGraphManager2d>(20, (float) 0.75, true) {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected boolean removeEldestEntry(Map.Entry<Integer, OTGraphManager2d> eldest) {
+            protected boolean removeEldestEntry(Map.Entry<Integer, OTStyleGraphManager2d> eldest) {
                 if (size() > 15) {
                     mDatabase.store(eldest.getValue());
                     return true;
@@ -43,10 +43,10 @@ public class DataManager {
         };
     }
 
-    public static OTGraphManager2d getGraph(int mGraphId) {
+    public static OTStyleGraphManager2d getGraph(int mGraphId) {
         if (sGraphs.containsKey(mGraphId))
             return sGraphs.get(mGraphId);
-        OTGraphManager2d graph = mDatabase.retrieve(mGraphId);
+        OTStyleGraphManager2d graph = mDatabase.retrieve(mGraphId);
         if (graph == null)
             return null;
         else
@@ -54,7 +54,7 @@ public class DataManager {
         
     }
 
-    public static void save(OTGraphManager2d graph) {
+    public static void save(OTStyleGraphManager2d graph) {
         if (sGraphs.containsKey(graph.getGraphId())) sGraphs.remove(graph.getGraphId());
         sGraphs.put(graph.getGraphId(), graph);
     }
@@ -62,7 +62,7 @@ public class DataManager {
     public static int create() {
 
         int id = ++sHighestId;
-        OTGraphManager2d  graph = OTGraphManagerFactory.newInstance(id);
+        OTStyleGraphManager2d  graph = OTGraphManagerFactory.newInstance(id);
         sGraphs.put(id, graph);
         return id;
     }
@@ -73,9 +73,13 @@ public class DataManager {
     
     static class Backup extends TimerTask {
         public void run() {
-            Collection<OTGraphManager2d> iterator = sGraphs.values();
+            Collection<OTStyleGraphManager2d> iterator = sGraphs.values();
             for (OTGraphManager2d g : iterator)
                 mDatabase.store(g);
         }
       }
+
+    public static void renameGraph(int id, String title) {
+        
+    }
 }

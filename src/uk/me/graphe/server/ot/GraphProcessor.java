@@ -10,6 +10,7 @@ import uk.me.graphe.server.ClientMessageSender;
 import uk.me.graphe.server.DataManager;
 import uk.me.graphe.shared.GraphTransform;
 import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
+import uk.me.graphe.shared.graphmanagers.OTStyleGraphManager2d;
 import uk.me.graphe.shared.messages.StateIdMessage;
 import uk.me.graphe.shared.messages.operations.CompositeOperation;
 import uk.me.graphe.shared.messages.operations.GraphOperation;
@@ -44,7 +45,7 @@ public class GraphProcessor extends Thread {
 
                 // get the graph and get the history delta
                 System.err.println(mGraphId);
-                OTGraphManager2d graph = DataManager.getGraph(mGraphId);
+                OTStyleGraphManager2d graph = DataManager.getGraph(mGraphId);
                 System.err.println(graph);
                 CompositeOperation historyDelta = graph.getOperationDelta(c.getCurrentStateId());
 
