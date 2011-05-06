@@ -7,6 +7,7 @@ import java.util.Queue;
 
 import uk.me.graphe.client.communications.ReceiveNotificationRunner;
 import uk.me.graphe.client.communications.ServerChannel;
+import uk.me.graphe.client.UserPanel;
 import uk.me.graphe.shared.Edge;
 import uk.me.graphe.shared.GraphTransform;
 import uk.me.graphe.shared.Vertex;
@@ -20,6 +21,8 @@ import uk.me.graphe.shared.messages.Message;
 import uk.me.graphe.shared.messages.MessageFactory;
 import uk.me.graphe.shared.messages.RequestGraphMessage;
 import uk.me.graphe.shared.messages.StateIdMessage;
+import uk.me.graphe.shared.messages.UserAuthMessage;
+import uk.me.graphe.shared.messages.GraphListMessage;
 import uk.me.graphe.shared.messages.operations.AddEdgeOperation;
 import uk.me.graphe.shared.messages.operations.AddNodeOperation;
 import uk.me.graphe.shared.messages.operations.CompositeOperation;
@@ -178,6 +181,14 @@ public class ClientOT {
             	//show message here
             	ChatMessage cm = (ChatMessage)m;
             	Chat.getInstance().onReceiveMessage(cm);
+            } else if (m.getMessage().equals("userAuth")) {
+            	UserAuthMessage uam = (UserAuthMessage)m;
+            	String reUrl = uam.getRedirectionUrl();
+                //Window.alert("got redir request to " + reUrl);
+                Window.Location.assign(reUrl);
+            } else if (m.getMessage().equals("graphList")) {
+            	GraphListMessage glm = (GraphListMessage)m;
+            	UserPanel.displayGraphList(glm.getGraphList());
             }
 
         }

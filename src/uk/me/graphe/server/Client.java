@@ -22,6 +22,7 @@ public class Client {
     private boolean mConnected = true;
     private int mSelectedGraphId = -1;
     private int mStateId;
+    private String mUserId = "guest";
 
     public Client(SocketChannel clientSock) {
         mChannel = clientSock;
@@ -107,6 +108,14 @@ public class Client {
 
     public void updateStateId(int stateId) {
         mStateId = stateId;
+    }
+    
+    public String getUserId(){
+    	return mUserId;
+    }
+    
+    public void setUserId(String id){
+    	mUserId = id;
     }
 
 }

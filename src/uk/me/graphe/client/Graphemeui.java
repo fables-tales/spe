@@ -13,7 +13,6 @@ import uk.me.graphe.shared.graphmanagers.GraphManager2d;
 import uk.me.graphe.shared.graphmanagers.GraphManager2dFactory;
 import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
 
-import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
@@ -21,8 +20,7 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
-public class Graphemeui implements EntryPoint
-{   
+public class Graphemeui {   
     public final Canvas canvas;
     public final CanvasTooltip tooltip;
     public final Chat chat;  
@@ -78,7 +76,7 @@ public class Graphemeui implements EntryPoint
     	lay = new AutoLayout(graphManager);
     }
     
-    public void onModuleLoad() {
+    public void show() {
         JSONImplHolder.initialise(new JSOFactory());
         RootPanel.get("toolbox").add(this.tools);
         RootPanel.get("canvas").add(this.canvas);

@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import uk.me.graphe.server.database.UserDatabase;
 import uk.me.graphe.server.ot.GraphProcessor;
+import uk.me.graphe.server.UserAuth;
 import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
 import uk.me.graphe.shared.jsonwrapper.JSONException;
 import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
 import uk.me.graphe.shared.jsonwrapper.JSONObject;
 import uk.me.graphe.shared.messages.ChatMessage;
+import uk.me.graphe.shared.messages.GraphListMessage;
+import uk.me.graphe.shared.messages.UserAuthMessage;
 import uk.me.graphe.shared.messages.Message;
 import uk.me.graphe.shared.messages.MessageFactory;
 import uk.me.graphe.shared.messages.NoSuchGraphMessage;
@@ -33,6 +37,8 @@ public class ClientMessageHandler extends Thread {
     private HeartbeatManager mHbm = new HeartbeatManager();
     private GraphProcessor mProcessor = GraphProcessor.getInstance();
     private static ClientMessageHandler sInstance = null;
+    private static UserAuth userAuth = new UserAuth();
+    private static UserDatabase mUserDatabase = new UserDatabase();
 
     public ClientMessageHandler() {}
 
@@ -117,6 +123,48 @@ public class ClientMessageHandler extends Thread {
         		if (c != otherClients) ClientMessageSender.getInstance().sendMessage(otherClients, cm);
         	}
         	
+        } else if (message.getMessage().equals("userAuth")){
+        	System.err.println("got auth request from client");
+        	UserAuthMessage uam = (UserAuthMessage) message;
+        	
+        	String ak = uam.getAuthKey();
+        	
+        	if((ak.length() < 10) || (ak == null) || (ak == "") || (ak.isEmpty())){
+        		//if step 1, do discovery
+        		// discover provider for this openid url
+            	uam = userAuth.authenticateOpenId(uam.getOpUrl());
+            	// send url to client for redirection
+            	System.err.println("redir url is:" + uam.getRedirectionUrl());
+            	ClientMessageSender.getInstance().sendMessage(c, uam);
+        	}else{
+        		//if step 2, verify
+        		System.err.println("verifying openid");
+        		if(userAuth.verifyOpenId(uam)){
+        			System.err.println("oid verification successful");
+        			//TODO: create user if it doesn't exist
+        			//if(user doesn't exist){
+        			System.err.println(uam.getEmailAddress());
+        				mUserDatabase.newUser("testuser");
+        			//}
+        			
+        			//c.setUserId(uam.getEmailAddress());
+        			String balls[] = mUserDatabase.getUserIDs();
+        			for(int i = 0; i < balls.length; i++){
+        			System.err.println("balls " +  balls[i]);
+        			}
+        			
+        			//uam.set
+        			
+        		}else{
+        			System.err.println("oid verification failed");
+        		}
+        		
+        	}
+        	
+        } else if (message.getMessage().equals("graphList")){
+        	GraphListMessage glm = new GraphListMessage(mUserDatabase.getGraphs(c.getUserId()).toString());
+        	ClientMessageSender.getInstance().sendMessage(c, glm);
+        
         } else if (message.isOperation()) {
             mProcessor.submit(c, (GraphOperation) message);
         } else {
