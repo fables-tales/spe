@@ -22,6 +22,7 @@ public class JSONObjectWrapper extends JSONObject {
 
     public JSONObjectWrapper(String s) {
         mObj = this.createObject(s);
+        
     }
 
     private native JavaScriptObject createObject(String s) /*-{
@@ -81,6 +82,11 @@ public class JSONObjectWrapper extends JSONObject {
     @Override
     public native void put(String string, int mId) throws JSONException /*-{
         this.@uk.me.graphe.client.json.wrapper.JSONObjectWrapper::mObj[string] = mId;
+    }-*/;
+
+    @Override
+    public native void put(String string, int[] things) throws JSONException /*-{
+        this.@uk.me.graphe.client.json.wrapper.JSONObjectWrapper::mObj[string] = things;
     }-*/;
 
 }

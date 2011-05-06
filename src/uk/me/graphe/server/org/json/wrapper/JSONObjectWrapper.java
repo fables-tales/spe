@@ -62,7 +62,7 @@ public class JSONObjectWrapper extends JSONObject {
         return mObject.has(string);
 
     }
-
+    
     @Override
     public void put(String string, String string2) throws JSONException {
         try {
@@ -80,6 +80,17 @@ public class JSONObjectWrapper extends JSONObject {
             throw new JSONException(e);
         }
 
+    }
+
+    @Override
+    public void put(String string, int[] things) throws JSONException {
+        for (int i = 0; i < things.length; i++)
+            try {
+                mObject.append(string, things[i]);
+            } catch (org.json.JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
     }
 
 }
