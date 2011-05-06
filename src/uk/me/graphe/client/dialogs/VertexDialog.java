@@ -112,7 +112,6 @@ public class VertexDialog extends PopupPanel
 	public void show (String initialValue, int left, int top)
 	{
 		parent.isHotkeysEnabled = false;
-		Console.log("Vertex dialog shown");
 		txtParam.setText(initialValue);
 		this.setPopupPosition(left, top);		
 		super.show();		
