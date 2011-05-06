@@ -12,14 +12,17 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.event.dom.client.MouseWheelEvent;
+import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.widgetideas.graphics.client.GWTCanvas;
+import com.google.gwt.event.dom.client.HasMouseWheelHandlers;
 
 public class CanvasWrapper extends GWTCanvas implements MouseOutHandler, MouseDownHandler, MouseUpHandler,
-        MouseMoveHandler, HasMouseDownHandlers, HasMouseMoveHandlers, HasMouseUpHandlers,
-        HasMouseOutHandlers {
+        MouseMoveHandler, MouseWheelHandler, HasMouseDownHandlers, HasMouseMoveHandlers, HasMouseUpHandlers,
+        HasMouseOutHandlers, HasMouseWheelHandlers {
 
     public CanvasWrapper() {
         super(2000, 2000);
@@ -58,6 +61,11 @@ public class CanvasWrapper extends GWTCanvas implements MouseOutHandler, MouseDo
     }
     
     @Override
+    public HandlerRegistration addMouseWheelHandler(MouseWheelHandler handler) {
+        return addHandler(handler, MouseWheelEvent.getType());
+    }
+    
+    @Override
     public void onMouseMove(MouseMoveEvent event) {
         Window.alert("An error has occurred.");
     }
@@ -75,5 +83,11 @@ public class CanvasWrapper extends GWTCanvas implements MouseOutHandler, MouseDo
 	@Override
 	public void onMouseOut(MouseOutEvent event) {
         Window.alert("An error has occurred.");		
+	}
+
+	@Override
+	public void onMouseWheel(MouseWheelEvent arg0) {
+		Window.alert("An error has occurred.");
+		
 	}
 }

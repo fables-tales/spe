@@ -5,6 +5,7 @@ import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -136,6 +137,22 @@ public class Canvas extends Composite{
 		isMouseDown = false;
 		parent.drawing.hideUIline();
 		parent.tooltip.hide();
+	}
+	
+	@UiHandler("canvasPanel")
+	void onMouseWheel (MouseWheelEvent e)
+	{
+		if(e.isAltKeyDown())
+		{
+			if(e.isNorth())
+			{
+				parent.zoomIn();
+			}
+			else
+			{
+				parent.zoomOut();
+			}
+		}
 	}
 	
 	@UiHandler("canvasPanel")
