@@ -30,17 +30,20 @@ public class CanvasWrapper extends GWTCanvas implements MouseOutHandler, MouseDo
     public CanvasWrapper() {
         super(2000, 2000);
         sinkEvents(Event.MOUSEEVENTS);
+        sinkEvents(Event.ONMOUSEWHEEL);
         this.createHandlerManager();
     }
 
     public CanvasWrapper(int coordX, int coordY, int pixelX, int pixelY) {
         super(coordX, coordY, pixelX, pixelY);
         sinkEvents(Event.MOUSEEVENTS);
+        sinkEvents(Event.ONMOUSEWHEEL);
     }
 
     public CanvasWrapper(int coordX, int coordY) {
         super(coordX, coordY);
         sinkEvents(Event.MOUSEEVENTS);
+        sinkEvents(Event.ONMOUSEWHEEL);
     }
 
     @Override
