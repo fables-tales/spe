@@ -3,7 +3,6 @@ package uk.me.graphe.client;
 import java.util.ArrayList;
 
 import uk.me.graphe.client.algorithms.AutoLayout;
-import uk.me.graphe.client.communications.ServerChannel;
 import uk.me.graphe.client.json.wrapper.JSOFactory;
 import uk.me.graphe.shared.Edge;
 import uk.me.graphe.shared.Tools;
@@ -131,9 +130,7 @@ public class Graphemeui {
 
         RootPanel.get().addDomHandler(khHotkeys, KeyUpEvent.getType());
                 
-        ServerChannel sc = ServerChannel.getInstance();
         ClientOT.getInstance().setOperatingGraph(this.graphManager);
-        sc.init();
         
     }
     

@@ -7,6 +7,7 @@ import java.util.Queue;
 
 import uk.me.graphe.client.communications.ReceiveNotificationRunner;
 import uk.me.graphe.client.communications.ServerChannel;
+import uk.me.graphe.client.json.wrapper.JSOFactory;
 import uk.me.graphe.client.UserPanel;
 import uk.me.graphe.shared.Edge;
 import uk.me.graphe.shared.GraphTransform;
@@ -114,7 +115,18 @@ public class ClientOT {
                 }
             }
         }.schedule(1500);
-        
+    }
+    
+    public void connect(){
+        JSONImplHolder.initialise(new JSOFactory());
+        ServerChannel sc = ServerChannel.getInstance();
+        ClientOT.getInstance();
+        sc.init();
+    	mServer = true;
+    }
+    
+    public void requestGraph(){
+    	
         new Timer() {
 
             @Override
@@ -135,7 +147,7 @@ public class ClientOT {
 
             }
         }.schedule(1000);
-
+    	
     }
 
     protected void pumpOut() {
@@ -183,9 +195,14 @@ public class ClientOT {
             	Chat.getInstance().onReceiveMessage(cm);
             } else if (m.getMessage().equals("userAuth")) {
             	UserAuthMessage uam = (UserAuthMessage)m;
-            	String reUrl = uam.getRedirectionUrl();
-                //Window.alert("got redir request to " + reUrl);
-                Window.Location.assign(reUrl);
+            	if(uam.getEmailAddress() == null){
+                	String reUrl = uam.getRedirectionUrl();
+                    //Window.alert("got redir request to " + reUrl);
+                    Window.Location.assign(reUrl);
+            	}else if(uam.getEmailAddress() == "need"){
+            		//UserPanel.
+            	}
+
             } else if (m.getMessage().equals("graphList")) {
             	GraphListMessage glm = (GraphListMessage)m;
             	UserPanel.displayGraphList(glm.getGraphList());

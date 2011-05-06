@@ -8,6 +8,7 @@ import uk.me.graphe.client.json.wrapper.JSOFactory;
 import uk.me.graphe.shared.graphmanagers.GraphManager2d;
 import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
 import uk.me.graphe.shared.messages.UserAuthMessage;
+import uk.me.graphe.client.ClientOT;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -20,11 +21,7 @@ public class Entry implements EntryPoint {
 	
     public void onModuleLoad() {
     	    	
-        JSONImplHolder.initialise(new JSOFactory());
-
-        ServerChannel sc = ServerChannel.getInstance();
-        ClientOT.getInstance();
-        sc.init();
+    	ClientOT.getInstance().connect();
     	
         
         if(Window.Location.getParameter("action") == "userauth"){
@@ -32,9 +29,10 @@ public class Entry implements EntryPoint {
         	UserPanel.verify();
             
         }else if(Window.Location.getHash().substring(1) != ""){
-    	editor.show();
+        	editor.show();
+        	ClientOT.getInstance().requestGraph();
         }else{
-    	UserPanel.show();
+        	UserPanel.show();
     	
         }
     	

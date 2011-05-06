@@ -30,6 +30,8 @@ import com.google.gwt.user.client.ui.Widget;
 public class UserPanel extends Composite {
 	private static UiBinderUserPanel uiBinder = GWT.create(UiBinderUserPanel.class);
 	interface UiBinderUserPanel extends UiBinder<Widget, UserPanel> {}
+	
+    final static VerticalPanel pnlUser = new VerticalPanel();
 		
 	@UiField
 	VerticalPanel mainPanel;
@@ -76,8 +78,43 @@ public class UserPanel extends Composite {
 		    timer.schedule(1000); 
 	}
 	
-	public static void show(){
+	public static void getEmailAddress(){
+		
+	    final TextBox openIdUrl = new TextBox();
+	    final Button login = new Button("Sign in");
+	    
+		openIdUrl.addKeyDownHandler(new KeyDownHandler()
+		{
+			@Override
+			public void onKeyDown(KeyDownEvent kc)
+			{
+				if (kc.getNativeKeyCode() == KeyCodes.KEY_ENTER)
+				{
+					login.click();
+				}
+			}
+		});
+	    
+	    
+	    login.addClickHandler(new ClickHandler() {
 	
+	        public void onClick(ClickEvent event) {
+	            if (openIdUrl.getText() == null || openIdUrl.getText().isEmpty()) {
+	            	Window.alert("Please enter your openIdUrl.");
+	                return;
+	            }
+	            String url = openIdUrl.getText();
+	            pnlUser.clear();
+	        	pnlUser.add(new HTML("Please wait..."));
+	        	UserAuthMessage uam = new UserAuthMessage(url);
+				ServerChannel.getInstance().send(uam.toJson());
+	        }
+	    });
+		
+		
+	}
+	
+	public static void show(){
 		//show user panel
 		HorizontalPanel outerPanel = new HorizontalPanel();
 		outerPanel.add(new HTML("<div style=\"margin-top: 2em; margin-left: 3em;\">" +
@@ -98,7 +135,6 @@ public class UserPanel extends Composite {
 				"background-position: 0 4px; background-repeat:no-repeat; color: #7B7C7B;" +
 				" background-image: url(../images/ico3.png);\">Do Things!</h4> <p>things." +
 				" 3</li> </ul> </div> <p></p>", true));
-	    final VerticalPanel pnlUser = new VerticalPanel();
 	    final Label sign = new Label("Login with OpenID");
 	    final TextBox openIdUrl = new TextBox();
 	    final Button login = new Button("Sign in");
