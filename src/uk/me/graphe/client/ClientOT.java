@@ -26,6 +26,7 @@ import uk.me.graphe.shared.messages.operations.CompositeOperation;
 import uk.me.graphe.shared.messages.operations.DeleteEdgeOperation;
 import uk.me.graphe.shared.messages.operations.DeleteNodeOperation;
 import uk.me.graphe.shared.messages.operations.GraphOperation;
+import uk.me.graphe.shared.messages.operations.SetStyleOperation;
 
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
@@ -246,6 +247,12 @@ public class ClientOT {
         mUnsentOps.add(newop);
         mStore.store(newop, false);
 
+    }
+
+    public void notifyStyleChange(String label, int style) {
+        SetStyleOperation sso = new SetStyleOperation(new Vertex(label), style);
+        mUnsentOps.add(sso);
+        mStore.store(sso, false);
     }
 
 }

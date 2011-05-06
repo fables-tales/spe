@@ -23,10 +23,9 @@ public class DataManager {
     
     static {
         newMap();
+        create();
         mTimer.scheduleAtFixedRate(new Backup(), 1000, 5000);
         sHighestId = mDatabase.size();
-        if (sHighestId < 1)
-        	create();
     }
 
     private static void newMap() {

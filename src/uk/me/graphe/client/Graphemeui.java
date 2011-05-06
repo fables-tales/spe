@@ -242,6 +242,7 @@ public class Graphemeui implements EntryPoint
     	{
     		vd.setStyle(style);
     		vd.updateSize(width,height);
+    		ClientOT.getInstance().notifyStyleChange(vd.getLabel(), style);
     	}
     	graphManager.invalidate();
     }

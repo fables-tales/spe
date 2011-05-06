@@ -158,6 +158,19 @@ public class VertexDrawable {
 
     public void setStyle(int style) {
         mStyle = style;
+        if (style == VertexDrawable.STROKED_SQUARE_STYLE) {
+            mWidth = 2*Graphemeui.VERTEX_SIZE;
+            mHeight = Graphemeui.VERTEX_SIZE;
+        } else if (style == VertexDrawable.STROKED_TERM_STYLE) {
+            mWidth = 2*Graphemeui.VERTEX_SIZE;
+            mHeight = Graphemeui.VERTEX_SIZE;
+        } else if (style == VertexDrawable.STROKED_DIAMOND_STYLE) {
+            mWidth = 2*Graphemeui.VERTEX_SIZE;
+            mHeight = Graphemeui.VERTEX_SIZE;
+        } else if (style == VertexDrawable.FILLED_CIRCLE_STYLE) {
+            mWidth = Graphemeui.VERTEX_SIZE;
+            mHeight = Graphemeui.VERTEX_SIZE;
+        }
     }
 
     public int getStyle() {

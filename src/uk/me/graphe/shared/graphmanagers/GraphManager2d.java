@@ -159,4 +159,6 @@ public interface GraphManager2d {
 
 	public boolean isEdgeBetween(Vertex vertexFromDrawable,
 			Vertex vertexFromDrawable2);
+
+    public void setVertexStyle(Vertex node, int mStyle);
 }
