@@ -17,16 +17,8 @@ import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
 import uk.me.graphe.shared.jsonwrapper.JSONObject;
 import uk.me.graphe.shared.messages.Message;
 import uk.me.graphe.shared.messages.MessageFactory;
-import uk.me.graphe.shared.messages.operations.AddEdgeOperation;
-import uk.me.graphe.shared.messages.operations.AddNodeOperation;
 import uk.me.graphe.shared.messages.operations.CompositeOperation;
-import uk.me.graphe.shared.messages.operations.DeleteEdgeOperation;
-import uk.me.graphe.shared.messages.operations.DeleteNodeOperation;
-import uk.me.graphe.shared.messages.operations.EdgeOperation;
 import uk.me.graphe.shared.messages.operations.GraphOperation;
-import uk.me.graphe.shared.messages.operations.MoveNodeOperation;
-import uk.me.graphe.shared.messages.operations.NoOperation;
-import uk.me.graphe.shared.messages.operations.NodeOperation;
 
 import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
@@ -80,13 +72,17 @@ public class DatabaseImpl implements Database{
         if (retrieve.getmOps() == null)
             return OTGraphManagerFactory.newInstance(key);
         for (String s : retrieve.getmOps()) {
-            s = s.substring(s.indexOf('{'), s.lastIndexOf('}')+1);
-            String st = "";
-            for (int i=0; i < s.length(); i++)
-                if (s.charAt(i) != '\\')
-                    st += s.charAt(i);
-            JSONObject item = parseItem(st);
-            objects.add(item);
+            do {
+                String toStrip = s.substring(s.indexOf('{'), s.indexOf('}')+1);
+                String st = "";
+                for (int i=0; i < toStrip.length(); i++)
+                    if (toStrip.charAt(i) != '\\')
+                        st += toStrip.charAt(i);
+                JSONObject item = parseItem(st);
+                System.out.println("Parsing: " + st +" to " + item);
+                objects.add(item);
+                s = s.substring(s.indexOf('}') + 1);
+            } while (s.indexOf('{') != -1);
         }
         try {
             messages = MessageFactory.makeOperationsFromJson(objects);
@@ -96,6 +92,7 @@ public class DatabaseImpl implements Database{
         OTGraphManager2d toReturn = OTGraphManagerFactory.newInstance(key);
         for (Message item : messages) {
             // Store all operations as local, map to server in restoreState()
+            System.out.println("Applying operation:" + item.toJson() +" to graph");
             toReturn.applyOperation((GraphOperation) item);
         }
         System.out.println("Returning graph: " + toReturn.getGraphId());
