@@ -148,13 +148,13 @@ public class Graphemeui implements EntryPoint
     	{
     		// TODO: There is weight
             graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo, weight);
-            ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo);	   		
+            ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo, weight);	   		
     	}
     	else
     	{
     		// TODO: No weight
             graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo, weight);
-            ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo);		
+            ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo, weight);		
     	}
         
         clearSelectedObjects();
@@ -242,6 +242,7 @@ public class Graphemeui implements EntryPoint
     	{
     		vd.setStyle(style);
     		vd.updateSize(width,height);
+    		ClientOT.getInstance().notifyStyleChange(vd.getLabel(), style);
     	}
     	graphManager.invalidate();
     }

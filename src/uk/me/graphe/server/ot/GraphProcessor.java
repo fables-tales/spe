@@ -10,6 +10,7 @@ import uk.me.graphe.server.ClientMessageSender;
 import uk.me.graphe.server.DataManager;
 import uk.me.graphe.shared.GraphTransform;
 import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
+import uk.me.graphe.shared.graphmanagers.OTStyleGraphManager2d;
 import uk.me.graphe.shared.messages.StateIdMessage;
 import uk.me.graphe.shared.messages.operations.CompositeOperation;
 import uk.me.graphe.shared.messages.operations.GraphOperation;
@@ -30,7 +31,8 @@ public class GraphProcessor extends Thread {
 
     private boolean mShutdown = false;
 
-    private GraphProcessor() {}
+    private GraphProcessor() {
+    }
 
     @Override
     public void run() {
@@ -43,15 +45,13 @@ public class GraphProcessor extends Thread {
 
                 // get the graph and get the history delta
                 System.err.println(mGraphId);
-                OTGraphManager2d graph = DataManager.getGraph(mGraphId);
+                OTStyleGraphManager2d graph = DataManager.getGraph(mGraphId);
                 System.err.println(graph);
-                CompositeOperation historyDelta = graph.getOperationDelta(c
-                        .getCurrentStateId());
+                CompositeOperation historyDelta = graph.getOperationDelta(c.getCurrentStateId());
 
                 // transform and apply the new operation
-                GraphOperation newOp = GraphTransform.transform(operation,
-                        historyDelta);
-                System.err.println("applying: " +  newOp.toString());
+                GraphOperation newOp = GraphTransform.transform(operation, historyDelta);
+                System.err.println("applying: " + newOp.toString());
                 graph.applyOperation(newOp);
                 System.err.println("nodes:" + graph.getVertexDrawables().size());
                 System.err.println("edges:" + graph.getEdgeDrawables().size());
@@ -59,15 +59,12 @@ public class GraphProcessor extends Thread {
                 // send update to client
                 int serverStateId = graph.getStateId();
                 ClientMessageSender.getInstance().sendMessage(c, historyDelta);
-                ClientMessageSender.getInstance()
-                        .sendMessage(
-                                c,
-                                new StateIdMessage(c.getCurrentGraphId(),
-                                        serverStateId));
+                ClientMessageSender.getInstance().sendMessage(c,
+                        new StateIdMessage(c.getCurrentGraphId(), serverStateId));
                 c.updateStateId(graph.getStateId());
                 DataManager.save(graph);
-                List<Client> otherClients = ClientManager.getInstance()
-                        .clientsForGraph(c.getCurrentGraphId());
+                List<Client> otherClients = ClientManager.getInstance().clientsForGraph(
+                        c.getCurrentGraphId());
                 otherClients.remove(c);
                 for (Client cl : otherClients) {
                     int state = cl.getCurrentStateId();
@@ -76,10 +73,8 @@ public class GraphProcessor extends Thread {
                     CompositeOperation delta = graph.getOperationDelta(state);
                     System.err.println(delta.asIndividualOperations());
                     ClientMessageSender.getInstance().sendMessage(cl, delta);
-                    ClientMessageSender.getInstance().sendMessage(
-                            cl,
-                            new StateIdMessage(graph.getGraphId(),
-                                    serverStateId));
+                    ClientMessageSender.getInstance().sendMessage(cl,
+                            new StateIdMessage(graph.getGraphId(), serverStateId));
                 }
 
             } catch (InterruptedException e) {
