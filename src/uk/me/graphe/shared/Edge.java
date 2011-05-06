@@ -1,14 +1,10 @@
 package uk.me.graphe.shared;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 public class Edge {
     private Vertex mVertex1;
     private Vertex mVertex2;
     private VertexDirection mDir;
-    private List<Integer> mWeights = new ArrayList<Integer>();
+    private int mWeight = 1;
 
     /**
      * creates an edge without direction
@@ -36,7 +32,6 @@ public class Edge {
         mVertex1 = v1;
         mVertex2 = v2;
         mDir = dir;
-        mWeights.add(0);
     }
 
     /**
@@ -110,25 +105,17 @@ public class Edge {
             return false;
     }
 
-    public void setWeight(int weight, int edgeIndex) {
-        if (weight >= 0) mWeights.set(edgeIndex, weight);
+    public void setWeight(int i) {
+        if (i >= 0) mWeight = i;
     }
 
-    public int getWeight(int edgeIndex) {
-        return mWeights.get(edgeIndex);
+    public int getWeight() {
+        return mWeight;
     }
     
     @Override
     public int hashCode() {
         return mVertex1.hashCode() + mVertex2.hashCode();
-    }
-    
-    public void addMultipleEdge(int weight) {
-        mWeights.add(weight);
-    }
-    
-    public List<Integer> getAllWeights() {
-        return Collections.unmodifiableList(this.mWeights);
     }
 
 }

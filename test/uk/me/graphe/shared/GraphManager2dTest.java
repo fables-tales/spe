@@ -57,24 +57,13 @@ public class GraphManager2dTest extends TestCase {
         Assert.assertEquals(10, vds[0].getHeight());
         Assert.assertEquals("hi", vds[0].getLabel());
     }
-
+    
     public void testRemoveVertex_single_noEdges() {
         mManager.addVertex(new Vertex("bees"), 0, 0, 10);
         mManager.removeVertex(new Vertex("bees"));
-        Assert.assertEquals(false,
-                mManager.getUnderlyingGraph().getVertices().contains(new Vertex("bees")));
+        Assert.assertEquals(false, mManager.getUnderlyingGraph().getVertices().contains(new Vertex("bees")));
     }
-
-    public void testAddMultipleEdge() {
-        mManager.addVertex(new Vertex("a"), 0, 0, 1);
-        mManager.addVertex(new Vertex("b"), 0, 0, 1);
-        mManager.addEdge(new Vertex("a"), new Vertex("b"), VertexDirection.both, 0);
-        mManager.addEdge(new Vertex("a"), new Vertex("b"), VertexDirection.both, 0);
-        Assert.assertEquals(2, mManager.getEdgeDrawables().iterator().next().getEdgeWeights()
-                .size());
-
-    }
-
+    
     public void testRemoveVertex_double_edges() {
         Vertex v1 = new Vertex("bees");
         Vertex v2 = new Vertex("cheese");
@@ -82,11 +71,10 @@ public class GraphManager2dTest extends TestCase {
         mManager.addVertex(v2, 0, 0, 10);
         mManager.addEdge(v1, v2, VertexDirection.both, 0);
         mManager.removeVertex(new Vertex("bees"));
-        Assert.assertEquals(false,
-                mManager.getUnderlyingGraph().getVertices().contains(new Vertex("bees")));
+        Assert.assertEquals(false, mManager.getUnderlyingGraph().getVertices().contains(new Vertex("bees")));
         Assert.assertEquals(0, mManager.getUnderlyingGraph().getEdges().size());
     }
-
+    
     public void testRemoveVertex_triple_line() {
         Vertex v1 = new Vertex("bees");
         Vertex v2 = new Vertex("cheese");
@@ -102,7 +90,7 @@ public class GraphManager2dTest extends TestCase {
             Assert.assertEquals(false, e.enters(v3) || e.exits(v3));
         }
     }
-
+    
     public void testRemoveVertex_triple_complete() {
         Vertex v1 = new Vertex("bees");
         Vertex v2 = new Vertex("cheese");

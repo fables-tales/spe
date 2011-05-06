@@ -1,9 +1,5 @@
 package uk.me.graphe.client;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import uk.me.graphe.shared.VertexDirection;
 
 public class EdgeDrawable {
@@ -22,8 +18,7 @@ public class EdgeDrawable {
      */
     private VertexDirection mArrowDirection;
     private boolean mHilighted;
-    
-    private List<Integer> mWeights = new ArrayList<Integer>();
+    private int mWeight;
 
     /**
      * creates a new EdgeDrawable, with no arrow
@@ -61,7 +56,7 @@ public class EdgeDrawable {
 
         mEndX = endX;
         mEndY = endY;
-        mWeights.add(weight);
+        mWeight = weight;
         mArrowDirection = arrowDir;
         
         mPolygon = new DrawingPolygon();
@@ -135,15 +130,7 @@ public class EdgeDrawable {
     }
     
     public int getWeight() {
-        return mWeights.get(0);
-    }
-    
-    public List<Integer> getEdgeWeights() {
-        return Collections.unmodifiableList(mWeights);
-    }
-    
-    public int getWeight(int edgeIndex) {
-        return mWeights.get(edgeIndex);
+        return mWeight;
     }
     
     public boolean isHilighted() {
@@ -170,7 +157,5 @@ public class EdgeDrawable {
         mEndY = y;
     }
     
-    public void addExtraWeight(int weight) {
-        mWeights.add(weight);
-    }
+    
 }

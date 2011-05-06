@@ -36,12 +36,12 @@ public class OTGraphManager2dImpl extends GraphManager2dImpl implements
             if (eo.createsEdge(eo.getEdge())) {
                 Edge e = eo.getEdge();
                 System.err
-                        .println("got weight for edge in ot:" + e.getWeight(0));
+                        .println("got weight for edge in ot:" + e.getWeight());
                 System.err.println("adding edge with parameters:"
                         + e.getFromVertex() + " " + e.getToVertex() + " " + " "
-                        + e.getDirection() + " " + e.getWeight(0));
+                        + e.getDirection() + " " + e.getWeight());
                 this.addEdge(e.getFromVertex(), e.getToVertex(), e
-                        .getDirection(), e.getWeight(0));
+                        .getDirection(), e.getWeight());
             } else if (eo.deletesEdge(eo.getEdge())) {
                 System.err.println(eo.getEdge());
                 if (this.getUnderlyingGraph().getEdges().size() > 0) {

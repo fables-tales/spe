@@ -20,9 +20,9 @@ public class AddEdgeFactory implements ConversionFactory {
             int weight = o.getInt("weight");
             System.err.println(dir);
             Edge e = new Edge(v1, v2, dir);
-            e.setWeight(weight, 0);
+            e.setWeight(weight);
             System.err.println("got weight:" + weight);
-            System.err.println("e-weight:" + e.getWeight(0));
+            System.err.println("e-weight:" + e.getWeight());
             return new AddEdgeOperation(e);
         } catch (JSONException e) {
             e.printStackTrace();

@@ -72,7 +72,7 @@ public class GraphString{
         for (Edge thisEdge : mEdges) {
             graphString += cleanLabel(thisEdge.getFromVertex().getLabel())+" "+arrow+" "+
                 cleanLabel(thisEdge.getToVertex().getLabel());
-            if(showWeights)graphString += "[label=\""+thisEdge.getWeight(0)+"\"]";
+            if(showWeights)graphString += "[label=\""+thisEdge.getWeight()+"\"]";
             graphString += ";";
         }
         

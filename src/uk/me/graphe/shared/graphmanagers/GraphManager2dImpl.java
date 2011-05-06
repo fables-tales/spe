@@ -53,8 +53,7 @@ public class GraphManager2dImpl implements GraphManager2d {
     @Override
     public void addEdge(Vertex v1, Vertex v2, VertexDirection dir, int weight) {
         Edge e = new Edge(v1, v2, dir);
-        e.setWeight(weight, 0);
-        System.err.println(mEdges.contains(e));
+        e.setWeight(weight);
         if (!mEdges.contains(e)) {
             mEdges.add(e);
             mVertexEdgeMap.get(v1).add(e);
@@ -73,17 +72,14 @@ public class GraphManager2dImpl implements GraphManager2d {
                 l1 ^= l2;
                 l2 ^= l1;
                 l1 ^= l2;
-                
+
                 t1 ^= t2;
                 t2 ^= t1;
                 t1 ^= t2;
             }
             
-            mEdgeRenderMap.put(e, new EdgeDrawable(l1, t1, l2, t2, e.getWeight(0), e
+            mEdgeRenderMap.put(e, new EdgeDrawable(l1, t1, l2, t2, e.getWeight(), e
                     .getDirection()));
-        } else {
-            mEdges.get(mEdges.indexOf(e)).addMultipleEdge(weight);
-            mEdgeRenderMap.get(e).addExtraWeight(weight);
         }
         
         this.invalidate();
