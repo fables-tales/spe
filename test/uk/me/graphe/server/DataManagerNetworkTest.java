@@ -196,8 +196,8 @@ public class DataManagerNetworkTest extends TestCase {
         
         Assert.assertEquals(2, serverGraph.getVertexDrawables().size());
         Edge e = new Edge(a,b,vd);
-        e.setWeight(weight);
-        Assert.assertEquals(weight, e.getWeight());
+        e.setWeight(weight, 0);
+        Assert.assertEquals(weight, e.getWeight(0));
         AddEdgeOperation aeo = new AddEdgeOperation(e);
         g.applyOperation(aeo);
         System.err.println(aeo.toJson());

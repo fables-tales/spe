@@ -92,7 +92,7 @@ public class Djikstra {
         // Initialise the adjacency matrix
         String tail = e.getFromVertex().getLabel();
         String head = e.getToVertex().getLabel();
-        int weight = e.getWeight();
+        int weight = e.getWeight(0);
         ArrayList<ListItem> list = matrix.get(tail);
         ListItem listitem = new ListItem(head,tail,weight);
         if (list == null) {
