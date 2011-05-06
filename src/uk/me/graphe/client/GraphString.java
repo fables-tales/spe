@@ -9,6 +9,16 @@ public class GraphString{
     
     
     /**
+     * Adds to the graph manager nodes,edges contained in the dot language code
+     * @param graphManager
+     * @param graphCode
+     */
+    public static void addDot(GraphManager2d graphManager,String graphCode){
+        Vertex v = new Vertex("test");
+        graphManager.addVertex(v, 200, 200, Graphemeui.VERTEX_SIZE);
+    }
+    
+    /**
      * returns the "DOT language" (http://en.wikipedia.org/wiki/DOT_language) 
      * representation of the graph
      *
