@@ -148,13 +148,13 @@ public class Graphemeui implements EntryPoint
     	{
     		// TODO: There is weight
             graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo, weight);
-            ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo);	   		
+            ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo, weight);	   		
     	}
     	else
     	{
     		// TODO: No weight
             graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo, weight);
-            ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo);		
+            ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo, weight);		
     	}
         
         clearSelectedObjects();

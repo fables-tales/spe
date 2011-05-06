@@ -234,8 +234,9 @@ public class ClientOT {
         mStore.store(newop, false);
     }
 
-    public void notifyAddEdge(Vertex vertex, Vertex vertex2, VertexDirection fromto) {
+    public void notifyAddEdge(Vertex vertex, Vertex vertex2, VertexDirection fromto, int weight) {
     	AddEdgeOperation newop = new AddEdgeOperation(new Edge(vertex, vertex2, fromto));
+    	newop.setWeight(weight);
         mUnsentOps.add(newop);
     	mStore.store(newop, false);
 
