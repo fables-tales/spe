@@ -2,18 +2,28 @@ package uk.me.graphe.server.database.dbitems;
 
 import java.util.List;
 
-import com.google.code.morphia.annotations.Embedded;
+import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Id;
 
-@Embedded("user")
+@Entity
 public class UserDB {
 
 	@Id
 	private String mUserID;
+	private String mEmail;
 	private List<String> mKeys;
 	
 	// Void constructor for morphia
 	public UserDB() {}
+
+	
+	public String getEmail() {
+		return mEmail;
+	}
+	
+	public void setEmail(String email) {
+		mEmail = email;
+	}
 	
 	public UserDB(String id) {
 		mUserID = id;
@@ -27,7 +37,7 @@ public class UserDB {
 		mKeys.add(toAdd);
 	}
 	
-	public void removeKey(GraphDB toRemove) {
+	public void removeKey(String toRemove) {
 		mKeys.remove(toRemove);
 	}
 	

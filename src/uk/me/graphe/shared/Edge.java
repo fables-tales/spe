@@ -112,5 +112,10 @@ public class Edge {
     public int getWeight() {
         return mWeight;
     }
+    
+    @Override
+    public int hashCode() {
+        return mVertex1.hashCode() + mVertex2.hashCode();
+    }
 
 }
