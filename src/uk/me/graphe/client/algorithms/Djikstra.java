@@ -32,6 +32,9 @@ public class Djikstra {
         // Create lookup table for vertices from name
         vlookup = new HashMap<String,Vertex>();
         elookup = new HashMap<ListItem,Edge>();
+        nlookup = new HashMap<String,Node>();
+        processedEdges = new ArrayList<Edge>();
+        processedVertices = new ArrayList<Vertex>();
         for (Vertex v : vertices)
             vlookup.put(v.getLabel(), v);
         List<Edge> edges = graph.getEdges();
@@ -43,6 +46,7 @@ public class Djikstra {
         // Create an array of nodes (1 indexed for simplicity)
         heap = new Node[noNodes + 1];
         int i = 1;
+        
         for (Vertex v : vertices) {
             heap[i] = new Node(v.getLabel(), i);
             nlookup.put(v.getLabel(),heap[i]);
