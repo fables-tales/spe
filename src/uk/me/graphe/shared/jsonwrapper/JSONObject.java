@@ -11,8 +11,6 @@ public abstract class JSONObject {
     public abstract void put(String string, String string2) throws JSONException;
 
     public abstract void put(String string, int mId) throws JSONException;
-    
-    public abstract void put(String string, int[] things) throws JSONException;
 
     public abstract int getInt(String string) throws JSONException;
 

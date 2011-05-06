@@ -1,7 +1,5 @@
 package uk.me.graphe.shared.messages.operations;
 
-import java.util.List;
-
 import uk.me.graphe.shared.Edge;
 import uk.me.graphe.shared.graphmanagers.GraphManager2d;
 import uk.me.graphe.shared.jsonwrapper.JSONException;
@@ -27,11 +25,7 @@ public class AddEdgeOperation extends EdgeOperation {
             repr.put("from", this.getEdge().getFromVertex().getLabel());
             repr.put("to", this.getEdge().getToVertex().getLabel());
             repr.put("dir", this.getEdge().getDirection().name());
-            Integer[] weights = this.getEdge().getAllWeights().toArray(new Integer[0]);
-            int[] intWeights = new int[weights.length];
-            for (int i = 0; i < weights.length; i++)
-                intWeights[i] = weights[i];
-            repr.put("weights", intWeights);
+            repr.put("weight", this.getEdge().getWeight(0));
         } catch (JSONException e) {
             throw new Error(e);
         }
@@ -45,12 +39,8 @@ public class AddEdgeOperation extends EdgeOperation {
 
     @Override
     public void applyTo(GraphManager2d mGraph) {
-        List<Integer> weights = this.getEdge().getAllWeights();
-        for (int i = 0; i < weights.size(); i++) {
-            mGraph.addEdge(this.getEdge().getFromVertex(), getEdge().getToVertex(), getEdge()
-                    .getDirection(), getEdge().getWeight(i));
-        }
-
+        mGraph.addEdge(this.getEdge().getFromVertex(), getEdge().getToVertex(),
+                getEdge().getDirection(), getEdge().getWeight(0));
     }
 
 }
