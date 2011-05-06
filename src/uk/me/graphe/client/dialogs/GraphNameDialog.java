@@ -40,6 +40,8 @@ public class GraphNameDialog extends PopupPanel
 		
 		pnlCont.add(lblTitle);
 		pnlCont.add(txtParam);
+		
+		isValid = true;
 
 		txtParam.addKeyDownHandler(new KeyDownHandler()
 		{

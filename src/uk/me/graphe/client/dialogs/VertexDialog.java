@@ -1,7 +1,6 @@
 
 package uk.me.graphe.client.dialogs;
 
-import uk.me.graphe.client.Console;
 import uk.me.graphe.client.Graphemeui;
 import uk.me.graphe.shared.Tools;
 
@@ -42,6 +41,8 @@ public class VertexDialog extends PopupPanel
 		
 		pnlCont.add(lblTitle);
 		pnlCont.add(txtParam);
+		
+		isValid = true;
 
 		txtParam.addKeyDownHandler(new KeyDownHandler()
 		{
