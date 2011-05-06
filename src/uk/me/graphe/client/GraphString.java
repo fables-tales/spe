@@ -58,7 +58,6 @@ public class GraphString{
             }else{
                 graphString += "[label=<<FONT COLOR=\"white\">"+label+
                     "</FONT>> fillcolor=black, style=\"filled\", shape=circle]";
-                break;
             }
             graphString += ";";
         }
