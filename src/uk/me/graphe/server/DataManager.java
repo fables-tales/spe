@@ -78,4 +78,8 @@ public class DataManager {
                 mDatabase.store(g);
         }
       }
+
+    public static void renameGraph(int id, String title) {
+        
+    }
 }

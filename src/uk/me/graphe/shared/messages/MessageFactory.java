@@ -20,6 +20,7 @@ import uk.me.graphe.shared.messages.factories.MoveNodeFactory;
 import uk.me.graphe.shared.messages.factories.NoSuchGraphFactory;
 import uk.me.graphe.shared.messages.factories.OpenGraphFactory;
 import uk.me.graphe.shared.messages.factories.RequestGraphFactory;
+import uk.me.graphe.shared.messages.factories.SetNameForIdFactory;
 import uk.me.graphe.shared.messages.factories.SetStyleFactory;
 import uk.me.graphe.shared.messages.factories.StateIdFactory;
 
@@ -43,6 +44,7 @@ public abstract class MessageFactory {
         sOpFactoryMap.put("composite", new CompositeFactory());
         sOpFactoryMap.put("chat", new ChatFactory());
         sOpFactoryMap.put("setStyle", new SetStyleFactory());
+        sOpFactoryMap.put("setNameForId", new SetNameForIdFactory());
     }
 
     /**

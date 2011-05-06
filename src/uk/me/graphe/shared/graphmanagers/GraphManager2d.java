@@ -174,4 +174,7 @@ public interface GraphManager2d {
 			Vertex vertexFromDrawable2);
 
     public void setVertexStyle(Vertex node, int mStyle);
+    
+    public String getName();
+    public void setName(String name);
 }
