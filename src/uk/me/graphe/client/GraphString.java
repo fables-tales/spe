@@ -43,23 +43,19 @@ public class GraphString{
             vertexStyle = vertexToDraw.getStyle();
             label = vertexToDraw.getLabel();
             graphString += cleanLabel(vertexToDraw.getLabel())+" ";
-            switch (vertexStyle) {
-            case VertexDrawable.STROKED_TERM_STYLE:
+
+            if (vertexStyle == VertexDrawable.STROKED_TERM_STYLE){
                 graphString += "[label=<<FONT COLOR=\"black\">"+label+
                     "</FONT>> fillcolor=gray, style=\"rounded,filled\", shape=box]";
-                break;
-            case VertexDrawable.STROKED_SQUARE_STYLE:
+            }else if (vertexStyle == VertexDrawable.STROKED_SQUARE_STYLE){
                 graphString += "[label=<<FONT COLOR=\"black\">"+label+
                     "</FONT>> fillcolor=gray, style=\"filled\", shape=box]";
-                break;
-            case VertexDrawable.STROKED_DIAMOND_STYLE:
+            }else if (vertexStyle == VertexDrawable.STROKED_DIAMOND_STYLE){
                 graphString += "[label=<<FONT COLOR=\"black\">"+label+
                     "</FONT>> fillcolor=gray, style=\"filled\", shape=diamond]";
-                break;
-            case VertexDrawable.COLORED_FILLED_CIRCLE:
+            }else if (vertexStyle == VertexDrawable.COLORED_FILLED_CIRCLE){
                 graphString += "[fillcolor=black, style=\"filled\", shape=circle]";
-                break; 
-            default:
+            }else{
                 graphString += "[label=<<FONT COLOR=\"white\">"+label+
                     "</FONT>> fillcolor=black, style=\"filled\", shape=circle]";
                 break;

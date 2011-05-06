@@ -287,8 +287,7 @@ public class DrawingImpl implements Drawing {
                 vertexStyle = thisVertex.getStyle();
                 float[] customColor = { 0, 0, 0, 1};
                 
-                switch (vertexStyle) {
-                    case VertexDrawable.STROKED_TERM_STYLE:
+                if (vertexStyle == VertexDrawable.STROKED_TERM_STYLE) {
                         if (thisVertex.isHilighted()) {
                             addTerm(centreX, centreY,width,height, DrawingConstants.YELLOW);
                             addTerm(centreX, centreY,width-4,height-4, DrawingConstants.GREY);
@@ -297,8 +296,7 @@ public class DrawingImpl implements Drawing {
                             addTerm(centreX, centreY,width-4,height-4, DrawingConstants.GREY);
                         }
                         addStringBox(centreX, centreY, width-height,height, label, DrawingConstants.BLACK);
-                        break;
-                    case VertexDrawable.STROKED_SQUARE_STYLE:
+                }else if (vertexStyle == VertexDrawable.STROKED_SQUARE_STYLE){
                         if (thisVertex.isHilighted()) {
                             addSquare(centreX, centreY,width,height, DrawingConstants.YELLOW);
                             addSquare(centreX, centreY,width-4,height-4, DrawingConstants.GREY);
@@ -307,8 +305,7 @@ public class DrawingImpl implements Drawing {
                             addSquare(centreX, centreY,width-4,height-4, DrawingConstants.GREY);
                         }
                         addStringBox(centreX, centreY, width,height, label, DrawingConstants.BLACK);
-                        break;
-                    case VertexDrawable.STROKED_DIAMOND_STYLE:
+                }else if (vertexStyle == VertexDrawable.STROKED_DIAMOND_STYLE){
                         if (thisVertex.isHilighted()) {
                             addDiamondStroke(centreX, centreY, width,height,DrawingConstants.GREY,
                                     2,DrawingConstants.YELLOW);
@@ -318,19 +315,17 @@ public class DrawingImpl implements Drawing {
                             
                         }
                         addStringCircle(centreX, centreY, width/2, label, DrawingConstants.BLACK);
-                        break;
-                    case VertexDrawable.COLORED_FILLED_CIRCLE:
+                }else if (vertexStyle == VertexDrawable.COLORED_FILLED_CIRCLE){
                         customColor = thisVertex.getColor();
                         addCircle(centreX, centreY, width, customColor);
                         break; 
-                    default:
+                }else{
                         if (thisVertex.isHilighted()) {
                             addCircle(centreX, centreY, width, highlightColour);
                             addCircle(centreX, centreY, width - 4, highlightColour);
                         } else {
                             addCircle(centreX, centreY, width, DrawingConstants.BLACK);
                         }
-                        break;
                 }
                 
             }
