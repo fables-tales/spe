@@ -30,6 +30,7 @@ public interface Algorithm {
      * algorithm is not done executing
      * 
      * @return a string representing the result of the algorithm
+     * @throws Exception 
      */
-    public String getResult();
+    public String getResult() throws Exception;
 }

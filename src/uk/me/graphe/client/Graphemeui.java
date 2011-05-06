@@ -16,7 +16,6 @@ import uk.me.graphe.shared.VertexDirection;
 import uk.me.graphe.shared.graphmanagers.GraphManager2d;
 import uk.me.graphe.shared.graphmanagers.GraphManager2dFactory;
 import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
-import uk.me.graphe.shared.messages.operations.AddNodeOperation;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -62,11 +61,11 @@ public class Graphemeui implements EntryPoint
     	dialogHelp = HelpDialog.getInstance(this);
     	dialogGraphName = GraphNameDialog.getInstance(this);
     	toolInfo = new ToolInfo(this);
-        tools = new Toolbox(this);
         canvas = new Canvas(this);
         chat = Chat.getInstance(this);
         graphInfo = new GraphInfo(this);
         drawing = new DrawingImpl();
+        tools = new Toolbox(this);
         tooltip = new CanvasTooltip(this);
         graphManagerFactory = GraphManager2dFactory.getInstance();
         graphManager = graphManagerFactory.makeDefaultGraphManager();
@@ -98,7 +97,6 @@ public class Graphemeui implements EntryPoint
         RootPanel.get("toolInfo").add(this.toolInfo);
         
         mStore = LocalStoreFactory.newInstance();
-        mStore.store(new AddNodeOperation(new Vertex("test"), 10, 10));
         Timer t = new Timer() {
 
             @Override
@@ -107,7 +105,7 @@ public class Graphemeui implements EntryPoint
             }
         };
         t.scheduleRepeating(1000);
-        
+
 		KeyUpHandler khHotkeys = new KeyUpHandler() {
 			public void onKeyUp(KeyUpEvent e) {
 				if (isHotkeysEnabled) {
@@ -160,13 +158,13 @@ public class Graphemeui implements EntryPoint
     	{
     		// TODO: There is weight
             graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo, weight);
-            ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo);	   		
+            ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo, weight);	   		
     	}
     	else
     	{
     		// TODO: No weight
             graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo, weight);
-            ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo);		
+            ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo, weight);		
     	}
         
         clearSelectedObjects();
@@ -254,6 +252,7 @@ public class Graphemeui implements EntryPoint
     	{
     		vd.setStyle(style);
     		vd.updateSize(width,height);
+    		ClientOT.getInstance().notifyStyleChange(vd.getLabel(), style);
     	}
     	graphManager.invalidate();
     }

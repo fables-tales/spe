@@ -7,25 +7,19 @@ import uk.me.graphe.shared.messages.operations.GraphOperation;
 public interface LocalStore {
 
 	/**
-	 * Add the graph operation to the UnAcked list
+	 * Store the operation as a local operation
 	 * 
 	 * @param o GraphOperation to be stored
 	 */
-	void toUnack(GraphOperation o);
+	void toServer(GraphOperation o);
+
 
 	/**
-	 * Add the graph operation to the Sent list
+	 * Store the operation as a server operation
 	 * 
 	 * @param o GraphOperation to be stored
 	 */
-	void toSent(GraphOperation o);
-
-	/**
-	 * Add the graph operation to the Unsent list
-	 * 
-	 * @param o GraphOperation to be stored
-	 */
-	void toUnsent(GraphOperation o);
+	void toLocal(GraphOperation o);
 
 	/**
 	 *  Load the state of graph into memory
@@ -36,11 +30,10 @@ public interface LocalStore {
 	/**
 	 * Prepares the localStore
 	 * @param GraphId id of the graph to be stored
-	 * @param sent list of server acknowledged operations
-	 * @param unsent list of unsent operations
-	 * @param unacked list of unacknowledged operations
+	 * @param server list of server acknowledged operations
+	 * @param local list of local operations
 	 */
-	void setup(int GraphId, List<GraphOperation> sent, List<GraphOperation> unsent, List<GraphOperation> unacked);
+	void setup(int GraphId, List<GraphOperation> local, List<GraphOperation> server);
 
 	/**
 	 *  Save the state of the graph into the server side database
@@ -58,14 +51,19 @@ public interface LocalStore {
 	 * Save the sent operation into the Store memory
 	 * 
 	 * @param op GraphOperation to be stored
-	 * @param Acked Whether the server has acknowledged receiving the operation 
+	 * @param server whether the operation is currently local to client or serverside, true if server side
 	 */
-	void store(GraphOperation op, boolean Acked);
+	void store(GraphOperation op, boolean server);
 
 	/**
-	 * Save the unsent operation into the Store memory
-	 * @param op GraphOperation to be stored
+	 * Converts the state of all the local operations to server acknowledged operations
 	 */
-	void store(GraphOperation op);
+	void Ack();
+	
+	/**
+	 * Removes server information from the localstore in preparation for receiving updated graph
+	 */
+	void resetServer();
+	
 
 }

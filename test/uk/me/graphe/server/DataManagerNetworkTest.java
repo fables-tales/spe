@@ -12,6 +12,7 @@ import uk.me.graphe.shared.Vertex;
 import uk.me.graphe.shared.VertexDirection;
 import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
 import uk.me.graphe.shared.graphmanagers.OTGraphManagerFactory;
+import uk.me.graphe.shared.graphmanagers.OTStyleGraphManager2d;
 import uk.me.graphe.shared.messages.MakeGraphMessage;
 import uk.me.graphe.shared.messages.Message;
 import uk.me.graphe.shared.messages.NoSuchGraphMessage;
@@ -64,7 +65,7 @@ public class DataManagerNetworkTest extends TestCase {
     
     public void testRequestGraph_suchgraph() {
         int gKey = DataManager.create();
-        OTGraphManager2d g = DataManager.getGraph(gKey);
+        OTStyleGraphManager2d g = DataManager.getGraph(gKey);
         g.applyOperation(new AddNodeOperation(new Vertex("bees"), 0, 0));
         g.applyOperation(new AddNodeOperation(new Vertex("faces"), 0, 0));
         DataManager.save(g);

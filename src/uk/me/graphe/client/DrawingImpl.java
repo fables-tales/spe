@@ -119,6 +119,64 @@ public class DrawingImpl implements Drawing {
         if (typeof Float32Array != "undefined")return 1;
         return 0;
     }-*/;
+    
+    private void setNext(EdgeDrawable thisEdge){
+        double startX = (thisEdge.getStartX());
+        double startY = (thisEdge.getStartY());
+        double endX = (thisEdge.getEndX());
+        double endY = (thisEdge.getEndY());
+        for (EdgeDrawable thisEdge2 : mEdgesToDraw) {
+            double startX2 = (thisEdge2.getStartX());
+            double startY2 = (thisEdge2.getStartY());
+            double endX2 = (thisEdge2.getEndX());
+            double endY2 = (thisEdge2.getEndY());
+            if((startX == startX2 &&
+               startY == startY2 &&
+               endX == endX2 &&
+               endY == endY2 )||
+               (startX == endX2 &&
+               startY == endY2 &&
+               endX == startX2 &&
+               endY == startY2)){
+               // Then this is the same edge
+               thisEdge2.setDoubleFirst();
+               
+            }
+        }
+    }
+    
+    private void resetEdges(){
+        for (EdgeDrawable thisEdge : mEdgesToDraw) {
+            double startX = (thisEdge.getStartX());
+            double startY = (thisEdge.getStartY());
+            double endX = (thisEdge.getEndX());
+            double endY = (thisEdge.getEndY());
+            int count = 0;
+            thisEdge.setDoubleSecond();
+            for (EdgeDrawable thisEdge2 : mEdgesToDraw) {
+                double startX2 = (thisEdge2.getStartX());
+                double startY2 = (thisEdge2.getStartY());
+                double endX2 = (thisEdge2.getEndX());
+                double endY2 = (thisEdge2.getEndY());
+                if((startX == startX2 &&
+                   startY == startY2 &&
+                   endX == endX2 &&
+                   endY == endY2 )||
+                   (startX == endX2 &&
+                   startY == endY2 &&
+                   endX == startX2 &&
+                   endY == startY2)){
+                   count++;
+                   
+                }
+            }
+            if(count >1) {
+                Console.log("repeat edge");
+                thisEdge.setDouble();
+            }
+        }
+    }
+    
 
     private void doRendering() {
 
@@ -146,7 +204,8 @@ public class DrawingImpl implements Drawing {
             // SetupWebGl if not done so already
             if (!mWebglReady)
                 setUpWebGL();
-
+            
+            resetEdges();
             // Loop through all edges and draw them
             for (EdgeDrawable thisEdge : mEdgesToDraw) {
                 mCurrentPolygon = thisEdge.getPolygon();
@@ -167,25 +226,36 @@ public class DrawingImpl implements Drawing {
                     edgeStyle = -edgeStyle;
                     edgeColour = DrawingConstants.YELLOW;
                 }
+
+                int pos = 0;
+                if(thisEdge.getDoubleFirst()){
+                    pos = 1;
+                }
+                
+                if(thisEdge.getDouble() && !thisEdge.getDoubleFirst()){
+                    pos = 2;
+                    setNext(thisEdge);
+                }
+                
                 // Add edge to lists to be rendered
                 if(thisEdge.needsToFromArrow()){
                     if (thisEdge.isHilighted()){
                         addEdge(startX, startY, endX, endY, edgeThickness, true,true,(edgeThickness*5),(edgeThickness*5),weight+"", highlightColour, textColour);
-                        addEdge(startX, startY, endX, endY, edgeThickness-strokeThickness, false,false,(edgeThickness*5)-strokeThickness,0,"", edgeColour, textColour);
+                        addEdge(startX, startY, endX, endY, edgeThickness-strokeThickness, false,false,(edgeThickness*5)-strokeThickness,0,"", highlightColour, textColour);
                     }else{
                         addEdge(startX, startY, endX, endY, edgeThickness, true,true,(edgeThickness*5),(edgeThickness*5),weight+"", edgeColour, textColour);
                     }
                 } else if(thisEdge.needsToFromArrow()){
                     if (thisEdge.isHilighted()){
                         addEdge(endX, endY, startX, startY, edgeThickness, true,true,(edgeThickness*5),(edgeThickness*5),weight+"", highlightColour, textColour);
-                        addEdge(endX, endY, startX, startY, edgeThickness-strokeThickness, false,false,(edgeThickness*5)-strokeThickness,0,"", edgeColour, textColour);
+                        addEdge(endX, endY, startX, startY, edgeThickness-strokeThickness, false,false,(edgeThickness*5)-strokeThickness,0,"", highlightColour, textColour);
                     }else{
                         addEdge(endX, endY, startX, startY, edgeThickness, true,true,(edgeThickness*5),(edgeThickness*5),weight+"", edgeColour, textColour);
                     }
                 } else {
                     if (thisEdge.isHilighted()){
                         addEdge(startX, startY, endX, endY, edgeThickness, true,true,(edgeThickness*5),(edgeThickness*5),weight+"", highlightColour, textColour);
-                        addEdge(startX, startY, endX, endY, edgeThickness-strokeThickness, false,false,(edgeThickness*5)-strokeThickness,0,"", edgeColour, textColour);
+                        addEdge(startX, startY, endX, endY, edgeThickness-strokeThickness, false,false,(edgeThickness*5)-strokeThickness,0,"", highlightColour, textColour);
                     }else{
                         addEdge(startX, startY, endX, endY, edgeThickness, true,true,(edgeThickness*5),(edgeThickness*5),weight+"", edgeColour, textColour);
                     }
@@ -250,7 +320,7 @@ public class DrawingImpl implements Drawing {
                     default:
                         if (thisVertex.isHilighted()) {
                             addCircle(centreX, centreY, width, highlightColour);
-                            addCircle(centreX, centreY, width - 4, DrawingConstants.YELLOW);
+                            addCircle(centreX, centreY, width - 4, highlightColour);
                         } else {
                             addCircle(centreX, centreY, width, DrawingConstants.BLACK);
                         }

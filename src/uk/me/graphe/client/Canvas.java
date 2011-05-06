@@ -8,9 +8,11 @@ import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseWheelEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -167,6 +169,22 @@ public class Canvas extends Composite{
 	}
 	
 	@UiHandler("canvasPanel")
+	void onMouseWheel (MouseWheelEvent e)
+	{
+		if(e.isAltKeyDown())
+		{
+			if(e.isNorth())
+			{
+				parent.zoomIn();
+			}
+			else
+			{
+				parent.zoomOut();
+			}
+		}
+	}
+	
+	@UiHandler("canvasPanel")
 	void onMouseUp (MouseUpEvent e)
 	{
 		isMouseDown = false;
@@ -180,7 +198,12 @@ public class Canvas extends Composite{
 				parent.drawing.hideUIline();
 				if (parent.selectedVertices.size() == 2) 
 				{
-					parent.dialogEdge.show("", e.getX(), e.getY());
+					if(!parent.graphManager.isDirectedEdgeBetweenVertices(
+							parent.graphManager.getVertexFromDrawable(parent.selectedVertices.get(0)), 
+							parent.graphManager.getVertexFromDrawable(parent.selectedVertices.get(1))))
+					{
+						parent.dialogEdge.show("", e.getX(), e.getY());
+					}
 				}				
 				else if ((lMouseDown[X] != lMouseMove[X]) || (lMouseDown[Y] != lMouseMove[Y]))
 				{
