@@ -80,6 +80,9 @@ public class DataManager {
       }
 
     public static void renameGraph(int id, String title) {
-        
+    	if (sGraphs.containsKey(id))
+    		sGraphs.get(id).setName(title);
+        else
+            mDatabase.rename(id,title);   
     }
 }
