@@ -1,5 +1,8 @@
 package uk.me.graphe.client;
 
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
+import com.google.gwt.event.dom.client.HasDoubleClickHandlers;
 import com.google.gwt.event.dom.client.HasMouseDownHandlers;
 import com.google.gwt.event.dom.client.HasMouseMoveHandlers;
 import com.google.gwt.event.dom.client.HasMouseOutHandlers;
@@ -22,7 +25,7 @@ import com.google.gwt.event.dom.client.HasMouseWheelHandlers;
 
 public class CanvasWrapper extends GWTCanvas implements MouseOutHandler, MouseDownHandler, MouseUpHandler,
         MouseMoveHandler, MouseWheelHandler, HasMouseDownHandlers, HasMouseMoveHandlers, HasMouseUpHandlers,
-        HasMouseOutHandlers, HasMouseWheelHandlers {
+        HasMouseOutHandlers, HasMouseWheelHandlers, DoubleClickHandler, HasDoubleClickHandlers {
 
     public CanvasWrapper() {
         super(2000, 2000);
@@ -58,7 +61,12 @@ public class CanvasWrapper extends GWTCanvas implements MouseOutHandler, MouseDo
     @Override
     public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
         return addHandler(handler, MouseOutEvent.getType());
-    }
+    }    
+
+	@Override
+	public HandlerRegistration addDoubleClickHandler(DoubleClickHandler handler) {
+		return addHandler(handler, DoubleClickEvent.getType());
+	}
     
     @Override
     public HandlerRegistration addMouseWheelHandler(MouseWheelHandler handler) {
@@ -88,6 +96,9 @@ public class CanvasWrapper extends GWTCanvas implements MouseOutHandler, MouseDo
 	@Override
 	public void onMouseWheel(MouseWheelEvent arg0) {
 		Window.alert("An error has occurred.");
-		
+	}
+	
+	public void onDoubleClick(DoubleClickEvent arg0) {
+		Window.alert("An error has occurred.");
 	}
 }
