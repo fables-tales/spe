@@ -164,6 +164,10 @@ public class EdgeDrawable {
         mDouble = true;
     }
     
+    public void unsetDouble(){
+        mDouble = false;
+    }
+    
     public boolean getDouble(){
         return mDouble;
     }

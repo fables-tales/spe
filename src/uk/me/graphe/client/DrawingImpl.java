@@ -153,6 +153,7 @@ public class DrawingImpl implements Drawing {
             double endY = (thisEdge.getEndY());
             int count = 0;
             thisEdge.setDoubleSecond();
+            thisEdge.unsetDouble();
             for (EdgeDrawable thisEdge2 : mEdgesToDraw) {
                 double startX2 = (thisEdge2.getStartX());
                 double startY2 = (thisEdge2.getStartY());
@@ -236,6 +237,11 @@ public class DrawingImpl implements Drawing {
                     pos = 2;
                     setNext(thisEdge);
                 }
+                if(startX < endX && pos == 1 && thisEdge.needsToFromArrow())pos = 2;
+                else if(startX <= endX && pos == 2 && thisEdge.needsToFromArrow())pos = 1;
+                if(startX < endX && pos == 1)pos = 2;
+                else if(startX >= endX && pos == 2)pos = 1;
+                
                 
                 // Add edge to lists to be rendered
                 if(thisEdge.needsToFromArrow()){
@@ -626,7 +632,7 @@ public class DrawingImpl implements Drawing {
         
 
         int aOff = 0;
-        if(pos == 1) aOff = -20;
+        if(pos == 1) aOff = 20;
         if(pos == 2) aOff = 20;
         
         
@@ -644,9 +650,9 @@ public class DrawingImpl implements Drawing {
         
         for (int i = 0; i < coords.length; i++) {
             oldX = coords[i][0];
-            oldY = coords[i][1];
-            coords[i][0] = ((oldX+aOff) * Math.cos(angle)) - (oldY * Math.sin(angle));
-            coords[i][1] = ((oldX+aOff) * Math.sin(angle)) + (oldY * Math.cos(angle));
+            oldY = coords[i][1]+aOff;
+            coords[i][0] = ((oldX) * Math.cos(angle)) - (oldY * Math.sin(angle));
+            coords[i][1] = ((oldX) * Math.sin(angle)) + (oldY * Math.cos(angle));
         }
 
         mVerticesList.add((float) (coords[0][0] + centreX)); // topLeftX
@@ -868,6 +874,7 @@ public class DrawingImpl implements Drawing {
             lX = 0;
             if(pos == 1) lX = -20;
             if(pos == 2) lX = 20;
+            
             lY = -dLine;
             nlX = (lX * Math.cos(lineAngle)) - (lY * Math.sin(lineAngle))+xOffset;
             nlY = (lX * Math.sin(lineAngle)) + (lY * Math.cos(lineAngle))+yOffset;
