@@ -9,6 +9,9 @@ public class EdgeDrawable {
     private int mEndX;
     private int mEndY;
     
+    private boolean mDouble = false;
+    private boolean mDoubleFirst = false;
+    
     private DrawingPolygon mPolygon;
     
     /**
@@ -157,5 +160,24 @@ public class EdgeDrawable {
         mEndY = y;
     }
     
+    public void setDouble(){
+        mDouble = true;
+    }
+    
+    public boolean getDouble(){
+        return mDouble;
+    }
+    
+    public void setDoubleFirst(){
+        mDoubleFirst = true;
+    }
+    
+    public boolean getDoubleFirst(){
+        return mDoubleFirst;
+    }
+    
+    public void setDoubleSecond(){
+        mDoubleFirst = false;
+    }
     
 }
