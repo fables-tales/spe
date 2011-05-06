@@ -19,7 +19,7 @@ public class OTGraphManager2dImpl extends GraphManager2dImpl implements
     private int mStateId;
     private List<GraphOperation> mHistory = new ArrayList<GraphOperation>();
 
-    public OTGraphManager2dImpl(int id) {
+    protected OTGraphManager2dImpl(int id) {
         super();
         mId = id;
         mStateId = 0;

@@ -10,6 +10,7 @@ import uk.me.graphe.shared.Vertex;
 import uk.me.graphe.shared.graphmanagers.GraphManager2d;
 import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
 import uk.me.graphe.shared.graphmanagers.OTGraphManagerFactory;
+import uk.me.graphe.shared.graphmanagers.OTStyleGraphManager2d;
 import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
 import uk.me.graphe.shared.messages.operations.AddEdgeOperation;
 import uk.me.graphe.shared.messages.operations.AddNodeOperation;
@@ -17,7 +18,7 @@ import uk.me.graphe.shared.messages.operations.AddNodeOperation;
 public class DatabaseTest extends TestCase {
 
     private Database db = DatabaseFactory.newInstance();
-    private OTGraphManager2d mManager;
+    private OTStyleGraphManager2d mManager;
     private int graphId = 0;
 
     @Override

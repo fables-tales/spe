@@ -12,6 +12,7 @@ import uk.me.graphe.shared.Vertex;
 import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
 import uk.me.graphe.shared.graphmanagers.OTGraphManager2dImpl;
 import uk.me.graphe.shared.graphmanagers.OTGraphManagerFactory;
+import uk.me.graphe.shared.graphmanagers.OTStyleGraphManager2d;
 import uk.me.graphe.shared.jsonwrapper.JSONException;
 import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
 import uk.me.graphe.shared.jsonwrapper.JSONObject;
@@ -68,7 +69,7 @@ public class DatabaseImpl implements Database{
     }
     
     @Override
-    public OTGraphManager2d retrieve(int key) {
+    public OTStyleGraphManager2d retrieve(int key) {
         //  Extract OtGraphManagerStore from DB
         List<OTGraphManager2dStore> retrieves = mData.find(OTGraphManager2dStore.class, "id =", key).asList();
         if (retrieves == null || retrieves.size() != 1)
@@ -93,7 +94,7 @@ public class DatabaseImpl implements Database{
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        OTGraphManager2d toReturn = OTGraphManagerFactory.newInstance(key);
+        OTStyleGraphManager2d toReturn = OTGraphManagerFactory.newInstance(key);
         for (Message item : messages) {
             // Store all operations as local, map to server in restoreState()
             toReturn.applyOperation((GraphOperation) item);
