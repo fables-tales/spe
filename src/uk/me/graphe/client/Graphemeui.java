@@ -256,6 +256,7 @@ public class Graphemeui implements EntryPoint
     	// vertex and the vertex drawable label. Keep the invalidate to redraw
     	VertexDrawable vd = selectedVertices.get(0);
     	
+    	clearSelectedVertices();
     	graphManager.invalidate();
     }
     
@@ -266,6 +267,7 @@ public class Graphemeui implements EntryPoint
     	Edge e = graphManager.getEdgeFromDrawable(ed);
     	ClientOT.getInstance().notifyRemoveEdge(e);
     	ClientOT.getInstance().notifyAddEdge(e.getFromVertex(), e.getToVertex(), e.getDirection(), e.getWeight());
+    	clearSelectedEdges();
     	graphManager.invalidate();
     }
     
