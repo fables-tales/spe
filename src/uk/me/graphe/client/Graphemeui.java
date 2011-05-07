@@ -61,8 +61,11 @@ public class Graphemeui implements EntryPoint
 	private static final int X = 0, Y = 1;
 
 	private AutoLayout lay;
+	
+	
 
-    public Graphemeui() {
+	public Graphemeui() {
+	    
         graphManagerFactory = GraphManager2dFactory.getInstance();
         graphManager = graphManagerFactory.makeDefaultGraphManager();
         graphManager.addRedrawCallback(new Runnable() {
@@ -170,6 +173,7 @@ public class Graphemeui implements EntryPoint
                 
         ServerChannel sc = ServerChannel.getInstance();
         ClientOT.getInstance().setOperatingGraph(this.graphManager);
+        ClientOT.getInstance().passGraphemeUiInstance(this);
         sc.init();
         
     }
