@@ -30,7 +30,6 @@
   <div id="cont">
     <div id="toolbox"></div>
     <div id="canvas">
-        <div style="position:absolute;z-index:50;width:100%;text-align:right;" id="frameRate"></div>
         <div style="position:absolute;" id="gwtGL"></div>
       <!--<canvas width="2000" height="2000" style="position: absolute; z-index: -10;"></canvas>-->
     </div>

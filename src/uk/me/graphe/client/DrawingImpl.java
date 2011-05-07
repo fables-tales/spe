@@ -4,11 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasAlignment;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.widgetideas.graphics.client.Color;
 import com.google.gwt.widgetideas.graphics.client.GWTCanvas;
 import com.googlecode.gwtgl.array.Float32Array;
@@ -51,8 +47,6 @@ public class DrawingImpl implements Drawing {
     private int mNumVertices = 0;
     private boolean mTimeOutSet = false;
     private boolean mCanRender = true;
-    private long mCurrentTime = -1;
-    private long mOldTime = -1;
     private int mFramesDone = 0;
     private int mCanvasWidth = Window.getClientWidth();
     private int mCanvasHeight = Window.getClientWidth(); // Deliberate
@@ -371,33 +365,18 @@ public class DrawingImpl implements Drawing {
             mTimeOutSet = true;
             
             Timer t = new Timer() {
+                private double startTimer;
                 public void run() {
                     if (mCanRender && mRenderRequest) {
-                    	mOldTime = System.currentTimeMillis();
+                    	startTimer = System.currentTimeMillis();
                         doRendering();
-                        mCurrentTime = System.currentTimeMillis();
-                        
-                        float fps =
-                                (((float)(System.currentTimeMillis()-mOldTime))/(float)1000);
-                        fps = (float) (Math.round(((double) fps) * 100.0) / 100.0);
-                        mLastRenderTime = fps;
-                        RootPanel.get("frameRate").clear();
-                        VerticalPanel panel = new VerticalPanel();
-                        HTML gLabel =
-                                new HTML("TotalFrames:" + mFramesDone + 
-                                        " Nodes:"+ mNumVertices + 
-                                        " Zoom:"+ mZoom +
-                                        " Seconds:" + fps);
-                        gLabel.setHorizontalAlignment(HasAlignment.ALIGN_RIGHT);
-                        panel.add(gLabel);
-                        RootPanel.get("frameRate").add(panel);
-                        
-                        mOldTime = System.currentTimeMillis();
+                        mLastRenderTime =
+                            (System.currentTimeMillis()-startTimer)/1000;
+                        Console.log("Last render (2d:"+mDo2d+"):"+mLastRenderTime+" seconds.");
                         mRenderRequest = false;
                     }
                 }
             };
-
             t.scheduleRepeating(100 / 6);
         }
 
@@ -1085,9 +1064,7 @@ public class DrawingImpl implements Drawing {
             float coords1 = (float)((float)(oldX) * Math.cos(angle)) - (float)(oldY * Math.sin(angle));
             float coords2 = (float)((float)(oldX) * Math.sin(angle)) + (float)(oldY * Math.cos(angle));
             m2dList.add(coords1);
-            
             m2dList.add(coords2);
-            Console.log(""+coords2+coords1);
         }        
         
     }
@@ -1114,7 +1091,6 @@ public class DrawingImpl implements Drawing {
             float coords2 = (float)((float)(oldX) * Math.sin(angle)) + (float)(oldY * Math.cos(angle));
             m2dList.add(coords1);
             m2dList.add(coords2);
-            Console.log(""+coords2+coords1);
         }
         
     }
