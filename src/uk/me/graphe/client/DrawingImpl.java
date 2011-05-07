@@ -192,6 +192,23 @@ public class DrawingImpl implements Drawing {
 
     private void doRendering() {
 
+    	// Update booleans for drawing arrows and weights
+    	if(Graphemeui.graphManager.isFlowChart()){
+        	mDirected = true;
+        	mWeighted = false;
+        }else{
+	        if(Graphemeui.graphManager.isDigraph()){
+	        	mDirected = true;
+	        }else{
+	        	mDirected = false;
+	        }
+	        if(Graphemeui.graphManager.isWeighted()){
+	        	mWeighted = true;
+	        }else{
+	        	mWeighted = false;
+	        }
+        }
+
         // Update frames drawn
         mFramesDone++;
         // Can not render while render is happening
