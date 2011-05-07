@@ -3,7 +3,12 @@ package uk.me.graphe.client;
 import java.util.ArrayList;
 
 import uk.me.graphe.client.algorithms.AutoLayout;
+import uk.me.graphe.client.algorithms.ShortestPathDjikstras;
 import uk.me.graphe.client.communications.ServerChannel;
+import uk.me.graphe.client.dialogs.EdgeDialog;
+import uk.me.graphe.client.dialogs.GraphNameDialog;
+import uk.me.graphe.client.dialogs.HelpDialog;
+import uk.me.graphe.client.dialogs.VertexDialog;
 import uk.me.graphe.client.json.wrapper.JSOFactory;
 import uk.me.graphe.shared.Edge;
 import uk.me.graphe.shared.Tools;
@@ -26,13 +31,17 @@ public class Graphemeui implements EntryPoint
     public final Canvas canvas;
     public final CanvasTooltip tooltip;
     public final Chat chat;  
-    public final Dialog dialog;
+    public final VertexDialog dialogVertex;
+    public final EdgeDialog dialogEdge;
+    public final GraphNameDialog dialogGraphName;
+    public final HelpDialog dialogHelp;
     public final GraphInfo graphInfo;
     public final Toolbox tools;
     public final ToolInfo toolInfo;   
     public final GraphManager2d graphManager;
     public final GraphManager2dFactory graphManagerFactory;
     public final Drawing drawing;
+    public final ShortestPathDjikstras spDjikstra;
     
     private LocalStore mStore;
     
@@ -47,15 +56,18 @@ public class Graphemeui implements EntryPoint
 	private static final int X = 0, Y = 1;
 
 	private AutoLayout lay;
-	
+
     public Graphemeui() {
-    	dialog = new Dialog(this);
+    	dialogVertex = VertexDialog.getInstance(this);
+    	dialogEdge = EdgeDialog.getInstance(this);
+    	dialogHelp = HelpDialog.getInstance(this);
+    	dialogGraphName = GraphNameDialog.getInstance(this);
     	toolInfo = new ToolInfo(this);
-        tools = new Toolbox(this);
         canvas = new Canvas(this);
         chat = Chat.getInstance(this);
         graphInfo = new GraphInfo(this);
         drawing = new DrawingImpl();
+        tools = new Toolbox(this);
         tooltip = new CanvasTooltip(this);
         graphManagerFactory = GraphManager2dFactory.getInstance();
         graphManager = graphManagerFactory.makeDefaultGraphManager();
@@ -74,7 +86,7 @@ public class Graphemeui implements EntryPoint
     	selectedVertices = new ArrayList<VertexDrawable>();
     	selectedEdges = new ArrayList<EdgeDrawable>();
     	isHotkeysEnabled = true;
-    	
+    	spDjikstra = new ShortestPathDjikstras();
     	lay = new AutoLayout(graphManager);
     }
     

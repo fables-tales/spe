@@ -1,7 +1,5 @@
 package uk.me.graphe.shared.graphmanagers;
 
-import java.util.List;
-
 import uk.me.graphe.shared.messages.operations.CompositeOperation;
 import uk.me.graphe.shared.messages.operations.GraphOperation;
 
