@@ -20,7 +20,7 @@ public class Toolbox extends Composite {
 	public Tools currentTool;
 	
 	private final Graphemeui parent;	
-	private final ToolboxButton btnAddVert, btnAddEd, btnSelect, btnMove, btnZoom, btnAutoLayout, btnCluster, btnDelete, btnProcess, btnTerminator, btnDecision, btnNormal;
+	private final ToolboxButton btnAddVert, btnAddEd, btnSelect, btnMove, btnZoom, btnAutoLayout, btnCluster, btnDjikstra, btnDelete, btnProcess, btnTerminator, btnDecision, btnNormal;
 	
 	public Toolbox(Graphemeui gUI) {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -33,6 +33,7 @@ public class Toolbox extends Composite {
 		btnZoom = new ToolboxButton(this, Tools.zoom);
 		btnAutoLayout = new ToolboxButton(this, Tools.autolayout);
 		btnCluster = new ToolboxButton(this, Tools.cluster);
+		btnDjikstra = new ToolboxButton(this, Tools.djikstra);
 		btnDelete = new ToolboxButton(this, Tools.delete);
 		btnProcess = new ToolboxButton(this, Tools.styleProcess);
 		btnTerminator = new ToolboxButton(this, Tools.styleTerminator);
@@ -49,6 +50,7 @@ public class Toolbox extends Composite {
 		
 		pnlTools3.add(btnAutoLayout);
 		pnlTools3.add(btnCluster);
+		pnlTools3.add(btnDjikstra);
 		
 		pnlTools4.add(btnProcess);
 		pnlTools4.add(btnTerminator);
@@ -109,6 +111,8 @@ public class Toolbox extends Composite {
 				// TODO: Implement
 				this.setTool(Tools.select);
 				break;
+			case djikstra:
+				
 			case styleProcess:
 				parent.setSelectedSyle(VertexDrawable.STROKED_SQUARE_STYLE,
 				        Graphemeui.VERTEX_SIZE*2,Graphemeui.VERTEX_SIZE);
