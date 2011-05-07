@@ -80,5 +80,25 @@ public class UserDatabase {
 	public void deleteUser(String userID) {
 		mData.delete(mData.createQuery(UserDB.class).filter("mUserID =", userID));
 	}
-	 
+
+	public boolean exists(String userID, String email) {
+		Query<UserDB> result;
+		if (userID != null) {
+			result = mData.find(UserDB.class, "mUserID =", userID);
+			if (email != null)
+				result = result.filter("mEmail =", email);
+			if (result.asList().isEmpty())
+				return false;
+			else
+				return true;
+		}
+		if (email != null) {
+			result = mData.find(UserDB.class, "mEmail =", email);
+			if (result.asList().isEmpty())
+				return false;
+			else
+				return true;
+		}
+		return false;
+	}
 }

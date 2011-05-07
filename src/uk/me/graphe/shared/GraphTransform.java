@@ -36,6 +36,8 @@ public class GraphTransform {
             } else if (no.movesNode(effectedNode)) {
                 if (historyDelta.deletesNode(effectedNode)) return new NoOperation();
                 else return no;
+            } else if (no.isStyleOperation() && !historyDelta.deletesNode(effectedNode)) {
+                return no;
             }
 
         }

@@ -26,6 +26,7 @@ import uk.me.graphe.shared.messages.operations.CompositeOperation;
 import uk.me.graphe.shared.messages.operations.DeleteEdgeOperation;
 import uk.me.graphe.shared.messages.operations.DeleteNodeOperation;
 import uk.me.graphe.shared.messages.operations.GraphOperation;
+import uk.me.graphe.shared.messages.operations.SetStyleOperation;
 
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
@@ -70,7 +71,8 @@ public class ClientOT {
                 if (mServer == false) {
                     Console.log("No server connection, offline mode enabled");
                     mInfo = mStore.getInformation();
-                    if(Window.confirm("A previous graph has been detected, press okay to load")) {
+                    if(!(mInfo.getLocal().isEmpty() && mInfo.getServer().isEmpty()) &&
+                            Window.confirm("A previous graph has been detected, press okay to load")) {
                         List<GraphOperation> ops = mInfo.getServer();
                         if (!ops.isEmpty()) {
                             for (GraphOperation op : ops) {
@@ -233,8 +235,9 @@ public class ClientOT {
         mStore.store(newop, false);
     }
 
-    public void notifyAddEdge(Vertex vertex, Vertex vertex2, VertexDirection fromto) {
+    public void notifyAddEdge(Vertex vertex, Vertex vertex2, VertexDirection fromto, int weight) {
     	AddEdgeOperation newop = new AddEdgeOperation(new Edge(vertex, vertex2, fromto));
+    	newop.setWeight(weight);
         mUnsentOps.add(newop);
     	mStore.store(newop, false);
 
@@ -246,6 +249,12 @@ public class ClientOT {
         mUnsentOps.add(newop);
         mStore.store(newop, false);
 
+    }
+
+    public void notifyStyleChange(String label, int style) {
+        SetStyleOperation sso = new SetStyleOperation(new Vertex(label), style);
+        mUnsentOps.add(sso);
+        mStore.store(sso, false);
     }
 
 }

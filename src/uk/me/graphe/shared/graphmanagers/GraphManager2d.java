@@ -128,7 +128,15 @@ public interface GraphManager2d {
 	* @param y
 	* @return the vertex at the location
 	*/
-    public VertexDrawable getDrawableAt(int x, int y);
+    public VertexDrawable getVertexDrawableAt(int x, int y);
+    
+	/**
+	* gets the drawable at a specific position
+	* @param x
+	* @param y
+	* @return the vertex at the location
+	*/
+    public EdgeDrawable getEdgeDrawableAt(int x, int y);
     
     /**
      * Gets the vertex associated with the given drawable
@@ -138,10 +146,22 @@ public interface GraphManager2d {
     public Vertex getVertexFromDrawable(VertexDrawable vd);
 
     /**
+     * Gets the edge associated with the given drawable
+     * @param ed
+     * @return the edge
+     */
+    public Edge getEdgeFromDrawable(EdgeDrawable ed);
+    
+    /**
      * forces graph to be redrawn
      */
 	public void invalidate();
 
 	public boolean isEdgeBetween(Vertex vertexFromDrawable,
 			Vertex vertexFromDrawable2);
+
+    public void setVertexStyle(Vertex node, int mStyle);
+    
+    public String getName();
+    public void setName(String name);
 }

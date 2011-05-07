@@ -20,15 +20,15 @@ import uk.me.graphe.shared.messages.factories.MoveNodeFactory;
 import uk.me.graphe.shared.messages.factories.NoSuchGraphFactory;
 import uk.me.graphe.shared.messages.factories.OpenGraphFactory;
 import uk.me.graphe.shared.messages.factories.RequestGraphFactory;
+import uk.me.graphe.shared.messages.factories.SetNameForIdFactory;
+import uk.me.graphe.shared.messages.factories.SetStyleFactory;
 import uk.me.graphe.shared.messages.factories.StateIdFactory;
-
-
 
 public abstract class MessageFactory {
     private static Map<String, ConversionFactory> sOpFactoryMap = null;
 
     static {
-        // TODO: get the strings from the classes instead of hardcode them
+        // insert all the operations into the factory map
         sOpFactoryMap = new HashMap<String, ConversionFactory>();
         sOpFactoryMap.put("addEdge", new AddEdgeFactory());
         sOpFactoryMap.put("delEdge", new DeleteEdgeFactory());
@@ -43,13 +43,25 @@ public abstract class MessageFactory {
         sOpFactoryMap.put("noSuchGraph", new NoSuchGraphFactory());
         sOpFactoryMap.put("composite", new CompositeFactory());
         sOpFactoryMap.put("chat", new ChatFactory());
+        sOpFactoryMap.put("setStyle", new SetStyleFactory());
+        sOpFactoryMap.put("setNameForId", new SetNameForIdFactory());
     }
 
-    public static List<Message> makeOperationsFromJson(List<JSONObject> jsos)
-            throws JSONException {
+    /**
+     * makes a list of messages from a list of json objects
+     * 
+     * @param jsos
+     *            the json objects to turn into messages
+     * @return the json objects converted to messages
+     * @throws JSONException
+     *             if we can't convert for any reason
+     */
+    public static List<Message> makeOperationsFromJson(List<JSONObject> jsos) throws JSONException {
 
         List<Message> result = new ArrayList<Message>();
 
+        // for all the messages that we get in, turn them into type safe message
+        // objects
         for (JSONObject o : jsos) {
             String messageVal = o.getString("message");
             Message op = MessageFactory.make(messageVal, o);
@@ -59,7 +71,16 @@ public abstract class MessageFactory {
         return result;
     }
 
+    /**
+     * attempts to turn a json object into a type safe message, using messageval
+     * as the type of message to construct
+     * 
+     * @param messageVal the value of the message field
+     * @param o the passed json object
+     * @return a message object if the type of message is correct
+     */
     private static Message make(String messageVal, JSONObject o) {
+
         if (sOpFactoryMap.containsKey(messageVal)) {
             return sOpFactoryMap.get(messageVal).make(o);
         } else {
