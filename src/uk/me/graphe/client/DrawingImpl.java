@@ -902,11 +902,12 @@ public class DrawingImpl implements Drawing {
             double lLength= stringPixelLength(label);;
             double halfLLength = lLength / 2;
             double dLine = thickness * 2;
-
+            double labelOffset = thickness*3;
+            
             if (pos == 1)
-                lX = -20;
+                lX = -labelOffset;
             if (pos == 2)
-                lX = 20;
+                lX = labelOffset;
 
             lY = -dLine;
             nlX = (lX * Math.cos(lineAngle)) - (lY * Math.sin(lineAngle))
