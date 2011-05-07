@@ -183,5 +183,9 @@ public class EdgeDrawable {
     public void setDoubleSecond(){
         mDoubleFirst = false;
     }
+
+    public void setWeight(int weight) {
+        mWeight = weight;
+    }
     
 }

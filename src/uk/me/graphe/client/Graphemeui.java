@@ -61,8 +61,11 @@ public class Graphemeui implements EntryPoint
 	private static final int X = 0, Y = 1;
 
 	private AutoLayout lay;
+	
+	
 
-    public Graphemeui() {
+	public Graphemeui() {
+	    
         graphManagerFactory = GraphManager2dFactory.getInstance();
         graphManager = graphManagerFactory.makeDefaultGraphManager();
         graphManager.addRedrawCallback(new Runnable() {
@@ -170,6 +173,7 @@ public class Graphemeui implements EntryPoint
                 
         ServerChannel sc = ServerChannel.getInstance();
         ClientOT.getInstance().setOperatingGraph(this.graphManager);
+        ClientOT.getInstance().passGraphemeUiInstance(this);
         sc.init();
         
     }
@@ -213,8 +217,6 @@ public class Graphemeui implements EntryPoint
     		vd.setHilighted(false);
     	}
     	
-    	tools.pnlTools4.setVisible(false);
-    	
     	selectedVertices.clear();
     }
     
@@ -257,26 +259,26 @@ public class Graphemeui implements EntryPoint
     	graphManager.invalidate();
     }
     
-    public void editEdgeWeight(String weight)
+    public void editEdgeWeight(int weight)
     {
-    	//TODO: implement - edit edge weight locally and over OT too. Remember you need to edit the
-    	// edge and the edge drawable label.  Keep the invalidate to redraw
     	EdgeDrawable ed = selectedEdges.get(0);
-    	
+    	graphManager.setEdgeWeight(ed, weight);
+    	Edge e = graphManager.getEdgeFromDrawable(ed);
+    	ClientOT.getInstance().notifyRemoveEdge(e);
+    	ClientOT.getInstance().notifyAddEdge(e.getFromVertex(), e.getToVertex(), e.getDirection(), e.getWeight());
     	graphManager.invalidate();
     }
     
     public void editGraphName(String name)
     {
     	updateGraphName(name);
-    	
-    	//TODO: send name over OT.
+    	ClientOT.getInstance().notifyNewName(name);
     }
     
     public void editGraphProperties(boolean isDigraph, boolean isFlowChart, boolean isWeighted)
     {
     	updateGraphProperties(isDigraph, isWeighted, isFlowChart);
-    	
+    	ClientOT.getInstance().notifyUpdateParameters(isDigraph, isWeighted, isFlowChart);
     	//TODO: Send the boolean parameters to the database and over OT to the other clients.
     }
     
@@ -302,6 +304,14 @@ public class Graphemeui implements EntryPoint
     		ClientOT.getInstance().notifyStyleChange(vd.getLabel(), style);
     	}
     	graphManager.invalidate();
+    }
+    
+    public void toggleEdgeDirection()
+    {
+    	for (EdgeDrawable ed : selectedEdges)
+    	{
+    		// TODO: toggle the edge direction locally via Edge and EdgeDrawable and over OT.
+    	}
     }
     
     public boolean toggleSelectedEdgeAt(int x, int y) {
@@ -349,14 +359,7 @@ public class Graphemeui implements EntryPoint
         	}
         	graphManager.invalidate();
         	
-        	tools.pnlTools4.setVisible(true);
-        	
             return true;
-        }
-        
-        if (selectedVertices.isEmpty())
-        {
-        	tools.pnlTools4.setVisible(false);
         }
 
         return false;
@@ -376,6 +379,7 @@ public class Graphemeui implements EntryPoint
 		drawing.setIsDigraph(isDigraph);
 		drawing.setIsWeighted(isWeighted);
 		graphInfo.update();
+		tools.updateVisibleTools();
 		graphManager.invalidate();
     }
     
