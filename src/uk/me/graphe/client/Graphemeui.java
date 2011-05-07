@@ -267,6 +267,15 @@ public class Graphemeui implements EntryPoint
     	EdgeDrawable ed = selectedEdges.get(0);
     }
     
+    public void editGraphProperties(boolean isDigraph, boolean isFlowChart, boolean isWeighted)
+    {
+		drawing.setIsFlowChart(isFlowChart);
+		drawing.setIsDigraph(isDigraph);
+		drawing.setIsWeighted(isWeighted);
+    	
+    	//TODO: Send the boolean parameters to the database and over OT to the other clients.
+    }
+    
     public void moveNode(VertexDrawable vd, int x, int y) {
         Vertex v = graphManager.getVertexFromDrawable(vd);
         
