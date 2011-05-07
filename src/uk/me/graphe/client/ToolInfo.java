@@ -47,6 +47,15 @@ public class ToolInfo extends Composite {
 			case cluster:
 				lblText.setText("Cluster");
 				break;
+			case djikstra:
+				lblText.setText("Run Dijkstra's Shortest Path Algorithm");
+				break;
+			case step:
+				lblText.setText("Step Once");
+				break;
+			case stepAll:
+				lblText.setText("Step All");
+				break;
 			case delete:
 				lblText.setText("Delete (DEL)");
 				break;

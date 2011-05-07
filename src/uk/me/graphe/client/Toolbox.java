@@ -124,9 +124,9 @@ public class Toolbox extends Composite {
 				this.setTool(Tools.select);
 				break;
 			case djikstra:
-				pnlTools5.setVisible(true);
 				if(parent.selectedVertices.size() == 2)
 				{
+					pnlTools5.setVisible(true);
 					parent.spDjikstra.initialise(parent.graphManager.getUnderlyingGraph(), 
 							parent.graphManager.getVertexFromDrawable(parent.selectedVertices.get(0)), 
 							parent.graphManager.getVertexFromDrawable(parent.selectedVertices.get(1)));
