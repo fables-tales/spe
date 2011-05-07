@@ -26,6 +26,7 @@ import uk.me.graphe.shared.messages.operations.CompositeOperation;
 import uk.me.graphe.shared.messages.operations.DeleteEdgeOperation;
 import uk.me.graphe.shared.messages.operations.DeleteNodeOperation;
 import uk.me.graphe.shared.messages.operations.GraphOperation;
+import uk.me.graphe.shared.messages.operations.SetStyleOperation;
 
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
@@ -42,8 +43,10 @@ public class ClientOT {
     private int mServerStateId = -1;
     private List<GraphOperation> mServerOperations = new ArrayList<GraphOperation>();
     private LocalStore mStore = LocalStoreFactory.newInstance();
+    private StorePackage mInfo;
 
     private boolean mInited = true;
+    private boolean mServer = false;
 
     public ClientOT() {
         mSc = ServerChannel.getInstance();
@@ -55,6 +58,61 @@ public class ClientOT {
             }
         });
 
+         //Timer waits to see if server connection has been established
+        new Timer() {
+            @Override
+            public void run() {
+                /*
+                 * Options:
+                 * 1) No Server connection + any ops
+                 * 2) Server connection + no local
+                 * 3) Server connection + local
+                 */
+                if (mServer == false) {
+                    Console.log("No server connection, offline mode enabled");
+                    mInfo = mStore.getInformation();
+                    if(Window.confirm("A previous graph has been detected, press okay to load")) {
+                        List<GraphOperation> ops = mInfo.getServer();
+                        if (!ops.isEmpty()) {
+                            for (GraphOperation op : ops) {
+                                op.applyTo(mGraph);
+                            }
+                        }
+                        ops = mInfo.getLocal();
+                        if (!ops.isEmpty()) {
+                            for (GraphOperation op : ops) {
+                                op.applyTo(mGraph);
+                                mUnsentOps.add(op);
+                            }
+                        }                     
+                    }
+                    else
+                        mStore.setup(1, null, null);
+                }
+                else {
+                    Console.log("Server connection established");
+                    List<GraphOperation> ops = mInfo.getLocal();
+                    if (!ops.isEmpty() &&
+                       Window.confirm("Offline operations have been detected, press okay to load these operations or cancel to discard them")) {
+                       for (GraphOperation op : ops) {
+                           op.applyTo(mGraph);
+                           mUnsentOps.add(op);
+                       }
+                    }
+                    else
+                        mStore.setup(1, null, null);
+                    // Store the graph operations retrieve from server at load
+//                    for (GraphOperation op : mServerOperations) {
+//                        CompositeOperation comp = (CompositeOperation)op;
+//                        for (GraphOperation o : comp.asIndividualOperations()) {
+//                            if (!o.isNoOperation())
+//                                mStore.store(o, true);
+//                        }
+//                    } 
+                }
+            }
+        }.schedule(1500);
+        
         new Timer() {
 
             @Override
@@ -62,6 +120,9 @@ public class ClientOT {
                 mSc.send(new RequestGraphMessage(1, 0).toJson());
                 Console.log("sent ogm");
                 Window.alert("SENT OGM");
+                mServer = true;
+                mStore.resetServer();
+                mInfo = mStore.getInformation();
                 new Timer() {
 
                     @Override
@@ -105,6 +166,13 @@ public class ClientOT {
                         + mGraph.getEdgeDrawables().size());
                 mServerOperations.add(o);
                 mSentUnAcked.clear();
+                CompositeOperation co = (CompositeOperation)o;
+                for (GraphOperation op : co.asIndividualOperations()) {
+                    if (!op.isNoOperation()) {
+                        mStore.store(op, true);
+                    }
+                }
+                mStore.Ack();
             } else if (m.getMessage().equals(new StateIdMessage(0, 0).getMessage())) {
                 mServerStateId = ((StateIdMessage) m).getState();
             } else if (m.getMessage().equals("chat")) {
@@ -157,19 +225,20 @@ public class ClientOT {
     public void notifyRemoveEdge(Edge edge) {
     	DeleteEdgeOperation newop = new DeleteEdgeOperation((edge));
         mUnsentOps.add(newop);
-        mStore.store(newop);
+        mStore.store(newop, false);
     }
 
     public void notifyRemoveVertex(Vertex vertex) {
     	DeleteNodeOperation newop = new DeleteNodeOperation(vertex);
         mUnsentOps.add(newop);
-        mStore.store(newop);
+        mStore.store(newop, false);
     }
 
-    public void notifyAddEdge(Vertex vertex, Vertex vertex2, VertexDirection fromto) {
+    public void notifyAddEdge(Vertex vertex, Vertex vertex2, VertexDirection fromto, int weight) {
     	AddEdgeOperation newop = new AddEdgeOperation(new Edge(vertex, vertex2, fromto));
+    	newop.setWeight(weight);
         mUnsentOps.add(newop);
-    	mStore.store(newop);
+    	mStore.store(newop, false);
 
     }
 
@@ -177,8 +246,14 @@ public class ClientOT {
         Console.log("notified of adding vertex:" + v.getLabel());
         AddNodeOperation newop = new AddNodeOperation(v, i, j);
         mUnsentOps.add(newop);
-        mStore.store(newop);
+        mStore.store(newop, false);
 
+    }
+
+    public void notifyStyleChange(String label, int style) {
+        SetStyleOperation sso = new SetStyleOperation(new Vertex(label), style);
+        mUnsentOps.add(sso);
+        mStore.store(sso, false);
     }
 
 }

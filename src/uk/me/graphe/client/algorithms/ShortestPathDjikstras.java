@@ -9,45 +9,46 @@ import uk.me.graphe.shared.Vertex;
 public class ShortestPathDjikstras implements Algorithm {
 
     private Graph mGraph = null;
+    private Djikstra mDjikstra = null;
     
     @Override
-    public List<Edge> getHilightedEdges() {
-        // TODO Auto-generated method stub
-        return null;
+    public List<Edge> getHilightedEdges() {  
+        return mDjikstra.getProcessedEdges();
     }
     
     @Override
     public boolean hasFinished() {
-        return false;
+        return mDjikstra.hasFinished();
     }
 
     @Override
     public List<Vertex> getHilightedVerticies() {
-        // TODO Auto-generated method stub
-        return null;
+        return mDjikstra.getProcessedVertex();
     }
 
     @Override
-    public String getResult() {
-        // TODO Auto-generated method stub
-        return null;
+    public String getResult() throws Exception {
+        return mDjikstra.getResult();
     }
 
+    public void initialise(Graph g, Vertex start, Vertex end) {
+        mGraph = g;
+        mDjikstra = new Djikstra(g,start,end);
+    }
+    
     @Override
     public void initialise(Graph g) {
-        mGraph = g;
+        // No point in initialise graph without starting parameters
     }
 
     @Override
     public void step() {
-        // TODO Auto-generated method stub
-        
+        mDjikstra.step();        
     }
 
     @Override
     public void stepAll() {
-        // TODO Auto-generated method stub
-        
+        mDjikstra.iterate();
     }
 
 }

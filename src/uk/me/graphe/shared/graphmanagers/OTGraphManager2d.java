@@ -29,6 +29,4 @@ public interface OTGraphManager2d extends GraphManager2d {
     public void setStateId(int m);
     
     public CompositeOperation getCompleteHistory();
-
-    public void setHistory(List<GraphOperation> h);
 }
