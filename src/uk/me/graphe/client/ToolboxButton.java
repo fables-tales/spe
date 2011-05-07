@@ -69,6 +69,10 @@ public class ToolboxButton extends Button
 				this.setStyleName("btnGraphOptions");
 				this.setTitle("Set Graph Options");
 				break;
+			case cluster:
+				this.setStyleName("btnCluster");
+				this.setTitle("Cluster");
+				break;
 			case styleProcess:
 				this.setStyleName("btnProcess");
 				this.setTitle("Set Process Style");
