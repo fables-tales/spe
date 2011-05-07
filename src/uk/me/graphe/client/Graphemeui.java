@@ -6,6 +6,7 @@ import uk.me.graphe.client.algorithms.AutoLayout;
 import uk.me.graphe.client.communications.ServerChannel;
 import uk.me.graphe.client.dialogs.EdgeDialog;
 import uk.me.graphe.client.dialogs.GraphNameDialog;
+import uk.me.graphe.client.dialogs.GraphOptionsDialog;
 import uk.me.graphe.client.dialogs.HelpDialog;
 import uk.me.graphe.client.dialogs.ShareGraphDialog;
 import uk.me.graphe.client.dialogs.VertexDialog;
@@ -36,6 +37,7 @@ public class Graphemeui implements EntryPoint
     public final GraphNameDialog dialogGraphName;
     public final ShareGraphDialog dialogShareGraph;
     public final HelpDialog dialogHelp;
+    public final GraphOptionsDialog dialogGraphOptions;
     public final GraphInfo graphInfo;
     public final Toolbox tools;
     public final ToolInfo toolInfo;   
@@ -76,6 +78,7 @@ public class Graphemeui implements EntryPoint
     	dialogHelp = HelpDialog.getInstance(this);
     	dialogGraphName = GraphNameDialog.getInstance(this);
     	dialogShareGraph = ShareGraphDialog.getInstance(this);
+    	dialogGraphOptions = GraphOptionsDialog.getInstance(this);
     	toolInfo = new ToolInfo(this);
         canvas = new Canvas(this);
         chat = Chat.getInstance(this);
