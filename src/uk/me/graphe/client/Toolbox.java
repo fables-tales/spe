@@ -242,7 +242,6 @@ public class Toolbox extends Composite {
 			else if (parent.drawing.isDigraph() && !parent.drawing.isWeighted())
 			{
 				btnToggleEdgeDirection.setVisible(true);
-				btnDjikstra.setVisible(true);
 				pnlToolsAlgs.setVisible(true);
 			}
 			else if (!parent.drawing.isDigraph() && parent.drawing.isWeighted())
