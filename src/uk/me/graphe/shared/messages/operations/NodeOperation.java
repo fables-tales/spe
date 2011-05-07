@@ -40,4 +40,8 @@ public abstract class NodeOperation extends GraphOperation {
         return false;
     }
 
+    public boolean isStyleOperation() {
+        return false;
+    }
+
 }

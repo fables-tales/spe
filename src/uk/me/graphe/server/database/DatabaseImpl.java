@@ -7,11 +7,9 @@ import java.util.List;
 
 
 import uk.me.graphe.server.database.dbitems.*;
-import uk.me.graphe.shared.Edge;
-import uk.me.graphe.shared.Vertex;
 import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
-import uk.me.graphe.shared.graphmanagers.OTGraphManager2dImpl;
 import uk.me.graphe.shared.graphmanagers.OTGraphManagerFactory;
+import uk.me.graphe.shared.graphmanagers.OTStyleGraphManager2d;
 import uk.me.graphe.shared.jsonwrapper.JSONException;
 import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
 import uk.me.graphe.shared.jsonwrapper.JSONObject;
@@ -60,17 +58,23 @@ public class DatabaseImpl implements Database{
     }
     
     @Override
-    public OTGraphManager2d retrieve(int key) {
+    public OTStyleGraphManager2d retrieve(int key) {
         //  Extract OtGraphManagerStore from DB
         List<OTGraphManager2dStore> retrieves = mData.find(OTGraphManager2dStore.class, "id =", key).asList();
         if (retrieves == null || retrieves.size() != 1)
             return null;
         OTGraphManager2dStore retrieve = retrieves.get(0);
-        List<GraphOperation> operations = new ArrayList<GraphOperation>();
         List<JSONObject> objects = new LinkedList<JSONObject>();
         List<Message> messages = null;
-        if (retrieve.getmOps() == null)
-            return OTGraphManagerFactory.newInstance(key);
+        
+        OTStyleGraphManager2d toReturn = OTGraphManagerFactory.newInstance(key);
+        toReturn.setStateId(retrieve.getStateid());
+        toReturn.setName(retrieve.getName());
+        
+        
+        if (retrieve.getmOps() == null) {
+    		return toReturn;
+        }
         for (String s : retrieve.getmOps()) {
             do {
                 String toStrip = s.substring(s.indexOf('{'), s.indexOf('}')+1);
@@ -89,7 +93,6 @@ public class DatabaseImpl implements Database{
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        OTGraphManager2d toReturn = OTGraphManagerFactory.newInstance(key);
         for (Message item : messages) {
             // Store all operations as local, map to server in restoreState()
             System.out.println("Applying operation:" + item.toJson() +" to graph");
@@ -162,4 +165,13 @@ public class DatabaseImpl implements Database{
         }
         return storedOperations;
     }
+
+	@Override
+	public void rename(int id, String title) {
+		Query<OTGraphManager2dStore> updateQuery = mData.createQuery(OTGraphManager2dStore.class).filter("id =", id);
+        UpdateOperations<OTGraphManager2dStore> ops = 
+            mData.createUpdateOperations(OTGraphManager2dStore.class).set("name", title);
+        mData.update(updateQuery, ops);
+		
+	}
 }

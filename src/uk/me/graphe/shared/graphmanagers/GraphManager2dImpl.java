@@ -278,4 +278,25 @@ public class GraphManager2dImpl implements GraphManager2d {
     public VertexDrawable getVertexDrawable(String s) {
         return mVertexRenderMap.get(new Vertex(s));
     }
+
+    @Override
+    public void setVertexStyle(Vertex node, int mStyle) {
+        mVertexRenderMap.get(node).setStyle(mStyle);
+        this.invalidate();
+    }
+    
+    private String mName;
+    
+    @Override
+    public String getName() {
+        return mName;
+    }
+    
+    @Override
+    public void setName(String s) {
+        mName = s; 
+    }
+    
+    
+    
 }

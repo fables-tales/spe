@@ -7,6 +7,7 @@ import junit.framework.TestCase;
 import uk.me.graphe.client.VertexDrawable;
 import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
 import uk.me.graphe.shared.graphmanagers.OTGraphManagerFactory;
+import uk.me.graphe.shared.graphmanagers.OTStyleGraphManager2d;
 import uk.me.graphe.shared.messages.operations.AddEdgeOperation;
 import uk.me.graphe.shared.messages.operations.AddNodeOperation;
 import uk.me.graphe.shared.messages.operations.DeleteEdgeOperation;
@@ -16,7 +17,7 @@ import uk.me.graphe.shared.messages.operations.NoOperation;
 
 public class OTGraphManagerTest extends TestCase {
 
-    private OTGraphManager2d mManager;
+    private OTStyleGraphManager2d mManager;
 
     @Override
     protected void setUp() throws Exception {

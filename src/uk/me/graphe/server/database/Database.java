@@ -1,6 +1,7 @@
 package uk.me.graphe.server.database;
 
 import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
+import uk.me.graphe.shared.graphmanagers.OTStyleGraphManager2d;
 
 public interface Database {
     
@@ -22,7 +23,7 @@ public interface Database {
      * 
      * @return the requested graph
      */  
-    public OTGraphManager2d retrieve (int key);
+    public OTStyleGraphManager2d retrieve (int key);
     
     /**
      * deletes the graphmanager with matching key
@@ -42,4 +43,11 @@ public interface Database {
      * @return number of objects
      */
     int size();
+    
+    /**
+     * renames the graph with the given id to the given string
+     * @param id Id of graph
+     * @param title Name to be set to
+     */
+    void rename(int id, String title);
 }
