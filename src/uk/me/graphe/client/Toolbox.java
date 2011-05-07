@@ -128,6 +128,16 @@ public class Toolbox extends Composite {
 			case graphOptions:
 				parent.dialogGraphOptions.show("");
 				break;
+			case toggleEdgeDirection:
+				if (parent.selectedEdges.size() > 0)
+				{
+					//TODO: implement
+				}
+				else
+				{
+					parent.dialogHelp.show("You must have at least one edge highlighted to toggle the direction of.");
+				}
+				break;
 			case djikstra:
 				if(parent.selectedVertices.size() == 2)
 				{
