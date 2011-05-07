@@ -34,6 +34,7 @@ public class ToolInfo extends Composite {
 		btnHelpToggle.addStyleName("btnHelpOff");
 		
 		btnHelpToggle.setStyleName("btnHelpOn");
+		btnHelpToggle.setTitle("Toggle help");
 		
 		btnHelpToggle.addClickHandler(new ClickHandler()
 		{
