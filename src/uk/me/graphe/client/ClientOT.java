@@ -200,6 +200,7 @@ public class ClientOT {
             	UserAuthMessage uam = (UserAuthMessage)m;
             	if(uam.isAuthd()){
             	    //show graph list
+            	    UserPanel.requestGraphList();
             	}else if(uam.getEmailAddress() == null){
                 	String reUrl = uam.getRedirectionUrl();
                     Window.Location.assign(reUrl);
@@ -214,7 +215,7 @@ public class ClientOT {
 
         }
         Console.log("I have this many vertices:");
-        Console.log("" + mGraph.getVertexDrawables().size());
+        //Console.log("" + mGraph.getVertexDrawables().size());
 
         Console.log("done handling messages");
 
