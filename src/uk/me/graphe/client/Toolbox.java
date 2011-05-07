@@ -125,10 +125,8 @@ public class Toolbox extends Composite {
 				parent.doAutoLayout();
 				this.setTool(Tools.select);
 				break;
-			case cluster:
-				// TODO: Implement
+			case graphOptions:
 				parent.dialogGraphOptions.show("");
-				this.setTool(Tools.select);
 				break;
 			case djikstra:
 				if(parent.selectedVertices.size() == 2)
