@@ -273,6 +273,8 @@ public class Graphemeui implements EntryPoint
     
     public void editGraphName(String name)
     {
+    	graphManager.setName(name);
+    	graphInfo.update();
     	//TODO: send name over OT.
     }
     
@@ -281,7 +283,7 @@ public class Graphemeui implements EntryPoint
 		drawing.setIsFlowChart(isFlowChart);
 		drawing.setIsDigraph(isDigraph);
 		drawing.setIsWeighted(isWeighted);
-		
+		graphInfo.update();
 		graphManager.invalidate();
     	
     	//TODO: Send the boolean parameters to the database and over OT to the other clients.
