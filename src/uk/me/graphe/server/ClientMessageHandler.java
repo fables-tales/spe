@@ -115,15 +115,15 @@ public class ClientMessageHandler extends Thread {
         } else if (message.getMessage().equals("chat")){
         	System.err.println("got cm");
         	ChatMessage cm = (ChatMessage) message;
-        	for (Client otherClients : ClientManager.getInstance().clientsForGraph(1)) {
+        	for (Client otherClients : ClientManager.getInstance().clientsForGraph(c.getCurrentGraphId())) {
         		if (c != otherClients) ClientMessageSender.getInstance().sendMessage(otherClients, cm);
         	}
         } else if (message.getMessage().equals("setNameForId")) {
             SetNameForIdMessage snfi = (SetNameForIdMessage) message;
             DataManager.renameGraph(snfi.getId(), snfi.getTitle());
-            List<Client> clients = ClientManager.getInstance().getClientsWith(snfi.getId());
+            List<Client> clients = ClientManager.getInstance().clientsForGraph(snfi.getId());
             for (Client cOut : clients) {
-                ClientMessageSender.getInstance().sendMessage(c, snfi);
+                ClientMessageSender.getInstance().sendMessage(cOut, snfi);
             }
         } else if (message.isOperation()) {
             mProcessor.submit(c, (GraphOperation) message);

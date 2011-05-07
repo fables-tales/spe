@@ -22,6 +22,7 @@ import uk.me.graphe.shared.messages.StateIdMessage;
 import uk.me.graphe.shared.messages.operations.AddEdgeOperation;
 import uk.me.graphe.shared.messages.operations.AddNodeOperation;
 import uk.me.graphe.shared.messages.operations.CompositeOperation;
+import uk.me.graphe.shared.messages.operations.DeleteEdgeOperation;
 import uk.me.graphe.shared.messages.operations.GraphOperation;
 
 
@@ -152,6 +153,18 @@ public class DataManagerNetworkTest extends TestCase {
         Assert.assertFalse(ed.needsToFromArrow());
     }
     
+    public void testRemoveEdge_noEdges() {
+        VertexDirection vd = VertexDirection.fromTo;
+        EdgeDrawable ed = makeServerEdge(vd);
+        Vertex a = new Vertex("bees");
+        Vertex b = new Vertex("faces");
+        mClient.sendMessage(new DeleteEdgeOperation(new Edge(a,b)));
+        Message m = mClient.readNextMessage();
+        
+        OTGraphManager2d serverGraph = DataManager.getGraph(id);
+        Assert.assertEquals(0, serverGraph.getEdgeDrawables().size());
+    }
+    
     public void testAddEdge_noEdges_weight() {
         EdgeDrawable ed = makeServerEdge(VertexDirection.both, 12);
         Assert.assertEquals(12, ed.getWeight());
@@ -162,12 +175,16 @@ public class DataManagerNetworkTest extends TestCase {
         return makeServerEdge(vd, 1);
     }
     
+    private int id;
+    
     private EdgeDrawable makeServerEdge(VertexDirection vd, int weight) {
         mClient.sendMessage(new MakeGraphMessage());
         Message m = mClient.readNextMessage();
         OpenGraphMessage ogr = (OpenGraphMessage)m;
         OTGraphManager2d g = OTGraphManagerFactory.newInstance(ogr.getId());
         assertNullCompositeOperation();
+        
+        id = ogr.getId();
         
         m = mClient.readNextMessage();
         Assert.assertEquals("updateStateId", m.getMessage());

@@ -30,25 +30,22 @@ public class GraphManager2dImpl implements GraphManager2d {
         if (GWT.isClient()) {
             Console.log("graphmanager2d constructed");
         }
-        
+
         mName = "Untitled graph";
     }
-    
+
     @Override
-    public boolean isEdgeBetween(Vertex v1, Vertex v2)
-    {
-    	boolean result = false;
-    	
-    	for (Edge e : mVertexEdgeMap.get(v1))
-    	{
-    		if (e.getToVertex().equals(v2))
-    		{
-    			result = true;
-    			break;
-    		}
-    	}
-    	
-    	return result;
+    public boolean isEdgeBetween(Vertex v1, Vertex v2) {
+        boolean result = false;
+
+        for (Edge e : mVertexEdgeMap.get(v1)) {
+            if (e.getToVertex().equals(v2)) {
+                result = true;
+                break;
+            }
+        }
+
+        return result;
     }
 
     @Override
@@ -59,7 +56,7 @@ public class GraphManager2dImpl implements GraphManager2d {
             mEdges.add(e);
             mVertexEdgeMap.get(v1).add(e);
             mVertexEdgeMap.get(v2).add(e);
-            
+
             VertexDrawable vd1 = mVertexRenderMap.get(e.getFromVertex());
             VertexDrawable vd2 = mVertexRenderMap.get(e.getToVertex());
             int l1 = vd1.getCenterX();
@@ -78,11 +75,11 @@ public class GraphManager2dImpl implements GraphManager2d {
                 t2 ^= t1;
                 t1 ^= t2;
             }
-            
-            mEdgeRenderMap.put(e, new EdgeDrawable(l1, t1, l2, t2, e.getWeight(), e
-                    .getDirection()));
+
+            mEdgeRenderMap.put(e, new EdgeDrawable(l1, t1, l2, t2, e
+                    .getWeight(), e.getDirection()));
         }
-        
+
         this.invalidate();
     }
 
@@ -127,7 +124,7 @@ public class GraphManager2dImpl implements GraphManager2d {
 
         return null;
     }
-    
+
     @Override
     public EdgeDrawable getEdgeDrawableAt(int x, int y) {
         for (EdgeDrawable ed : mEdgeRenderMap.values()) {
@@ -141,15 +138,15 @@ public class GraphManager2dImpl implements GraphManager2d {
     public Collection<EdgeDrawable> getEdgeDrawables() {
         return Collections.unmodifiableCollection(mEdgeRenderMap.values());
     }
-    
+
     @Override
-    public EdgeDrawable getDrawableFromEdge(Edge e){
-		return mEdgeRenderMap.get(e);    	
+    public EdgeDrawable getDrawableFromEdge(Edge e) {
+        return mEdgeRenderMap.get(e);
     }
-    
+
     @Override
-	public VertexDrawable getDrawableFromVertex(Vertex v){
-    	return mVertexRenderMap.get(v);
+    public VertexDrawable getDrawableFromVertex(Vertex v) {
+        return mVertexRenderMap.get(v);
     }
 
     @Override
@@ -170,25 +167,21 @@ public class GraphManager2dImpl implements GraphManager2d {
         int left = xPosition - halfWidth;
         int top = yPosition - halfHeight;
         vd.updateBoundingRectangle(left, top, vd.getWidth(), vd.getHeight());
-        
-        //update edges
-        //VertexDrawable vd1 = mVertexRenderMap.get(e.getFromVertex());
-        for (Edge e : mVertexEdgeMap.get(v))
-        {
-        	EdgeDrawable ed = mEdgeRenderMap.get(e);
-        	
-        	if (v.equals(e.getFromVertex()))
-        	{
-        		ed.setStartX(vd.getCenterX());
-        		ed.setStartY(vd.getCenterY());
-        	}
-        	else
-        	{
-        		ed.setEndX(vd.getCenterX());
-        		ed.setEndY(vd.getCenterY());
-        	}
+
+        // update edges
+        // VertexDrawable vd1 = mVertexRenderMap.get(e.getFromVertex());
+        for (Edge e : mVertexEdgeMap.get(v)) {
+            EdgeDrawable ed = mEdgeRenderMap.get(e);
+
+            if (v.equals(e.getFromVertex())) {
+                ed.setStartX(vd.getCenterX());
+                ed.setStartY(vd.getCenterY());
+            } else {
+                ed.setEndX(vd.getCenterX());
+                ed.setEndY(vd.getCenterY());
+            }
         }
-        
+
         this.invalidate();
     }
 
@@ -210,43 +203,42 @@ public class GraphManager2dImpl implements GraphManager2d {
 
     @Override
     public void removeEdge(Edge e) {
+        if (GWT.isClient()) Console.log("removing edge e: "  +e);
         mEdges.remove(e);
-        
-        mEdgeRenderMap.remove(e);       
+        mEdgeRenderMap.remove(e);
         mVertexEdgeMap.get(e.getFromVertex()).remove(e);
         mVertexEdgeMap.get(e.getToVertex()).remove(e);
-        
         this.invalidate();
     }
 
     @Override
-    public void removeVertex(Vertex v)
-    {        
+    public void removeVertex(Vertex v) {
         mVertices.remove(v);
         mVertexRenderMap.remove(v);
-        
+
         if (mVertexEdgeMap.containsKey(v)) {
-            if (GWT.isClient()) Console.log("Vertex " + v.getLabel() + "has " + String.valueOf(mVertexEdgeMap.get(v).size()) + " edges");
-            for (Edge e : mVertexEdgeMap.get(v))
-            {
-            	if (GWT.isClient()) Console.log("Remove edge: " + e.getFromVertex().getLabel() + " to "+ e.getToVertex().getLabel());
+            if (GWT.isClient())
+                Console.log("Vertex " + v.getLabel() + "has "
+                        + String.valueOf(mVertexEdgeMap.get(v).size())
+                        + " edges");
+            for (Edge e : mVertexEdgeMap.get(v)) {
+                if (GWT.isClient())
+                    Console.log("Remove edge: " + e.getFromVertex().getLabel()
+                            + " to " + e.getToVertex().getLabel());
                 mEdges.remove(e);
                 if (GWT.isClient()) Console.log("Removed from edges list");
                 mEdgeRenderMap.remove(e);
-                
-                if (e.getToVertex().equals(v))
-                {
-                	mVertexEdgeMap.get(e.getFromVertex()).remove(e);
-                }
-                else
-                {
-                	mVertexEdgeMap.get(e.getToVertex()).remove(e);
+
+                if (e.getToVertex().equals(v)) {
+                    mVertexEdgeMap.get(e.getFromVertex()).remove(e);
+                } else {
+                    mVertexEdgeMap.get(e.getToVertex()).remove(e);
                 }
             }
 
             mVertexEdgeMap.remove(v);
         }
-        
+
         this.invalidate();
     }
 
@@ -269,7 +261,7 @@ public class GraphManager2dImpl implements GraphManager2d {
         }
         return null;
     }
-    
+
     public Edge getEdgeFromDrawable(EdgeDrawable ed) {
         for (Edge e : mEdges) {
             if (mEdgeRenderMap.get(e) == ed) {
@@ -278,17 +270,19 @@ public class GraphManager2dImpl implements GraphManager2d {
         }
         return null;
     }
-    
+
     public boolean isDirectedEdgeBetweenVertices(Vertex v1, Vertex v2) {
-    	boolean b = false;
-    	for (Edge e: mEdges) {
-    		if((e.getFromVertex() == v1 && e.getToVertex() == v2 && e.getDirection() == VertexDirection.fromTo)
-    				|| (e.getFromVertex() == v2 && e.getToVertex() == v1 && e.getDirection() == VertexDirection.toFrom)){
-    			b = true;
-    			break;
-    		}
-    	}
-    	return b;
+        boolean b = false;
+        for (Edge e : mEdges) {
+            if ((e.getFromVertex() == v1 && e.getToVertex() == v2 && e
+                    .getDirection() == VertexDirection.fromTo)
+                    || (e.getFromVertex() == v2 && e.getToVertex() == v1 && e
+                            .getDirection() == VertexDirection.toFrom)) {
+                b = true;
+                break;
+            }
+        }
+        return b;
     }
 
     public void invalidate() {
@@ -301,36 +295,52 @@ public class GraphManager2dImpl implements GraphManager2d {
     public VertexDrawable getVertexDrawable(String s) {
         return mVertexRenderMap.get(new Vertex(s));
     }
-    
+
     /*
      * checks if a vertex name is already taken
      */
-    public boolean isVertexNameAvailable(String s){
-    	boolean b = true;
-    	for(Vertex v : mVertices) {
-    		if(v.toString().equals(s)){
-    			b = false;
-    			break;
-    		}
-    	}
-    	return b;
-	}
+    public boolean isVertexNameAvailable(String s) {
+        boolean b = true;
+        for (Vertex v : mVertices) {
+            if (v.toString().equals(s)) {
+                b = false;
+                break;
+            }
+        }
+        return b;
+    }
 
     @Override
     public void setVertexStyle(Vertex node, int mStyle) {
         mVertexRenderMap.get(node).setStyle(mStyle);
         this.invalidate();
     }
-    
+
     private String mName;
-    
+
     @Override
     public String getName() {
         return mName;
     }
-    
+
     @Override
     public void setName(String s) {
-        mName = s; 
+        mName = s;
     }
+
+    @Override
+    public void setEdgeWeight(EdgeDrawable ed, int weight) {
+        for (Edge e : mEdgeRenderMap.keySet()) {
+            if (mEdgeRenderMap.get(e).equals(ed)) {
+                e.setWeight(weight);
+                mEdgeRenderMap.remove(e);
+                ed.setWeight(weight);
+                mEdgeRenderMap.put(e, ed);
+
+            }
+
+        }
+
+    }
+
 }

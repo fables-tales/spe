@@ -61,8 +61,11 @@ public class Graphemeui implements EntryPoint
 	private static final int X = 0, Y = 1;
 
 	private AutoLayout lay;
+	
+	
 
-    public Graphemeui() {
+	public Graphemeui() {
+	    
         graphManagerFactory = GraphManager2dFactory.getInstance();
         graphManager = graphManagerFactory.makeDefaultGraphManager();
         graphManager.addRedrawCallback(new Runnable() {
@@ -170,6 +173,7 @@ public class Graphemeui implements EntryPoint
                 
         ServerChannel sc = ServerChannel.getInstance();
         ClientOT.getInstance().setOperatingGraph(this.graphManager);
+        ClientOT.getInstance().passGraphemeUiInstance(this);
         sc.init();
         
     }
@@ -255,20 +259,20 @@ public class Graphemeui implements EntryPoint
     	graphManager.invalidate();
     }
     
-    public void editEdgeWeight(String weight)
+    public void editEdgeWeight(int weight)
     {
-    	//TODO: implement - edit edge weight locally and over OT too. Remember you need to edit the
-    	// edge and the edge drawable label.  Keep the invalidate to redraw
     	EdgeDrawable ed = selectedEdges.get(0);
-    	
+    	graphManager.setEdgeWeight(ed, weight);
+    	Edge e = graphManager.getEdgeFromDrawable(ed);
+    	ClientOT.getInstance().notifyRemoveEdge(e);
+    	ClientOT.getInstance().notifyAddEdge(e.getFromVertex(), e.getToVertex(), e.getDirection(), e.getWeight());
     	graphManager.invalidate();
     }
     
     public void editGraphName(String name)
     {
     	updateGraphName(name);
-    	
-    	//TODO: send name over OT.
+    	ClientOT.getInstance().notifyNewName(name);
     }
     
     public void editGraphProperties(boolean isDigraph, boolean isFlowChart, boolean isWeighted)
