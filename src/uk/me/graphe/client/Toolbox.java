@@ -133,7 +133,7 @@ public class Toolbox extends Composite {
 			case toggleEdgeDirection:
 				if (parent.selectedEdges.size() > 0)
 				{
-					//TODO: implement
+					parent.toggleEdgeDirection();
 				}
 				else
 				{
