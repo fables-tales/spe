@@ -74,6 +74,7 @@ public class Graphemeui implements EntryPoint
                 // here!
             }
         });
+        drawing = new DrawingImpl();
         
     	dialogVertex = VertexDialog.getInstance(this);
     	dialogEdge = EdgeDialog.getInstance(this);
@@ -85,11 +86,11 @@ public class Graphemeui implements EntryPoint
         canvas = new Canvas(this);
         chat = Chat.getInstance(this);
         graphInfo = new GraphInfo(this);
-        drawing = new DrawingImpl();
         tools = new Toolbox(this);
         tooltip = new CanvasTooltip(this);
+        
         drawing.setOffset(0, 0);
-        drawing.setZoom(1);
+        drawing.setZoom(1);     
         
     	selectedVertices = new ArrayList<VertexDrawable>();
     	selectedEdges = new ArrayList<EdgeDrawable>();
@@ -361,14 +362,14 @@ public class Graphemeui implements EntryPoint
         return false;
     }
         
-    // TODO: Call this when ANOTHER CLIENT updates the graph name.
+    // TODO: Call this when ANOTHER CLIENT updates the graph name. This NEEDS to be called on first graph load too.
     public void updateGraphName(String name)
     {
     	graphManager.setName(name);
     	graphInfo.update();
     }
     
-    // TODO: Call this when ANOTHER CLIENT updates the graph properties.
+    // TODO: Call this when ANOTHER CLIENT updates the graph properties. This NEEDS to be called on first graph load too.
     public void updateGraphProperties(boolean isDigraph, boolean isWeighted, boolean isFlowChart)
     {
 		drawing.setIsFlowChart(isFlowChart);
