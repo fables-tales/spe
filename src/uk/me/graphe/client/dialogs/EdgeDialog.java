@@ -9,6 +9,7 @@ import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -99,7 +100,11 @@ public class EdgeDialog extends PopupPanel
 		{
 			if (isEdit)
 			{
-				parent.editEdgeWeight(txtParam.getText());
+			    try {
+			        parent.editEdgeWeight(Integer.parseInt(txtParam.getText()));
+			    } catch (NumberFormatException nfe) {
+			        Window.alert("invalid weight entered");
+			    }
 			}
 			else
 			{
