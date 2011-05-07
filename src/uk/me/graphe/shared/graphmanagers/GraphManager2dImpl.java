@@ -267,6 +267,18 @@ public class GraphManager2dImpl implements GraphManager2d {
         }
         return null;
     }
+    
+    public boolean isDirectedEdgeBetweenVertices(Vertex v1, Vertex v2) {
+    	boolean b = false;
+    	for (Edge e: mEdges) {
+    		if((e.getFromVertex() == v1 && e.getToVertex() == v2 && e.getDirection() == VertexDirection.fromTo)
+    				|| (e.getFromVertex() == v2 && e.getToVertex() == v1 && e.getDirection() == VertexDirection.toFrom)){
+    			b = true;
+    			break;
+    		}
+    	}
+    	return b;
+    }
 
     public void invalidate() {
         for (final Runnable r : mRedrawCallbacks) {
@@ -278,6 +290,20 @@ public class GraphManager2dImpl implements GraphManager2d {
     public VertexDrawable getVertexDrawable(String s) {
         return mVertexRenderMap.get(new Vertex(s));
     }
+    
+    /*
+     * checks if a vertex name is already taken
+     */
+    public boolean isVertexNameAvailable(String s){
+    	boolean b = true;
+    	for(Vertex v : mVertices) {
+    		if(v.toString().equals(s)){
+    			b = false;
+    			break;
+    		}
+    	}
+    	return b;
+	}
 
     @Override
     public void setVertexStyle(Vertex node, int mStyle) {
