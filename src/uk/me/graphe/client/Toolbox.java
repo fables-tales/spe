@@ -68,7 +68,10 @@ public class Toolbox extends Composite {
 		pnlToolsAlgsRun.add(btnStep);
 		pnlToolsAlgsRun.add(btnStepAll);
 		
-		pnlToolsOptions.add(btnGraphOptions);
+		pnlToolsOptions.add(btnGraphOptions);		
+		
+		pnlToolsFlowStyle.setVisible(false);
+		pnlToolsAlgsRun.setVisible(false);
 		
 		setTool(Tools.select);
 	}
@@ -138,11 +141,9 @@ public class Toolbox extends Composite {
 				}
 				break;
 			case djikstra:
-				if(parent.selectedVertices.size() == 2)
+				if((parent.selectedVertices.size() == 2) && parent.spDjikstra.hasFinished())
 				{
-					//TODO: here
-					//pnlTools5.setVisible(true);
-					//pnlTools4.setVisible(false);
+					pnlToolsAlgsRun.setVisible(true);
 					parent.spDjikstra.initialise(parent.graphManager.getUnderlyingGraph(), 
 							parent.graphManager.getVertexFromDrawable(parent.selectedVertices.get(0)), 
 							parent.graphManager.getVertexFromDrawable(parent.selectedVertices.get(1)));
@@ -154,7 +155,6 @@ public class Toolbox extends Composite {
 				}
 				break;
 			case step:
-				//TODO: pnlTools5.setVisible(true);
 				parent.spDjikstra.step();
 				EdgeDrawable ed;
 				VertexDrawable vd;
@@ -170,11 +170,10 @@ public class Toolbox extends Composite {
 					parent.selectedVertices.add(vd);
 				}
 				if(parent.spDjikstra.hasFinished()){
-					//TODO: bring up dialog
+					//TODO: bring up dialog, hide pnl of step and stepall In on dialog close unhighlight nodes.
 				}
 				break;
 			case stepAll:
-				//TODO: pnlTools5.setVisible(true);
 				parent.spDjikstra.stepAll();
 				EdgeDrawable ed1;
 				VertexDrawable vd1;
@@ -189,7 +188,7 @@ public class Toolbox extends Composite {
 					vd1.setHilighted(true);
 					parent.selectedVertices.add(vd1);
 				}
-				//TODO: bring up dialog
+				//TODO: bring up dialog hide pnl of step and stepall. In on dialog close unhighlight nodes.
 				break;
 			case styleProcess:
 				parent.setSelectedSyle(VertexDrawable.STROKED_SQUARE_STYLE,
