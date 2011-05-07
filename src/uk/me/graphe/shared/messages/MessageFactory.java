@@ -25,6 +25,7 @@ import uk.me.graphe.shared.messages.factories.SetStyleFactory;
 import uk.me.graphe.shared.messages.factories.StateIdFactory;
 import uk.me.graphe.shared.messages.factories.UserAuthFactory;
 import uk.me.graphe.shared.messages.factories.GraphListFactory;
+import uk.me.graphe.shared.messages.factories.AddPrivsFactory;
 
 public abstract class MessageFactory {
     private static Map<String, ConversionFactory> sOpFactoryMap = null;
@@ -47,6 +48,7 @@ public abstract class MessageFactory {
         sOpFactoryMap.put("chat", new ChatFactory());
         sOpFactoryMap.put("userAuth", new UserAuthFactory());
         sOpFactoryMap.put("graphList", new GraphListFactory());
+        sOpFactoryMap.put("addPrivs", new AddPrivsFactory());
         sOpFactoryMap.put("setStyle", new SetStyleFactory());
         sOpFactoryMap.put("setNameForId", new SetNameForIdFactory());
     }

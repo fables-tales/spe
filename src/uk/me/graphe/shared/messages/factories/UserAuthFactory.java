@@ -15,7 +15,9 @@ public class UserAuthFactory implements ConversionFactory{
             String emailAdd = o.getString("emailAdd");
             String openIdUrl = o.getString("openIdUrl");
             String authKey = o.getString("authKey");
-            return new UserAuthMessage(opUrl, reUrl, emailAdd, openIdUrl, authKey);
+            String identity = o.getString("identity");
+            String authd = o.getString("authd");
+            return new UserAuthMessage(opUrl, reUrl, emailAdd, openIdUrl, authKey, identity, authd);
         } catch (JSONException e) {
             throw new Error(e);
         }

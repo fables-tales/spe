@@ -14,6 +14,7 @@ import uk.me.graphe.shared.jsonwrapper.JSONObject;
 import uk.me.graphe.shared.messages.ChatMessage;
 import uk.me.graphe.shared.messages.GraphListMessage;
 import uk.me.graphe.shared.messages.UserAuthMessage;
+import uk.me.graphe.shared.messages.AddPrivsMessage;
 import uk.me.graphe.shared.messages.Message;
 import uk.me.graphe.shared.messages.MessageFactory;
 import uk.me.graphe.shared.messages.NoSuchGraphMessage;
@@ -186,7 +187,11 @@ public class ClientMessageHandler extends Thread {
             for (Client cOut : clients) {
                 ClientMessageSender.getInstance().sendMessage(c, snfi);
             }
-        } else if (message.isOperation()) {
+        } else if (message.getMessage().equals("addPrivs")){
+            AddPrivsMessage apm = (AddPrivsMessage) message;
+            mUserDatabase.setGraphsToUsers(apm.getEmailAddress(),c.getUserId());
+        }
+            else if (message.isOperation()) {
             mProcessor.submit(c, (GraphOperation) message);
         } else {
             throw new Error("got unexpected message from client");

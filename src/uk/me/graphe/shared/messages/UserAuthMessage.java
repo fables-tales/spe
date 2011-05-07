@@ -11,6 +11,8 @@ public class UserAuthMessage extends Message {
 	private String emailAdd = null;
 	private String openIdUrl = null;
 	private String authKey = null;
+	private String identity = null;
+	private String authd = null;
 		
 	public UserAuthMessage(String opUrl){
 		this.opUrl = opUrl;
@@ -40,7 +42,26 @@ public class UserAuthMessage extends Message {
 		this.emailAdd = emailAdd;
 		this.openIdUrl = openIdUrl;
 		this.authKey = authKey;
-	}	
+	}
+	
+    public UserAuthMessage(String opUrl, String reUrl, String emailAdd, String openIdUrl, String authKey, String identity){
+        this.opUrl = opUrl;
+        this.reUrl = reUrl;
+        this.emailAdd = emailAdd;
+        this.openIdUrl = openIdUrl;
+        this.authKey = authKey;
+        this.identity = identity;
+    }   
+    
+    public UserAuthMessage(String opUrl, String reUrl, String emailAdd, String openIdUrl, String authKey, String identity, String authd){
+        this.opUrl = opUrl;
+        this.reUrl = reUrl;
+        this.emailAdd = emailAdd;
+        this.openIdUrl = openIdUrl;
+        this.authKey = authKey;
+        this.identity = identity;
+        this.authd = authd;
+    }   
 	
 	public UserAuthMessage(){
 		
@@ -61,6 +82,8 @@ public class UserAuthMessage extends Message {
             repr.put("emailAdd", emailAdd);
             repr.put("openIdUrl", openIdUrl);
             repr.put("authKey", authKey);
+            repr.put("identity", identity);
+            repr.put("authd", authd);
         } catch (JSONException jse) {
             throw new Error(jse);
         }
@@ -105,6 +128,28 @@ public class UserAuthMessage extends Message {
 	
 	public void setAuthKey(String inp) {
 		authKey = inp;
+	}
+	
+	public String getId(){
+	    return identity;
+	}
+	
+	public void setId(String inp){
+	    identity = inp;
+	}
+	
+	public void setAuthd(boolean inp){
+	    if(inp)
+	        authd = "true";
+	    else
+	        authd = "false";
+	}
+	
+	public boolean isAuthd(){
+	    if(authd == "true")
+	        return true;
+	    else
+	        return false;
 	}
 	
 }
