@@ -662,9 +662,9 @@ public class DrawingImpl implements Drawing {
 
         int aOff = 0;
         if (pos == 1)
-            aOff = 20;
+            aOff = (int) height;
         if (pos == 2)
-            aOff = 20;
+            aOff = (int) height;
 
         int startIndex = verticesIndex();
         double halfHeight = (height / 2);
