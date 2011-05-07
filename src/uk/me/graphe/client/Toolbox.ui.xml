@@ -19,5 +19,6 @@
 	    <g:HorizontalPanel styleName='{style.pnlTools}' ui:field="pnlTools2" />	   
 	    <g:HorizontalPanel styleName='{style.pnlTools}' ui:field="pnlTools3" />
 	    <g:HorizontalPanel styleName='{style.pnlTools}' ui:field="pnlTools4" /> 
+	    <g:HorizontalPanel styleName='{style.pnlTools}' ui:field="pnlTools5" /> 
     </g:HorizontalPanel>
 </ui:UiBinder>

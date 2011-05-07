@@ -3,6 +3,7 @@ package uk.me.graphe.client;
 import java.util.ArrayList;
 
 import uk.me.graphe.client.algorithms.AutoLayout;
+import uk.me.graphe.client.algorithms.ShortestPathDjikstras;
 import uk.me.graphe.client.communications.ServerChannel;
 import uk.me.graphe.client.dialogs.EdgeDialog;
 import uk.me.graphe.client.dialogs.GraphNameDialog;
@@ -44,6 +45,7 @@ public class Graphemeui implements EntryPoint
     public final GraphManager2d graphManager;
     public final GraphManager2dFactory graphManagerFactory;
     public final Drawing drawing;
+    public final ShortestPathDjikstras spDjikstra;
     
     private LocalStore mStore;
     
@@ -93,7 +95,9 @@ public class Graphemeui implements EntryPoint
     	selectedEdges = new ArrayList<EdgeDrawable>();
     	isHotkeysEnabled = true;
     	isHelpEnabled = false;
-    	
+
+    	// Algorithms here
+    	spDjikstra = new ShortestPathDjikstras();
     	lay = new AutoLayout(graphManager);
     }
     
@@ -369,13 +373,6 @@ public class Graphemeui implements EntryPoint
         }
 
         return false;
-    }
-    
-    public void userWentOffline(String user)
-    {
-    	// TODO: Implement this function and change the Server to call this function
-    	// 		 when another client disconnects from the graph. This function lets the 
-    	//		 chat and other things know it's happend.
     }
     
 	public void zoomIn() {
