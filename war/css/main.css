@@ -321,3 +321,24 @@ h1 {
 .btnHelpOff:hover {
   background: url(../images/helpOffH.png) left center no-repeat;
 }
+
+.optionsDialog {
+  background-color: #fff;
+  border: 3px solid #c6d1df;
+  font: bold 15px arial;
+  padding: 4px 8px;  
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  opacity:0.8;
+  filter:alpha(opacity=80);
+}
+
+.optionsDialog label {
+  font: normal 13px arial;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
+.optionsDialog input {
+  margin: 5px 0;
+}
