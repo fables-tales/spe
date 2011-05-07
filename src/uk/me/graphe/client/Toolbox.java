@@ -131,6 +131,7 @@ public class Toolbox extends Composite {
 							parent.graphManager.getVertexFromDrawable(parent.selectedVertices.get(0)), 
 							parent.graphManager.getVertexFromDrawable(parent.selectedVertices.get(1)));
 				}
+				break;
 			case step:
 				parent.spDjikstra.step();
 				EdgeDrawable ed;
@@ -149,6 +150,7 @@ public class Toolbox extends Composite {
 				if(parent.spDjikstra.hasFinished()){
 					//TODO: bring up dialog
 				}
+				break;
 			case stepAll:
 				parent.spDjikstra.stepAll();
 				EdgeDrawable ed1;
@@ -165,6 +167,7 @@ public class Toolbox extends Composite {
 					parent.selectedVertices.add(vd1);
 				}
 				//TODO: bring up dialog
+				break;
 			case styleProcess:
 				parent.setSelectedSyle(VertexDrawable.STROKED_SQUARE_STYLE,
 				        Graphemeui.VERTEX_SIZE*2,Graphemeui.VERTEX_SIZE);
