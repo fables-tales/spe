@@ -143,21 +143,21 @@ public class Graphemeui implements EntryPoint
                             tools.setTool(Tools.zoom);
                             break;
                         case 68: // d
-                            Window.open(drawing.getUrl(), "_blank", null);
+                            //Window.open(drawing.getUrl(), "_blank", null);
                             break;
                         case 71: // g
-                            Window.prompt("DOT graph Code", GraphString.getDot(graphManager, "Grapheme",true,true));
+                            //Window.prompt("DOT graph Code", GraphString.getDot(graphManager, "Grapheme",true,true));
                             break;
                         case 73: // i
                             // import graph code
-                            String graphCode = Window.prompt("DOT graph Code","");
-                            if(graphCode != null)GraphString.addDot(graphManager, graphCode);
+                            //String graphCode = Window.prompt("DOT graph Code","");
+                            //if(graphCode != null)GraphString.addDot(graphManager, graphCode);
                             // GraphString.addDot(graphManager, graphCode) will return false
                             // if error detected in code
                             break;
                         case 87:// w
-                            drawing.toggle2d();
-                            graphManager.invalidate();
+                            //drawing.toggle2d();
+                            //graphManager.invalidate();
                             break;
 						case KeyCodes.KEY_DELETE:
 							tools.setTool(Tools.delete);
@@ -170,12 +170,11 @@ public class Graphemeui implements EntryPoint
 		};
 
         RootPanel.get().addDomHandler(khHotkeys, KeyUpEvent.getType());
-                
+        
         ServerChannel sc = ServerChannel.getInstance();
         ClientOT.getInstance().setOperatingGraph(this.graphManager);
         ClientOT.getInstance().passGraphemeUiInstance(this);
         sc.init();
-        
     }
     
     
