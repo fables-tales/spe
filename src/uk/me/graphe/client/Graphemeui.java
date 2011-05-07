@@ -256,15 +256,24 @@ public class Graphemeui implements EntryPoint
     public void editNodeName(String name)
     {
     	//TODO: implement - edit node name locally and over OT too. Remember you need to edit the
-    	// vertex and the vertex drawable label.
+    	// vertex and the vertex drawable label. Keep the invalidate to redraw
     	VertexDrawable vd = selectedVertices.get(0);
+    	
+    	graphManager.invalidate();
     }
     
     public void editEdgeWeight(String weight)
     {
     	//TODO: implement - edit edge weight locally and over OT too. Remember you need to edit the
-    	// edge and the edge drawable label.
+    	// edge and the edge drawable label.  Keep the invalidate to redraw
     	EdgeDrawable ed = selectedEdges.get(0);
+    	
+    	graphManager.invalidate();
+    }
+    
+    public void editGraphName(String name)
+    {
+    	//TODO: send name over OT.
     }
     
     public void editGraphProperties(boolean isDigraph, boolean isFlowChart, boolean isWeighted)
@@ -272,6 +281,8 @@ public class Graphemeui implements EntryPoint
 		drawing.setIsFlowChart(isFlowChart);
 		drawing.setIsDigraph(isDigraph);
 		drawing.setIsWeighted(isWeighted);
+		
+		graphManager.invalidate();
     	
     	//TODO: Send the boolean parameters to the database and over OT to the other clients.
     }
