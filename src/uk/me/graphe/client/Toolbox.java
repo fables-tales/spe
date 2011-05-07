@@ -217,4 +217,43 @@ public class Toolbox extends Composite {
 	{
 		parent.toolInfo.showTool(tool);
 	}
+	
+	public void updateVisibleTools()
+	{
+		pnlToolsFlowStyle.setVisible(false);
+		pnlToolsAlgs.setVisible(false);
+		pnlToolsAlgsRun.setVisible(false);
+		btnToggleEdgeDirection.setVisible(false);
+		btnDjikstra.setVisible(false);
+		
+		if (parent.drawing.isFlowChart())
+		{
+			pnlToolsFlowStyle.setVisible(true);
+			btnToggleEdgeDirection.setVisible(true);
+		}
+		else
+		{
+			if (parent.drawing.isDigraph() && parent.drawing.isWeighted())
+			{
+				btnToggleEdgeDirection.setVisible(true);
+				btnDjikstra.setVisible(true);
+				pnlToolsAlgs.setVisible(true);
+			}
+			else if (parent.drawing.isDigraph() && !parent.drawing.isWeighted())
+			{
+				btnToggleEdgeDirection.setVisible(true);
+				btnDjikstra.setVisible(true);
+				pnlToolsAlgs.setVisible(true);
+			}
+			else if (!parent.drawing.isDigraph() && parent.drawing.isWeighted())
+			{
+				btnDjikstra.setVisible(true);
+				pnlToolsAlgs.setVisible(true);
+			}
+			else
+			{
+				pnlToolsAlgs.setVisible(true);
+			}
+		}
+	}
 }
