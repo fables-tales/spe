@@ -96,11 +96,11 @@ public class Canvas extends Composite{
 			case select:
 				EdgeDrawable ed = parent.graphManager.getEdgeDrawableAt(lMouseDown[X], lMouseDown[Y]);
 				
-				if (ed != null && parent.selectedEdges.contains(ed))
+				if ((parent.selectedEdges.size() == 1) && (parent.selectedVertices.size() == 0) && ed != null && parent.selectedEdges.contains(ed))
 				{
 					parent.dialogEdge.show(String.valueOf(ed.getWeight()), e.getX(), e.getY());
 				}
-				else
+				else if ((parent.selectedEdges.size()  == 0) && (parent.selectedVertices.size() == 1))
 				{
 					VertexDrawable vd = parent.graphManager.getVertexDrawableAt(lMouseDown[X], lMouseDown[Y]);
 					
