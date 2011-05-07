@@ -112,7 +112,7 @@ public class EdgeDialog extends PopupPanel
 			}
 			
 			parent.clearSelectedObjects();
-			parent.tools.setTool(Tools.addEdge);
+			if (!isEdit) parent.tools.setTool(Tools.addEdge);
 			parent.isHotkeysEnabled = true;
 			super.hide();
 		}
