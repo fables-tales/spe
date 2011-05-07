@@ -1,12 +1,70 @@
 package uk.me.graphe.client;
 
+import java.util.HashMap;
 import java.util.List;
+import com.google.gwt.user.client.Random;
+import com.google.gwt.user.client.Window;
+
 import uk.me.graphe.shared.Edge;
 import uk.me.graphe.shared.Vertex;
+import uk.me.graphe.shared.VertexDirection;
 import uk.me.graphe.shared.graphmanagers.GraphManager2d;
 
 public class GraphString{ 
     
+    
+    /**
+     * Adds to the graph manager nodes,edges contained in the dot language code
+     * @param graphManager
+     * @param graphCode
+     * @return
+     *      false if error in the DOT code
+     */
+    public static boolean addDot(GraphManager2d graphManager,String graphCode){
+
+        HashMap<String, Vertex> verticesMap = new HashMap<String, Vertex>();
+        graphCode = graphCode.replaceAll("\\r|\\n", "");
+        if(graphCode.indexOf("{") < 0)return false;
+        if(graphCode.indexOf("}") < 0)return false;
+        String betweenCurly = graphCode.split("{")[1].split("}")[0];
+        String[] lines = betweenCurly.split(";");
+        for(int i = 0;i<lines.length;i++){
+            int weight = 1;
+            String line = lines[i].trim();
+            line = line.replaceAll(" ","");
+            if(line.indexOf("label=\"") > 0){
+                String label = line.split("label=\"")[1].split("\"")[0];
+                weight = Integer.parseInt(label);
+            }
+            if(line.indexOf("[") > 0){
+                line = line.split("\\[")[0].trim();
+            }
+            if(line.indexOf("->") > 0){
+                String[] nodes = line.split("->");
+                if(nodes.length!=2)return false;
+                if(!verticesMap.containsKey(nodes[0].trim())){
+                    verticesMap.put(nodes[0].trim(),addEdge(graphManager,nodes[0].trim()));
+                }
+                if(!verticesMap.containsKey(nodes[1].trim())){
+                    verticesMap.put(nodes[1].trim(),addEdge(graphManager,nodes[1].trim()));
+                }
+                graphManager.addEdge(verticesMap.get(nodes[0].trim()), 
+                        verticesMap.get(nodes[1].trim()), VertexDirection.fromTo, weight);
+            }else{
+                // Add node
+                verticesMap.put(line,addEdge(graphManager,line));
+            }
+        }
+        return true;
+    }
+    
+    private static Vertex addEdge(GraphManager2d graphManager,String label){
+        Vertex v = new Vertex(label);
+        int randomX = Random.nextInt(500)+50;
+        int randomY = Random.nextInt(200)+50;
+        graphManager.addVertex(v, randomX, randomY, Graphemeui.VERTEX_SIZE);
+        return v;
+    }
     
     /**
      * returns the "DOT language" (http://en.wikipedia.org/wiki/DOT_language) 
@@ -43,26 +101,21 @@ public class GraphString{
             vertexStyle = vertexToDraw.getStyle();
             label = vertexToDraw.getLabel();
             graphString += cleanLabel(vertexToDraw.getLabel())+" ";
-            switch (vertexStyle) {
-            case VertexDrawable.STROKED_TERM_STYLE:
+
+            if (vertexStyle == VertexDrawable.STROKED_TERM_STYLE){
                 graphString += "[label=<<FONT COLOR=\"black\">"+label+
                     "</FONT>> fillcolor=gray, style=\"rounded,filled\", shape=box]";
-                break;
-            case VertexDrawable.STROKED_SQUARE_STYLE:
+            }else if (vertexStyle == VertexDrawable.STROKED_SQUARE_STYLE){
                 graphString += "[label=<<FONT COLOR=\"black\">"+label+
                     "</FONT>> fillcolor=gray, style=\"filled\", shape=box]";
-                break;
-            case VertexDrawable.STROKED_DIAMOND_STYLE:
+            }else if (vertexStyle == VertexDrawable.STROKED_DIAMOND_STYLE){
                 graphString += "[label=<<FONT COLOR=\"black\">"+label+
                     "</FONT>> fillcolor=gray, style=\"filled\", shape=diamond]";
-                break;
-            case VertexDrawable.COLORED_FILLED_CIRCLE:
+            }else if (vertexStyle == VertexDrawable.COLORED_FILLED_CIRCLE){
                 graphString += "[fillcolor=black, style=\"filled\", shape=circle]";
-                break; 
-            default:
+            }else{
                 graphString += "[label=<<FONT COLOR=\"white\">"+label+
                     "</FONT>> fillcolor=black, style=\"filled\", shape=circle]";
-                break;
             }
             graphString += ";";
         }
