@@ -77,6 +77,7 @@ public class Toolbox extends Composite {
 	{
 		currentTool = tool;
 		parent.toolInfo.showTool(tool);
+		pnlTools5.setVisible(false);
 
 		switch (tool)
 		{
@@ -123,6 +124,7 @@ public class Toolbox extends Composite {
 				this.setTool(Tools.select);
 				break;
 			case djikstra:
+				pnlTools5.setVisible(true);
 				if(parent.selectedVertices.size() == 2)
 				{
 					parent.spDjikstra.initialise(parent.graphManager.getUnderlyingGraph(), 
