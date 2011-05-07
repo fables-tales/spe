@@ -1,15 +1,10 @@
 package uk.me.graphe.client;
 
-import com.google.gwt.core.client.EntryPoint;
 import uk.me.graphe.client.Graphemeui;
 import uk.me.graphe.client.UserPanel;
-import uk.me.graphe.client.communications.ServerChannel;
-import uk.me.graphe.client.json.wrapper.JSOFactory;
-import uk.me.graphe.shared.graphmanagers.GraphManager2d;
-import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
-import uk.me.graphe.shared.messages.UserAuthMessage;
 import uk.me.graphe.client.ClientOT;
 
+import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 

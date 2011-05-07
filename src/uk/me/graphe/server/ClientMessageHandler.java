@@ -138,13 +138,29 @@ public class ClientMessageHandler extends Thread {
             	ClientMessageSender.getInstance().sendMessage(c, uam);
         	}else{
         		//if step 2, verify
+        		
+        		//if provider didn't provide e-mail address, request this from the user
+    			if(uam.getEmailAddress().length() < 5){
+                    System.err.println("no email address retrieved from openid provider :(");
+    				uam.setEmailAddress("need");
+    				ClientMessageSender.getInstance().sendMessage(c, uam);
+    				return;
+    			} else {
+    			    System.err.println("email address retrived from openid provider:" + uam.getEmailAddress());
+    			}
+        		
         		System.err.println("verifying openid");
         		if(userAuth.verifyOpenId(uam)){
+        			
+        			
         			System.err.println("oid verification successful");
+        			
+        			
+        			
         			//TODO: create user if it doesn't exist
         			//if(user doesn't exist){
         			System.err.println(uam.getEmailAddress());
-        				mUserDatabase.newUser("testuser");
+        				//mUserDatabase.newUser("testuser");
         			//}
         			
         			//c.setUserId(uam.getEmailAddress());

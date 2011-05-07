@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class UserPanel extends Composite {
 	private static UiBinderUserPanel uiBinder = GWT.create(UiBinderUserPanel.class);
 	interface UiBinderUserPanel extends UiBinder<Widget, UserPanel> {}
+	private static String mode = null;
 	
     final static VerticalPanel pnlUser = new VerticalPanel();
 		
@@ -40,6 +41,7 @@ public class UserPanel extends Composite {
 	@UiField
 	TextBox openIdUrl;
 	@UiField
+    static
 	Button login;
 	
 	public static void requestGraphList(){
@@ -50,17 +52,63 @@ public class UserPanel extends Composite {
 	}
 	
 	public static void displayGraphList(String list){
-		
+
+	}
+	
+	public static void requestEmailAddress(final UserAuthMessage uam){
+	      if(mode != "verify"){
+	            return;
+	        }
+	        
+	        final VerticalPanel pnlEmailRequest = new VerticalPanel();
+	        final HorizontalPanel pnlEmail = new HorizontalPanel();
+	        final TextBox emailAddress = new TextBox();
+	        final Button submit = new Button("Submit");
+	        
+	        emailAddress.addKeyDownHandler(new KeyDownHandler()
+	        {
+	            @Override
+	            public void onKeyDown(KeyDownEvent kc)
+	            {
+	                if (kc.getNativeKeyCode() == KeyCodes.KEY_ENTER)
+	                {
+	                    submit.click();
+	                }
+	            }
+	        });
+	        
+	        
+	        submit.addClickHandler(new ClickHandler() {
+	    
+	            public void onClick(ClickEvent event) {
+	                if (submit.getText() == null || submit.getText().isEmpty()) {
+	                    Window.alert("Please enter your email address.");
+	                    return;
+	                }
+	                pnlEmailRequest.clear();
+	                pnlEmailRequest.add(new HTML("Please wait..."));
+	                //UserAuthMessage uam = new UserAuthMessage(url);
+	                uam.setEmailAddress(emailAddress.getText());
+                    ServerChannel.getInstance().send(uam.toJson());
+	            }
+	        });
+	        
+	        RootPanel.get("canvas").clear();
+	        
+	        pnlEmail.add(emailAddress);
+	        pnlEmail.add(submit);
+	        pnlEmailRequest.add(new HTML("We couldn't get your e-mail address from your OpenID provider. Please enter it below:"));
+	        pnlEmailRequest.add(pnlEmail);
+	        
+	        RootPanel.get("canvas").add(pnlEmailRequest);
 	}
 	
 	public static void verify(){
 
+		mode = "verify";
 	    VerticalPanel pnlUser = new VerticalPanel();
-	
-	    HorizontalPanel secPanel = new HorizontalPanel();
 	    pnlUser.setSize("400px", "350px");
 	    pnlUser.setSpacing(5);
-	    pnlUser.add(secPanel);
 	    pnlUser.add(new HTML("<b>Verifying your OpenID. Please wait...</b>"));
 	
 	    
