@@ -177,4 +177,8 @@ public interface GraphManager2d {
     
     public String getName();
     public void setName(String name);
+    
+    public EdgeDrawable getDrawableFromEdge(Edge e);
+
+	public VertexDrawable getDrawableFromVertex(Vertex v);
 }

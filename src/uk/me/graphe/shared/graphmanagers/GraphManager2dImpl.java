@@ -140,6 +140,16 @@ public class GraphManager2dImpl implements GraphManager2d {
     public Collection<EdgeDrawable> getEdgeDrawables() {
         return Collections.unmodifiableCollection(mEdgeRenderMap.values());
     }
+    
+    @Override
+    public EdgeDrawable getDrawableFromEdge(Edge e){
+		return mEdgeRenderMap.get(e);    	
+    }
+    
+    @Override
+	public VertexDrawable getDrawableFromVertex(Vertex v){
+    	return mVertexRenderMap.get(v);
+    }
 
     @Override
     public Graph getUnderlyingGraph() {
