@@ -184,4 +184,6 @@ public interface GraphManager2d {
 	public VertexDrawable getDrawableFromVertex(Vertex v);
 
     public void setEdgeWeight(EdgeDrawable ed, int weight);
+
+    public void renameVertex(String label, String name);
 }

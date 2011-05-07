@@ -293,4 +293,8 @@ public class ClientOT {
         mSc.send(sgpm.toJson());
     }
 
+    public void notifyRenameVertex(String label, String name) {
+        
+    }
+
 }

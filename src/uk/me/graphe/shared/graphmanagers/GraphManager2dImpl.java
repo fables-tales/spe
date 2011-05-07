@@ -343,4 +343,22 @@ public class GraphManager2dImpl implements GraphManager2d {
 
     }
 
+    @Override
+    public void renameVertex(String label, String name) {
+        int j = 0;
+        mVertices.remove(new Vertex(label));
+        mVertices.add(new Vertex(name));
+        VertexDrawable vd = mVertexRenderMap.get(new Vertex(label));
+        vd.rename(name);
+        mVertexRenderMap.remove(new Vertex(label));        
+        mVertexRenderMap.put(new Vertex(name), vd);
+        List<Edge> edges = mVertexEdgeMap.get(new Vertex(label));
+        for (Edge e : edges) {
+            e.replaceVertex(label, name);
+        }
+
+        mVertexEdgeMap.remove(new Vertex(label));
+        mVertexEdgeMap.put(new Vertex(name), edges);
+    }
+
 }
