@@ -19,6 +19,7 @@ import uk.me.graphe.shared.messages.ChatMessage;
 import uk.me.graphe.shared.messages.Message;
 import uk.me.graphe.shared.messages.MessageFactory;
 import uk.me.graphe.shared.messages.RequestGraphMessage;
+import uk.me.graphe.shared.messages.SetGraphPropertiesMessage;
 import uk.me.graphe.shared.messages.SetNameForIdMessage;
 import uk.me.graphe.shared.messages.StateIdMessage;
 import uk.me.graphe.shared.messages.operations.AddEdgeOperation;
@@ -190,7 +191,11 @@ public class ClientOT {
                 if (snfi.getId() == this.mGraphId) {
                     mGuiInstance.updateGraphName(snfi.getTitle());
                 }
-                
+
+            } else if (m.getMessage().equals("sgp")) {
+                SetGraphPropertiesMessage sgpm = (SetGraphPropertiesMessage) m;
+                mGuiInstance.updateGraphProperties(sgpm.hasDirection(), sgpm
+                        .hasWeight(), sgpm.hasFlowChart());
             }
 
         }
@@ -279,6 +284,13 @@ public class ClientOT {
 
     public void passGraphemeUiInstance(Graphemeui graphemeui) {
         mGuiInstance = graphemeui;
+    }
+
+    public void notifyUpdateParameters(boolean isDigraph, boolean isWeighted,
+            boolean isFlowChart) {
+        SetGraphPropertiesMessage sgpm = new SetGraphPropertiesMessage(
+                isWeighted, isDigraph, isFlowChart);
+        mSc.send(sgpm.toJson());
     }
 
 }

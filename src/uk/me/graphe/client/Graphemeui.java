@@ -278,7 +278,7 @@ public class Graphemeui implements EntryPoint
     public void editGraphProperties(boolean isDigraph, boolean isFlowChart, boolean isWeighted)
     {
     	updateGraphProperties(isDigraph, isWeighted, isFlowChart);
-    	
+    	ClientOT.getInstance().notifyUpdateParameters(isDigraph, isWeighted, isFlowChart);
     	//TODO: Send the boolean parameters to the database and over OT to the other clients.
     }
     
