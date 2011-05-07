@@ -367,6 +367,7 @@ public class Graphemeui implements EntryPoint
 		drawing.setIsDigraph(isDigraph);
 		drawing.setIsWeighted(isWeighted);
 		graphInfo.update();
+		tools.updateVisibleTools();
 		graphManager.invalidate();
     }
     
