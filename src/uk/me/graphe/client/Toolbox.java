@@ -103,8 +103,15 @@ public class Toolbox extends Composite {
 				}
 				break;
 			case delete:
-				parent.deleteSelected();
-				this.setTool(Tools.select);
+				if ((parent.selectedEdges.size() > 0) || (parent.selectedVertices.size() > 0))
+				{
+					parent.deleteSelected();
+					this.setTool(Tools.select);
+				}
+				else
+				{
+					parent.dialogHelp.show("There are no edges or vertices selected to delete.");
+				}				
 				break;
 			case move:
 				parent.dialogHelp.show("Click and drag to pan the canvas or move a vertex.");
