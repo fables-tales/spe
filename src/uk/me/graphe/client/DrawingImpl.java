@@ -63,7 +63,7 @@ public class DrawingImpl implements Drawing {
     private boolean mIsWeighted = true;
     private boolean mIsFlowChart = false;
  
-    
+    private double mLastRenderTime = 0;
     private DrawingPolygon mCurrentPolygon;
     
     WebGLCanvas webGLCanvas;
@@ -380,6 +380,7 @@ public class DrawingImpl implements Drawing {
                         float fps =
                                 (((float)(System.currentTimeMillis()-mOldTime))/(float)1000);
                         fps = (float) (Math.round(((double) fps) * 100.0) / 100.0);
+                        mLastRenderTime = fps;
                         RootPanel.get("frameRate").clear();
                         VerticalPanel panel = new VerticalPanel();
                         HTML gLabel =
@@ -1181,5 +1182,9 @@ public class DrawingImpl implements Drawing {
 
 	public boolean isFlowChart() {
 		return mIsFlowChart;
+	}
+	
+	public double getRenderTime(){
+	    return mLastRenderTime;
 	}
 }

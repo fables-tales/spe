@@ -100,6 +100,13 @@ public interface Drawing {
     public void toggle2d();
     
     /**
+     * Get time taken for last render in seconds
+     * @return
+     *      time taken for last render in seconds
+     */
+    public double getRenderTime();
+    
+    /**
      * Methods for setting style
      * @param isDigraph
      */
