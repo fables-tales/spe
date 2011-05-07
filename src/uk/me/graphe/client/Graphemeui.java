@@ -250,6 +250,20 @@ public class Graphemeui implements EntryPoint
     	selectedEdges.clear(); 	
     }
     
+    public void editNodeName(String name)
+    {
+    	//TODO: implement - edit node name locally and over OT too. Remember you need to edit the
+    	// vertex and the vertex drawable label.
+    	VertexDrawable vd = selectedVertices.get(0);
+    }
+    
+    public void editEdgeWeight(String weight)
+    {
+    	//TODO: implement - edit edge weight locally and over OT too. Remember you need to edit the
+    	// edge and the edge drawable label.
+    	EdgeDrawable ed = selectedEdges.get(0);
+    }
+    
     public void moveNode(VertexDrawable vd, int x, int y) {
         Vertex v = graphManager.getVertexFromDrawable(vd);
         
