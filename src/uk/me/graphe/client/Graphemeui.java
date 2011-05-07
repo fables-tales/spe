@@ -274,8 +274,7 @@ public class Graphemeui implements EntryPoint
     public void editGraphName(String name)
     {
     	updateGraphName(name);
-    	
-    	//TODO: send name over OT.
+    	ClientOT.getInstance().notifyNewName(name);
     }
     
     public void editGraphProperties(boolean isDigraph, boolean isFlowChart, boolean isWeighted)
