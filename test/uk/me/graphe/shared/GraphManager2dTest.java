@@ -64,6 +64,14 @@ public class GraphManager2dTest extends TestCase {
         Assert.assertEquals(false, mManager.getUnderlyingGraph().getVertices().contains(new Vertex("bees")));
     }
     
+    public void testRemoveEdge_single() {
+        mManager.addVertex(new Vertex("bees"), 0, 0, 10);
+        mManager.addVertex(new Vertex("cheese"), 0, 1, 30);
+        mManager.addEdge(new Vertex("bees"), new Vertex("cheese"), VertexDirection.fromTo, 10);
+        mManager.removeEdge(new Edge(new Vertex("bees"), new Vertex("cheese")));
+        Assert.assertEquals(0, mManager.getEdgeDrawables().size());
+    }
+    
     public void testRemoveVertex_double_edges() {
         Vertex v1 = new Vertex("bees");
         Vertex v2 = new Vertex("cheese");
