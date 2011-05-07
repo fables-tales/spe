@@ -4,6 +4,11 @@ import java.util.ArrayList;
 
 import uk.me.graphe.client.algorithms.AutoLayout;
 import uk.me.graphe.client.communications.ServerChannel;
+import uk.me.graphe.client.dialogs.EdgeDialog;
+import uk.me.graphe.client.dialogs.GraphNameDialog;
+import uk.me.graphe.client.dialogs.HelpDialog;
+import uk.me.graphe.client.dialogs.ShareGraphDialog;
+import uk.me.graphe.client.dialogs.VertexDialog;
 import uk.me.graphe.client.json.wrapper.JSOFactory;
 import uk.me.graphe.shared.Edge;
 import uk.me.graphe.shared.Tools;
@@ -26,7 +31,11 @@ public class Graphemeui implements EntryPoint
     public final Canvas canvas;
     public final CanvasTooltip tooltip;
     public final Chat chat;  
-    public final Dialog dialog;
+    public final VertexDialog dialogVertex;
+    public final EdgeDialog dialogEdge;
+    public final GraphNameDialog dialogGraphName;
+    public final ShareGraphDialog dialogShareGraph;
+    public final HelpDialog dialogHelp;
     public final GraphInfo graphInfo;
     public final Toolbox tools;
     public final ToolInfo toolInfo;   
@@ -43,24 +52,15 @@ public class Graphemeui implements EntryPoint
     public static final double ZOOM_STRENGTH = 0.2;
     
     public boolean isHotkeysEnabled;
+    public boolean isHelpEnabled;
     
 	private static final int X = 0, Y = 1;
 
 	private AutoLayout lay;
-	
+
     public Graphemeui() {
-    	dialog = new Dialog(this);
-    	toolInfo = new ToolInfo(this);
-        tools = new Toolbox(this);
-        canvas = new Canvas(this);
-        chat = Chat.getInstance(this);
-        graphInfo = new GraphInfo(this);
-        drawing = new DrawingImpl();
-        tooltip = new CanvasTooltip(this);
         graphManagerFactory = GraphManager2dFactory.getInstance();
         graphManager = graphManagerFactory.makeDefaultGraphManager();
-        drawing.setOffset(0, 0);
-        drawing.setZoom(1);
         graphManager.addRedrawCallback(new Runnable() {
             @Override
             public void run() {
@@ -71,9 +71,25 @@ public class Graphemeui implements EntryPoint
             }
         });
         
+    	dialogVertex = VertexDialog.getInstance(this);
+    	dialogEdge = EdgeDialog.getInstance(this);
+    	dialogHelp = HelpDialog.getInstance(this);
+    	dialogGraphName = GraphNameDialog.getInstance(this);
+    	dialogShareGraph = ShareGraphDialog.getInstance(this);
+    	toolInfo = new ToolInfo(this);
+        canvas = new Canvas(this);
+        chat = Chat.getInstance(this);
+        graphInfo = new GraphInfo(this);
+        drawing = new DrawingImpl();
+        tools = new Toolbox(this);
+        tooltip = new CanvasTooltip(this);
+        drawing.setOffset(0, 0);
+        drawing.setZoom(1);
+        
     	selectedVertices = new ArrayList<VertexDrawable>();
     	selectedEdges = new ArrayList<EdgeDrawable>();
     	isHotkeysEnabled = true;
+    	isHelpEnabled = false;
     	
     	lay = new AutoLayout(graphManager);
     }
@@ -232,6 +248,20 @@ public class Graphemeui implements EntryPoint
     	
     	selectedVertices.clear();
     	selectedEdges.clear(); 	
+    }
+    
+    public void editNodeName(String name)
+    {
+    	//TODO: implement - edit node name locally and over OT too. Remember you need to edit the
+    	// vertex and the vertex drawable label.
+    	VertexDrawable vd = selectedVertices.get(0);
+    }
+    
+    public void editEdgeWeight(String weight)
+    {
+    	//TODO: implement - edit edge weight locally and over OT too. Remember you need to edit the
+    	// edge and the edge drawable label.
+    	EdgeDrawable ed = selectedEdges.get(0);
     }
     
     public void moveNode(VertexDrawable vd, int x, int y) {
