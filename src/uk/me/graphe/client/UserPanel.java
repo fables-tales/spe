@@ -87,7 +87,6 @@ public class UserPanel extends Composite {
 	                }
 	                pnlEmailRequest.clear();
 	                pnlEmailRequest.add(new HTML("Please wait..."));
-	                //UserAuthMessage uam = new UserAuthMessage(url);
 	                uam.setEmailAddress(emailAddress.getText());
                     ServerChannel.getInstance().send(uam.toJson());
 	            }
@@ -110,8 +109,6 @@ public class UserPanel extends Composite {
 	    pnlUser.setSize("400px", "350px");
 	    pnlUser.setSpacing(5);
 	    pnlUser.add(new HTML("<b>Verifying your OpenID. Please wait...</b>"));
-	
-	    
 	    RootPanel.get("canvas").add(pnlUser);
 		
 		Timer timer = new Timer() {
@@ -119,7 +116,7 @@ public class UserPanel extends Composite {
 		    	UserAuthMessage uam = new UserAuthMessage();
 		    	uam.setOpenIdUrl(Window.Location.getQueryString());
 		    	uam.setAuthKey(Window.Location.getParameter("authKey"));
-		    	//Window.alert(uam.toJson());
+		    	uam.setOpenIdUrl(Window.Location.getParameter("openid.identity"));
 				ServerChannel.getInstance().send(uam.toJson());
 			}
 		}; 
@@ -168,7 +165,8 @@ public class UserPanel extends Composite {
 		outerPanel.add(new HTML("<div style=\"margin-top: 2em; margin-left: 3em;\">" +
 				"</p> <h2 style=\"font-size: 2em; font-weight: bold; color: #7B7C7B; " +
 				"margin-bottom: 0.5em;\">Welcome to Grapheme</h2><p></p> <ul " +
-				"style=\"margin-bottom: 2em; list-style-type: none;\"> <li> <h4 style=\"font-size: 1.5em;" +
+				"style=\"margin-bottom: 2em; list-style-type: none;\"> <li> " +
+				"<h4 style=\"font-size: 1.5em;" +
 				" line-height: 1; height: 2em; padding-left: 45px; background-position:" +
 				" 0 4px; background-repeat:no-repeat; color: #7B7C7B; background-image:" +
 				" url(../images/ico1.png);\">Real-time collaboration</h4> <p>Grapheme " +
@@ -244,7 +242,6 @@ public class UserPanel extends Composite {
 	
 	    RootPanel.get("canvas").add(outerPanel);
 		
-	
 	}
 
 }

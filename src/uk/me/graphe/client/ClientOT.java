@@ -201,7 +201,6 @@ public class ClientOT {
                     //Window.alert("got redir request to " + reUrl);
                     Window.Location.assign(reUrl);
             	}else if(uam.getEmailAddress() == "need"){
-            	    Window.alert("no email");
             		UserPanel.requestEmailAddress(uam);
             	}
 
