@@ -370,33 +370,21 @@ public class DrawingImpl implements Drawing {
             mTimeOutSet = true;
             
             Timer t = new Timer() {
+                private double startTimer;
                 public void run() {
                     if (mCanRender && mRenderRequest) {
-                    	mOldTime = System.currentTimeMillis();
+                    	startTimer = System.currentTimeMillis();
                         doRendering();
-                        mCurrentTime = System.currentTimeMillis();
-                        
-                        float fps =
-                                (((float)(System.currentTimeMillis()-mOldTime))/(float)1000);
-                        fps = (float) (Math.round(((double) fps) * 100.0) / 100.0);
-                        mLastRenderTime = fps;
-                        RootPanel.get("frameRate").clear();
-                        VerticalPanel panel = new VerticalPanel();
-                        HTML gLabel =
-                                new HTML("TotalFrames:" + mFramesDone + 
-                                        " Nodes:"+ mNumVertices + 
-                                        " Zoom:"+ mZoom +
-                                        " Seconds:" + fps);
-                        gLabel.setHorizontalAlignment(HasAlignment.ALIGN_RIGHT);
-                        panel.add(gLabel);
-                        RootPanel.get("frameRate").add(panel);
-                        
-                        mOldTime = System.currentTimeMillis();
+                        mLastRenderTime =
+                            (System.currentTimeMillis()-startTimer)/1000;
+                        Console.log("Last render (2d:"+mDo2d+"):"+mLastRenderTime+" seconds.");
+                        //mLastRenderTime = 
+                            //(Math.round((mLastRenderTime) * 100.0) / 100.0);
+                        //mLastRenderTime = 2;
                         mRenderRequest = false;
                     }
                 }
             };
-
             t.scheduleRepeating(100 / 6);
         }
 
