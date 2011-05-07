@@ -96,7 +96,7 @@ public class GraphNameDialog extends PopupPanel
 	{
 		if (isValid)
 		{
-			//TODO: Set name of graph here.
+			parent.graphManager.setName(txtParam.getText());
 			parent.isHotkeysEnabled = true;
 			super.hide();
 		}
