@@ -45,10 +45,13 @@ public class HelpDialog extends PopupPanel
 	
 	public void show (String message)
 	{
-		if (super.isVisible()) super.hide();
+		if (parent.isHelpEnabled)
+		{
+			if (super.isVisible()) super.hide();
+			
+			lblText.setText(message);
 		
-		lblText.setText(message);
-	
-		super.show();		
+			super.show();
+		}
 	}
 }

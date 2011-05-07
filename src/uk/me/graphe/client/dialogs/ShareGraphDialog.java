@@ -13,9 +13,9 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class GraphNameDialog extends PopupPanel
+public class ShareGraphDialog extends PopupPanel
 {
-	private static GraphNameDialog sInstance;
+	private static ShareGraphDialog sInstance;
 	
 	private final Graphemeui parent;
 	private final VerticalPanel pnlCont;
@@ -24,16 +24,16 @@ public class GraphNameDialog extends PopupPanel
 	
 	private boolean isValid;
 	
-	public GraphNameDialog (Graphemeui gui)
+	public ShareGraphDialog (Graphemeui gui)
 	{
 		this.parent = gui;
 		this.setAnimationEnabled(true);
 		this.setGlassEnabled(true);
 		this.setAutoHideEnabled(true);
-		this.setTitle("Graph name");		
+		this.setTitle("Share graph");		
 		this.setStyleName("paramDialog");
 		
-		lblTitle = new Label("Graph name:");
+		lblTitle = new Label("Share graph with:");
 		txtParam = new TextBox();
 		
 		pnlCont = new VerticalPanel();
@@ -81,13 +81,13 @@ public class GraphNameDialog extends PopupPanel
 		super.add(pnlCont);
 	}
 
-	public static GraphNameDialog getInstance (Graphemeui gui)
+	public static ShareGraphDialog getInstance (Graphemeui gui)
 	{
-		if (sInstance == null) sInstance = new GraphNameDialog(gui);
+		if (sInstance == null) sInstance = new ShareGraphDialog(gui);
         return sInstance;
 	}
 	
-	public static GraphNameDialog getInstance ()
+	public static ShareGraphDialog getInstance ()
 	{
 		return sInstance;
 	}
@@ -96,7 +96,7 @@ public class GraphNameDialog extends PopupPanel
 	{
 		if (isValid)
 		{
-			parent.graphManager.setName(txtParam.getText());
+			//TODO: Here is where you actually call the method to share the graph
 			parent.isHotkeysEnabled = true;
 			super.hide();
 		}
@@ -115,5 +115,6 @@ public class GraphNameDialog extends PopupPanel
 		super.center();
 		super.show();		
 		txtParam.setFocus(true);
+		txtParam.selectAll();
 	}
 }

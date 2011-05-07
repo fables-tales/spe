@@ -1,6 +1,8 @@
 package uk.me.graphe.client;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.user.client.ui.Composite;
@@ -20,19 +22,29 @@ public class GraphInfo extends Composite {
 		initWidget(uiBinder.createAndBindUi(this));		
 		this.parent = gUI;
 		
-		lblTitle.setText("Unknown graph title");
-		lblUsers.setText("Unknown number of users viewing");
+		lblTitle.setText(parent.graphManager.getName());
+		lblUsers.setText("Directed, weighted graph");
+		
+		lblTitle.addDoubleClickHandler(new DoubleClickHandler()
+		{
+			@Override
+			public void onDoubleClick(DoubleClickEvent arg0)
+			{
+				parent.dialogGraphName.show(parent.graphManager.getName());
+			}			
+		});
 	}
 	
-	public void update(String title, int users){
-		lblTitle.setText(title);
-		if (users > 0)
+	public void update(int users){
+		lblTitle.setText(parent.graphManager.getName());
+		
+		/*if (users > 0)
 		{
-			lblTitle.setText(users + " users viewing.");
+			lblTitle.setText(users + " number of editors.");
 		}
 		else
 		{
-			lblUsers.setText("Unknown number of users viewing");
-		}
+			lblUsers.setText("Unknown number of editors.");
+		}*/
 	}	
 }

@@ -3,8 +3,11 @@ package uk.me.graphe.client;
 import uk.me.graphe.shared.Tools;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -16,9 +19,9 @@ public class ToolInfo extends Composite {
 	interface UiBinderDescription extends UiBinder<Widget, ToolInfo> {}
 
 	@UiField
-	HorizontalPanel pnlToolInfo;
-	@UiField
 	Label lblText;
+	@UiField
+	Button btnHelpToggle;
 	
 	private final Graphemeui parent;
 	
@@ -27,13 +30,32 @@ public class ToolInfo extends Composite {
 		initWidget(uiBinder.createAndBindUi(this));
 		this.parent = gUI;
 		
-		pnlToolInfo.setVisible(false);
+		btnHelpToggle.addStyleName("btnHelpOn");
+		btnHelpToggle.addStyleName("btnHelpOff");
+		
+		btnHelpToggle.setStyleName("btnHelpOn");
+		
+		btnHelpToggle.addClickHandler(new ClickHandler()
+		{
+			@Override
+			public void onClick(ClickEvent arg0)
+			{
+				if (parent.isHelpEnabled)
+				{
+					parent.isHelpEnabled = false;
+					btnHelpToggle.setStyleName("btnHelpOff");
+				}
+				else
+				{
+					parent.isHelpEnabled = true;
+					btnHelpToggle.setStyleName("btnHelpOn");
+				}
+			}			
+		});
 	}
 	
 	public void showTool(Tools tool)
-	{
-		pnlToolInfo.setVisible(false);
-		
+	{		
 		switch(tool) {
 			case addVertex:
 				lblText.setText("Add Vertex (v)");
@@ -72,7 +94,5 @@ public class ToolInfo extends Composite {
 				lblText.setText("Set normal style");
 				break;
 		}
-		
-		pnlToolInfo.setVisible(true);
 	}
 }

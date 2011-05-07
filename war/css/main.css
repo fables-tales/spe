@@ -299,3 +299,25 @@ h1 {
   opacity:0.85;
   filter:alpha(opacity=85);
 }
+
+.btnHelpOn, .btnHelpOff {
+  border: 0;
+  height: 30px;
+  width: 30px;
+}
+
+.btnHelpOn {
+  background: url(../images/helpOn.png) left center no-repeat;
+}
+
+.btnHelpOn:hover {
+  background: url(../images/helpOnH.png) left center no-repeat;
+}
+
+.btnHelpOff {
+  background: url(../images/helpOff.png) left center no-repeat;
+}
+
+.btnHelpOff:hover {
+  background: url(../images/helpOffH.png) left center no-repeat;
+}
