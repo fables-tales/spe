@@ -1,8 +1,13 @@
 package uk.me.graphe.client;
 
+import java.util.HashMap;
 import java.util.List;
+import com.google.gwt.user.client.Random;
+import com.google.gwt.user.client.Window;
+
 import uk.me.graphe.shared.Edge;
 import uk.me.graphe.shared.Vertex;
+import uk.me.graphe.shared.VertexDirection;
 import uk.me.graphe.shared.graphmanagers.GraphManager2d;
 
 public class GraphString{ 
@@ -12,10 +17,39 @@ public class GraphString{
      * Adds to the graph manager nodes,edges contained in the dot language code
      * @param graphManager
      * @param graphCode
+     * @return
+     *      false if error in the DOT code
      */
-    public static void addDot(GraphManager2d graphManager,String graphCode){
-        Vertex v = new Vertex("test");
-        graphManager.addVertex(v, 200, 200, Graphemeui.VERTEX_SIZE);
+    public static boolean addDot(GraphManager2d graphManager,String graphCode){
+
+        HashMap<String, Vertex> verticesMap = new HashMap<String, Vertex>();
+        graphCode = graphCode.replaceAll("\\r|\\n", "");
+        if(graphCode.indexOf("{") < 0)return false;
+        if(graphCode.indexOf("}") < 0)return false;
+        String betweenCurly = graphCode.split("{")[1].split("}")[0];
+        String[] lines = betweenCurly.split(";");
+        for(int i = 0;i<lines.length;i++){
+            String line = lines[i].trim();
+            if(line.indexOf("[") > 0){
+                line = line.split("\\[")[0].trim();
+            }
+            if(line.indexOf("->") > 0){
+                String[] nodes = line.split("->");
+                if(nodes.length!=2)return false;
+                if(!verticesMap.containsKey(nodes[0]))verticesMap.put(nodes[0],new Vertex(nodes[0]));
+                if(!verticesMap.containsKey(nodes[1]))verticesMap.put(nodes[1],new Vertex(nodes[1]));
+                graphManager.addEdge(verticesMap.get(nodes[0].trim()), 
+                        verticesMap.get(nodes[1].trim()), VertexDirection.fromTo, 1);
+            }else{
+                // Add node
+                Vertex v = new Vertex(line);
+                verticesMap.put(line,v);
+                int randomX = Random.nextInt(500)+50;
+                int randomY = Random.nextInt(200)+50;
+                graphManager.addVertex(v, randomX, randomY, Graphemeui.VERTEX_SIZE);
+            }
+        }
+        return true;
     }
     
     /**
