@@ -1,7 +1,5 @@
 package uk.me.graphe.client;
 
-import java.util.List;
-
 import uk.me.graphe.shared.Edge;
 import uk.me.graphe.shared.Tools;
 import uk.me.graphe.shared.Vertex;
@@ -19,12 +17,15 @@ public class Toolbox extends Composite {
 	interface UiBinderToolbox extends UiBinder<Widget, Toolbox> {}
 	
 	@UiField
-	HorizontalPanel pnlTools1, pnlTools2, pnlTools3, pnlTools4, pnlTools5;
+	HorizontalPanel pnlToolsStd, pnlToolsOps, pnlToolsAlgs, pnlToolsFlowStyle, pnlToolsAlgsRun, pnlToolsOptions;
 
 	public Tools currentTool;
 	
 	private final Graphemeui parent;	
-	private final ToolboxButton btnAddVert, btnAddEd, btnSelect, btnMove, btnZoom, btnAutoLayout, btnCluster, btnDjikstra, btnStep, btnStepAll, btnDelete, btnProcess, btnTerminator, btnDecision, btnNormal;
+	private final ToolboxButton btnAddVert, btnAddEd, btnSelect, btnMove, 
+		btnZoom, btnAutoLayout, btnDjikstra, btnStep, btnStepAll, 
+		btnDelete, btnProcess, btnTerminator, btnDecision, btnNormal, btnGraphOptions,
+		btnToggleEdgeDirection;
 	
 	public Toolbox(Graphemeui gUI) {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -36,7 +37,6 @@ public class Toolbox extends Composite {
 		btnMove = new ToolboxButton(this, Tools.move);
 		btnZoom = new ToolboxButton(this, Tools.zoom);
 		btnAutoLayout = new ToolboxButton(this, Tools.autolayout);
-		btnCluster = new ToolboxButton(this, Tools.cluster);
 		btnDjikstra = new ToolboxButton(this, Tools.djikstra);
 		btnDelete = new ToolboxButton(this, Tools.delete);
 		btnProcess = new ToolboxButton(this, Tools.styleProcess);
@@ -45,30 +45,30 @@ public class Toolbox extends Composite {
 		btnNormal = new ToolboxButton(this, Tools.styleNormal);
 		btnStep = new ToolboxButton(this, Tools.step);
 		btnStepAll = new ToolboxButton(this, Tools.stepAll);
+		btnGraphOptions = new ToolboxButton(this, Tools.graphOptions);
+		btnToggleEdgeDirection = new ToolboxButton(this, Tools.toggleEdgeDirection);
 		
-		pnlTools1.add(btnSelect);
-		pnlTools1.add(btnMove);
-		pnlTools1.add(btnZoom);
+		pnlToolsStd.add(btnSelect);
+		pnlToolsStd.add(btnMove);
+		pnlToolsStd.add(btnZoom);
 		
-		pnlTools2.add(btnAddVert);
-		pnlTools2.add(btnAddEd);
-		pnlTools2.add(btnDelete);
+		pnlToolsOps.add(btnAddVert);
+		pnlToolsOps.add(btnAddEd);
+		pnlToolsOps.add(btnToggleEdgeDirection);
+		pnlToolsOps.add(btnDelete);
 		
-		pnlTools3.add(btnAutoLayout);
-		pnlTools3.add(btnCluster);
-		pnlTools3.add(btnDjikstra);
+		pnlToolsAlgs.add(btnAutoLayout);
+		pnlToolsAlgs.add(btnDjikstra);
 		
-		pnlTools4.add(btnProcess);
-		pnlTools4.add(btnTerminator);
-		pnlTools4.add(btnDecision);
-		pnlTools4.add(btnNormal);
+		pnlToolsFlowStyle.add(btnProcess);
+		pnlToolsFlowStyle.add(btnTerminator);
+		pnlToolsFlowStyle.add(btnDecision);
+		pnlToolsFlowStyle.add(btnNormal);
 		
-		pnlTools4.setVisible(false);
+		pnlToolsAlgsRun.add(btnStep);
+		pnlToolsAlgsRun.add(btnStepAll);
 		
-		pnlTools5.add(btnStep);
-		pnlTools5.add(btnStepAll);
-		
-		pnlTools5.setVisible(false);
+		pnlToolsOptions.add(btnGraphOptions);
 		
 		setTool(Tools.select);
 	}
@@ -77,7 +77,6 @@ public class Toolbox extends Composite {
 	{
 		currentTool = tool;
 		parent.toolInfo.showTool(tool);
-		pnlTools5.setVisible(false);
 
 		switch (tool)
 		{
@@ -141,8 +140,9 @@ public class Toolbox extends Composite {
 			case djikstra:
 				if(parent.selectedVertices.size() == 2)
 				{
-					pnlTools5.setVisible(true);
-					pnlTools4.setVisible(false);
+					//TODO: here
+					//pnlTools5.setVisible(true);
+					//pnlTools4.setVisible(false);
 					parent.spDjikstra.initialise(parent.graphManager.getUnderlyingGraph(), 
 							parent.graphManager.getVertexFromDrawable(parent.selectedVertices.get(0)), 
 							parent.graphManager.getVertexFromDrawable(parent.selectedVertices.get(1)));
@@ -154,7 +154,7 @@ public class Toolbox extends Composite {
 				}
 				break;
 			case step:
-				pnlTools5.setVisible(true);
+				//TODO: pnlTools5.setVisible(true);
 				parent.spDjikstra.step();
 				EdgeDrawable ed;
 				VertexDrawable vd;
@@ -174,7 +174,7 @@ public class Toolbox extends Composite {
 				}
 				break;
 			case stepAll:
-				pnlTools5.setVisible(true);
+				//TODO: pnlTools5.setVisible(true);
 				parent.spDjikstra.stepAll();
 				EdgeDrawable ed1;
 				VertexDrawable vd1;
