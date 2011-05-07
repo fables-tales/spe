@@ -145,19 +145,14 @@ public class ClientMessageHandler extends Thread {
     				uam.setEmailAddress("need");
     				ClientMessageSender.getInstance().sendMessage(c, uam);
     				return;
-    			} else {
-    			    System.err.println("email address retrived from openid provider:" + uam.getEmailAddress());
     			}
         		
         		System.err.println("verifying openid");
         		if(userAuth.verifyOpenId(uam)){
-        			
-        			
+
         			System.err.println("oid verification successful");
-        			
-        			
-        			
-        			//TODO: create user if it doesn't exist
+
+        			//create user if it doesn't exist
         			//if(user doesn't exist){
         			System.err.println(uam.getEmailAddress());
         				//mUserDatabase.newUser("testuser");
@@ -168,9 +163,7 @@ public class ClientMessageHandler extends Thread {
         			for(int i = 0; i < balls.length; i++){
         			System.err.println("balls " +  balls[i]);
         			}
-        			
-        			//uam.set
-        			
+        			        			
         		}else{
         			System.err.println("oid verification failed");
         		}
