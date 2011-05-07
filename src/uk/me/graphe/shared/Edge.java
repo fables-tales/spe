@@ -100,7 +100,7 @@ public class Edge {
         if (o instanceof Edge) {
             Edge cmp = (Edge) o;
             return cmp.mVertex1.equals(mVertex1)
-                    && cmp.mVertex2.equals(mVertex2) && cmp.mDir == mDir;
+                    && cmp.mVertex2.equals(mVertex2);
         } else
             return false;
     }
