@@ -89,8 +89,7 @@ public class Toolbox extends Composite {
 				parent.clearSelectedEdges();
 				if (parent.selectedVertices.size() == 2)
 				{
-					// TODO: position this is right place.
-					parent.dialogEdge.show("", 125, 125);
+					parent.dialogEdge.show("", parent.canvas.lMouseDown[0], parent.canvas.lMouseDown[1]);
 				}
 				else if (parent.selectedVertices.size() > 2)
 				{
