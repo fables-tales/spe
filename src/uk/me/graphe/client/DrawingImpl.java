@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.widgetideas.graphics.client.Color;
 import com.google.gwt.widgetideas.graphics.client.GWTCanvas;
 import com.googlecode.gwtgl.array.Float32Array;
@@ -50,8 +47,6 @@ public class DrawingImpl implements Drawing {
     private int mNumVertices = 0;
     private boolean mTimeOutSet = false;
     private boolean mCanRender = true;
-    private long mCurrentTime = -1;
-    private long mOldTime = -1;
     private int mFramesDone = 0;
     private int mCanvasWidth = Window.getClientWidth();
     private int mCanvasHeight = Window.getClientWidth(); // Deliberate
@@ -378,9 +373,6 @@ public class DrawingImpl implements Drawing {
                         mLastRenderTime =
                             (System.currentTimeMillis()-startTimer)/1000;
                         Console.log("Last render (2d:"+mDo2d+"):"+mLastRenderTime+" seconds.");
-                        //mLastRenderTime = 
-                            //(Math.round((mLastRenderTime) * 100.0) / 100.0);
-                        //mLastRenderTime = 2;
                         mRenderRequest = false;
                     }
                 }
