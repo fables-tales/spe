@@ -103,6 +103,12 @@ public class ToolInfo extends Composite {
 			case styleNormal:
 				lblText.setText("Set normal style");
 				break;
+			case toggleEdgeDirection:
+				lblText.setText("Toggle edge direction");
+				break;
+			case graphOptions:
+				lblText.setText("Set graph options");
+				break;
 		}
 	}
 }
