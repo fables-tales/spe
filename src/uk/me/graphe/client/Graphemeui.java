@@ -306,6 +306,14 @@ public class Graphemeui implements EntryPoint
     	graphManager.invalidate();
     }
     
+    public void toggleEdgeDirection()
+    {
+    	for (EdgeDrawable ed : selectedEdges)
+    	{
+    		// TODO: toggle the edge direction locally via Edge and EdgeDrawable and over OT.
+    	}
+    }
+    
     public boolean toggleSelectedEdgeAt(int x, int y) {
         EdgeDrawable ed = graphManager.getEdgeDrawableAt(x, y);
         
