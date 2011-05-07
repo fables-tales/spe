@@ -163,6 +163,18 @@ public interface GraphManager2d {
      */
     public boolean isVertexNameAvailable(String s);
     
+    /**
+     * says if there is already an edge between v1 and v2
+     * going in the direction from v1 to v2 (takes tofrom v2 to v1 into account as well)
+     * @return
+     */
+    public boolean isDirectedEdgeBetweenVertices(Vertex v1, Vertex v2);
+    
 	public boolean isEdgeBetween(Vertex vertexFromDrawable,
 			Vertex vertexFromDrawable2);
+
+    public void setVertexStyle(Vertex node, int mStyle);
+    
+    public String getName();
+    public void setName(String name);
 }

@@ -200,9 +200,11 @@ public class GraphManager2dImpl implements GraphManager2d {
     @Override
     public void removeEdge(Edge e) {
         mEdges.remove(e);
-        mEdgeRenderMap.remove(e);
+        
+        mEdgeRenderMap.remove(e);       
         mVertexEdgeMap.get(e.getFromVertex()).remove(e);
         mVertexEdgeMap.get(e.getToVertex()).remove(e);
+        
         this.invalidate();
     }
 
@@ -213,12 +215,12 @@ public class GraphManager2dImpl implements GraphManager2d {
         mVertexRenderMap.remove(v);
         
         if (mVertexEdgeMap.containsKey(v)) {
-        	Console.log("Vertex " + v.getLabel() + "has " + String.valueOf(mVertexEdgeMap.get(v).size()) + " edges");
+            if (GWT.isClient()) Console.log("Vertex " + v.getLabel() + "has " + String.valueOf(mVertexEdgeMap.get(v).size()) + " edges");
             for (Edge e : mVertexEdgeMap.get(v))
             {
-            	Console.log("Remove edge: " + e.getFromVertex().getLabel() + " to "+ e.getToVertex().getLabel());
+            	if (GWT.isClient()) Console.log("Remove edge: " + e.getFromVertex().getLabel() + " to "+ e.getToVertex().getLabel());
                 mEdges.remove(e);
-                Console.log("Removed from edges list");
+                if (GWT.isClient()) Console.log("Removed from edges list");
                 mEdgeRenderMap.remove(e);
                 
                 if (e.getToVertex().equals(v))
@@ -265,6 +267,18 @@ public class GraphManager2dImpl implements GraphManager2d {
         }
         return null;
     }
+    
+    public boolean isDirectedEdgeBetweenVertices(Vertex v1, Vertex v2) {
+    	boolean b = false;
+    	for (Edge e: mEdges) {
+    		if((e.getFromVertex() == v1 && e.getToVertex() == v2 && e.getDirection() == VertexDirection.fromTo)
+    				|| (e.getFromVertex() == v2 && e.getToVertex() == v1 && e.getDirection() == VertexDirection.toFrom)){
+    			b = true;
+    			break;
+    		}
+    	}
+    	return b;
+    }
 
     public void invalidate() {
         for (final Runnable r : mRedrawCallbacks) {
@@ -289,5 +303,26 @@ public class GraphManager2dImpl implements GraphManager2d {
     		}
     	}
     	return b;
+	}
+
+    @Override
+    public void setVertexStyle(Vertex node, int mStyle) {
+        mVertexRenderMap.get(node).setStyle(mStyle);
+        this.invalidate();
     }
+    
+    private String mName;
+    
+    @Override
+    public String getName() {
+        return mName;
+    }
+    
+    @Override
+    public void setName(String s) {
+        mName = s; 
+    }
+    
+    
+    
 }

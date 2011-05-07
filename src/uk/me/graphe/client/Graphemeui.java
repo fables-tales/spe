@@ -4,6 +4,10 @@ import java.util.ArrayList;
 
 import uk.me.graphe.client.algorithms.AutoLayout;
 import uk.me.graphe.client.communications.ServerChannel;
+import uk.me.graphe.client.dialogs.EdgeDialog;
+import uk.me.graphe.client.dialogs.GraphNameDialog;
+import uk.me.graphe.client.dialogs.HelpDialog;
+import uk.me.graphe.client.dialogs.VertexDialog;
 import uk.me.graphe.client.json.wrapper.JSOFactory;
 import uk.me.graphe.shared.Edge;
 import uk.me.graphe.shared.Tools;
@@ -26,7 +30,10 @@ public class Graphemeui implements EntryPoint
     public final Canvas canvas;
     public final CanvasTooltip tooltip;
     public final Chat chat;  
-    public final Dialog dialog;
+    public final VertexDialog dialogVertex;
+    public final EdgeDialog dialogEdge;
+    public final GraphNameDialog dialogGraphName;
+    public final HelpDialog dialogHelp;
     public final GraphInfo graphInfo;
     public final Toolbox tools;
     public final ToolInfo toolInfo;   
@@ -47,9 +54,12 @@ public class Graphemeui implements EntryPoint
 	private static final int X = 0, Y = 1;
 
 	private AutoLayout lay;
-	
+
     public Graphemeui() {
-    	dialog = new Dialog(this);
+    	dialogVertex = VertexDialog.getInstance(this);
+    	dialogEdge = EdgeDialog.getInstance(this);
+    	dialogHelp = HelpDialog.getInstance(this);
+    	dialogGraphName = GraphNameDialog.getInstance(this);
     	toolInfo = new ToolInfo(this);
         canvas = new Canvas(this);
         chat = Chat.getInstance(this);
@@ -121,6 +131,13 @@ public class Graphemeui implements EntryPoint
                         case 71: // g
                             Window.prompt("DOT graph Code", GraphString.getDot(graphManager, "Grapheme",true,true));
                             break;
+                        case 73: // i
+                            // import graph code
+                            String graphCode = Window.prompt("DOT graph Code","");
+                            if(graphCode != null)GraphString.addDot(graphManager, graphCode);
+                            // GraphString.addDot(graphManager, graphCode) will return false
+                            // if error detected in code
+                            break;
 						case KeyCodes.KEY_DELETE:
 							tools.setTool(Tools.delete);
 							break;
@@ -148,13 +165,13 @@ public class Graphemeui implements EntryPoint
     	{
     		// TODO: There is weight
             graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo, weight);
-            ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo);	   		
+            ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo, weight);	   		
     	}
     	else
     	{
     		// TODO: No weight
             graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo, weight);
-            ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo);		
+            ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo, weight);		
     	}
         
         clearSelectedObjects();
@@ -242,6 +259,7 @@ public class Graphemeui implements EntryPoint
     	{
     		vd.setStyle(style);
     		vd.updateSize(width,height);
+    		ClientOT.getInstance().notifyStyleChange(vd.getLabel(), style);
     	}
     	graphManager.invalidate();
     }

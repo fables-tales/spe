@@ -145,7 +145,7 @@ public class ClientManager {
     }
     
     public List<Client> clientsForGraph(int currentGraphId) {
-        return mClientGraphMap.get(currentGraphId);
+        return new ArrayList<Client>(mClientGraphMap.get(currentGraphId));
     }
 
     public void removeClientGraph(int id, Client client) {

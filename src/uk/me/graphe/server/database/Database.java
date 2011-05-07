@@ -1,6 +1,7 @@
 package uk.me.graphe.server.database;
 
 import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
+import uk.me.graphe.shared.graphmanagers.OTStyleGraphManager2d;
 
 public interface Database {
     
@@ -22,7 +23,7 @@ public interface Database {
      * 
      * @return the requested graph
      */  
-    public OTGraphManager2d retrieve (int key);
+    public OTStyleGraphManager2d retrieve (int key);
     
     /**
      * deletes the graphmanager with matching key

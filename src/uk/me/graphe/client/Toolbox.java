@@ -71,23 +71,23 @@ public class Toolbox extends Composite {
 		{
 			case addVertex:
 				parent.clearSelectedObjects();
-				parent.dialog.show(DialogType.help, "Click the canvas to add a vertex.", 50, 125);
+				parent.dialogHelp.show("Click the canvas to add a vertex.");
 				break;
 			case addEdge:
 				parent.clearSelectedEdges();
 				if (parent.selectedVertices.size() == 2)
 				{
 					// TODO: position this is right place.
-					parent.dialog.show(DialogType.edgeWeight, "", 125, 125);
+					parent.dialogEdge.show("", 125, 125);
 				}
 				else if (parent.selectedVertices.size() > 2)
 				{
 					parent.clearSelectedVertices();
-					parent.dialog.show(DialogType.help, "Click to select the vertices you would like to connect.", 50, 125);
+					parent.dialogHelp.show("Click to select the vertices you would like to connect.");
 				}
 				else
 				{
-					parent.dialog.show(DialogType.help, "Click to select the vertices you would like to connect.", 50, 125);
+					parent.dialogHelp.show("Click to select the vertices you would like to connect.");
 				}
 				break;
 			case delete:
@@ -95,13 +95,13 @@ public class Toolbox extends Composite {
 				this.setTool(Tools.select);
 				break;
 			case move:
-				parent.dialog.show(DialogType.help, "Click and drag to pan the canvas or move a vertex.", 50, 125);
+				parent.dialogHelp.show("Click and drag to pan the canvas or move a vertex.");
 				break;
 			case select:
-				parent.dialog.show(DialogType.help, "Click to select objects. Hold 'CTRL' and click to deselect or multi-select.", 50, 125);
+				parent.dialogHelp.show("Click to select objects. Hold 'CTRL' and click to deselect or multi-select.");
 				break;
 			case zoom:
-				parent.dialog.show(DialogType.help, "Click where you like to zoom in. Hold 'CTRL' and click to zoom out.", 50, 125);
+				parent.dialogHelp.show("Click where you like to zoom in. Hold 'CTRL' and click to zoom out.");
 				break;
 			case autolayout:
 				parent.doAutoLayout();
