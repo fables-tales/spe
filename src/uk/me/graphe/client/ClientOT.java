@@ -71,7 +71,8 @@ public class ClientOT {
                 if (mServer == false) {
                     Console.log("No server connection, offline mode enabled");
                     mInfo = mStore.getInformation();
-                    if(Window.confirm("A previous graph has been detected, press okay to load")) {
+                    if(!(mInfo.getLocal().isEmpty() && mInfo.getServer().isEmpty()) &&
+                            Window.confirm("A previous graph has been detected, press okay to load")) {
                         List<GraphOperation> ops = mInfo.getServer();
                         if (!ops.isEmpty()) {
                             for (GraphOperation op : ops) {

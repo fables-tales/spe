@@ -24,7 +24,7 @@ public class DataManager {
     static {
         newMap();
         create();
-        mTimer.scheduleAtFixedRate(new Backup(), 1000, 5000);
+        mTimer.scheduleAtFixedRate(new Backup(), 120000, 120000);
         sHighestId = mDatabase.size();
     }
 
@@ -57,6 +57,8 @@ public class DataManager {
     public static void save(OTStyleGraphManager2d graph) {
         if (sGraphs.containsKey(graph.getGraphId())) sGraphs.remove(graph.getGraphId());
         sGraphs.put(graph.getGraphId(), graph);
+        Timer mSaver = new Timer();
+        mSaver.schedule(new SaveGraph(graph), 500);
     }
 
     public static int create() {
@@ -78,6 +80,17 @@ public class DataManager {
                 mDatabase.store(g);
         }
       }
+    
+    static class SaveGraph extends TimerTask {
+        
+        OTGraphManager2d g = null;
+        public SaveGraph(OTGraphManager2d gr) {
+            g = gr;
+        }
+        public void run() {
+            mDatabase.store(g);
+        }
+    }
 
     public static void renameGraph(int id, String title) {
     	if (sGraphs.containsKey(id))
