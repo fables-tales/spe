@@ -91,7 +91,7 @@ public class ToolboxButton extends Button
 				break;
 			case toggleEdgeDirection:
 				this.setStyleName("btnToggleDirection");
-				this.setTitle("Toggle Edge direction");
+				this.setTitle("Toggle Edge Direction");
 				break;
 		}
 		
