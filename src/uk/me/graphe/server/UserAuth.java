@@ -53,7 +53,8 @@ public class UserAuth {
     	
 	    try {
 	        // return url for after authentication
-	        String returnUrl = "http://127.0.0.1:1338/?action=userauth&authKey=" + authKey;
+	        String rootUrl = "http://127.0.0.1:1338/"; // THIS MUST BE THE GRAPHEME ROOT URL
+	        String returnUrl = rootUrl + "?action=userauth&authKey=" + authKey;
 	        // endpoint discover
 	        List discoveries = manager.discover(opUrl);
 	        DiscoveryInformation discovered = manager.associate(discoveries);
@@ -145,5 +146,4 @@ public class UserAuth {
 
         return false;
     }
-	//*/
 }
