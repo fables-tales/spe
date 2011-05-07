@@ -127,6 +127,8 @@ public class Graphemeui implements EntryPoint
                             // import graph code
                             String graphCode = Window.prompt("DOT graph Code","");
                             if(graphCode != null)GraphString.addDot(graphManager, graphCode);
+                            // GraphString.addDot(graphManager, graphCode) will return false
+                            // if error detected in code
                             break;
 						case KeyCodes.KEY_DELETE:
 							tools.setTool(Tools.delete);
