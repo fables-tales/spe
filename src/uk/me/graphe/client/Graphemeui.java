@@ -128,6 +128,10 @@ public class Graphemeui implements EntryPoint
                             // GraphString.addDot(graphManager, graphCode) will return false
                             // if error detected in code
                             break;
+                        case 87:// w
+                            drawing.toggle2d();
+                            graphManager.invalidate();
+                            break;
 						case KeyCodes.KEY_DELETE:
 							tools.setTool(Tools.delete);
 							break;
