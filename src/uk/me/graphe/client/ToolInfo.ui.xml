@@ -11,7 +11,8 @@
 		}
 		
 	</ui:style>
-	<g:HorizontalPanel ui:field='pnlToolInfo'>
+	<g:HorizontalPanel>
+		<g:Button ui:field='btnHelpToggle' />
 		<g:Label styleName='{style.lblText}' ui:field='lblText' />
 	</g:HorizontalPanel>
 </ui:UiBinder>
