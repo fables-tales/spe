@@ -9,7 +9,7 @@ import com.google.code.morphia.annotations.Id;
 public class UserDB {
 
 	@Id
-	private String mUserID;
+	private String mUserId;
 	private String mEmail;
 	private List<String> mKeys;
 	
@@ -25,12 +25,13 @@ public class UserDB {
 		mEmail = email;
 	}
 	
-	public UserDB(String id) {
-		mUserID = id;
+	public UserDB(String id, String e) {
+		mUserId = id;
+		mEmail = e;
 	}
 	
 	public String getId() {
-		return mUserID;
+		return mUserId;
 	}
 	
 	public void addKey(String toAdd) {

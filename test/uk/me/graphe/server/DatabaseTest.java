@@ -8,7 +8,6 @@ import uk.me.graphe.server.org.json.wrapper.JSONWrapperFactory;
 import uk.me.graphe.shared.Edge;
 import uk.me.graphe.shared.Vertex;
 import uk.me.graphe.shared.graphmanagers.GraphManager2d;
-import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
 import uk.me.graphe.shared.graphmanagers.OTGraphManagerFactory;
 import uk.me.graphe.shared.graphmanagers.OTStyleGraphManager2d;
 import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
