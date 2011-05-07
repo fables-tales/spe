@@ -107,6 +107,7 @@ public class Toolbox extends Composite {
 				break;
 			case cluster:
 				// TODO: Implement
+				parent.dialogGraphOptions.show("");
 				this.setTool(Tools.select);
 				break;
 			case styleProcess:
