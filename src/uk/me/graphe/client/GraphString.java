@@ -42,20 +42,28 @@ public class GraphString{
             if(line.indexOf("->") > 0){
                 String[] nodes = line.split("->");
                 if(nodes.length!=2)return false;
-                if(!verticesMap.containsKey(nodes[0]))verticesMap.put(nodes[0],new Vertex(nodes[0]));
-                if(!verticesMap.containsKey(nodes[1]))verticesMap.put(nodes[1],new Vertex(nodes[1]));
+                if(!verticesMap.containsKey(nodes[0].trim())){
+                    verticesMap.put(nodes[0].trim(),addEdge(graphManager,nodes[0].trim()));
+                }
+                if(!verticesMap.containsKey(nodes[1].trim())){
+                    verticesMap.put(nodes[1].trim(),addEdge(graphManager,nodes[1].trim()));
+                }
                 graphManager.addEdge(verticesMap.get(nodes[0].trim()), 
                         verticesMap.get(nodes[1].trim()), VertexDirection.fromTo, weight);
             }else{
                 // Add node
-                Vertex v = new Vertex(line);
-                verticesMap.put(line,v);
-                int randomX = Random.nextInt(500)+50;
-                int randomY = Random.nextInt(200)+50;
-                graphManager.addVertex(v, randomX, randomY, Graphemeui.VERTEX_SIZE);
+                verticesMap.put(line,addEdge(graphManager,line));
             }
         }
         return true;
+    }
+    
+    private static Vertex addEdge(GraphManager2d graphManager,String label){
+        Vertex v = new Vertex(label);
+        int randomX = Random.nextInt(500)+50;
+        int randomY = Random.nextInt(200)+50;
+        graphManager.addVertex(v, randomX, randomY, Graphemeui.VERTEX_SIZE);
+        return v;
     }
     
     /**
