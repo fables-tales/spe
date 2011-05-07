@@ -132,6 +132,11 @@ public class Toolbox extends Composite {
 					parent.spDjikstra.initialise(parent.graphManager.getUnderlyingGraph(), 
 							parent.graphManager.getVertexFromDrawable(parent.selectedVertices.get(0)), 
 							parent.graphManager.getVertexFromDrawable(parent.selectedVertices.get(1)));
+					parent.dialogHelp.show("You can step through the algorithm or fast forward to the result.");
+				}
+				else
+				{
+					parent.dialogHelp.show("To run Djikstra's algorithm, you must have a start and end node selected.");
 				}
 				break;
 			case step:
