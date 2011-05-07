@@ -24,9 +24,7 @@ public class GraphOptionsDialog extends PopupPanel
 	private final Label lblTitle;
 	private final CheckBox cbIsWeighted, cbIsDigraph, cbIsFlowChart;
 	private final Button btnOk, btnCancel;
-	
-	private boolean isValid;
-	
+
 	public GraphOptionsDialog (Graphemeui gui)
 	{
 		this.parent = gui;
@@ -95,8 +93,6 @@ public class GraphOptionsDialog extends PopupPanel
 			
 		});
 		
-		isValid = true;
-		
 		super.add(pnlCont);
 	}
 
@@ -113,23 +109,22 @@ public class GraphOptionsDialog extends PopupPanel
 	
 	private void ok ()
 	{
-		if (isValid)
-		{
-			//TODO: implement save
-			parent.isHotkeysEnabled = true;
-			super.hide();
-		}
+		parent.editGraphProperties(cbIsDigraph.getValue(), cbIsFlowChart.getValue(), cbIsWeighted.getValue());
+		parent.isHotkeysEnabled = true;
+		super.hide();
 	}
 	
 	private void cancel ()
 	{
-		//TODO: implement cancel
 		parent.isHotkeysEnabled = true;
 		super.hide();
 	}
 	
 	public void show (String s)
 	{
+		cbIsDigraph.setValue(parent.drawing.isDigraph());
+		cbIsWeighted.setValue(parent.drawing.isWeighted());
+		cbIsFlowChart.setValue(parent.drawing.isFlowChart());
 		parent.isHotkeysEnabled = false;
 		super.center();
 		super.show();		
