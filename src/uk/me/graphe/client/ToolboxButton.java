@@ -41,6 +41,18 @@ public class ToolboxButton extends Button
 				this.setStyleName("btnAddVert");
 				this.setTitle("Add Vertex (v)");
 				break;
+			case djikstra:
+				this.setStyleName("btnDjikstra");
+				this.setTitle("Run Dijkstra");
+				break;
+			case step:
+				this.setStyleName("btnStep");
+				this.setTitle("Step Once");
+				break;
+			case stepAll:
+				this.setStyleName("btnStepAll");
+				this.setTitle("Step All");
+				break;
 			case addEdge:
 				this.setStyleName("btnAddEdge");
 				this.setTitle("Add Edge (e)");

@@ -43,4 +43,11 @@ public interface Database {
      * @return number of objects
      */
     int size();
+    
+    /**
+     * renames the graph with the given id to the given string
+     * @param id Id of graph
+     * @param title Name to be set to
+     */
+    void rename(int id, String title);
 }

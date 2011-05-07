@@ -27,6 +27,7 @@ public class OTGraphManager2dStore {
     public OTGraphManager2dStore (OTGraphManager2d graph) {
         id = graph.getGraphId();
         stateid = graph.getStateId();
+        name = graph.getName();
     }
     
     public OTGraphManager2dStore() {

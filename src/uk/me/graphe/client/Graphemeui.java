@@ -3,9 +3,11 @@ package uk.me.graphe.client;
 import java.util.ArrayList;
 
 import uk.me.graphe.client.algorithms.AutoLayout;
+import uk.me.graphe.client.algorithms.ShortestPathDjikstras;
 import uk.me.graphe.client.communications.ServerChannel;
 import uk.me.graphe.client.dialogs.EdgeDialog;
 import uk.me.graphe.client.dialogs.GraphNameDialog;
+import uk.me.graphe.client.dialogs.GraphOptionsDialog;
 import uk.me.graphe.client.dialogs.HelpDialog;
 import uk.me.graphe.client.dialogs.ShareGraphDialog;
 import uk.me.graphe.client.dialogs.VertexDialog;
@@ -36,12 +38,14 @@ public class Graphemeui implements EntryPoint
     public final GraphNameDialog dialogGraphName;
     public final ShareGraphDialog dialogShareGraph;
     public final HelpDialog dialogHelp;
+    public final GraphOptionsDialog dialogGraphOptions;
     public final GraphInfo graphInfo;
     public final Toolbox tools;
     public final ToolInfo toolInfo;   
     public final GraphManager2d graphManager;
     public final GraphManager2dFactory graphManagerFactory;
     public final Drawing drawing;
+    public final ShortestPathDjikstras spDjikstra;
     
     private LocalStore mStore;
     
@@ -70,27 +74,31 @@ public class Graphemeui implements EntryPoint
                 // here!
             }
         });
+        drawing = new DrawingImpl();
         
     	dialogVertex = VertexDialog.getInstance(this);
     	dialogEdge = EdgeDialog.getInstance(this);
     	dialogHelp = HelpDialog.getInstance(this);
     	dialogGraphName = GraphNameDialog.getInstance(this);
     	dialogShareGraph = ShareGraphDialog.getInstance(this);
+    	dialogGraphOptions = GraphOptionsDialog.getInstance(this);
     	toolInfo = new ToolInfo(this);
         canvas = new Canvas(this);
         chat = Chat.getInstance(this);
         graphInfo = new GraphInfo(this);
-        drawing = new DrawingImpl();
         tools = new Toolbox(this);
         tooltip = new CanvasTooltip(this);
+        
         drawing.setOffset(0, 0);
-        drawing.setZoom(1);
+        drawing.setZoom(1);     
         
     	selectedVertices = new ArrayList<VertexDrawable>();
     	selectedEdges = new ArrayList<EdgeDrawable>();
     	isHotkeysEnabled = true;
     	isHelpEnabled = false;
-    	
+
+    	// Algorithms here
+    	spDjikstra = new ShortestPathDjikstras();
     	lay = new AutoLayout(graphManager);
     }
     
@@ -171,18 +179,8 @@ public class Graphemeui implements EntryPoint
     	Vertex vFrom = graphManager.getVertexFromDrawable(from);
     	Vertex vTo = graphManager.getVertexFromDrawable(to);
     	
-    	if (weight == null)
-    	{
-    		// TODO: There is weight
-            graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo, weight);
-            ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo, weight);	   		
-    	}
-    	else
-    	{
-    		// TODO: No weight
-            graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo, weight);
-            ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo, weight);		
-    	}
+        graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo, weight);
+        ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo, weight);		
         
         clearSelectedObjects();
     }
@@ -253,15 +251,33 @@ public class Graphemeui implements EntryPoint
     public void editNodeName(String name)
     {
     	//TODO: implement - edit node name locally and over OT too. Remember you need to edit the
-    	// vertex and the vertex drawable label.
+    	// vertex and the vertex drawable label. Keep the invalidate to redraw
     	VertexDrawable vd = selectedVertices.get(0);
+    	
+    	graphManager.invalidate();
     }
     
     public void editEdgeWeight(String weight)
     {
     	//TODO: implement - edit edge weight locally and over OT too. Remember you need to edit the
-    	// edge and the edge drawable label.
+    	// edge and the edge drawable label.  Keep the invalidate to redraw
     	EdgeDrawable ed = selectedEdges.get(0);
+    	
+    	graphManager.invalidate();
+    }
+    
+    public void editGraphName(String name)
+    {
+    	updateGraphName(name);
+    	
+    	//TODO: send name over OT.
+    }
+    
+    public void editGraphProperties(boolean isDigraph, boolean isFlowChart, boolean isWeighted)
+    {
+    	updateGraphProperties(isDigraph, isWeighted, isFlowChart);
+    	
+    	//TODO: Send the boolean parameters to the database and over OT to the other clients.
     }
     
     public void moveNode(VertexDrawable vd, int x, int y) {
@@ -345,12 +361,22 @@ public class Graphemeui implements EntryPoint
 
         return false;
     }
-    
-    public void userWentOffline(String user)
+        
+    // TODO: Call this when ANOTHER CLIENT updates the graph name. This NEEDS to be called on first graph load too.
+    public void updateGraphName(String name)
     {
-    	// TODO: Implement this function and change the Server to call this function
-    	// 		 when another client disconnects from the graph. This function lets the 
-    	//		 chat and other things know it's happend.
+    	graphManager.setName(name);
+    	graphInfo.update();
+    }
+    
+    // TODO: Call this when ANOTHER CLIENT updates the graph properties. This NEEDS to be called on first graph load too.
+    public void updateGraphProperties(boolean isDigraph, boolean isWeighted, boolean isFlowChart)
+    {
+		drawing.setIsFlowChart(isFlowChart);
+		drawing.setIsDigraph(isDigraph);
+		drawing.setIsWeighted(isWeighted);
+		graphInfo.update();
+		graphManager.invalidate();
     }
     
 	public void zoomIn() {

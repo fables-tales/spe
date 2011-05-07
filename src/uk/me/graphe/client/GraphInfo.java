@@ -22,8 +22,7 @@ public class GraphInfo extends Composite {
 		initWidget(uiBinder.createAndBindUi(this));		
 		this.parent = gUI;
 		
-		lblTitle.setText(parent.graphManager.getName());
-		lblUsers.setText("Directed, weighted graph");
+		update();
 		
 		lblTitle.addDoubleClickHandler(new DoubleClickHandler()
 		{
@@ -35,16 +34,32 @@ public class GraphInfo extends Composite {
 		});
 	}
 	
-	public void update(int users){
+	public void update()
+	{
 		lblTitle.setText(parent.graphManager.getName());
-		
-		/*if (users > 0)
+
+		if (parent.drawing.isFlowChart())
 		{
-			lblTitle.setText(users + " number of editors.");
+			lblUsers.setText("Flow chart.");
 		}
 		else
 		{
-			lblUsers.setText("Unknown number of editors.");
-		}*/
+			if (parent.drawing.isDigraph() && parent.drawing.isWeighted())
+			{
+				lblUsers.setText("Weighted digraph.");
+			}
+			else if (parent.drawing.isDigraph() && !parent.drawing.isWeighted())
+			{
+				lblUsers.setText("Digraph.");
+			}
+			else if (!parent.drawing.isDigraph() && parent.drawing.isWeighted())
+			{
+				lblUsers.setText("Weighted graph.");
+			}
+			else
+			{
+				lblUsers.setText("Standard graph.");
+			}
+		}
 	}	
 }
