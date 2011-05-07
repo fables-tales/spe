@@ -59,16 +59,14 @@ public class DrawingImpl implements Drawing {
     private boolean mWebglReady = false;
     
     private boolean mDo2d = false;
-    private boolean mDirected = true;
-    private boolean mWeighted = true;
-    
+    private boolean mIsDigraph = true;
+    private boolean mIsWeighted = true;
+    private boolean mIsFlowChart = false;
+ 
     
     private DrawingPolygon mCurrentPolygon;
     
     WebGLCanvas webGLCanvas;
-    
-    // used for styles
-    private boolean mIsFlowChart;
 
     // used for UI line
     private double[] mUIline = { 0, 0, 0, 0 };
@@ -861,13 +859,13 @@ public class DrawingImpl implements Drawing {
             mCurrentPolygon.set(xArray, yArray,mZoom, mOffsetX,mOffsetY);
         }
         
-        if (arrow && mDirected) {
+        if (arrow && (mIsDigraph||mIsFlowChart)) {
             if (x1 > x2)
                 arrowAngle -= Math.PI;
             addTriangle(xOffset, yOffset, arrowThickness, arrowHeight, arrowAngle - Math.PI / 2, addToPolygon,color,pos);
         }
 
-        if(!label.equals("") && mWeighted){
+        if(!label.equals("") && mIsWeighted && !mIsFlowChart){
             double lX;
             double lY;
             double nlX;
@@ -1160,4 +1158,27 @@ public class DrawingImpl implements Drawing {
     public double getZoom() {
         return mZoom;
     }
+    
+    public void setIsDigraph(boolean isDigraph) {
+	}
+
+	public boolean isDigraph() {
+		return mIsDigraph;
+	}
+	
+	public void setIsWeighted(boolean isWeighted) {
+		this.mIsWeighted = isWeighted;
+	}
+
+	public boolean isWeighted() {
+		return this.mIsWeighted;
+	}
+	
+	public void setIsFlowChart(boolean isFlowChart) {
+		this.mIsFlowChart = isFlowChart;
+	}
+
+	public boolean isFlowChart() {
+		return mIsFlowChart;
+	}
 }
