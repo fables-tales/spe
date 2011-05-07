@@ -254,8 +254,6 @@ public class Graphemeui implements EntryPoint
     
     public void editNodeName(String name)
     {
-    	//TODO: implement - edit node name locally and over OT too. Remember you need to edit the
-    	// vertex and the vertex drawable label. Keep the invalidate to redraw
     	VertexDrawable vd = selectedVertices.get(0);
     	String oldLabel = vd.getLabel();
     	Console.log("cows");
