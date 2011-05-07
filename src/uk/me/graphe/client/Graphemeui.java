@@ -98,7 +98,7 @@ public class Graphemeui implements EntryPoint
     	selectedVertices = new ArrayList<VertexDrawable>();
     	selectedEdges = new ArrayList<EdgeDrawable>();
     	isHotkeysEnabled = true;
-    	isHelpEnabled = false;
+    	isHelpEnabled = true;
 
     	// Algorithms here
     	spDjikstra = new ShortestPathDjikstras();
