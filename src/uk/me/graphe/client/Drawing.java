@@ -98,4 +98,20 @@ public interface Drawing {
      * toggle 2d canvas
      */
     public void toggle2d();
+    
+    /**
+     * Methods for setting style
+     * @param isDigraph
+     */
+    public void setIsDigraph(boolean isDigraph);
+
+    public boolean isDigraph();
+    
+    public void setIsWeighted(boolean isWeighted);
+
+    public boolean isWeighted();
+    
+    public void setIsFlowChart(boolean isFlowChart);
+
+    public boolean isFlowChart();
 }
