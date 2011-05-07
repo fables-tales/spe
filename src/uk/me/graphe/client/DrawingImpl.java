@@ -78,6 +78,7 @@ public class DrawingImpl implements Drawing {
     }-*/;
     
     public void toggle2d(){
+        Console.log("Last render (2d:"+mDo2d+"):"+mLastRenderTime+" seconds.");
     	if(mDo2d == false)mDo2d = true;
     	else mDo2d = false;
     }
@@ -372,7 +373,6 @@ public class DrawingImpl implements Drawing {
                         doRendering();
                         mLastRenderTime =
                             (System.currentTimeMillis()-startTimer)/1000;
-                        Console.log("Last render (2d:"+mDo2d+"):"+mLastRenderTime+" seconds.");
                         mRenderRequest = false;
                     }
                 }
