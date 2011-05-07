@@ -29,7 +29,13 @@ public class GraphString{
         String betweenCurly = graphCode.split("{")[1].split("}")[0];
         String[] lines = betweenCurly.split(";");
         for(int i = 0;i<lines.length;i++){
+            int weight = 1;
             String line = lines[i].trim();
+            line = line.replaceAll(" ","");
+            if(line.indexOf("label=\"") > 0){
+                String label = line.split("label=\"")[1].split("\"")[0];
+                weight = Integer.parseInt(label);
+            }
             if(line.indexOf("[") > 0){
                 line = line.split("\\[")[0].trim();
             }
@@ -39,7 +45,7 @@ public class GraphString{
                 if(!verticesMap.containsKey(nodes[0]))verticesMap.put(nodes[0],new Vertex(nodes[0]));
                 if(!verticesMap.containsKey(nodes[1]))verticesMap.put(nodes[1],new Vertex(nodes[1]));
                 graphManager.addEdge(verticesMap.get(nodes[0].trim()), 
-                        verticesMap.get(nodes[1].trim()), VertexDirection.fromTo, 1);
+                        verticesMap.get(nodes[1].trim()), VertexDirection.fromTo, weight);
             }else{
                 // Add node
                 Vertex v = new Vertex(line);
