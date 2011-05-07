@@ -178,18 +178,8 @@ public class Graphemeui implements EntryPoint
     	Vertex vFrom = graphManager.getVertexFromDrawable(from);
     	Vertex vTo = graphManager.getVertexFromDrawable(to);
     	
-    	if (weight == null)
-    	{
-    		// TODO: There is weight
-            graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo, weight);
-            ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo, weight);	   		
-    	}
-    	else
-    	{
-    		// TODO: No weight
-            graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo, weight);
-            ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo, weight);		
-    	}
+        graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo, weight);
+        ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo, weight);		
         
         clearSelectedObjects();
     }
@@ -277,18 +267,14 @@ public class Graphemeui implements EntryPoint
     
     public void editGraphName(String name)
     {
-    	graphManager.setName(name);
-    	graphInfo.update();
+    	updateGraphName(name);
+    	
     	//TODO: send name over OT.
     }
     
     public void editGraphProperties(boolean isDigraph, boolean isFlowChart, boolean isWeighted)
     {
-		drawing.setIsFlowChart(isFlowChart);
-		drawing.setIsDigraph(isDigraph);
-		drawing.setIsWeighted(isWeighted);
-		graphInfo.update();
-		graphManager.invalidate();
+    	updateGraphProperties(isDigraph, isWeighted, isFlowChart);
     	
     	//TODO: Send the boolean parameters to the database and over OT to the other clients.
     }
@@ -373,6 +359,23 @@ public class Graphemeui implements EntryPoint
         }
 
         return false;
+    }
+        
+    // TODO: Call this when ANOTHER CLIENT updates the graph name.
+    public void updateGraphName(String name)
+    {
+    	graphManager.setName(name);
+    	graphInfo.update();
+    }
+    
+    // TODO: Call this when ANOTHER CLIENT updates the graph properties.
+    public void updateGraphProperties(boolean isDigraph, boolean isWeighted, boolean isFlowChart)
+    {
+		drawing.setIsFlowChart(isFlowChart);
+		drawing.setIsDigraph(isDigraph);
+		drawing.setIsWeighted(isWeighted);
+		graphInfo.update();
+		graphManager.invalidate();
     }
     
 	public void zoomIn() {
