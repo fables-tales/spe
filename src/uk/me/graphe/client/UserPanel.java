@@ -116,7 +116,7 @@ public class UserPanel extends Composite {
 		    	UserAuthMessage uam = new UserAuthMessage();
 		    	uam.setOpenIdUrl(Window.Location.getQueryString());
 		    	uam.setAuthKey(Window.Location.getParameter("authKey"));
-		    	uam.setOpenIdUrl(Window.Location.getParameter("openid.identity"));
+		    	uam.setId(Window.Location.getParameter("openid.identity"));
 				ServerChannel.getInstance().send(uam.toJson());
 			}
 		}; 
@@ -164,7 +164,7 @@ public class UserPanel extends Composite {
 		HorizontalPanel outerPanel = new HorizontalPanel();
 		outerPanel.add(new HTML("<div style=\"margin-top: 2em; margin-left: 3em;\">" +
 				"</p> <h2 style=\"font-size: 2em; font-weight: bold; color: #7B7C7B; " +
-				"margin-bottom: 0.5em;\">Welcome to Grapheme</h2><p></p> <ul " +
+				"margin-bottom: 0.5em;\">Welcome to grapheme</h2><p></p> <ul " +
 				"style=\"margin-bottom: 2em; list-style-type: none;\"> <li> " +
 				"<h4 style=\"font-size: 1.5em;" +
 				" line-height: 1; height: 2em; padding-left: 45px; background-position:" +

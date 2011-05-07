@@ -198,9 +198,10 @@ public class ClientOT {
             	Chat.getInstance().onReceiveMessage(cm);
             } else if (m.getMessage().equals("userAuth")) {
             	UserAuthMessage uam = (UserAuthMessage)m;
-            	if(uam.getEmailAddress() == null){
+            	if(uam.isAuthd()){
+            	    //show graph list
+            	}else if(uam.getEmailAddress() == null){
                 	String reUrl = uam.getRedirectionUrl();
-                    //Window.alert("got redir request to " + reUrl);
                     Window.Location.assign(reUrl);
             	}else if(uam.getEmailAddress() == "need"){
             		UserPanel.requestEmailAddress(uam);

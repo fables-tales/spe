@@ -22,7 +22,7 @@ public class Client {
     private boolean mConnected = true;
     private int mSelectedGraphId = -1;
     private int mStateId;
-    private String mUserId = "guest";
+    private String mUserId = null;
 
     public Client(SocketChannel clientSock) {
         mChannel = clientSock;

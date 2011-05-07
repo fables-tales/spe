@@ -154,17 +154,22 @@ public class ClientMessageHandler extends Thread {
         			System.err.println("oid verification successful");
 
         			//create user if it doesn't exist
-        			//if(user doesn't exist){
-        			System.err.println(uam.getEmailAddress());
-        				//mUserDatabase.newUser("testuser");
-        			//}
+        			if(!mUserDatabase.exists(uam.getId(), uam.getEmailAddress())){
+        				mUserDatabase.newUser(uam.getId(), uam.getEmailAddress());
+        			}
         			
-        			//c.setUserId(uam.getEmailAddress());
         			String balls[] = mUserDatabase.getUserIDs();
         			for(int i = 0; i < balls.length; i++){
-        			System.err.println("balls " +  balls[i]);
+        			System.err.println("user " +  balls[i]);
         			}
-        			        			
+        			
+        			c.setUserId(uam.getId());
+        			
+        			//send auth message to client
+        			uam.setAuthd(true);
+        			
+        			ClientMessageSender.getInstance().sendMessage(c, uam);
+        			
         		}else{
         			System.err.println("oid verification failed");
         		}
