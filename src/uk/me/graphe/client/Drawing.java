@@ -93,4 +93,9 @@ public interface Drawing {
      * 
      */
     public String getUrl();
+    
+    /**
+     * toggle 2d canvas
+     */
+    public void toggle2d();
 }

@@ -57,6 +57,11 @@ public class DrawingImpl implements Drawing {
     private int mCanvasHeight = Window.getClientWidth(); // Deliberate
     private boolean mWebglReady = false;
     
+    private boolean mDo2d = false;
+    private boolean mDirected = false;
+    private boolean mWeighted = false;
+    
+    
     private DrawingPolygon mCurrentPolygon;
     
     WebGLCanvas webGLCanvas;
@@ -78,6 +83,11 @@ public class DrawingImpl implements Drawing {
         canvas1 = document.getElementsByTagName("canvas")[0];
         canvas1.style.position = "absolute";
     }-*/;
+    
+    public void toggle2d(){
+    	if(mDo2d == false)mDo2d = true;
+    	else mDo2d = false;
+    }
 
     // Does one time set up to make page ready for repeated rendering of graph
     private void setUpWebGL() {
@@ -187,8 +197,8 @@ public class DrawingImpl implements Drawing {
         mCanRender = false;
 
         // Do a (kind of reliable) check for webgl
-        if (webglCheck() == 1) {
-            
+        if (webglCheck() == 1 && mDo2d==false) {
+        	m2dCanvas.clear();
             // Can do WebGL
             mNumVertices = 0;
             String label = "";
@@ -331,13 +341,13 @@ public class DrawingImpl implements Drawing {
             }
 
             renderGraph();
-            mCanRender = true;
 
         } else {
             // Can't do webGL so draw on 2d Canvas
             renderGraph2d(m2dCanvas, mEdgesToDraw, mVerticesToDraw);
         }
 
+        mCanRender = true;
     }
     
     private static native String getUrlJsni()
@@ -850,13 +860,13 @@ public class DrawingImpl implements Drawing {
             mCurrentPolygon.set(xArray, yArray,mZoom, mOffsetX,mOffsetY);
         }
         
-        if (arrow) {
+        if (arrow && mDirected) {
             if (x1 > x2)
                 arrowAngle -= Math.PI;
             addTriangle(xOffset, yOffset, arrowThickness, arrowHeight, arrowAngle - Math.PI / 2, addToPolygon,color,pos);
         }
 
-        if(!label.equals("")){
+        if(!label.equals("") && mWeighted){
             double lX;
             double lY;
             double nlX;
@@ -1042,8 +1052,8 @@ public class DrawingImpl implements Drawing {
     // old 2d canvas functions
     public void renderGraph2d(GWTCanvas canvas, Collection<EdgeDrawable> edges,
             Collection<VertexDrawable> vertices) {
-
-        canvas.setLineWidth(1);
+        canvas.clear();
+        canvas.setLineWidth(5);
         canvas.setStrokeStyle(Color.BLACK);
         canvas.setFillStyle(Color.BLACK);
         canvas.setFillStyle(Color.WHITE);
@@ -1057,14 +1067,16 @@ public class DrawingImpl implements Drawing {
     private void drawVertex(VertexDrawable vertex, GWTCanvas canvas) {
         double centreX = (vertex.getLeft() + 0.5 * vertex.getWidth() + mOffsetX) * mZoom;
         double centreY = (vertex.getTop() + 0.5 * vertex.getHeight() + mOffsetY) * mZoom;
-        double radius = (0.25 * vertex.getWidth()) * mZoom;
-
+        double radius = (vertex.getWidth()*0.5) * mZoom;
+        
+        
         canvas.moveTo(centreX, centreY);
         canvas.beginPath();
         canvas.arc(centreX, centreY, radius, 0, 360, false);
         canvas.closePath();
         canvas.stroke();
         canvas.fill();
+        
     }
 
     // Draws a line from coordinates to other coordinates
