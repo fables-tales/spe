@@ -895,16 +895,14 @@ public class DrawingImpl implements Drawing {
         }
 
         if (!label.equals("") && mIsWeighted && !mIsFlowChart) {
-            double lX;
+            double lX = 0;
             double lY;
             double nlX;
             double nlY;
-            double lLength;
-            double halfLLength;
-            lLength = stringPixelLength(label);
-            halfLLength = lLength / 2;
+            double lLength= stringPixelLength(label);;
+            double halfLLength = lLength / 2;
             double dLine = thickness * 2;
-            lX = 0;
+
             if (pos == 1)
                 lX = -20;
             if (pos == 2)
