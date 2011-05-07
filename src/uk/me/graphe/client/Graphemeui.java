@@ -261,12 +261,13 @@ public class Graphemeui implements EntryPoint
     	graphManager.invalidate();
     }
     
-    public void editEdgeWeight(String weight)
+    public void editEdgeWeight(int weight)
     {
-    	//TODO: implement - edit edge weight locally and over OT too. Remember you need to edit the
-    	// edge and the edge drawable label.  Keep the invalidate to redraw
     	EdgeDrawable ed = selectedEdges.get(0);
-    	
+    	graphManager.setEdgeWeight(ed, weight);
+    	Edge e = graphManager.getEdgeFromDrawable(ed);
+    	ClientOT.getInstance().notifyRemoveEdge(e);
+    	ClientOT.getInstance().notifyAddEdge(e.getFromVertex(), e.getToVertex(), e.getDirection(), e.getWeight());
     	graphManager.invalidate();
     }
     
