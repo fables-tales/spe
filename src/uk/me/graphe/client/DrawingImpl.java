@@ -1160,6 +1160,7 @@ public class DrawingImpl implements Drawing {
     }
     
     public void setIsDigraph(boolean isDigraph) {
+        mIsDigraph = isDigraph;
 	}
 
 	public boolean isDigraph() {
