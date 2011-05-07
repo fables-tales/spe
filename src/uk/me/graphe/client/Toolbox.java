@@ -127,12 +127,14 @@ public class Toolbox extends Composite {
 				if(parent.selectedVertices.size() == 2)
 				{
 					pnlTools5.setVisible(true);
+					pnlTools4.setVisible(false);
 					parent.spDjikstra.initialise(parent.graphManager.getUnderlyingGraph(), 
 							parent.graphManager.getVertexFromDrawable(parent.selectedVertices.get(0)), 
 							parent.graphManager.getVertexFromDrawable(parent.selectedVertices.get(1)));
 				}
 				break;
 			case step:
+				pnlTools5.setVisible(true);
 				parent.spDjikstra.step();
 				EdgeDrawable ed;
 				VertexDrawable vd;
@@ -152,6 +154,7 @@ public class Toolbox extends Composite {
 				}
 				break;
 			case stepAll:
+				pnlTools5.setVisible(true);
 				parent.spDjikstra.stepAll();
 				EdgeDrawable ed1;
 				VertexDrawable vd1;
