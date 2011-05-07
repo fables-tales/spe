@@ -328,6 +328,7 @@ h1 {
   border: 0;
   height: 30px;
   width: 30px;
+  cursor: pointer;
 }
 
 .btnHelpOn {
