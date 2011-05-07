@@ -42,6 +42,7 @@ public class DrawingImpl implements Drawing {
     private ArrayList<Float> mVerticesList = new ArrayList<Float>();
     private ArrayList<Integer> mIndicesList = new ArrayList<Integer>();
     private ArrayList<Float> mColorsList = new ArrayList<Float>();
+    private ArrayList<Float> m2dList = new ArrayList<Float>();
 
     private Collection<EdgeDrawable> mEdgesToDraw;
     private Collection<VertexDrawable> mVerticesToDraw;
@@ -58,8 +59,8 @@ public class DrawingImpl implements Drawing {
     private boolean mWebglReady = false;
     
     private boolean mDo2d = false;
-    private boolean mDirected = false;
-    private boolean mWeighted = false;
+    private boolean mDirected = true;
+    private boolean mWeighted = true;
     
     
     private DrawingPolygon mCurrentPolygon;
@@ -370,16 +371,16 @@ public class DrawingImpl implements Drawing {
         mRenderRequest = true;
         if (!mTimeOutSet) {
             mTimeOutSet = true;
-            mOldTime = System.currentTimeMillis();
+            
             Timer t = new Timer() {
                 public void run() {
                     if (mCanRender && mRenderRequest) {
-
+                    	mOldTime = System.currentTimeMillis();
                         doRendering();
                         mCurrentTime = System.currentTimeMillis();
                         
                         float fps =
-                                1 /(((float)(System.currentTimeMillis()-mOldTime))/(float)1000);
+                                (((float)(System.currentTimeMillis()-mOldTime))/(float)1000);
                         fps = (float) (Math.round(((double) fps) * 100.0) / 100.0);
                         RootPanel.get("frameRate").clear();
                         VerticalPanel panel = new VerticalPanel();
@@ -387,7 +388,7 @@ public class DrawingImpl implements Drawing {
                                 new HTML("TotalFrames:" + mFramesDone + 
                                         " Nodes:"+ mNumVertices + 
                                         " Zoom:"+ mZoom +
-                                        " FPS:" + fps);
+                                        " Seconds:" + fps);
                         gLabel.setHorizontalAlignment(HasAlignment.ALIGN_RIGHT);
                         panel.add(gLabel);
                         RootPanel.get("frameRate").add(panel);
@@ -1077,6 +1078,19 @@ public class DrawingImpl implements Drawing {
         canvas.stroke();
         canvas.fill();
         
+        // code that emulates caluclation needed if this 2d had all features     
+        for (int i = 0; i < 20; i++) {
+            float oldX = (float)centreX;
+            float oldY = (float)centreY;
+            float angle = 0.23f;
+            float coords1 = (float)((float)(oldX) * Math.cos(angle)) - (float)(oldY * Math.sin(angle));
+            float coords2 = (float)((float)(oldX) * Math.sin(angle)) + (float)(oldY * Math.cos(angle));
+            m2dList.add(coords1);
+            
+            m2dList.add(coords2);
+            Console.log(""+coords2+coords1);
+        }        
+        
     }
 
     // Draws a line from coordinates to other coordinates
@@ -1091,6 +1105,19 @@ public class DrawingImpl implements Drawing {
         canvas.lineTo(endX, endY);
         canvas.closePath();
         canvas.stroke();
+        
+        // code that emulates caluclation needed if this 2d had all features     
+        for (int i = 0; i < 20; i++) {
+            float oldX = (float)startX;
+            float oldY = (float)startY;
+            float angle = 0.23f;
+            float coords1 = (float)((float)(oldX) * Math.cos(angle)) - (float)(oldY * Math.sin(angle));
+            float coords2 = (float)((float)(oldX) * Math.sin(angle)) + (float)(oldY * Math.cos(angle));
+            m2dList.add(coords1);
+            m2dList.add(coords2);
+            Console.log(""+coords2+coords1);
+        }
+        
     }
 
     // Takes collections of edges and vertices and draws a graph on a specified
