@@ -1084,9 +1084,7 @@ public class DrawingImpl implements Drawing {
             float coords1 = (float)((float)(oldX) * Math.cos(angle)) - (float)(oldY * Math.sin(angle));
             float coords2 = (float)((float)(oldX) * Math.sin(angle)) + (float)(oldY * Math.cos(angle));
             m2dList.add(coords1);
-            
             m2dList.add(coords2);
-            Console.log(""+coords2+coords1);
         }        
         
     }
@@ -1113,7 +1111,6 @@ public class DrawingImpl implements Drawing {
             float coords2 = (float)((float)(oldX) * Math.sin(angle)) + (float)(oldY * Math.cos(angle));
             m2dList.add(coords1);
             m2dList.add(coords2);
-            Console.log(""+coords2+coords1);
         }
         
     }
