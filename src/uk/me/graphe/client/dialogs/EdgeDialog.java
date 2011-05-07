@@ -23,7 +23,7 @@ public class EdgeDialog extends PopupPanel
 	private final Label lblTitle;
 	private final TextBox txtParam;
 	
-	private boolean isValid;
+	private boolean isValid, isEdit;
 	
 	public EdgeDialog (Graphemeui gui)
 	{
@@ -97,7 +97,15 @@ public class EdgeDialog extends PopupPanel
 	{
 		if (isValid)
 		{
-			parent.addEdge(parent.selectedVertices.get(0), parent.selectedVertices.get(1), Integer.parseInt(txtParam.getText()));
+			if (isEdit)
+			{
+				parent.editEdgeWeight(txtParam.getText());
+			}
+			else
+			{
+				parent.addEdge(parent.selectedVertices.get(0), parent.selectedVertices.get(1), Integer.parseInt(txtParam.getText()));
+			}
+			
 			parent.clearSelectedObjects();
 			parent.tools.setTool(Tools.addEdge);
 			parent.isHotkeysEnabled = true;
@@ -113,6 +121,15 @@ public class EdgeDialog extends PopupPanel
 	
 	public void show (String initialValue, int left, int top)
 	{
+		if (!initialValue.equals(""))
+		{
+			isEdit = true;
+		}
+		else
+		{
+			isEdit = false;
+		}
+		
 		parent.isHotkeysEnabled = false;
 		txtParam.setText(initialValue);
 		this.setPopupPosition(left, top);		
