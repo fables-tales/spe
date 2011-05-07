@@ -76,7 +76,6 @@ public class Graphemeui {
     }
     
     public void show() {
-        JSONImplHolder.initialise(new JSOFactory());
         RootPanel.get("toolbox").add(this.tools);
         RootPanel.get("canvas").add(this.canvas);
         RootPanel.get("chat").add(this.chat);
