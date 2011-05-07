@@ -93,6 +93,23 @@ public class Canvas extends Composite{
 					parent.toggleSelectedVertexAt(lMouseDown[X], lMouseDown[Y]); // try to select vertex.
 				}
 				break;
+			case select:
+				EdgeDrawable ed = parent.graphManager.getEdgeDrawableAt(lMouseDown[X], lMouseDown[Y]);
+				
+				if (ed != null && parent.selectedEdges.contains(ed))
+				{
+					parent.dialogEdge.show(String.valueOf(ed.getWeight()), e.getX(), e.getY());
+				}
+				else
+				{
+					VertexDrawable vd = parent.graphManager.getVertexDrawableAt(lMouseDown[X], lMouseDown[Y]);
+					
+					if (vd != null && parent.selectedVertices.contains(vd))
+					{
+						parent.dialogVertex.show(vd.getLabel(), e.getX(), e.getY());
+					}
+				}
+				break;
 		}
 		
 		parent.tooltip.hide();
