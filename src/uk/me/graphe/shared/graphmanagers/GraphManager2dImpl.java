@@ -30,6 +30,8 @@ public class GraphManager2dImpl implements GraphManager2d {
         if (GWT.isClient()) {
             Console.log("graphmanager2d constructed");
         }
+        
+        mName = "Untitled graph";
     }
     
     @Override
