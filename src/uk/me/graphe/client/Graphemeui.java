@@ -193,7 +193,13 @@ public class Graphemeui implements EntryPoint
     	// TODO: Style the vertex if its in flow chart mode.
         Vertex v = new Vertex(label);
         graphManager.addVertex(v, canvas.lMouseDown[X], canvas.lMouseDown[Y], VERTEX_SIZE);
-        ClientOT.getInstance().notifyAddVertex(v, canvas.lMouseDown[X], canvas.lMouseDown[Y], VERTEX_SIZE);    	
+        ClientOT.getInstance().notifyAddVertex(v, canvas.lMouseDown[X], canvas.lMouseDown[Y], VERTEX_SIZE);
+        if(drawing.isFlowChart()){
+        	VertexDrawable vd = graphManager.getDrawableFromVertex(v);
+        	vd.setStyle(VertexDrawable.STROKED_SQUARE_STYLE);
+        	vd.updateSize(VERTEX_SIZE*2, VERTEX_SIZE);
+        	ClientOT.getInstance().notifyStyleChange(vd.getLabel(), VertexDrawable.STROKED_SQUARE_STYLE);
+        }
     }
 
     public void clearSelectedEdges()
@@ -315,7 +321,7 @@ public class Graphemeui implements EntryPoint
     	for (EdgeDrawable ed : selectedEdges)
     	{
     		// TODO: toggle the edge direction locally via Edge and EdgeDrawable and over OT.
-
+    		
     		if (ed.needsFromToArrow())
     		{
     			Edge e  = graphManager.getEdgeFromDrawable(ed);
@@ -329,7 +335,7 @@ public class Graphemeui implements EntryPoint
     		{
     			Edge e  = graphManager.getEdgeFromDrawable(ed);
     			graphManager.removeEdge(e);
-    			graphManager.addEdge(e.getToVertex(), e.getFromVertex(), VertexDirection.toFrom, e.getWeight()); 
+    			graphManager.addEdge(e.getToVertex(), e.getFromVertex(), VertexDirection.toFrom, e.getWeight());
     			ClientOT.getInstance().notifyRemoveEdge(e);	
     			ClientOT.getInstance().notifyAddEdge(e.getToVertex(), e.getFromVertex(), VertexDirection.toFrom, e.getWeight());  			
     		}
@@ -403,15 +409,23 @@ public class Graphemeui implements EntryPoint
 		graphInfo.update();
 		tools.updateVisibleTools();
 		
+		clearSelectedObjects();
+		
+		for(VertexDrawable vd : graphManager.getVertexDrawables())
+		{
+			selectedVertices.add(vd);
+		}
+		
 		if (isFlowChart)
 		{
-			// TODO: set each style to standard flowchart style
+			setSelectedSyle(VertexDrawable.STROKED_SQUARE_STYLE, VERTEX_SIZE*2, VERTEX_SIZE);
 		}
 		else
 		{
-			// TODO: set each style to normal style.
+			setSelectedSyle(VertexDrawable.FILLED_CIRCLE_STYLE, VERTEX_SIZE, VERTEX_SIZE);
 		}
 		
+		clearSelectedObjects();
 		graphManager.invalidate();
     }
     
