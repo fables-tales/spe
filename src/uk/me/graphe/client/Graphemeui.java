@@ -189,6 +189,7 @@ public class Graphemeui implements EntryPoint
     }
     
     public void addVertex(String label) {
+    	// TODO: Style the vertex if its in flow chart mode.
         Vertex v = new Vertex(label);
         graphManager.addVertex(v, canvas.lMouseDown[X], canvas.lMouseDown[Y], VERTEX_SIZE);
         ClientOT.getInstance().notifyAddVertex(v, canvas.lMouseDown[X], canvas.lMouseDown[Y], VERTEX_SIZE);    	
@@ -380,6 +381,16 @@ public class Graphemeui implements EntryPoint
 		drawing.setIsWeighted(isWeighted);
 		graphInfo.update();
 		tools.updateVisibleTools();
+		
+		if (isFlowChart)
+		{
+			// TODO: set each style to standard flowchart style
+		}
+		else
+		{
+			// TODO: set each style to normal style.
+		}
+		
 		graphManager.invalidate();
     }
     
