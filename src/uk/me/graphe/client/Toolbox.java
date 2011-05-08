@@ -147,7 +147,8 @@ public class Toolbox extends Composite {
 				}
 				break;
 			case djikstra:
-				if((parent.selectedVertices.size() == 2) && parent.spDjikstra.hasFinished())
+				if((parent.selectedVertices.size() == 2) 
+						&& (!parent.spDjikstra.isInitialised() || parent.spDjikstra.hasFinished()))
 				{
 					pnlToolsAlgsRun.setVisible(true);
 					parent.spDjikstra.initialise(parent.graphManager.getUnderlyingGraph(), 
@@ -155,6 +156,16 @@ public class Toolbox extends Composite {
 							parent.graphManager.getVertexFromDrawable(parent.selectedVertices.get(1)));
 					parent.dialogHelp.show("You can step through the algorithm or fast forward to the result.");
 				}
+				else if (parent.spDjikstra.isInitialised() && !parent.spDjikstra.hasFinished())
+				{
+					if(true) //TODO: create dialog to ask user if wants to restart dijkstra
+					{
+						parent.spDjikstra.stepAll();
+						parent.clearSelectedObjects();
+						btnDjikstra.click();
+						pnlToolsAlgsRun.setVisible(false);
+					}
+				}					
 				else
 				{
 					parent.dialogHelp.show("To run Djikstra's algorithm, you must have a start and end node selected.");
@@ -217,6 +228,7 @@ public class Toolbox extends Composite {
 				this.setTool(Tools.select);
 				break;
 			case shareGraph:
+				parent.dialogShareGraph.show("myemail@example.com");
 				//TODO: implement
 				break;
 			case importGraph:
