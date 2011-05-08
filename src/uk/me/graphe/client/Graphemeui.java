@@ -123,6 +123,7 @@ public class Graphemeui implements EntryPoint
         };
         t.scheduleRepeating(1000);
 
+        // TODO: Fix hotkeys so it works globally
 		KeyUpHandler khHotkeys = new KeyUpHandler() {
 			public void onKeyUp(KeyUpEvent e) {
 				if (isHotkeysEnabled) {
@@ -314,7 +315,27 @@ public class Graphemeui implements EntryPoint
     	for (EdgeDrawable ed : selectedEdges)
     	{
     		// TODO: toggle the edge direction locally via Edge and EdgeDrawable and over OT.
+
+    		if (ed.needsFromToArrow())
+    		{
+    			Edge e  = graphManager.getEdgeFromDrawable(ed);
+    			graphManager.removeEdge(e);
+    			graphManager.addEdge(e.getToVertex(), e.getFromVertex(), VertexDirection.fromTo, e.getWeight());
+    			ClientOT.getInstance().notifyRemoveEdge(e);
+    			ClientOT.getInstance().notifyAddEdge(e.getToVertex(), e.getFromVertex(), VertexDirection.fromTo, e.getWeight());
+    		}
+    		
+    		if (ed.needsToFromArrow())
+    		{
+    			Edge e  = graphManager.getEdgeFromDrawable(ed);
+    			graphManager.removeEdge(e);
+    			graphManager.addEdge(e.getToVertex(), e.getFromVertex(), VertexDirection.toFrom, e.getWeight()); 
+    			ClientOT.getInstance().notifyRemoveEdge(e);	
+    			ClientOT.getInstance().notifyAddEdge(e.getToVertex(), e.getFromVertex(), VertexDirection.toFrom, e.getWeight());  			
+    		}
     	}
+    	
+    	tools.setTool(Tools.select);
     }
     
     public boolean toggleSelectedEdgeAt(int x, int y) {
