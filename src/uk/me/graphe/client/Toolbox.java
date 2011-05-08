@@ -161,8 +161,7 @@ public class Toolbox extends Composite {
 					if(true) //TODO: create dialog to ask user if wants to restart dijkstra
 					{
 						parent.spDjikstra.stepAll();
-						parent.clearSelectedObjects();
-						
+						parent.clearSelectedObjects();						
 						btnDjikstra.click();
 						pnlToolsAlgsRun.setVisible(false);
 					}
@@ -273,7 +272,6 @@ public class Toolbox extends Composite {
 			}
 			else if (!parent.drawing.isDigraph() && parent.drawing.isWeighted())
 			{
-				btnDjikstra.setVisible(true);
 				pnlToolsAlgs.setVisible(true);
 			}
 			else
