@@ -646,14 +646,18 @@ public class DrawingImpl implements Drawing {
 
     private void addTriangle(double centreX, double centreY, double width,
             double height, double angle, boolean addToPolygon, float[] color,
-            int pos) {
+            int pos,double lineOffset) {
 
         int arrowOffset = (int)(height*0.65);
         int aOff = 0;
+        
         if (pos == 1)
             aOff = arrowOffset;
-        if (pos == 2)
+
+        if (pos == 2){
             aOff = arrowOffset;
+            lineOffset = -lineOffset;
+        }
 
         int startIndex = verticesIndex();
         double halfHeight = (height / 2);
@@ -666,7 +670,7 @@ public class DrawingImpl implements Drawing {
         double oldY;
 
         for (int i = 0; i < coords.length; i++) {
-            oldX = coords[i][0];
+            oldX = coords[i][0] + lineOffset;
             oldY = coords[i][1] + aOff;
             coords[i][0] = ((oldX) * Math.cos(angle))
                     - (oldY * Math.sin(angle));
@@ -889,7 +893,7 @@ public class DrawingImpl implements Drawing {
             if (x1 > x2)
                 arrowAngle -= Math.PI;
             addTriangle(xOffset, yOffset, arrowThickness, arrowHeight,
-                    arrowAngle - Math.PI / 2, addToPolygon, color, pos);
+                    arrowAngle - Math.PI / 2, addToPolygon, color, pos, lineOffset);
         }
 
         if (!label.equals("") && mIsWeighted && !mIsFlowChart) {
@@ -902,12 +906,16 @@ public class DrawingImpl implements Drawing {
             double dLine = thickness * 2;
             double labelOffset = thickness*3;
             
+            lY = -dLine;
+            
             if (pos == 1)
                 lX = -labelOffset;
             if (pos == 2)
                 lX = labelOffset;
+            if(pos != 0)
+                lY  -= lineSeperation;
 
-            lY = -dLine;
+            
             nlX = (lX * Math.cos(lineAngle)) - (lY * Math.sin(lineAngle))
                     + xOffset;
             nlY = (lX * Math.sin(lineAngle)) + (lY * Math.cos(lineAngle))
