@@ -660,11 +660,12 @@ public class DrawingImpl implements Drawing {
             double height, double angle, boolean addToPolygon, float[] color,
             int pos) {
 
+        int arrowOffset = (int)(height*0.65);
         int aOff = 0;
         if (pos == 1)
-            aOff = (int) height;
+            aOff = arrowOffset;
         if (pos == 2)
-            aOff = (int) height;
+            aOff = arrowOffset;
 
         int startIndex = verticesIndex();
         double halfHeight = (height / 2);
