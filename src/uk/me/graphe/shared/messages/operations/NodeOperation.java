@@ -44,4 +44,8 @@ public abstract class NodeOperation extends GraphOperation {
         return false;
     }
 
+    public boolean isRenameOperation() {
+        return false;
+    }
+
 }

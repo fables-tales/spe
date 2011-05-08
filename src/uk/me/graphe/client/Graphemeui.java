@@ -254,7 +254,9 @@ public class Graphemeui implements EntryPoint
     	//TODO: implement - edit node name locally and over OT too. Remember you need to edit the
     	// vertex and the vertex drawable label. Keep the invalidate to redraw
     	VertexDrawable vd = selectedVertices.get(0);
-    	
+    	String oldLabel = vd.getLabel();
+    	graphManager.renameVertex(vd.getLabel(), name);
+    	ClientOT.getInstance().notifyRenameVertex(oldLabel, name);
     	clearSelectedVertices();
     	graphManager.invalidate();
     }
@@ -280,7 +282,6 @@ public class Graphemeui implements EntryPoint
     {
     	updateGraphProperties(isDigraph, isWeighted, isFlowChart);
     	ClientOT.getInstance().notifyUpdateParameters(isDigraph, isWeighted, isFlowChart);
-    	//TODO: Send the boolean parameters to the database and over OT to the other clients.
     }
     
     public void moveNode(VertexDrawable vd, int x, int y) {
@@ -366,14 +367,12 @@ public class Graphemeui implements EntryPoint
         return false;
     }
         
-    // TODO: Call this when ANOTHER CLIENT updates the graph name. This NEEDS to be called on first graph load too.
     public void updateGraphName(String name)
     {
     	graphManager.setName(name);
     	graphInfo.update();
     }
     
-    // TODO: Call this when ANOTHER CLIENT updates the graph properties. This NEEDS to be called on first graph load too.
     public void updateGraphProperties(boolean isDigraph, boolean isWeighted, boolean isFlowChart)
     {
 		drawing.setIsFlowChart(isFlowChart);

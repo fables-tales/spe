@@ -197,4 +197,8 @@ public class VertexDrawable {
             mColor[i] = color[i];
         }
     }
+
+    public void rename(String name) {
+        mLabel = name;
+    }
 }

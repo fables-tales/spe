@@ -38,6 +38,8 @@ public class GraphTransform {
                 else return no;
             } else if (no.isStyleOperation() && !historyDelta.deletesNode(effectedNode)) {
                 return no;
+            } else if (no.isRenameOperation() && !historyDelta.deletesNode(effectedNode)) {
+                return no;
             }
 
         }

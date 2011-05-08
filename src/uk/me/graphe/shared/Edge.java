@@ -118,4 +118,12 @@ public class Edge {
         return mVertex1.hashCode() + mVertex2.hashCode();
     }
 
+    public void replaceVertex(String label, String name) {
+        if (mVertex1.getLabel() == label) {
+            mVertex1 = new Vertex(name);
+        } else if (mVertex2.getLabel() == label) {
+            mVertex2 = new Vertex(name);
+        }
+    }
+
 }

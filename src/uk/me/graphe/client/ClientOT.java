@@ -28,6 +28,7 @@ import uk.me.graphe.shared.messages.operations.CompositeOperation;
 import uk.me.graphe.shared.messages.operations.DeleteEdgeOperation;
 import uk.me.graphe.shared.messages.operations.DeleteNodeOperation;
 import uk.me.graphe.shared.messages.operations.GraphOperation;
+import uk.me.graphe.shared.messages.operations.RenameNodeOperation;
 import uk.me.graphe.shared.messages.operations.SetStyleOperation;
 
 import com.google.gwt.user.client.Timer;
@@ -291,6 +292,12 @@ public class ClientOT {
         SetGraphPropertiesMessage sgpm = new SetGraphPropertiesMessage(
                 isWeighted, isDigraph, isFlowChart);
         mSc.send(sgpm.toJson());
+    }
+
+    public void notifyRenameVertex(String label, String name) {
+        RenameNodeOperation rno = new RenameNodeOperation(new Vertex(label), name);
+        mUnsentOps.add(rno);
+        mStore.store(rno, false);
     }
 
 }
