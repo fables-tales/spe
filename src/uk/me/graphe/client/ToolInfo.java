@@ -109,6 +109,15 @@ public class ToolInfo extends Composite {
 			case graphOptions:
 				lblText.setText("Set graph options");
 				break;
+			case shareGraph:
+				lblText.setText("Share graph with another user");
+				break;
+			case importGraph:
+				lblText.setText("Import a graph from DOT format");
+				break;
+			case exportGraph:
+				lblText.setText("Export graph");
+				break;
 		}
 	}
 }
