@@ -172,7 +172,6 @@ public class DrawingImpl implements Drawing {
                 }
             }
             if (count > 1) {
-                Console.log("repeat edge");
                 thisEdge.setDouble();
             }
         }
