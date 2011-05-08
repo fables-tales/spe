@@ -63,7 +63,7 @@ public class Toolbox extends Composite {
 		pnlToolsFlowStyle.add(btnProcess);
 		pnlToolsFlowStyle.add(btnTerminator);
 		pnlToolsFlowStyle.add(btnDecision);
-		pnlToolsFlowStyle.add(btnNormal);
+		//pnlToolsFlowStyle.add(btnNormal);
 		
 		pnlToolsAlgsRun.add(btnStep);
 		pnlToolsAlgsRun.add(btnStepAll);
