@@ -185,12 +185,36 @@ h1 {
   margin-right: 5px;
 }
 
-.btnAddVert, .btnAddEdge, .btnMove, .btnSelect, .btnZoom, .btnToggleDirection, .btnGraphOptions, .btnAutoLayout, .btnCluster, .btnDjikstra, .btnStep, .btnStepAll, .btnDelete, .btnProcess, .btnDecision, .btnTerminator, .btnNormal {
+.btnAddVert, .btnAddEdge, .btnMove, .btnSelect, .btnZoom, .btnShareGraph, .btnImportGraph, .btnExportGraph, .btnToggleDirection, .btnGraphOptions, .btnAutoLayout, .btnCluster, .btnDjikstra, .btnStep, .btnStepAll, .btnDelete, .btnProcess, .btnDecision, .btnTerminator, .btnNormal {
   width: 35px;
   height: 35px;
   border: 0;
   cursor: pointer;
   margin: 0 2px;
+}
+
+.btnExportGraph {
+  background: url(../images/export.png) no-repeat;
+}
+
+.btnExportGraph:hover {
+  background: url(../images/exportd.png) no-repeat;
+}
+
+.btnImportGraph {
+  background: url(../images/import.png) no-repeat;
+}
+
+.btnImportGraph:hover {
+  background: url(../images/importd.png) no-repeat;
+}
+
+.btnShareGraph {
+  background: url(../images/share.png) no-repeat;
+}
+
+.btnShareGraph:hover {
+  background: url(../images/shareg.png) no-repeat;
 }
 
 .btnToggleDirection {
