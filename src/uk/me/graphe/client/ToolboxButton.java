@@ -93,6 +93,18 @@ public class ToolboxButton extends Button
 				this.setStyleName("btnToggleDirection");
 				this.setTitle("Toggle Edge Direction");
 				break;
+			case shareGraph:
+				this.setStyleName("btnShareGraph");
+				this.setTitle("Share graph");
+				break;
+			case importGraph:
+				this.setStyleName("btnImportGraph");
+				this.setTitle("Import graph");
+				break;
+			case exportGraph:
+				this.setStyleName("btnExportGraph");
+				this.setTitle("Export graph");
+				break;
 		}
 		
 		super.addClickHandler(new ClickHandler()
