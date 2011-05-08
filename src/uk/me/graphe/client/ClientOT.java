@@ -120,7 +120,6 @@ public class ClientOT {
                 }
             }
         }.schedule(1500);
-<<<<<<< HEAD
     }
     
     public void connect(){
@@ -134,9 +133,6 @@ public class ClientOT {
     
     public void requestGraph(){
     	
-=======
-
->>>>>>> f69fba6bb130c02658c69dcb3a710b2d4d47bec0
         new Timer() {
 
             @Override
