@@ -2,14 +2,28 @@ package uk.me.graphe.client;
 
 import java.util.ArrayList;
 
-import com.google.gwt.user.client.Window;
-
 public class DrawingPolygon {
 
     double mZoom = 1;
     private int mOffsetX, mOffsetY;
+    private int[] mEdgeCoords = new int[4];
+
     private ArrayList<Integer[]> polygonXList = new ArrayList<Integer[]>();
     private ArrayList<Integer[]> polygonYList = new ArrayList<Integer[]>();
+    
+    /**
+     * Set the coordinates if this polygon represents an edge
+     * @param startX
+     * @param startY
+     * @param endX
+     * @param endY
+     */
+    public void setEdge(int startX, int startY, int endX, int endY){
+        mEdgeCoords[0] = startX;
+        mEdgeCoords[1] = endY;
+        mEdgeCoords[2] = startX;
+        mEdgeCoords[3] = endY;
+    }
     
     /**
      * Set the polygon coordinates
