@@ -162,6 +162,7 @@ public class Toolbox extends Composite {
 					{
 						parent.spDjikstra.stepAll();
 						parent.clearSelectedObjects();
+						
 						btnDjikstra.click();
 						pnlToolsAlgsRun.setVisible(false);
 					}
