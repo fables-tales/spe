@@ -41,6 +41,18 @@ public class ToolboxButton extends Button
 				this.setStyleName("btnAddVert");
 				this.setTitle("Add Vertex (v)");
 				break;
+			case djikstra:
+				this.setStyleName("btnDjikstra");
+				this.setTitle("Run Dijkstra");
+				break;
+			case step:
+				this.setStyleName("btnStep");
+				this.setTitle("Step Once");
+				break;
+			case stepAll:
+				this.setStyleName("btnStepAll");
+				this.setTitle("Step All");
+				break;
 			case addEdge:
 				this.setStyleName("btnAddEdge");
 				this.setTitle("Add Edge (e)");
@@ -52,6 +64,10 @@ public class ToolboxButton extends Button
 			case autolayout:
 				this.setStyleName("btnAutoLayout");
 				this.setTitle("Auto Layout");
+				break;
+			case graphOptions:
+				this.setStyleName("btnGraphOptions");
+				this.setTitle("Set Graph Options");
 				break;
 			case cluster:
 				this.setStyleName("btnCluster");
@@ -72,7 +88,23 @@ public class ToolboxButton extends Button
 			case styleNormal:
 				this.setStyleName("btnNormal");
 				this.setTitle("Set Normal Style");
-				break;			
+				break;
+			case toggleEdgeDirection:
+				this.setStyleName("btnToggleDirection");
+				this.setTitle("Toggle Edge Direction");
+				break;
+			case shareGraph:
+				this.setStyleName("btnShareGraph");
+				this.setTitle("Share graph");
+				break;
+			case importGraph:
+				this.setStyleName("btnImportGraph");
+				this.setTitle("Import graph");
+				break;
+			case exportGraph:
+				this.setStyleName("btnExportGraph");
+				this.setTitle("Export graph");
+				break;
 		}
 		
 		super.addClickHandler(new ClickHandler()

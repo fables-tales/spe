@@ -100,7 +100,7 @@ public class Edge {
         if (o instanceof Edge) {
             Edge cmp = (Edge) o;
             return cmp.mVertex1.equals(mVertex1)
-                    && cmp.mVertex2.equals(mVertex2) && cmp.mDir == mDir;
+                    && cmp.mVertex2.equals(mVertex2);
         } else
             return false;
     }
@@ -116,6 +116,14 @@ public class Edge {
     @Override
     public int hashCode() {
         return mVertex1.hashCode() + mVertex2.hashCode();
+    }
+
+    public void replaceVertex(String label, String name) {
+        if (mVertex1.getLabel() == label) {
+            mVertex1 = new Vertex(name);
+        } else if (mVertex2.getLabel() == label) {
+            mVertex2 = new Vertex(name);
+        }
     }
 
 }

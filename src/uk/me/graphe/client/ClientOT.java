@@ -21,6 +21,8 @@ import uk.me.graphe.shared.messages.ChatMessage;
 import uk.me.graphe.shared.messages.Message;
 import uk.me.graphe.shared.messages.MessageFactory;
 import uk.me.graphe.shared.messages.RequestGraphMessage;
+import uk.me.graphe.shared.messages.SetGraphPropertiesMessage;
+import uk.me.graphe.shared.messages.SetNameForIdMessage;
 import uk.me.graphe.shared.messages.StateIdMessage;
 import uk.me.graphe.shared.messages.UserAuthMessage;
 import uk.me.graphe.shared.messages.GraphListMessage;
@@ -30,6 +32,7 @@ import uk.me.graphe.shared.messages.operations.CompositeOperation;
 import uk.me.graphe.shared.messages.operations.DeleteEdgeOperation;
 import uk.me.graphe.shared.messages.operations.DeleteNodeOperation;
 import uk.me.graphe.shared.messages.operations.GraphOperation;
+import uk.me.graphe.shared.messages.operations.RenameNodeOperation;
 import uk.me.graphe.shared.messages.operations.SetStyleOperation;
 
 import com.google.gwt.user.client.Timer;
@@ -52,6 +55,8 @@ public class ClientOT {
     private boolean mInited = true;
     private boolean mServer = false;
 
+    private int mGraphId;
+
     public ClientOT() {
         mSc = ServerChannel.getInstance();
         mSc.addReceiveNotification(new ReceiveNotificationRunner() {
@@ -62,21 +67,21 @@ public class ClientOT {
             }
         });
 
-         //Timer waits to see if server connection has been established
+        // Timer waits to see if server connection has been established
         new Timer() {
             @Override
             public void run() {
                 /*
-                 * Options:
-                 * 1) No Server connection + any ops
-                 * 2) Server connection + no local
-                 * 3) Server connection + local
+                 * Options: 1) No Server connection + any ops 2) Server
+                 * connection + no local 3) Server connection + local
                  */
                 if (mServer == false) {
                     Console.log("No server connection, offline mode enabled");
                     mInfo = mStore.getInformation();
-                    if(!(mInfo.getLocal().isEmpty() && mInfo.getServer().isEmpty()) &&
-                            Window.confirm("A previous graph has been detected, press okay to load")) {
+                    if (!(mInfo.getLocal().isEmpty() && mInfo.getServer()
+                            .isEmpty())
+                            && Window
+                                    .confirm("A previous graph has been detected, press okay to load")) {
                         List<GraphOperation> ops = mInfo.getServer();
                         if (!ops.isEmpty()) {
                             for (GraphOperation op : ops) {
@@ -89,34 +94,33 @@ public class ClientOT {
                                 op.applyTo(mGraph);
                                 mUnsentOps.add(op);
                             }
-                        }                     
-                    }
-                    else
+                        }
+                    } else
                         mStore.setup(1, null, null);
-                }
-                else {
+                } else {
                     Console.log("Server connection established");
                     List<GraphOperation> ops = mInfo.getLocal();
-                    if (!ops.isEmpty() &&
-                       Window.confirm("Offline operations have been detected, press okay to load these operations or cancel to discard them")) {
-                       for (GraphOperation op : ops) {
-                           op.applyTo(mGraph);
-                           mUnsentOps.add(op);
-                       }
-                    }
-                    else
+                    if (!ops.isEmpty()
+                            && Window
+                                    .confirm("Offline operations have been detected, press okay to load these operations or cancel to discard them")) {
+                        for (GraphOperation op : ops) {
+                            op.applyTo(mGraph);
+                            mUnsentOps.add(op);
+                        }
+                    } else
                         mStore.setup(1, null, null);
                     // Store the graph operations retrieve from server at load
-//                    for (GraphOperation op : mServerOperations) {
-//                        CompositeOperation comp = (CompositeOperation)op;
-//                        for (GraphOperation o : comp.asIndividualOperations()) {
-//                            if (!o.isNoOperation())
-//                                mStore.store(o, true);
-//                        }
-//                    } 
+                    // for (GraphOperation op : mServerOperations) {
+                    // CompositeOperation comp = (CompositeOperation)op;
+                    // for (GraphOperation o : comp.asIndividualOperations()) {
+                    // if (!o.isNoOperation())
+                    // mStore.store(o, true);
+                    // }
+                    // }
                 }
             }
         }.schedule(1500);
+<<<<<<< HEAD
     }
     
     public void connect(){
@@ -130,6 +134,9 @@ public class ClientOT {
     
     public void requestGraph(){
     	
+=======
+
+>>>>>>> f69fba6bb130c02658c69dcb3a710b2d4d47bec0
         new Timer() {
 
             @Override
@@ -169,33 +176,33 @@ public class ClientOT {
             Console.log("got message" + m.getMessage());
             if (m.isOperation()) {
                 CompositeOperation graph = (CompositeOperation) messages.get(0);
-                List<GraphOperation> myComposite = new ArrayList<GraphOperation>(mSentUnAcked);
+                List<GraphOperation> myComposite = new ArrayList<GraphOperation>(
+                        mSentUnAcked);
                 CompositeOperation me = new CompositeOperation(myComposite);
                 Console.log("message is:" + m.toJson());
                 Console.log("transforming against: " + me.toJson());
                 GraphOperation o = GraphTransform.transform(graph, me);
                 Console.log("transformed message" + m.toJson());
-                Console.log("graph current state is v: " + mGraph.getVertexDrawables().size()
-                        + " e:" + mGraph.getEdgeDrawables().size());
+                Console.log("graph current state is v: "
+                        + mGraph.getVertexDrawables().size() + " e:"
+                        + mGraph.getEdgeDrawables().size());
                 o.applyTo(mGraph);
                 Console.log("after operation current state is v: "
                         + mGraph.getVertexDrawables().size() + " e:"
                         + mGraph.getEdgeDrawables().size());
                 mServerOperations.add(o);
                 mSentUnAcked.clear();
-                CompositeOperation co = (CompositeOperation)o;
+                CompositeOperation co = (CompositeOperation) o;
                 for (GraphOperation op : co.asIndividualOperations()) {
                     if (!op.isNoOperation()) {
                         mStore.store(op, true);
                     }
                 }
                 mStore.Ack();
-            } else if (m.getMessage().equals(new StateIdMessage(0, 0).getMessage())) {
+            } else if (m.getMessage().equals(
+                    new StateIdMessage(0, 0).getMessage())) {
                 mServerStateId = ((StateIdMessage) m).getState();
-            } else if (m.getMessage().equals("chat")) {
-            	//show message here
-            	ChatMessage cm = (ChatMessage)m;
-            	Chat.getInstance().onReceiveMessage(cm);
+                mGraphId = ((StateIdMessage) m).getGraphId();
             } else if (m.getMessage().equals("userAuth")) {
             	UserAuthMessage uam = (UserAuthMessage)m;
             	if(uam.isAuthd()){
@@ -211,6 +218,21 @@ public class ClientOT {
             } else if (m.getMessage().equals("graphList")) {
             	GraphListMessage glm = (GraphListMessage)m;
             	UserPanel.displayGraphList(glm.getGraphList());
+            } else if (m.getMessage().equals("chat")) {
+                // show message here
+                ChatMessage cm = (ChatMessage) m;
+                Chat.getInstance().onReceiveMessage(cm);
+            } else if (m.getMessage().equals("setNameForId")) {
+                SetNameForIdMessage snfi = (SetNameForIdMessage) m;
+                if (snfi.getId() == this.mGraphId) {
+                    mGuiInstance.updateGraphName(snfi.getTitle());
+                }
+
+            } else if (m.getMessage().equals("sgp")) {
+                SetGraphPropertiesMessage sgpm = (SetGraphPropertiesMessage) m;
+                mGuiInstance.updateGraphProperties(sgpm.hasDirection(), sgpm
+                        .hasWeight(), sgpm.hasFlowChart());
+
             }
 
         }
@@ -255,22 +277,24 @@ public class ClientOT {
     }
 
     public void notifyRemoveEdge(Edge edge) {
-    	DeleteEdgeOperation newop = new DeleteEdgeOperation((edge));
+        DeleteEdgeOperation newop = new DeleteEdgeOperation((edge));
         mUnsentOps.add(newop);
         mStore.store(newop, false);
     }
 
     public void notifyRemoveVertex(Vertex vertex) {
-    	DeleteNodeOperation newop = new DeleteNodeOperation(vertex);
+        DeleteNodeOperation newop = new DeleteNodeOperation(vertex);
         mUnsentOps.add(newop);
         mStore.store(newop, false);
     }
 
-    public void notifyAddEdge(Vertex vertex, Vertex vertex2, VertexDirection fromto, int weight) {
-    	AddEdgeOperation newop = new AddEdgeOperation(new Edge(vertex, vertex2, fromto));
-    	newop.setWeight(weight);
+    public void notifyAddEdge(Vertex vertex, Vertex vertex2,
+            VertexDirection fromto, int weight) {
+        AddEdgeOperation newop = new AddEdgeOperation(new Edge(vertex, vertex2,
+                fromto));
+        newop.setWeight(weight);
         mUnsentOps.add(newop);
-    	mStore.store(newop, false);
+        mStore.store(newop, false);
 
     }
 
@@ -286,6 +310,30 @@ public class ClientOT {
         SetStyleOperation sso = new SetStyleOperation(new Vertex(label), style);
         mUnsentOps.add(sso);
         mStore.store(sso, false);
+    }
+
+    public void notifyNewName(String name) {
+        SetNameForIdMessage snfi = new SetNameForIdMessage(mGraphId, name);
+        mSc.send(snfi.toJson());
+    }
+
+    private Graphemeui mGuiInstance;
+
+    public void passGraphemeUiInstance(Graphemeui graphemeui) {
+        mGuiInstance = graphemeui;
+    }
+
+    public void notifyUpdateParameters(boolean isDigraph, boolean isWeighted,
+            boolean isFlowChart) {
+        SetGraphPropertiesMessage sgpm = new SetGraphPropertiesMessage(
+                isWeighted, isDigraph, isFlowChart);
+        mSc.send(sgpm.toJson());
+    }
+
+    public void notifyRenameVertex(String label, String name) {
+        RenameNodeOperation rno = new RenameNodeOperation(new Vertex(label), name);
+        mUnsentOps.add(rno);
+        mStore.store(rno, false);
     }
 
 }

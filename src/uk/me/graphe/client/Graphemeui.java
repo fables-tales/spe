@@ -3,9 +3,11 @@ package uk.me.graphe.client;
 import java.util.ArrayList;
 
 import uk.me.graphe.client.algorithms.AutoLayout;
+import uk.me.graphe.client.algorithms.ShortestPathDjikstras;
 import uk.me.graphe.client.communications.ServerChannel;
 import uk.me.graphe.client.dialogs.EdgeDialog;
 import uk.me.graphe.client.dialogs.GraphNameDialog;
+import uk.me.graphe.client.dialogs.GraphOptionsDialog;
 import uk.me.graphe.client.dialogs.HelpDialog;
 import uk.me.graphe.client.dialogs.ShareGraphDialog;
 import uk.me.graphe.client.dialogs.VertexDialog;
@@ -34,12 +36,14 @@ public class Graphemeui {
     public final GraphNameDialog dialogGraphName;
     public final ShareGraphDialog dialogShareGraph;
     public final HelpDialog dialogHelp;
+    public final GraphOptionsDialog dialogGraphOptions;
     public final GraphInfo graphInfo;
     public final Toolbox tools;
     public final ToolInfo toolInfo;   
     public final GraphManager2d graphManager;
     public final GraphManager2dFactory graphManagerFactory;
     public final Drawing drawing;
+    public final ShortestPathDjikstras spDjikstra;
     
     private LocalStore mStore;
     
@@ -55,8 +59,11 @@ public class Graphemeui {
 	private static final int X = 0, Y = 1;
 
 	private AutoLayout lay;
+	
+	
 
-    public Graphemeui() {
+	public Graphemeui() {
+	    
         graphManagerFactory = GraphManager2dFactory.getInstance();
         graphManager = graphManagerFactory.makeDefaultGraphManager();
         graphManager.addRedrawCallback(new Runnable() {
@@ -68,27 +75,31 @@ public class Graphemeui {
                 // here!
             }
         });
+        drawing = new DrawingImpl();
         
     	dialogVertex = VertexDialog.getInstance(this);
     	dialogEdge = EdgeDialog.getInstance(this);
     	dialogHelp = HelpDialog.getInstance(this);
     	dialogGraphName = GraphNameDialog.getInstance(this);
     	dialogShareGraph = ShareGraphDialog.getInstance(this);
+    	dialogGraphOptions = GraphOptionsDialog.getInstance(this);
     	toolInfo = new ToolInfo(this);
         canvas = new Canvas(this);
         chat = Chat.getInstance(this);
         graphInfo = new GraphInfo(this);
-        drawing = new DrawingImpl();
         tools = new Toolbox(this);
         tooltip = new CanvasTooltip(this);
+        
         drawing.setOffset(0, 0);
-        drawing.setZoom(1);
+        drawing.setZoom(1);     
         
     	selectedVertices = new ArrayList<VertexDrawable>();
     	selectedEdges = new ArrayList<EdgeDrawable>();
     	isHotkeysEnabled = true;
-    	isHelpEnabled = false;
-    	
+    	isHelpEnabled = true;
+
+    	// Algorithms here
+    	spDjikstra = new ShortestPathDjikstras();
     	lay = new AutoLayout(graphManager);
     }
     
@@ -109,6 +120,7 @@ public class Graphemeui {
         };
         t.scheduleRepeating(1000);
 
+        // TODO: Fix hotkeys so it works globally
 		KeyUpHandler khHotkeys = new KeyUpHandler() {
 			public void onKeyUp(KeyUpEvent e) {
 				if (isHotkeysEnabled) {
@@ -129,17 +141,21 @@ public class Graphemeui {
                             tools.setTool(Tools.zoom);
                             break;
                         case 68: // d
-                            Window.open(drawing.getUrl(), "_blank", null);
+                            //Window.open(drawing.getUrl(), "_blank", null);
                             break;
                         case 71: // g
-                            Window.prompt("DOT graph Code", GraphString.getDot(graphManager, "Grapheme",true,true));
+                            //Window.prompt("DOT graph Code", GraphString.getDot(graphManager, "Grapheme",true,true));
                             break;
                         case 73: // i
                             // import graph code
-                            String graphCode = Window.prompt("DOT graph Code","");
-                            if(graphCode != null)GraphString.addDot(graphManager, graphCode);
+                            //String graphCode = Window.prompt("DOT graph Code","");
+                            //if(graphCode != null)GraphString.addDot(graphManager, graphCode);
                             // GraphString.addDot(graphManager, graphCode) will return false
                             // if error detected in code
+                            break;
+                        case 87:// w
+                            //drawing.toggle2d();
+                            //graphManager.invalidate();
                             break;
 						case KeyCodes.KEY_DELETE:
 							tools.setTool(Tools.delete);
@@ -152,9 +168,9 @@ public class Graphemeui {
 		};
 
         RootPanel.get().addDomHandler(khHotkeys, KeyUpEvent.getType());
-                
-        ClientOT.getInstance().setOperatingGraph(this.graphManager);
         
+        ClientOT.getInstance().setOperatingGraph(this.graphManager);
+        ClientOT.getInstance().passGraphemeUiInstance(this);
     }
     
     
@@ -162,26 +178,23 @@ public class Graphemeui {
     	Vertex vFrom = graphManager.getVertexFromDrawable(from);
     	Vertex vTo = graphManager.getVertexFromDrawable(to);
     	
-    	if (weight == null)
-    	{
-    		// TODO: There is weight
-            graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo, weight);
-            ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo, weight);	   		
-    	}
-    	else
-    	{
-    		// TODO: No weight
-            graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo, weight);
-            ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo, weight);		
-    	}
+        graphManager.addEdge(vFrom, vTo, VertexDirection.fromTo, weight);
+        ClientOT.getInstance().notifyAddEdge(vFrom, vTo, VertexDirection.fromTo, weight);		
         
         clearSelectedObjects();
     }
     
     public void addVertex(String label) {
+    	// TODO: Style the vertex if its in flow chart mode.
         Vertex v = new Vertex(label);
         graphManager.addVertex(v, canvas.lMouseDown[X], canvas.lMouseDown[Y], VERTEX_SIZE);
-        ClientOT.getInstance().notifyAddVertex(v, canvas.lMouseDown[X], canvas.lMouseDown[Y], VERTEX_SIZE);    	
+        ClientOT.getInstance().notifyAddVertex(v, canvas.lMouseDown[X], canvas.lMouseDown[Y], VERTEX_SIZE);
+        if(drawing.isFlowChart()){
+        	VertexDrawable vd = graphManager.getDrawableFromVertex(v);
+        	vd.setStyle(VertexDrawable.STROKED_SQUARE_STYLE);
+        	vd.updateSize(VERTEX_SIZE*2, VERTEX_SIZE);
+        	ClientOT.getInstance().notifyStyleChange(vd.getLabel(), VertexDrawable.STROKED_SQUARE_STYLE);
+        }
     }
 
     public void clearSelectedEdges()
@@ -205,8 +218,6 @@ public class Graphemeui {
     	for(VertexDrawable vd : selectedVertices) {
     		vd.setHilighted(false);
     	}
-    	
-    	tools.pnlTools4.setVisible(false);
     	
     	selectedVertices.clear();
     }
@@ -241,6 +252,41 @@ public class Graphemeui {
     	selectedEdges.clear(); 	
     }
     
+    public void editNodeName(String name)
+    {
+    	//TODO: implement - edit node name locally and over OT too. Remember you need to edit the
+    	// vertex and the vertex drawable label. Keep the invalidate to redraw
+    	VertexDrawable vd = selectedVertices.get(0);
+    	String oldLabel = vd.getLabel();
+    	graphManager.renameVertex(vd.getLabel(), name);
+    	ClientOT.getInstance().notifyRenameVertex(oldLabel, name);
+    	clearSelectedVertices();
+    	graphManager.invalidate();
+    }
+    
+    public void editEdgeWeight(int weight)
+    {
+    	EdgeDrawable ed = selectedEdges.get(0);
+    	graphManager.setEdgeWeight(ed, weight);
+    	Edge e = graphManager.getEdgeFromDrawable(ed);
+    	ClientOT.getInstance().notifyRemoveEdge(e);
+    	ClientOT.getInstance().notifyAddEdge(e.getFromVertex(), e.getToVertex(), e.getDirection(), e.getWeight());
+    	clearSelectedEdges();
+    	graphManager.invalidate();
+    }
+    
+    public void editGraphName(String name)
+    {
+    	updateGraphName(name);
+    	ClientOT.getInstance().notifyNewName(name);
+    }
+    
+    public void editGraphProperties(boolean isDigraph, boolean isFlowChart, boolean isWeighted)
+    {
+    	updateGraphProperties(isDigraph, isWeighted, isFlowChart);
+    	ClientOT.getInstance().notifyUpdateParameters(isDigraph, isWeighted, isFlowChart);
+    }
+    
     public void moveNode(VertexDrawable vd, int x, int y) {
         Vertex v = graphManager.getVertexFromDrawable(vd);
         
@@ -263,6 +309,36 @@ public class Graphemeui {
     		ClientOT.getInstance().notifyStyleChange(vd.getLabel(), style);
     	}
     	graphManager.invalidate();
+    }
+    
+    public void toggleEdgeDirection()
+    {
+    	for (EdgeDrawable ed : selectedEdges)
+    	{
+    		// TODO: toggle the edge direction locally via Edge and EdgeDrawable and over OT.
+    		
+    		if (ed.needsFromToArrow())
+    		{
+    			Edge e  = graphManager.getEdgeFromDrawable(ed);
+    			graphManager.removeEdge(e);
+    			graphManager.addEdge(e.getToVertex(), e.getFromVertex(), VertexDirection.fromTo, e.getWeight());
+    			ClientOT.getInstance().notifyRemoveEdge(e);
+    			ClientOT.getInstance().notifyAddEdge(e.getToVertex(), e.getFromVertex(), VertexDirection.fromTo, e.getWeight());
+    		}
+    		
+    		if (ed.needsToFromArrow())
+    		{
+    			Edge e  = graphManager.getEdgeFromDrawable(ed);
+    			graphManager.removeEdge(e);
+    			graphManager.addEdge(e.getToVertex(), e.getFromVertex(), VertexDirection.toFrom, e.getWeight());
+    			ClientOT.getInstance().notifyRemoveEdge(e);	
+    			ClientOT.getInstance().notifyAddEdge(e.getToVertex(), e.getFromVertex(), VertexDirection.toFrom, e.getWeight());  			
+    		}
+    	}
+    	
+    	clearSelectedEdges();
+    	
+    	tools.setTool(Tools.select);
     }
     
     public boolean toggleSelectedEdgeAt(int x, int y) {
@@ -310,24 +386,44 @@ public class Graphemeui {
         	}
         	graphManager.invalidate();
         	
-        	tools.pnlTools4.setVisible(true);
-        	
             return true;
-        }
-        
-        if (selectedVertices.isEmpty())
-        {
-        	tools.pnlTools4.setVisible(false);
         }
 
         return false;
     }
-    
-    public void userWentOffline(String user)
+        
+    public void updateGraphName(String name)
     {
-    	// TODO: Implement this function and change the Server to call this function
-    	// 		 when another client disconnects from the graph. This function lets the 
-    	//		 chat and other things know it's happend.
+    	graphManager.setName(name);
+    	graphInfo.update();
+    }
+    
+    public void updateGraphProperties(boolean isDigraph, boolean isWeighted, boolean isFlowChart)
+    {
+		drawing.setIsFlowChart(isFlowChart);
+		drawing.setIsDigraph(isDigraph);
+		drawing.setIsWeighted(isWeighted);
+		graphInfo.update();
+		tools.updateVisibleTools();
+		
+		clearSelectedObjects();
+		
+		for(VertexDrawable vd : graphManager.getVertexDrawables())
+		{
+			selectedVertices.add(vd);
+		}
+		
+		if (isFlowChart)
+		{
+			setSelectedSyle(VertexDrawable.STROKED_SQUARE_STYLE, VERTEX_SIZE*2, VERTEX_SIZE);
+		}
+		else
+		{
+			setSelectedSyle(VertexDrawable.FILLED_CIRCLE_STYLE, VERTEX_SIZE, VERTEX_SIZE);
+		}
+		
+		clearSelectedObjects();
+		graphManager.invalidate();
     }
     
 	public void zoomIn() {

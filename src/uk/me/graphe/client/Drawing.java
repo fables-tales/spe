@@ -93,4 +93,32 @@ public interface Drawing {
      * 
      */
     public String getUrl();
+    
+    /**
+     * toggle 2d canvas
+     */
+    public void toggle2d();
+    
+    /**
+     * Get time taken for last render in seconds
+     * @return
+     *      time taken for last render in seconds
+     */
+    public double getRenderTime();
+    
+    /**
+     * Methods for setting style
+     * @param isDigraph
+     */
+    public void setIsDigraph(boolean isDigraph);
+
+    public boolean isDigraph();
+    
+    public void setIsWeighted(boolean isWeighted);
+
+    public boolean isWeighted();
+    
+    public void setIsFlowChart(boolean isFlowChart);
+
+    public boolean isFlowChart();
 }

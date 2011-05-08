@@ -19,7 +19,9 @@ import uk.me.graphe.shared.messages.factories.MakeGraphFactory;
 import uk.me.graphe.shared.messages.factories.MoveNodeFactory;
 import uk.me.graphe.shared.messages.factories.NoSuchGraphFactory;
 import uk.me.graphe.shared.messages.factories.OpenGraphFactory;
+import uk.me.graphe.shared.messages.factories.RenameNodeFactory;
 import uk.me.graphe.shared.messages.factories.RequestGraphFactory;
+import uk.me.graphe.shared.messages.factories.SetGraphPropertiesFactory;
 import uk.me.graphe.shared.messages.factories.SetNameForIdFactory;
 import uk.me.graphe.shared.messages.factories.SetStyleFactory;
 import uk.me.graphe.shared.messages.factories.StateIdFactory;
@@ -51,6 +53,8 @@ public abstract class MessageFactory {
         sOpFactoryMap.put("addPrivs", new AddPrivsFactory());
         sOpFactoryMap.put("setStyle", new SetStyleFactory());
         sOpFactoryMap.put("setNameForId", new SetNameForIdFactory());
+        sOpFactoryMap.put("sgp", new SetGraphPropertiesFactory());
+        sOpFactoryMap.put("rename", new RenameNodeFactory());
     }
 
     /**

@@ -185,12 +185,52 @@ h1 {
   margin-right: 5px;
 }
 
-.btnAddVert, .btnAddEdge, .btnMove, .btnSelect, .btnZoom, .btnAutoLayout, .btnCluster, .btnDelete, .btnProcess, .btnDecision, .btnTerminator, .btnNormal {
+.btnAddVert, .btnAddEdge, .btnMove, .btnSelect, .btnZoom, .btnShareGraph, .btnImportGraph, .btnExportGraph, .btnToggleDirection, .btnGraphOptions, .btnAutoLayout, .btnCluster, .btnDjikstra, .btnStep, .btnStepAll, .btnDelete, .btnProcess, .btnDecision, .btnTerminator, .btnNormal {
   width: 35px;
   height: 35px;
   border: 0;
   cursor: pointer;
   margin: 0 2px;
+}
+
+.btnExportGraph {
+  background: url(../images/export.png) no-repeat;
+}
+
+.btnExportGraph:hover {
+  background: url(../images/exportd.png) no-repeat;
+}
+
+.btnImportGraph {
+  background: url(../images/import.png) no-repeat;
+}
+
+.btnImportGraph:hover {
+  background: url(../images/importd.png) no-repeat;
+}
+
+.btnShareGraph {
+  background: url(../images/share.png) no-repeat;
+}
+
+.btnShareGraph:hover {
+  background: url(../images/shared.png) no-repeat;
+}
+
+.btnToggleDirection {
+  background: url(../images/toggledir.png) no-repeat;
+}
+
+.btnToggleDirection:hover {
+  background: url(../images/toggledird.png) no-repeat;
+}
+
+.btnGraphOptions {
+  background: url(../images/graphopts.png) no-repeat;
+}
+
+.btnGraphOptions:hover {
+  background: url(../images/graphoptsd.png) no-repeat;
 }
 
 .btnAddVert {
@@ -199,6 +239,30 @@ h1 {
 
 .btnAddVert:hover {
   background: url(../images/addvertd.png) no-repeat;
+}
+
+.btnDjikstra {
+  background: url(../images/dijkstra.png) no-repeat;
+}
+
+.btnDjikstra:hover {
+  background: url(../images/dijkstrad.png) no-repeat;
+}
+
+.btnStep{
+  background: url(../images/step.png) no-repeat;
+}
+
+.btnStep:hover {
+  background: url(../images/stepd.png) no-repeat;
+}
+
+.btnStepAll{
+  background: url(../images/stepall.png) no-repeat;
+}
+
+.btnStepAll:hover {
+  background: url(../images/stepalld.png) no-repeat;
 }
 
 .btnAddEdge {
@@ -303,7 +367,8 @@ h1 {
 .btnHelpOn, .btnHelpOff {
   border: 0;
   height: 30px;
-  width: 30px;
+  width: 24px;
+  cursor: pointer;
 }
 
 .btnHelpOn {
@@ -311,7 +376,7 @@ h1 {
 }
 
 .btnHelpOn:hover {
-  background: url(../images/helpOnH.png) left center no-repeat;
+  background: url(../images/helpOff.png) left center no-repeat;
 }
 
 .btnHelpOff {
@@ -319,5 +384,26 @@ h1 {
 }
 
 .btnHelpOff:hover {
-  background: url(../images/helpOffH.png) left center no-repeat;
+  background: url(../images/helpOn.png) left center no-repeat;
+}
+
+.optionsDialog {
+  background-color: #fff;
+  border: 3px solid #c6d1df;
+  font: bold 15px arial;
+  padding: 4px 8px;  
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  opacity:0.8;
+  filter:alpha(opacity=80);
+}
+
+.optionsDialog label {
+  font: normal 13px arial;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
+.optionsDialog input {
+  margin: 5px 0;
 }

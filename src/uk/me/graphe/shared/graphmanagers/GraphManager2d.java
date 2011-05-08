@@ -176,5 +176,14 @@ public interface GraphManager2d {
     public void setVertexStyle(Vertex node, int mStyle);
     
     public String getName();
+
     public void setName(String name);
+    
+    public EdgeDrawable getDrawableFromEdge(Edge e);
+
+	public VertexDrawable getDrawableFromVertex(Vertex v);
+
+    public void setEdgeWeight(EdgeDrawable ed, int weight);
+
+    public void renameVertex(String label, String name);
 }

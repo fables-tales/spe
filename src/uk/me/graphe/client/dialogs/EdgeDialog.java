@@ -9,6 +9,7 @@ import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -23,7 +24,7 @@ public class EdgeDialog extends PopupPanel
 	private final Label lblTitle;
 	private final TextBox txtParam;
 	
-	private boolean isValid;
+	private boolean isValid, isEdit;
 	
 	public EdgeDialog (Graphemeui gui)
 	{
@@ -97,9 +98,21 @@ public class EdgeDialog extends PopupPanel
 	{
 		if (isValid)
 		{
-			parent.addEdge(parent.selectedVertices.get(0), parent.selectedVertices.get(1), Integer.parseInt(txtParam.getText()));
+			if (isEdit)
+			{
+			    try {
+			        parent.editEdgeWeight(Integer.parseInt(txtParam.getText()));
+			    } catch (NumberFormatException nfe) {
+			        Window.alert("invalid weight entered");
+			    }
+			}
+			else
+			{
+				parent.addEdge(parent.selectedVertices.get(0), parent.selectedVertices.get(1), Integer.parseInt(txtParam.getText()));
+			}
+			
 			parent.clearSelectedObjects();
-			parent.tools.setTool(Tools.addEdge);
+			if (!isEdit) parent.tools.setTool(Tools.addEdge);
 			parent.isHotkeysEnabled = true;
 			super.hide();
 		}
@@ -113,6 +126,15 @@ public class EdgeDialog extends PopupPanel
 	
 	public void show (String initialValue, int left, int top)
 	{
+		if (!initialValue.equals(""))
+		{
+			isEdit = true;
+		}
+		else
+		{
+			isEdit = false;
+		}
+		
 		parent.isHotkeysEnabled = false;
 		txtParam.setText(initialValue);
 		this.setPopupPosition(left, top);		

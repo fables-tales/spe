@@ -131,9 +131,6 @@ public class ClientManager {
         this.unblockSelection();
     }
 
-    public List<Client> getClientsWith(int graphId) {
-        return null;
-    }
 
     public int getNumberOfClients() {
         return this.mClientMap.size();

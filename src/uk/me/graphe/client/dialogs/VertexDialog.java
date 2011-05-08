@@ -23,7 +23,7 @@ public class VertexDialog extends PopupPanel
 	private final Label lblTitle;
 	private final TextBox txtParam;
 	
-	private boolean isValid;
+	private boolean isValid, isEdit;
 	
 	public VertexDialog (Graphemeui gui)
 	{
@@ -97,8 +97,16 @@ public class VertexDialog extends PopupPanel
 	{
 		if (isValid)
 		{
-			parent.addVertex(txtParam.getText());
-			parent.tools.setTool(Tools.addVertex);
+			if (isEdit)
+			{
+				parent.editNodeName(txtParam.getText());
+			}
+			else
+			{
+				parent.addVertex(txtParam.getText());
+			}
+			
+			if (!isEdit) parent.tools.setTool(Tools.addVertex);
 			parent.isHotkeysEnabled = true;
 			super.hide();
 		}
@@ -112,6 +120,14 @@ public class VertexDialog extends PopupPanel
 	
 	public void show (String initialValue, int left, int top)
 	{
+		if (!initialValue.equals(""))
+		{
+			isEdit = true;
+		}
+		else
+		{
+			isEdit = false;
+		}
 		parent.isHotkeysEnabled = false;
 		txtParam.setText(initialValue);
 		this.setPopupPosition(left, top);		

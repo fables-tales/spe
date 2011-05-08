@@ -32,36 +32,36 @@ public class UserDatabase {
     public String[] getUserIDs() {
     	List<UserDB> users = mData.find(UserDB.class).asList();
     	int size = (int) mCollection.count();
-    	String[] userIDs = new String[size];
+    	String[] userIds = new String[size];
 		int i = 0;
     	for (UserDB item : users) {
-    		userIDs[i] = item.getId();
+    		userIds[i] = item.getId();
     		i++;
     	}
-    	return userIDs;
+    	return userIds;
     }
     
-    public List<String> getGraphs(String userID) {
-    	List<UserDB> users = mData.find(UserDB.class, "mUserID = ", userID).asList();
+    public List<String> getGraphs(String userId) {
+    	List<UserDB> users = mData.find(UserDB.class, "mUserId = ", userId).asList();
     	if (users == null) {
     		return null;
     	}
     	return (users.get(0)).getKeys();
     }
     
-	public void newUser(String userID, String email) {
-		UserDB user = new UserDB(userID, email);
+	public void newUser(String userId, String email) {
+		UserDB user = new UserDB(userId, email);
 		mData.save(user);
 	}
 	
-	public void addGraph(String userID, String graphID) {
-		Query<UserDB> query = mData.createQuery(UserDB.class).filter("mUserID =", userID);
-		UpdateOperations<UserDB> update = mData.createUpdateOperations(UserDB.class).add("mKeys", graphID, true);
+	public void addGraph(String userId, String graphId) {
+		Query<UserDB> query = mData.createQuery(UserDB.class).filter("mUserId =", userId);
+		UpdateOperations<UserDB> update = mData.createUpdateOperations(UserDB.class).add("mKeys", graphId, true);
 		mData.update(query, update);
 	}
 	
-	public String getEmailFromId(String userID) {
-		Query<UserDB> users = mData.find(UserDB.class,"mUserID =", userID);
+	public String getEmailFromId(String userId) {
+		Query<UserDB> users = mData.find(UserDB.class,"mUserId =", userId);
 		return users.get().getEmail();
 		
 	}
@@ -77,14 +77,14 @@ public class UserDatabase {
 		mData.update(query, update);
 	}
 	
-	public void deleteUser(String userID) {
-		mData.delete(mData.createQuery(UserDB.class).filter("mUserID =", userID));
+	public void deleteUser(String userId) {
+		mData.delete(mData.createQuery(UserDB.class).filter("mUserId =", userId));
 	}
 
-	public boolean exists(String userID, String email) {
+	public boolean exists(String userId, String email) {
 		Query<UserDB> result;
-		if (userID != null) {
-			result = mData.find(UserDB.class, "mUserID =", userID);
+		if (userId != null) {
+			result = mData.find(UserDB.class, "mUserId =", userId);
 			if (email != null)
 				result = result.filter("mEmail =", email);
 			if (result.asList().isEmpty())

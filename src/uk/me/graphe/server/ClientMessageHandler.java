@@ -20,6 +20,7 @@ import uk.me.graphe.shared.messages.MessageFactory;
 import uk.me.graphe.shared.messages.NoSuchGraphMessage;
 import uk.me.graphe.shared.messages.OpenGraphMessage;
 import uk.me.graphe.shared.messages.RequestGraphMessage;
+import uk.me.graphe.shared.messages.SetGraphPropertiesMessage;
 import uk.me.graphe.shared.messages.SetNameForIdMessage;
 import uk.me.graphe.shared.messages.StateIdMessage;
 import uk.me.graphe.shared.messages.factories.SetNameForIdFactory;
@@ -119,12 +120,16 @@ public class ClientMessageHandler extends Thread {
                         new StateIdMessage(rgm.getGraphId(), g.getStateId()));
                 c.updateStateId(rgm.getSince());
             }
+<<<<<<< HEAD
         } else if (message.getMessage().equals("chat")){
-        	System.err.println("got cm");
-        	ChatMessage cm = (ChatMessage) message;
-        	for (Client otherClients : ClientManager.getInstance().clientsForGraph(1)) {
-        		if (c != otherClients) ClientMessageSender.getInstance().sendMessage(otherClients, cm);
-        	}
+             System.err.println("got cm");
+            ChatMessage cm = (ChatMessage) message;
+            for (Client otherClients : ClientManager.getInstance()
+                    .clientsForGraph(c.getCurrentGraphId())) {
+                if (c != otherClients)
+                    ClientMessageSender.getInstance().sendMessage(otherClients,
+                            cm);
+            }
         } else if (message.getMessage().equals("userAuth")){
         	System.err.println("got auth request from client");
         	UserAuthMessage uam = (UserAuthMessage) message;
@@ -180,12 +185,20 @@ public class ClientMessageHandler extends Thread {
         } else if (message.getMessage().equals("graphList")){
         	GraphListMessage glm = new GraphListMessage(mUserDatabase.getGraphs(c.getUserId()).toString());
         	ClientMessageSender.getInstance().sendMessage(c, glm);
+        } else if (message.getMessage().equals("sgp")) {
+            SetGraphPropertiesMessage sgpm = (SetGraphPropertiesMessage) message;
+            DataManager.setGraphProperties(c.getCurrentGraphId(), sgpm);
+            for (Client co : ClientManager.getInstance().clientsForGraph(
+                    c.getCurrentGraphId())) {
+                ClientMessageSender.getInstance().sendMessage(co, sgpm);
+            }
         } else if (message.getMessage().equals("setNameForId")) {
             SetNameForIdMessage snfi = (SetNameForIdMessage) message;
             DataManager.renameGraph(snfi.getId(), snfi.getTitle());
-            List<Client> clients = ClientManager.getInstance().getClientsWith(snfi.getId());
+            List<Client> clients = ClientManager.getInstance().clientsForGraph(
+                    snfi.getId());
             for (Client cOut : clients) {
-                ClientMessageSender.getInstance().sendMessage(c, snfi);
+                ClientMessageSender.getInstance().sendMessage(cOut, snfi);
             }
         } else if (message.getMessage().equals("addPrivs")){
             AddPrivsMessage apm = (AddPrivsMessage) message;
