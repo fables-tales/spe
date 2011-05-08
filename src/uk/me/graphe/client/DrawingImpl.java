@@ -254,10 +254,6 @@ public class DrawingImpl implements Drawing {
                                 true, true, (edgeThickness * 5),
                                 (edgeThickness * 5), weight + "",
                                 highlightColour, textColour, pos);
-                        addEdge(startX, startY, endX, endY, edgeThickness
-                                - strokeThickness, false, false,
-                                (edgeThickness * 5) - strokeThickness, 0, "",
-                                highlightColour, textColour, pos);
                     } else {
                         addEdge(startX, startY, endX, endY, edgeThickness,
                                 true, true, (edgeThickness * 5),
@@ -270,10 +266,6 @@ public class DrawingImpl implements Drawing {
                                 true, true, (edgeThickness * 5),
                                 (edgeThickness * 5), weight + "",
                                 highlightColour, textColour, pos);
-                        addEdge(endX, endY, startX, startY, edgeThickness
-                                - strokeThickness, false, false,
-                                (edgeThickness * 5) - strokeThickness, 0, "",
-                                highlightColour, textColour, pos);
                     } else {
                         addEdge(endX, endY, startX, startY, edgeThickness,
                                 true, true, (edgeThickness * 5),
@@ -285,10 +277,6 @@ public class DrawingImpl implements Drawing {
                         addEdge(startX, startY, endX, endY, edgeThickness,
                                 true, true, (edgeThickness * 5),
                                 (edgeThickness * 5), weight + "",
-                                highlightColour, textColour, pos);
-                        addEdge(startX, startY, endX, endY, edgeThickness
-                                - strokeThickness, false, false,
-                                (edgeThickness * 5) - strokeThickness, 0, "",
                                 highlightColour, textColour, pos);
                     } else {
                         addEdge(startX, startY, endX, endY, edgeThickness,
@@ -855,9 +843,18 @@ public class DrawingImpl implements Drawing {
         double lineAngle = Math.atan(height / width);
         double arrowAngle = lineAngle;
 
-        double[][] coords = { { -halfLength, halfThick },
-                { halfLength, halfThick }, { -halfLength, -halfThick },
-                { halfLength, -halfThick } };
+        double lineOffset = 0;
+        double lineSeperation = thickness*1.2;
+        
+        if (pos == 1)
+            lineOffset = -lineSeperation;
+        if (pos == 2)
+            lineOffset = lineSeperation;
+        
+        
+        double[][] coords = { { -halfLength, halfThick+lineOffset },
+                { halfLength, halfThick+lineOffset}, { -halfLength, -halfThick+lineOffset },
+                { halfLength, -halfThick+lineOffset } };
 
         for (int i = 0; i < coords.length; i++) {
             oldX = coords[i][0];
