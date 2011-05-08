@@ -120,7 +120,6 @@ public class ClientMessageHandler extends Thread {
                         new StateIdMessage(rgm.getGraphId(), g.getStateId()));
                 c.updateStateId(rgm.getSince());
             }
-<<<<<<< HEAD
         } else if (message.getMessage().equals("chat")){
              System.err.println("got cm");
             ChatMessage cm = (ChatMessage) message;
