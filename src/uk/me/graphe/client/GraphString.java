@@ -50,6 +50,8 @@ public class GraphString{
                 }
                 graphManager.addEdge(verticesMap.get(nodes[0].trim()), 
                         verticesMap.get(nodes[1].trim()), VertexDirection.fromTo, weight);
+                ClientOT.getInstance().notifyAddEdge(verticesMap.get(nodes[0].trim()), 
+                        verticesMap.get(nodes[1].trim()), VertexDirection.fromTo, weight);
             }else{
                 // Add node
                 verticesMap.put(line,addEdge(graphManager,line));
@@ -63,6 +65,8 @@ public class GraphString{
         int randomX = Random.nextInt(500)+50;
         int randomY = Random.nextInt(200)+50;
         graphManager.addVertex(v, randomX, randomY, Graphemeui.VERTEX_SIZE);
+        ClientOT.getInstance().notifyAddVertex(v, randomX, randomY, 
+                Graphemeui.VERTEX_SIZE);
         return v;
     }
     
