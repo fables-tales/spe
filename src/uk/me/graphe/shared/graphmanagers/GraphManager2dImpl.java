@@ -44,7 +44,6 @@ public class GraphManager2dImpl implements GraphManager2d {
                 break;
             }
         }
-
         return result;
     }
 
