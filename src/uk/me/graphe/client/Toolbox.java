@@ -25,7 +25,7 @@ public class Toolbox extends Composite {
 	private final ToolboxButton btnAddVert, btnAddEd, btnSelect, btnMove, 
 		btnZoom, btnAutoLayout, btnDjikstra, btnStep, btnStepAll, 
 		btnDelete, btnProcess, btnTerminator, btnDecision, btnNormal, btnGraphOptions,
-		btnToggleEdgeDirection;
+		btnToggleEdgeDirection, btnShareGraph, btnImportGraph, btnExportGraph;
 	
 	public Toolbox(Graphemeui gUI) {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -47,6 +47,9 @@ public class Toolbox extends Composite {
 		btnStepAll = new ToolboxButton(this, Tools.stepAll);
 		btnGraphOptions = new ToolboxButton(this, Tools.graphOptions);
 		btnToggleEdgeDirection = new ToolboxButton(this, Tools.toggleEdgeDirection);
+		btnShareGraph = new ToolboxButton(this, Tools.shareGraph);
+		btnImportGraph = new ToolboxButton(this, Tools.importGraph);
+		btnExportGraph = new ToolboxButton(this, Tools.exportGraph);
 		
 		pnlToolsStd.add(btnSelect);
 		pnlToolsStd.add(btnMove);
@@ -68,6 +71,9 @@ public class Toolbox extends Composite {
 		pnlToolsAlgsRun.add(btnStep);
 		pnlToolsAlgsRun.add(btnStepAll);
 		
+		pnlToolsOptions.add(btnShareGraph);
+		//pnlToolsOptions.add(btnImportGraph);
+		pnlToolsOptions.add(btnExportGraph);
 		pnlToolsOptions.add(btnGraphOptions);		
 		
 		pnlToolsFlowStyle.setVisible(false);
@@ -209,6 +215,15 @@ public class Toolbox extends Composite {
 				parent.setSelectedSyle(VertexDrawable.FILLED_CIRCLE_STYLE,
 				        Graphemeui.VERTEX_SIZE,Graphemeui.VERTEX_SIZE);
 				this.setTool(Tools.select);
+				break;
+			case shareGraph:
+				//TODO: implement
+				break;
+			case importGraph:
+				//TODO: implement
+				break;
+			case exportGraph:
+				//TODO: implement
 				break;
 		}
 	}

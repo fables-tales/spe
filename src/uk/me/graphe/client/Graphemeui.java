@@ -341,6 +341,8 @@ public class Graphemeui implements EntryPoint
     		}
     	}
     	
+    	clearSelectedEdges();
+    	
     	tools.setTool(Tools.select);
     }
     

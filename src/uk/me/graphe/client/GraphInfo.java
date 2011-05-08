@@ -58,7 +58,7 @@ public class GraphInfo extends Composite {
 			}
 			else
 			{
-				lblUsers.setText("Standard graph.");
+				lblUsers.setText("Simple graph.");
 			}
 		}
 	}	
