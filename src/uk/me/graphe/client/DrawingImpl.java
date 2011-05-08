@@ -660,11 +660,12 @@ public class DrawingImpl implements Drawing {
             double height, double angle, boolean addToPolygon, float[] color,
             int pos) {
 
+        int arrowOffset = (int)(height*0.65);
         int aOff = 0;
         if (pos == 1)
-            aOff = 20;
+            aOff = arrowOffset;
         if (pos == 2)
-            aOff = 20;
+            aOff = arrowOffset;
 
         int startIndex = verticesIndex();
         double halfHeight = (height / 2);
@@ -895,20 +896,19 @@ public class DrawingImpl implements Drawing {
         }
 
         if (!label.equals("") && mIsWeighted && !mIsFlowChart) {
-            double lX;
+            double lX = 0;
             double lY;
             double nlX;
             double nlY;
-            double lLength;
-            double halfLLength;
-            lLength = stringPixelLength(label);
-            halfLLength = lLength / 2;
+            double lLength= stringPixelLength(label);;
+            double halfLLength = lLength / 2;
             double dLine = thickness * 2;
-            lX = 0;
+            double labelOffset = thickness*3;
+            
             if (pos == 1)
-                lX = -20;
+                lX = -labelOffset;
             if (pos == 2)
-                lX = 20;
+                lX = labelOffset;
 
             lY = -dLine;
             nlX = (lX * Math.cos(lineAngle)) - (lY * Math.sin(lineAngle))
