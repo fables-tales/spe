@@ -219,7 +219,14 @@ public class Canvas extends Composite{
 							parent.graphManager.getVertexFromDrawable(parent.selectedVertices.get(0)), 
 							parent.graphManager.getVertexFromDrawable(parent.selectedVertices.get(1))))
 					{
-						parent.dialogEdge.show("", e.getX(), e.getY());
+						if (parent.drawing.isFlowChart() || !parent.drawing.isWeighted())
+						{
+							parent.addEdge(parent.selectedVertices.get(0), parent.selectedVertices.get(1), 0);
+						}
+						else
+						{
+							parent.dialogEdge.show("", e.getX(), e.getY());
+						}
 					}
 				}				
 				else if ((lMouseDown[X] != lMouseMove[X]) || (lMouseDown[Y] != lMouseMove[Y]))
