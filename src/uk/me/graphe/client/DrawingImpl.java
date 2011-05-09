@@ -48,8 +48,8 @@ public class DrawingImpl implements Drawing {
     private boolean mTimeOutSet = false;
     private boolean mCanRender = true;
     private int mFramesDone = 0;
-    private int mCanvasWidth = Window.getClientWidth();
-    private int mCanvasHeight = Window.getClientWidth(); // Deliberate
+    private int mCanvasWidth = 2000;
+    private int mCanvasHeight = 2000; // Deliberate
     private boolean mWebglReady = false;
 
     private boolean mDo2d = false;
