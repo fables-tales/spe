@@ -45,14 +45,12 @@ public class UserPanel extends Composite {
 	Button login;
 	
 	public static void requestGraphList(){
-		
 		GraphListMessage glm = new GraphListMessage();
 		ServerChannel.getInstance().send(glm.toJson());
-		
 	}
 	
 	public static void displayGraphList(String list){
-
+	    
 	}
 	
 	public static void requestEmailAddress(final UserAuthMessage uam){

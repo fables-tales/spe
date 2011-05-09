@@ -177,6 +177,8 @@ public class ClientMessageHandler extends Thread {
         			
         		}else{
         			System.err.println("oid verification failed");
+        			uam.setAuthd(false);
+                    ClientMessageSender.getInstance().sendMessage(c, uam);
         		}
         		
         	}

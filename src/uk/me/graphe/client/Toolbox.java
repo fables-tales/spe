@@ -228,7 +228,7 @@ public class Toolbox extends Composite {
 				this.setTool(Tools.select);
 				break;
 			case shareGraph:
-				parent.dialogShareGraph.show("myemail@example.com");
+				parent.dialogShareGraph.show("theiremail@example.com");
 				//TODO: implement
 				break;
 			case importGraph:
