@@ -34,7 +34,7 @@ public class DatabaseImpl implements Database{
     
     public DatabaseImpl () {
         try {
-            mMongo = new Mongo("localhost");
+            mMongo = new Mongo();
         } catch (UnknownHostException e) {
             return;
         }

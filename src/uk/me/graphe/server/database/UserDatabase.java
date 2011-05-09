@@ -21,7 +21,7 @@ public class UserDatabase {
     
     public UserDatabase() {
         try {
-            mMongo = new Mongo("localhost");
+            mMongo = new Mongo();
         } catch (UnknownHostException e) {
             return;
         }
