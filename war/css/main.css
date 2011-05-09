@@ -42,12 +42,18 @@ h1 {
   margin-left: -20px;
   width: 150px;
   height: 35px; /*58 - 23*/
+}
+
+#nav a {
+  display: block;
+  width: 150px;
+  height: 35px; /*58 - 23*/
   background-image: url(../images/tab.png);
   text-align: center;
   padding-top: 23px;
 }
 
-#nav li:hover {
+#nav a:hover {
   background-image: url(../images/tabdown.png);
 }
 
