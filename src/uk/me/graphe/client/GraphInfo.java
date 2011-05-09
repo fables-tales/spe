@@ -32,6 +32,15 @@ public class GraphInfo extends Composite {
 				parent.dialogGraphName.show(parent.graphManager.getName());
 			}			
 		});
+		
+		lblUsers.addDoubleClickHandler(new DoubleClickHandler()
+		{
+			@Override
+			public void onDoubleClick(DoubleClickEvent arg0)
+			{
+				parent.dialogGraphOptions.show("");
+			}			
+		});
 	}
 	
 	public void update()
