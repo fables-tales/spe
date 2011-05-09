@@ -388,7 +388,7 @@ public class DrawingImpl implements Drawing {
     public void renderGraph(GWTCanvas canvasNew,
             Collection<EdgeDrawable> edgesNew,
             Collection<VertexDrawable> verticesNew) {
-
+        Console.log("graph invalidate");
         m2dCanvas = canvasNew;
         mEdgesToDraw = edgesNew;
         mVerticesToDraw = verticesNew;
@@ -401,16 +401,19 @@ public class DrawingImpl implements Drawing {
 
                 public void run() {
                     if (mCanRender && mRenderRequest) {
+                        Console.log("start render");
                         startTimer = System.currentTimeMillis();
                         doRendering();
                         mLastRenderTime = 
                             (System.currentTimeMillis()-startTimer)/1000;
+                        Console.log("Done render");
                         mRenderRequest = false;
                     }
                 }
             };
             t.scheduleRepeating(100 / 6);
         }
+        Console.log("call done");
 
     }
 
