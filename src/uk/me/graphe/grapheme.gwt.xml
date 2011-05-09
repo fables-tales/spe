@@ -18,7 +18,7 @@
   <inherits name='com.allen_sauer.gwt.voices.gwt-voices'/>
   
   <!-- Specify the app entry point class.                         -->
-  <entry-point class='uk.me.graphe.client.Graphemeui'/>
+  <entry-point class='uk.me.graphe.client.Entry'/>
   <inherits name='com.google.gwt.widgetideas.GWTCanvas'/>
   <!-- Specify the paths for translatable code                    -->
   <source path='client'/>

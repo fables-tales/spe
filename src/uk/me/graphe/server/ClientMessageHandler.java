@@ -4,12 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import uk.me.graphe.server.database.UserDatabase;
 import uk.me.graphe.server.ot.GraphProcessor;
+import uk.me.graphe.server.UserAuth;
 import uk.me.graphe.shared.graphmanagers.OTGraphManager2d;
 import uk.me.graphe.shared.jsonwrapper.JSONException;
 import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
 import uk.me.graphe.shared.jsonwrapper.JSONObject;
 import uk.me.graphe.shared.messages.ChatMessage;
+import uk.me.graphe.shared.messages.GraphListMessage;
+import uk.me.graphe.shared.messages.UserAuthMessage;
+import uk.me.graphe.shared.messages.AddPrivsMessage;
 import uk.me.graphe.shared.messages.Message;
 import uk.me.graphe.shared.messages.MessageFactory;
 import uk.me.graphe.shared.messages.NoSuchGraphMessage;
@@ -36,6 +41,8 @@ public class ClientMessageHandler extends Thread {
     private HeartbeatManager mHbm = new HeartbeatManager();
     private GraphProcessor mProcessor = GraphProcessor.getInstance();
     private static ClientMessageHandler sInstance = null;
+    private static UserAuth userAuth = new UserAuth();
+    private static UserDatabase mUserDatabase = new UserDatabase();
 
     public ClientMessageHandler() {}
 
@@ -113,8 +120,8 @@ public class ClientMessageHandler extends Thread {
                         new StateIdMessage(rgm.getGraphId(), g.getStateId()));
                 c.updateStateId(rgm.getSince());
             }
-        } else if (message.getMessage().equals("chat")) {
-            System.err.println("got cm");
+        } else if (message.getMessage().equals("chat")){
+             System.err.println("got cm");
             ChatMessage cm = (ChatMessage) message;
             for (Client otherClients : ClientManager.getInstance()
                     .clientsForGraph(c.getCurrentGraphId())) {
@@ -122,6 +129,63 @@ public class ClientMessageHandler extends Thread {
                     ClientMessageSender.getInstance().sendMessage(otherClients,
                             cm);
             }
+        } else if (message.getMessage().equals("userAuth")){
+        	System.err.println("got auth request from client");
+        	UserAuthMessage uam = (UserAuthMessage) message;
+        	
+        	String ak = uam.getAuthKey();
+        	
+        	if((ak.length() < 10) || (ak == null) || (ak == "") || (ak.isEmpty())){
+        		//if step 1, do discovery
+        		// discover provider for this openid url
+            	uam = userAuth.authenticateOpenId(uam.getOpUrl());
+            	// send url to client for redirection
+            	System.err.println("redir url is:" + uam.getRedirectionUrl());
+            	ClientMessageSender.getInstance().sendMessage(c, uam);
+        	}else{
+        		//if step 2, verify
+        		
+        		//if provider didn't provide e-mail address, request this from the user
+    			if(uam.getEmailAddress().length() < 5){
+                    System.err.println("no email address retrieved from openid provider :(");
+    				uam.setEmailAddress("need");
+    				ClientMessageSender.getInstance().sendMessage(c, uam);
+    				return;
+    			}
+        		
+        		System.err.println("verifying openid");
+        		if(userAuth.verifyOpenId(uam)){
+
+        			System.err.println("oid verification successful");
+
+        			//create user if it doesn't exist
+        			if(!mUserDatabase.exists(uam.getId(), uam.getEmailAddress())){
+        				mUserDatabase.newUser(uam.getId(), uam.getEmailAddress());
+        			}
+        			
+        			String balls[] = mUserDatabase.getUserIDs();
+        			for(int i = 0; i < balls.length; i++){
+        			System.err.println("user " +  balls[i]);
+        			}
+        			
+        			c.setUserId(uam.getId());
+        			
+        			//send auth message to client
+        			uam.setAuthd(true);
+        			
+        			ClientMessageSender.getInstance().sendMessage(c, uam);
+        			
+        		}else{
+        			System.err.println("oid verification failed");
+        			uam.setAuthd(false);
+                    ClientMessageSender.getInstance().sendMessage(c, uam);
+        		}
+        		
+        	}
+        	
+        } else if (message.getMessage().equals("graphList")){
+        	GraphListMessage glm = new GraphListMessage(mUserDatabase.getGraphs(c.getUserId()).toString());
+        	ClientMessageSender.getInstance().sendMessage(c, glm);
         } else if (message.getMessage().equals("sgp")) {
             SetGraphPropertiesMessage sgpm = (SetGraphPropertiesMessage) message;
             DataManager.setGraphProperties(c.getCurrentGraphId(), sgpm);
@@ -129,7 +193,6 @@ public class ClientMessageHandler extends Thread {
                     c.getCurrentGraphId())) {
                 ClientMessageSender.getInstance().sendMessage(co, sgpm);
             }
-
         } else if (message.getMessage().equals("setNameForId")) {
             SetNameForIdMessage snfi = (SetNameForIdMessage) message;
             DataManager.renameGraph(snfi.getId(), snfi.getTitle());
@@ -138,7 +201,11 @@ public class ClientMessageHandler extends Thread {
             for (Client cOut : clients) {
                 ClientMessageSender.getInstance().sendMessage(cOut, snfi);
             }
-        } else if (message.isOperation()) {
+        } else if (message.getMessage().equals("addPrivs")){
+            AddPrivsMessage apm = (AddPrivsMessage) message;
+            mUserDatabase.setGraphsToUsers(apm.getEmailAddress(),c.getUserId());
+        }
+            else if (message.isOperation()) {
             mProcessor.submit(c, (GraphOperation) message);
         } else {
             throw new Error("got unexpected message from client");

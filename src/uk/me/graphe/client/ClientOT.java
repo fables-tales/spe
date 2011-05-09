@@ -7,6 +7,8 @@ import java.util.Queue;
 
 import uk.me.graphe.client.communications.ReceiveNotificationRunner;
 import uk.me.graphe.client.communications.ServerChannel;
+import uk.me.graphe.client.json.wrapper.JSOFactory;
+import uk.me.graphe.client.UserPanel;
 import uk.me.graphe.shared.Edge;
 import uk.me.graphe.shared.GraphTransform;
 import uk.me.graphe.shared.Vertex;
@@ -22,6 +24,8 @@ import uk.me.graphe.shared.messages.RequestGraphMessage;
 import uk.me.graphe.shared.messages.SetGraphPropertiesMessage;
 import uk.me.graphe.shared.messages.SetNameForIdMessage;
 import uk.me.graphe.shared.messages.StateIdMessage;
+import uk.me.graphe.shared.messages.UserAuthMessage;
+import uk.me.graphe.shared.messages.GraphListMessage;
 import uk.me.graphe.shared.messages.operations.AddEdgeOperation;
 import uk.me.graphe.shared.messages.operations.AddNodeOperation;
 import uk.me.graphe.shared.messages.operations.CompositeOperation;
@@ -116,7 +120,19 @@ public class ClientOT {
                 }
             }
         }.schedule(1500);
-
+    }
+    
+    public void connect(){
+    	
+        JSONImplHolder.initialise(new JSOFactory());
+        ServerChannel sc = ServerChannel.getInstance();
+        ClientOT.getInstance();
+        sc.init();
+    	mServer = true;
+    }
+    
+    public void requestGraph(){
+    	
         new Timer() {
 
             @Override
@@ -137,7 +153,7 @@ public class ClientOT {
 
             }
         }.schedule(1000);
-
+    	
     }
 
     protected void pumpOut() {
@@ -183,6 +199,21 @@ public class ClientOT {
                     new StateIdMessage(0, 0).getMessage())) {
                 mServerStateId = ((StateIdMessage) m).getState();
                 mGraphId = ((StateIdMessage) m).getGraphId();
+            } else if (m.getMessage().equals("userAuth")) {
+            	UserAuthMessage uam = (UserAuthMessage)m;
+            	if(uam.isAuthd()){
+            	    //show graph list
+            	    UserPanel.requestGraphList();
+            	}else if(uam.getEmailAddress() == null){
+                	String reUrl = uam.getRedirectionUrl();
+                    Window.Location.assign(reUrl);
+            	}else if(uam.getEmailAddress() == "need"){
+            		UserPanel.requestEmailAddress(uam);
+            	}
+
+            } else if (m.getMessage().equals("graphList")) {
+            	GraphListMessage glm = (GraphListMessage)m;
+            	UserPanel.displayGraphList(glm.getGraphList());
             } else if (m.getMessage().equals("chat")) {
                 // show message here
                 ChatMessage cm = (ChatMessage) m;
@@ -197,11 +228,12 @@ public class ClientOT {
                 SetGraphPropertiesMessage sgpm = (SetGraphPropertiesMessage) m;
                 mGuiInstance.updateGraphProperties(sgpm.hasDirection(), sgpm
                         .hasWeight(), sgpm.hasFlowChart());
+
             }
 
         }
         Console.log("I have this many vertices:");
-        Console.log("" + mGraph.getVertexDrawables().size());
+        //Console.log("" + mGraph.getVertexDrawables().size());
 
         Console.log("done handling messages");
 
