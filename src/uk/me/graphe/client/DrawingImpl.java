@@ -849,7 +849,8 @@ public class DrawingImpl implements Drawing {
         double lineOffset = 0;
         double lineSeperation = thickness*1.2;
 
-        double[] currentPolyEdgeCoords = mCurrentPolygon.getEdgeCoords();
+        double[] currentPolyEdgeCoords;
+        boolean notCached = true;
         
         if (pos == 1)
             lineOffset = -lineSeperation;
@@ -859,20 +860,26 @@ public class DrawingImpl implements Drawing {
         double[][] coords = { { -halfLength, halfThick+lineOffset },
                 { halfLength, halfThick+lineOffset}, { -halfLength, -halfThick+lineOffset },
                 { halfLength, -halfThick+lineOffset } };
-
-        if(pos == 0 && mZoom == mCurrentPolygon.getZoom() &&
-                mOffsetX == mCurrentPolygon.getOffsetX() &&
-                mOffsetY == mCurrentPolygon.getOffsetY() &&
-                currentPolyEdgeCoords[0] == x1 &&
-                currentPolyEdgeCoords[1] == y1 &&
-                currentPolyEdgeCoords[2] == x2 &&
-                currentPolyEdgeCoords[3] == y2 ){
-            
-            // the polygon already has the coordinates we need
-            // can use stored coordinates
-            coords = mCurrentPolygon.getSquareCoords();
-            
-        }else{
+        
+        if(addToPolygon){
+            currentPolyEdgeCoords = mCurrentPolygon.getEdgeCoords();
+        
+            if(pos == 0 && addToPolygon && mZoom == mCurrentPolygon.getZoom() &&
+                    mOffsetX == mCurrentPolygon.getOffsetX() &&
+                    mOffsetY == mCurrentPolygon.getOffsetY() &&
+                    currentPolyEdgeCoords[0] == x1 &&
+                    currentPolyEdgeCoords[1] == y1 &&
+                    currentPolyEdgeCoords[2] == x2 &&
+                    currentPolyEdgeCoords[3] == y2 ){
+                    
+                // the polygon already has the coordinates we need
+                // can use stored coordinates
+                coords = mCurrentPolygon.getSquareCoords();
+                notCached = false;
+            }
+        }
+        
+        if(notCached){
     
             for (int i = 0; i < coords.length; i++) {
                 oldX = coords[i][0];
