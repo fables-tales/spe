@@ -76,8 +76,8 @@ public class GraphManager2dImpl implements GraphManager2d {
                 t1 ^= t2;
             }
 
-            mEdgeRenderMap.put(e, new EdgeDrawable(l1, t1, l2, t2, e
-                    .getWeight(), e.getDirection()));
+            mEdgeRenderMap
+                    .put(e, new EdgeDrawable(l1, t1, l2, t2, e.getWeight(), e.getDirection()));
         }
 
         this.invalidate();
@@ -106,8 +106,7 @@ public class GraphManager2dImpl implements GraphManager2d {
             int left = xPosition - halfSize;
             int top = yPosition - halfSize;
 
-            mVertexRenderMap.put(v, new VertexDrawable(left, top, size, size, v
-                    .getLabel()));
+            mVertexRenderMap.put(v, new VertexDrawable(left, top, size, size, v.getLabel()));
             mVertexEdgeMap.put(v, new ArrayList<Edge>());
             if (GWT.isClient()) {
                 Console.log("vertices size:" + mVertices.size());
@@ -162,25 +161,31 @@ public class GraphManager2dImpl implements GraphManager2d {
     @Override
     public void moveVertexTo(Vertex v, int xPosition, int yPosition) {
         VertexDrawable vd = mVertexRenderMap.get(v);
+        if (GWT.isClient()) Console.log("names are same: " + v.getLabel().equals(sName1));
         int halfWidth = vd.getWidth() / 2;
         int halfHeight = vd.getHeight() / 2;
         int left = xPosition - halfWidth;
         int top = yPosition - halfHeight;
         vd.updateBoundingRectangle(left, top, vd.getWidth(), vd.getHeight());
-
+        if (GWT.isClient()) Console.log(v + " " + mVertexEdgeMap.get(v));
         // update edges
         // VertexDrawable vd1 = mVertexRenderMap.get(e.getFromVertex());
         for (Edge e : mVertexEdgeMap.get(v)) {
+            if (GWT.isClient()) Console.log("in move g1");
             EdgeDrawable ed = mEdgeRenderMap.get(e);
+            if (GWT.isClient()) Console.log("in move g2");
 
             if (v.equals(e.getFromVertex())) {
+                if (GWT.isClient()) Console.log("in move g3");
                 ed.setStartX(vd.getCenterX());
                 ed.setStartY(vd.getCenterY());
             } else {
+                if (GWT.isClient()) Console.log("in move g4");
                 ed.setEndX(vd.getCenterX());
                 ed.setEndY(vd.getCenterY());
             }
         }
+        if (GWT.isClient()) Console.log("in move h");
 
         this.invalidate();
     }
@@ -219,12 +224,11 @@ public class GraphManager2dImpl implements GraphManager2d {
         if (mVertexEdgeMap.containsKey(v)) {
             if (GWT.isClient())
                 Console.log("Vertex " + v.getLabel() + "has "
-                        + String.valueOf(mVertexEdgeMap.get(v).size())
-                        + " edges");
+                        + String.valueOf(mVertexEdgeMap.get(v).size()) + " edges");
             for (Edge e : mVertexEdgeMap.get(v)) {
                 if (GWT.isClient())
-                    Console.log("Remove edge: " + e.getFromVertex().getLabel()
-                            + " to " + e.getToVertex().getLabel());
+                    Console.log("Remove edge: " + e.getFromVertex().getLabel() + " to "
+                            + e.getToVertex().getLabel());
                 mEdges.remove(e);
                 if (GWT.isClient()) Console.log("Removed from edges list");
                 mEdgeRenderMap.remove(e);
@@ -274,10 +278,8 @@ public class GraphManager2dImpl implements GraphManager2d {
     public boolean isDirectedEdgeBetweenVertices(Vertex v1, Vertex v2) {
         boolean b = false;
         for (Edge e : mEdges) {
-            if ((e.getFromVertex() == v1 && e.getToVertex() == v2 && e
-                    .getDirection() == VertexDirection.fromTo)
-                    || (e.getFromVertex() == v2 && e.getToVertex() == v1 && e
-                            .getDirection() == VertexDirection.toFrom)) {
+            if ((e.getFromVertex() == v1 && e.getToVertex() == v2 && e.getDirection() == VertexDirection.fromTo)
+                    || (e.getFromVertex() == v2 && e.getToVertex() == v1 && e.getDirection() == VertexDirection.toFrom)) {
                 b = true;
                 break;
             }
@@ -343,10 +345,12 @@ public class GraphManager2dImpl implements GraphManager2d {
 
     }
 
+    private static String sName1;
+    
     @Override
     public void renameVertex(String label, String name) {
-        int j = 0;
         if (mVertices.contains(new Vertex(label))) {
+            sName1 = name;
             mVertices.remove(new Vertex(label));
             mVertices.add(new Vertex(name));
             VertexDrawable vd = mVertexRenderMap.get(new Vertex(label));
@@ -354,12 +358,23 @@ public class GraphManager2dImpl implements GraphManager2d {
             mVertexRenderMap.remove(new Vertex(label));
             mVertexRenderMap.put(new Vertex(name), vd);
             List<Edge> edges = mVertexEdgeMap.get(new Vertex(label));
+            List<Edge> newEdges = new ArrayList<Edge>();
             for (Edge e : edges) {
+                mEdgeRenderMap.remove(e);
                 e.replaceVertex(label, name);
+                VertexDrawable v1 = mVertexRenderMap.get(e.getFromVertex());
+                VertexDrawable v2 = mVertexRenderMap.get(e.getToVertex());
+                mEdgeRenderMap.put(e, new EdgeDrawable(v1.getCenterX(), v1.getCenterY(), v2.getCenterX(), v2.getCenterY(), e.getWeight(), e.getDirection()));
+                
+                newEdges.add(e);
             }
 
             mVertexEdgeMap.remove(new Vertex(label));
-            mVertexEdgeMap.put(new Vertex(name), edges);
+            if (GWT.isClient()) Console.log("putting array under name: " + name + " " + newEdges);
+            mVertexEdgeMap.put(new Vertex(name), newEdges);
+            if (GWT.isClient()) {
+                Console.log("getting array back:" + mVertexEdgeMap.get(new Vertex(name)));
+            }
         }
     }
 
