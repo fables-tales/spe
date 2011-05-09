@@ -288,11 +288,14 @@ public class Graphemeui implements EntryPoint
     }
     
     public void moveNode(VertexDrawable vd, int x, int y) {
+        Console.log("moving a");
         Vertex v = graphManager.getVertexFromDrawable(vd);
+        Console.log("moving b");
         
     	if (v != null) {
             graphManager.moveVertexTo(v, x, y);
         }
+    	Console.log("moving c");
     }
   
     public void pan(int left, int top) {
