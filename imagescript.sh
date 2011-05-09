@@ -1,6 +1,6 @@
 #!/bin/sh
-leftbit="images_url["
-middlebit="] = '"
+leftbit="image_url["
+middlebit="] = 'images/"
 endbit="';"
 cd war/images/
 ls *.png > images
