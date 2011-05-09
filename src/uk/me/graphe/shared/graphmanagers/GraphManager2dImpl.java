@@ -46,6 +46,16 @@ public class GraphManager2dImpl implements GraphManager2d {
         }
         return result;
     }
+    
+    @Override
+    public Edge getEdgeBetween(Vertex v1, Vertex v2) {
+    	for (Edge e : mVertexEdgeMap.get(v1)) {
+            if (e.getToVertex().equals(v2)) {
+                return e;
+            }
+        }
+    	return null;
+    }
 
     @Override
     public void addEdge(Vertex v1, Vertex v2, VertexDirection dir, int weight) {

@@ -316,23 +316,49 @@ public class Graphemeui {
     	for (EdgeDrawable ed : selectedEdges)
     	{
     		// TODO: toggle the edge direction locally via Edge and EdgeDrawable and over OT.
+    		boolean secondEdge = false;
+    		Edge e2 = null;
     		
     		if (ed.needsFromToArrow())
     		{
     			Edge e  = graphManager.getEdgeFromDrawable(ed);
+    			if(graphManager.isEdgeBetween(e.getToVertex(), e.getFromVertex())){
+    				e2 = graphManager.getEdgeBetween(e.getToVertex(), e.getFromVertex());
+        			graphManager.removeEdge(e2);
+        			secondEdge = true;
+    			}
     			graphManager.removeEdge(e);
     			graphManager.addEdge(e.getToVertex(), e.getFromVertex(), VertexDirection.fromTo, e.getWeight());
     			ClientOT.getInstance().notifyRemoveEdge(e);
     			ClientOT.getInstance().notifyAddEdge(e.getToVertex(), e.getFromVertex(), VertexDirection.fromTo, e.getWeight());
+
+    			if(secondEdge){
+    				graphManager.addEdge(e2.getToVertex(), e2.getFromVertex(), VertexDirection.fromTo, e2.getWeight());
+    				ClientOT.getInstance().notifyRemoveEdge(e2);
+        			ClientOT.getInstance().notifyAddEdge(e2.getToVertex(), e2.getFromVertex(), VertexDirection.fromTo, e2.getWeight());
+    			}
     		}
+    		
+    		secondEdge = false;
     		
     		if (ed.needsToFromArrow())
     		{
     			Edge e  = graphManager.getEdgeFromDrawable(ed);
+    			if(graphManager.isEdgeBetween(e.getFromVertex(), e.getToVertex())){
+    				e2 = graphManager.getEdgeBetween(e.getFromVertex(), e.getToVertex());
+        			graphManager.removeEdge(e2);
+        			secondEdge = true;
+    			}
     			graphManager.removeEdge(e);
     			graphManager.addEdge(e.getToVertex(), e.getFromVertex(), VertexDirection.toFrom, e.getWeight());
     			ClientOT.getInstance().notifyRemoveEdge(e);	
-    			ClientOT.getInstance().notifyAddEdge(e.getToVertex(), e.getFromVertex(), VertexDirection.toFrom, e.getWeight());  			
+    			ClientOT.getInstance().notifyAddEdge(e.getToVertex(), e.getFromVertex(), VertexDirection.toFrom, e.getWeight());  
+    			
+    			if(secondEdge){
+    				graphManager.addEdge(e2.getFromVertex(), e2.getToVertex(), VertexDirection.toFrom, e2.getWeight());
+    				ClientOT.getInstance().notifyRemoveEdge(e2);
+        			ClientOT.getInstance().notifyAddEdge(e2.getFromVertex(), e2.getToVertex(), VertexDirection.toFrom, e2.getWeight());
+    			}
     		}
     	}
     	
