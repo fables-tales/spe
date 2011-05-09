@@ -848,24 +848,45 @@ public class DrawingImpl implements Drawing {
 
         double lineOffset = 0;
         double lineSeperation = thickness*1.2;
+
+        double[] currentPolyEdgeCoords = mCurrentPolygon.getEdgeCoords();
         
         if (pos == 1)
             lineOffset = -lineSeperation;
         if (pos == 2)
             lineOffset = lineSeperation;
         
-        
         double[][] coords = { { -halfLength, halfThick+lineOffset },
                 { halfLength, halfThick+lineOffset}, { -halfLength, -halfThick+lineOffset },
                 { halfLength, -halfThick+lineOffset } };
 
-        for (int i = 0; i < coords.length; i++) {
-            oldX = coords[i][0];
-            oldY = coords[i][1];
-            coords[i][0] = (oldX * Math.cos(lineAngle))
-                    - (oldY * Math.sin(lineAngle));
-            coords[i][1] = (oldX * Math.sin(lineAngle))
-                    + (oldY * Math.cos(lineAngle));
+        if(pos == 0 && mZoom == mCurrentPolygon.getZoom() &&
+                mOffsetX == mCurrentPolygon.getOffsetX() &&
+                mOffsetY == mCurrentPolygon.getOffsetY() &&
+                currentPolyEdgeCoords[0] == x1 &&
+                currentPolyEdgeCoords[1] == y1 &&
+                currentPolyEdgeCoords[2] == x2 &&
+                currentPolyEdgeCoords[3] == y2 ){
+            
+            // the polygon already has the coordinates we need
+            // can use stored coordinates
+            coords = mCurrentPolygon.getSquareCoords();
+            
+        }else{
+    
+            for (int i = 0; i < coords.length; i++) {
+                oldX = coords[i][0];
+                oldY = coords[i][1];
+                coords[i][0] = (oldX * Math.cos(lineAngle))
+                        - (oldY * Math.sin(lineAngle));
+                coords[i][1] = (oldX * Math.sin(lineAngle))
+                        + (oldY * Math.cos(lineAngle));
+            }
+            if (addToPolygon) {
+                mCurrentPolygon.setEdgeCoords(x1,y1,x2,y2);
+                mCurrentPolygon.setSquareCoords(coords);
+            }
+            
         }
 
         addSquare(coords[0][0] + xOffset, coords[0][1] + yOffset, coords[1][0]
