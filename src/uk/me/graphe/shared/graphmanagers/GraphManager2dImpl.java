@@ -44,8 +44,17 @@ public class GraphManager2dImpl implements GraphManager2d {
                 break;
             }
         }
-
         return result;
+    }
+    
+    @Override
+    public Edge getEdgeBetween(Vertex v1, Vertex v2) {
+    	for (Edge e : mVertexEdgeMap.get(v1)) {
+            if (e.getToVertex().equals(v2)) {
+                return e;
+            }
+        }
+    	return null;
     }
 
     @Override

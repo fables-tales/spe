@@ -51,4 +51,17 @@ public class ShortestPathDjikstras implements Algorithm {
         mDjikstra.iterate();
     }
 
+	@Override
+	public boolean isInitialised()
+	{
+		if (mDjikstra == null)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+
 }

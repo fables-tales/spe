@@ -20,7 +20,6 @@ import uk.me.graphe.shared.graphmanagers.GraphManager2d;
 import uk.me.graphe.shared.graphmanagers.GraphManager2dFactory;
 import uk.me.graphe.shared.jsonwrapper.JSONImplHolder;
 
-import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
@@ -28,8 +27,7 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
-public class Graphemeui implements EntryPoint
-{   
+public class Graphemeui {   
     public final Canvas canvas;
     public final CanvasTooltip tooltip;
     public final Chat chat;  
@@ -98,15 +96,14 @@ public class Graphemeui implements EntryPoint
     	selectedVertices = new ArrayList<VertexDrawable>();
     	selectedEdges = new ArrayList<EdgeDrawable>();
     	isHotkeysEnabled = true;
-    	isHelpEnabled = false;
+    	isHelpEnabled = true;
 
     	// Algorithms here
     	spDjikstra = new ShortestPathDjikstras();
     	lay = new AutoLayout(graphManager);
     }
     
-    public void onModuleLoad() {
-        JSONImplHolder.initialise(new JSOFactory());
+    public void show() {
         RootPanel.get("toolbox").add(this.tools);
         RootPanel.get("canvas").add(this.canvas);
         RootPanel.get("chat").add(this.chat);
@@ -123,6 +120,7 @@ public class Graphemeui implements EntryPoint
         };
         t.scheduleRepeating(1000);
 
+        // TODO: Fix hotkeys so it works globally
 		KeyUpHandler khHotkeys = new KeyUpHandler() {
 			public void onKeyUp(KeyUpEvent e) {
 				if (isHotkeysEnabled) {
@@ -143,21 +141,21 @@ public class Graphemeui implements EntryPoint
                             tools.setTool(Tools.zoom);
                             break;
                         case 68: // d
-                            Window.open(drawing.getUrl(), "_blank", null);
+                            //Window.open(drawing.getUrl(), "_blank", null);
                             break;
                         case 71: // g
-                            Window.prompt("DOT graph Code", GraphString.getDot(graphManager, "Grapheme",true,true));
+                            //Window.prompt("DOT graph Code", GraphString.getDot(graphManager, "Grapheme",true,true));
                             break;
                         case 73: // i
                             // import graph code
-                            String graphCode = Window.prompt("DOT graph Code","");
-                            if(graphCode != null)GraphString.addDot(graphManager, graphCode);
+                            //String graphCode = Window.prompt("DOT graph Code","");
+                            //if(graphCode != null)GraphString.addDot(graphManager, graphCode);
                             // GraphString.addDot(graphManager, graphCode) will return false
                             // if error detected in code
                             break;
                         case 87:// w
-                            drawing.toggle2d();
-                            graphManager.invalidate();
+                            //drawing.toggle2d();
+                            //graphManager.invalidate();
                             break;
 						case KeyCodes.KEY_DELETE:
 							tools.setTool(Tools.delete);
@@ -170,12 +168,9 @@ public class Graphemeui implements EntryPoint
 		};
 
         RootPanel.get().addDomHandler(khHotkeys, KeyUpEvent.getType());
-                
-        ServerChannel sc = ServerChannel.getInstance();
+        
         ClientOT.getInstance().setOperatingGraph(this.graphManager);
         ClientOT.getInstance().passGraphemeUiInstance(this);
-        sc.init();
-        
     }
     
     
@@ -190,9 +185,16 @@ public class Graphemeui implements EntryPoint
     }
     
     public void addVertex(String label) {
+    	// TODO: Style the vertex if its in flow chart mode.
         Vertex v = new Vertex(label);
         graphManager.addVertex(v, canvas.lMouseDown[X], canvas.lMouseDown[Y], VERTEX_SIZE);
-        ClientOT.getInstance().notifyAddVertex(v, canvas.lMouseDown[X], canvas.lMouseDown[Y], VERTEX_SIZE);    	
+        ClientOT.getInstance().notifyAddVertex(v, canvas.lMouseDown[X], canvas.lMouseDown[Y], VERTEX_SIZE);
+        if(drawing.isFlowChart()){
+        	VertexDrawable vd = graphManager.getDrawableFromVertex(v);
+        	vd.setStyle(VertexDrawable.STROKED_SQUARE_STYLE);
+        	vd.updateSize(VERTEX_SIZE*2, VERTEX_SIZE);
+        	ClientOT.getInstance().notifyStyleChange(vd.getLabel(), VertexDrawable.STROKED_SQUARE_STYLE);
+        }
     }
 
     public void clearSelectedEdges()
@@ -216,8 +218,6 @@ public class Graphemeui implements EntryPoint
     	for(VertexDrawable vd : selectedVertices) {
     		vd.setHilighted(false);
     	}
-    	
-    	tools.pnlTools4.setVisible(false);
     	
     	selectedVertices.clear();
     }
@@ -258,10 +258,9 @@ public class Graphemeui implements EntryPoint
     	// vertex and the vertex drawable label. Keep the invalidate to redraw
     	VertexDrawable vd = selectedVertices.get(0);
     	String oldLabel = vd.getLabel();
-    	Console.log("cows");
     	graphManager.renameVertex(vd.getLabel(), name);
-    	Console.log("cheese");
     	ClientOT.getInstance().notifyRenameVertex(oldLabel, name);
+    	clearSelectedVertices();
     	graphManager.invalidate();
     }
     
@@ -272,6 +271,7 @@ public class Graphemeui implements EntryPoint
     	Edge e = graphManager.getEdgeFromDrawable(ed);
     	ClientOT.getInstance().notifyRemoveEdge(e);
     	ClientOT.getInstance().notifyAddEdge(e.getFromVertex(), e.getToVertex(), e.getDirection(), e.getWeight());
+    	clearSelectedEdges();
     	graphManager.invalidate();
     }
     
@@ -312,6 +312,62 @@ public class Graphemeui implements EntryPoint
     		ClientOT.getInstance().notifyStyleChange(vd.getLabel(), style);
     	}
     	graphManager.invalidate();
+    }
+    
+    public void toggleEdgeDirection()
+    {
+    	for (EdgeDrawable ed : selectedEdges)
+    	{
+    		// TODO: toggle the edge direction locally via Edge and EdgeDrawable and over OT.
+    		boolean secondEdge = false;
+    		Edge e2 = null;
+    		
+    		if (ed.needsFromToArrow())
+    		{
+    			Edge e  = graphManager.getEdgeFromDrawable(ed);
+    			if(graphManager.isEdgeBetween(e.getToVertex(), e.getFromVertex())){
+    				e2 = graphManager.getEdgeBetween(e.getToVertex(), e.getFromVertex());
+        			graphManager.removeEdge(e2);
+        			secondEdge = true;
+    			}
+    			graphManager.removeEdge(e);
+    			graphManager.addEdge(e.getToVertex(), e.getFromVertex(), VertexDirection.fromTo, e.getWeight());
+    			ClientOT.getInstance().notifyRemoveEdge(e);
+    			ClientOT.getInstance().notifyAddEdge(e.getToVertex(), e.getFromVertex(), VertexDirection.fromTo, e.getWeight());
+
+    			if(secondEdge){
+    				graphManager.addEdge(e2.getToVertex(), e2.getFromVertex(), VertexDirection.fromTo, e2.getWeight());
+    				ClientOT.getInstance().notifyRemoveEdge(e2);
+        			ClientOT.getInstance().notifyAddEdge(e2.getToVertex(), e2.getFromVertex(), VertexDirection.fromTo, e2.getWeight());
+    			}
+    		}
+    		
+    		secondEdge = false;
+    		
+    		if (ed.needsToFromArrow())
+    		{
+    			Edge e  = graphManager.getEdgeFromDrawable(ed);
+    			if(graphManager.isEdgeBetween(e.getFromVertex(), e.getToVertex())){
+    				e2 = graphManager.getEdgeBetween(e.getFromVertex(), e.getToVertex());
+        			graphManager.removeEdge(e2);
+        			secondEdge = true;
+    			}
+    			graphManager.removeEdge(e);
+    			graphManager.addEdge(e.getToVertex(), e.getFromVertex(), VertexDirection.toFrom, e.getWeight());
+    			ClientOT.getInstance().notifyRemoveEdge(e);	
+    			ClientOT.getInstance().notifyAddEdge(e.getToVertex(), e.getFromVertex(), VertexDirection.toFrom, e.getWeight());  
+    			
+    			if(secondEdge){
+    				graphManager.addEdge(e2.getFromVertex(), e2.getToVertex(), VertexDirection.toFrom, e2.getWeight());
+    				ClientOT.getInstance().notifyRemoveEdge(e2);
+        			ClientOT.getInstance().notifyAddEdge(e2.getFromVertex(), e2.getToVertex(), VertexDirection.toFrom, e2.getWeight());
+    			}
+    		}
+    	}
+    	
+    	clearSelectedEdges();
+    	
+    	tools.setTool(Tools.select);
     }
     
     public boolean toggleSelectedEdgeAt(int x, int y) {
@@ -359,14 +415,7 @@ public class Graphemeui implements EntryPoint
         	}
         	graphManager.invalidate();
         	
-        	tools.pnlTools4.setVisible(true);
-        	
             return true;
-        }
-        
-        if (selectedVertices.isEmpty())
-        {
-        	tools.pnlTools4.setVisible(false);
         }
 
         return false;
@@ -384,6 +433,25 @@ public class Graphemeui implements EntryPoint
 		drawing.setIsDigraph(isDigraph);
 		drawing.setIsWeighted(isWeighted);
 		graphInfo.update();
+		tools.updateVisibleTools();
+		
+		clearSelectedObjects();
+		
+		for(VertexDrawable vd : graphManager.getVertexDrawables())
+		{
+			selectedVertices.add(vd);
+		}
+		
+		if (isFlowChart)
+		{
+			setSelectedSyle(VertexDrawable.STROKED_SQUARE_STYLE, VERTEX_SIZE*2, VERTEX_SIZE);
+		}
+		else
+		{
+			setSelectedSyle(VertexDrawable.FILLED_CIRCLE_STYLE, VERTEX_SIZE, VERTEX_SIZE);
+		}
+		
+		clearSelectedObjects();
 		graphManager.invalidate();
     }
     

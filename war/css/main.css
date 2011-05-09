@@ -185,12 +185,52 @@ h1 {
   margin-right: 5px;
 }
 
-.btnAddVert, .btnAddEdge, .btnMove, .btnSelect, .btnZoom, .btnAutoLayout, .btnCluster, .btnDjikstra, .btnStep, .btnStepAll, .btnDelete, .btnProcess, .btnDecision, .btnTerminator, .btnNormal {
+.btnAddVert, .btnAddEdge, .btnMove, .btnSelect, .btnZoom, .btnShareGraph, .btnImportGraph, .btnExportGraph, .btnToggleDirection, .btnGraphOptions, .btnAutoLayout, .btnCluster, .btnDjikstra, .btnStep, .btnStepAll, .btnDelete, .btnProcess, .btnDecision, .btnTerminator, .btnNormal {
   width: 35px;
   height: 35px;
   border: 0;
   cursor: pointer;
   margin: 0 2px;
+}
+
+.btnExportGraph {
+  background: url(../images/export.png) no-repeat;
+}
+
+.btnExportGraph:hover {
+  background: url(../images/exportd.png) no-repeat;
+}
+
+.btnImportGraph {
+  background: url(../images/import.png) no-repeat;
+}
+
+.btnImportGraph:hover {
+  background: url(../images/importd.png) no-repeat;
+}
+
+.btnShareGraph {
+  background: url(../images/share.png) no-repeat;
+}
+
+.btnShareGraph:hover {
+  background: url(../images/shared.png) no-repeat;
+}
+
+.btnToggleDirection {
+  background: url(../images/toggledir.png) no-repeat;
+}
+
+.btnToggleDirection:hover {
+  background: url(../images/toggledird.png) no-repeat;
+}
+
+.btnGraphOptions {
+  background: url(../images/graphopts.png) no-repeat;
+}
+
+.btnGraphOptions:hover {
+  background: url(../images/graphoptsd.png) no-repeat;
 }
 
 .btnAddVert {
@@ -327,7 +367,8 @@ h1 {
 .btnHelpOn, .btnHelpOff {
   border: 0;
   height: 30px;
-  width: 30px;
+  width: 24px;
+  cursor: pointer;
 }
 
 .btnHelpOn {
@@ -335,7 +376,7 @@ h1 {
 }
 
 .btnHelpOn:hover {
-  background: url(../images/helpOnH.png) left center no-repeat;
+  background: url(../images/helpOff.png) left center no-repeat;
 }
 
 .btnHelpOff {
@@ -343,7 +384,7 @@ h1 {
 }
 
 .btnHelpOff:hover {
-  background: url(../images/helpOffH.png) left center no-repeat;
+  background: url(../images/helpOn.png) left center no-repeat;
 }
 
 .optionsDialog {

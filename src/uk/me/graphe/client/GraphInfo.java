@@ -46,11 +46,11 @@ public class GraphInfo extends Composite {
 		{
 			if (parent.drawing.isDigraph() && parent.drawing.isWeighted())
 			{
-				lblUsers.setText("Weighted digraph.");
+				lblUsers.setText("Weighted, directed graph");
 			}
 			else if (parent.drawing.isDigraph() && !parent.drawing.isWeighted())
 			{
-				lblUsers.setText("Digraph.");
+				lblUsers.setText("Directed graph.");
 			}
 			else if (!parent.drawing.isDigraph() && parent.drawing.isWeighted())
 			{
@@ -58,7 +58,7 @@ public class GraphInfo extends Composite {
 			}
 			else
 			{
-				lblUsers.setText("Standard graph.");
+				lblUsers.setText("Simple graph.");
 			}
 		}
 	}	

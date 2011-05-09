@@ -15,10 +15,11 @@
 
     </ui:style>
     <g:HorizontalPanel styleName='{style.pnlCont}'>
-	    <g:HorizontalPanel styleName='{style.pnlTools}' ui:field="pnlTools1" />
-	    <g:HorizontalPanel styleName='{style.pnlTools}' ui:field="pnlTools2" />	   
-	    <g:HorizontalPanel styleName='{style.pnlTools}' ui:field="pnlTools3" />
-	    <g:HorizontalPanel styleName='{style.pnlTools}' ui:field="pnlTools4" /> 
-	    <g:HorizontalPanel styleName='{style.pnlTools}' ui:field="pnlTools5" /> 
-    </g:HorizontalPanel>
+	    <g:HorizontalPanel styleName='{style.pnlTools}' ui:field="pnlToolsStd" />
+	    <g:HorizontalPanel styleName='{style.pnlTools}' ui:field="pnlToolsOps" />	    
+	    <g:HorizontalPanel styleName='{style.pnlTools}' ui:field="pnlToolsFlowStyle" />
+	    <g:HorizontalPanel styleName='{style.pnlTools}' ui:field="pnlToolsAlgs" />
+	    <g:HorizontalPanel styleName='{style.pnlTools}' ui:field="pnlToolsAlgsRun" />
+	    <g:HorizontalPanel styleName='{style.pnlTools}' ui:field="pnlToolsOptions" /> 
+    </g:HorizontalPanel>    
 </ui:UiBinder>

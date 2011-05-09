@@ -65,6 +65,10 @@ public class ToolboxButton extends Button
 				this.setStyleName("btnAutoLayout");
 				this.setTitle("Auto Layout");
 				break;
+			case graphOptions:
+				this.setStyleName("btnGraphOptions");
+				this.setTitle("Set Graph Options");
+				break;
 			case cluster:
 				this.setStyleName("btnCluster");
 				this.setTitle("Cluster");
@@ -84,7 +88,23 @@ public class ToolboxButton extends Button
 			case styleNormal:
 				this.setStyleName("btnNormal");
 				this.setTitle("Set Normal Style");
-				break;			
+				break;
+			case toggleEdgeDirection:
+				this.setStyleName("btnToggleDirection");
+				this.setTitle("Toggle Edge Direction");
+				break;
+			case shareGraph:
+				this.setStyleName("btnShareGraph");
+				this.setTitle("Share graph");
+				break;
+			case importGraph:
+				this.setStyleName("btnImportGraph");
+				this.setTitle("Import graph");
+				break;
+			case exportGraph:
+				this.setStyleName("btnExportGraph");
+				this.setTitle("Export graph");
+				break;
 		}
 		
 		super.addClickHandler(new ClickHandler()

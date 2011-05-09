@@ -33,4 +33,6 @@ public interface Algorithm {
      * @throws Exception 
      */
     public String getResult() throws Exception;
+    
+    public boolean isInitialised ();
 }

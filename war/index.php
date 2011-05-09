@@ -21,16 +21,13 @@
   <h1>Grapheme</h1>
   <div id="graphInfo">
   </div>
-  <!--<ul id="nav">
-    <li><a href="#">file</a></li>
-    <li><a href="#">edit</a></li>
-    <li><a href="#">algorithms</a></li>
-    <li><a href="#">history</a></li>
-  </ul>-->
+  <ul id="nav">
+    <li><a href="#">graph list</a></li>
+    <li><a href="#">logout</a></li>
+  </ul>
   <div id="cont">
     <div id="toolbox"></div>
     <div id="canvas">
-        <div style="position:absolute;z-index:50;width:100%;text-align:right;" id="frameRate"></div>
         <div style="position:absolute;" id="gwtGL"></div>
       <!--<canvas width="2000" height="2000" style="position: absolute; z-index: -10;"></canvas>-->
     </div>

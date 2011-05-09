@@ -1,7 +1,5 @@
 package uk.me.graphe.client;
 
-import java.util.List;
-
 import uk.me.graphe.shared.Edge;
 import uk.me.graphe.shared.Tools;
 import uk.me.graphe.shared.Vertex;
@@ -19,12 +17,15 @@ public class Toolbox extends Composite {
 	interface UiBinderToolbox extends UiBinder<Widget, Toolbox> {}
 	
 	@UiField
-	HorizontalPanel pnlTools1, pnlTools2, pnlTools3, pnlTools4, pnlTools5;
+	HorizontalPanel pnlToolsStd, pnlToolsOps, pnlToolsAlgs, pnlToolsFlowStyle, pnlToolsAlgsRun, pnlToolsOptions;
 
 	public Tools currentTool;
 	
 	private final Graphemeui parent;	
-	private final ToolboxButton btnAddVert, btnAddEd, btnSelect, btnMove, btnZoom, btnAutoLayout, btnCluster, btnDjikstra, btnStep, btnStepAll, btnDelete, btnProcess, btnTerminator, btnDecision, btnNormal;
+	private final ToolboxButton btnAddVert, btnAddEd, btnSelect, btnMove, 
+		btnZoom, btnAutoLayout, btnDjikstra, btnStep, btnStepAll, 
+		btnDelete, btnProcess, btnTerminator, btnDecision, btnNormal, btnGraphOptions,
+		btnToggleEdgeDirection, btnShareGraph, btnImportGraph, btnExportGraph;
 	
 	public Toolbox(Graphemeui gUI) {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -36,7 +37,6 @@ public class Toolbox extends Composite {
 		btnMove = new ToolboxButton(this, Tools.move);
 		btnZoom = new ToolboxButton(this, Tools.zoom);
 		btnAutoLayout = new ToolboxButton(this, Tools.autolayout);
-		btnCluster = new ToolboxButton(this, Tools.cluster);
 		btnDjikstra = new ToolboxButton(this, Tools.djikstra);
 		btnDelete = new ToolboxButton(this, Tools.delete);
 		btnProcess = new ToolboxButton(this, Tools.styleProcess);
@@ -45,30 +45,39 @@ public class Toolbox extends Composite {
 		btnNormal = new ToolboxButton(this, Tools.styleNormal);
 		btnStep = new ToolboxButton(this, Tools.step);
 		btnStepAll = new ToolboxButton(this, Tools.stepAll);
+		btnGraphOptions = new ToolboxButton(this, Tools.graphOptions);
+		btnToggleEdgeDirection = new ToolboxButton(this, Tools.toggleEdgeDirection);
+		btnShareGraph = new ToolboxButton(this, Tools.shareGraph);
+		btnImportGraph = new ToolboxButton(this, Tools.importGraph);
+		btnExportGraph = new ToolboxButton(this, Tools.exportGraph);
 		
-		pnlTools1.add(btnSelect);
-		pnlTools1.add(btnMove);
-		pnlTools1.add(btnZoom);
+		pnlToolsStd.add(btnSelect);
+		pnlToolsStd.add(btnMove);
+		pnlToolsStd.add(btnZoom);
 		
-		pnlTools2.add(btnAddVert);
-		pnlTools2.add(btnAddEd);
-		pnlTools2.add(btnDelete);
+		pnlToolsOps.add(btnAddVert);
+		pnlToolsOps.add(btnAddEd);
+		pnlToolsOps.add(btnToggleEdgeDirection);
+		pnlToolsOps.add(btnDelete);
 		
-		pnlTools3.add(btnAutoLayout);
-		pnlTools3.add(btnCluster);
-		pnlTools3.add(btnDjikstra);
+		pnlToolsAlgs.add(btnAutoLayout);
+		pnlToolsAlgs.add(btnDjikstra);
 		
-		pnlTools4.add(btnProcess);
-		pnlTools4.add(btnTerminator);
-		pnlTools4.add(btnDecision);
-		pnlTools4.add(btnNormal);
+		pnlToolsFlowStyle.add(btnProcess);
+		pnlToolsFlowStyle.add(btnTerminator);
+		pnlToolsFlowStyle.add(btnDecision);
+		//pnlToolsFlowStyle.add(btnNormal);
 		
-		pnlTools4.setVisible(false);
+		pnlToolsAlgsRun.add(btnStep);
+		pnlToolsAlgsRun.add(btnStepAll);
 		
-		pnlTools5.add(btnStep);
-		pnlTools5.add(btnStepAll);
+		pnlToolsOptions.add(btnShareGraph);
+		//pnlToolsOptions.add(btnImportGraph);
+		pnlToolsOptions.add(btnExportGraph);
+		pnlToolsOptions.add(btnGraphOptions);		
 		
-		pnlTools5.setVisible(false);
+		pnlToolsFlowStyle.setVisible(false);
+		pnlToolsAlgsRun.setVisible(false);
 		
 		setTool(Tools.select);
 	}
@@ -77,7 +86,6 @@ public class Toolbox extends Composite {
 	{
 		currentTool = tool;
 		parent.toolInfo.showTool(tool);
-		pnlTools5.setVisible(false);
 
 		switch (tool)
 		{
@@ -89,8 +97,7 @@ public class Toolbox extends Composite {
 				parent.clearSelectedEdges();
 				if (parent.selectedVertices.size() == 2)
 				{
-					// TODO: position this is right place.
-					parent.dialogEdge.show("", 125, 125);
+					parent.dialogEdge.show("", parent.canvas.lMouseDown[0], parent.canvas.lMouseDown[1]);
 				}
 				else if (parent.selectedVertices.size() > 2)
 				{
@@ -103,8 +110,15 @@ public class Toolbox extends Composite {
 				}
 				break;
 			case delete:
-				parent.deleteSelected();
-				this.setTool(Tools.select);
+				if ((parent.selectedEdges.size() > 0) || (parent.selectedVertices.size() > 0))
+				{
+					parent.deleteSelected();
+					this.setTool(Tools.select);
+				}
+				else
+				{
+					parent.dialogHelp.show("There are no edges or vertices selected to delete.");
+				}				
 				break;
 			case move:
 				parent.dialogHelp.show("Click and drag to pan the canvas or move a vertex.");
@@ -119,23 +133,45 @@ public class Toolbox extends Composite {
 				parent.doAutoLayout();
 				this.setTool(Tools.select);
 				break;
-			case cluster:
-				// TODO: Implement
+			case graphOptions:
 				parent.dialogGraphOptions.show("");
-				this.setTool(Tools.select);
+				break;
+			case toggleEdgeDirection:
+				if (parent.selectedEdges.size() > 0)
+				{
+					parent.toggleEdgeDirection();
+				}
+				else
+				{
+					parent.dialogHelp.show("You must have at least one edge highlighted to toggle the direction of.");
+				}
 				break;
 			case djikstra:
-				if(parent.selectedVertices.size() == 2)
+				if((parent.selectedVertices.size() == 2) 
+						&& (!parent.spDjikstra.isInitialised() || parent.spDjikstra.hasFinished()))
 				{
-					pnlTools5.setVisible(true);
-					pnlTools4.setVisible(false);
+					pnlToolsAlgsRun.setVisible(true);
 					parent.spDjikstra.initialise(parent.graphManager.getUnderlyingGraph(), 
 							parent.graphManager.getVertexFromDrawable(parent.selectedVertices.get(0)), 
 							parent.graphManager.getVertexFromDrawable(parent.selectedVertices.get(1)));
+					parent.dialogHelp.show("You can step through the algorithm or fast forward to the result.");
+				}
+				else if (parent.spDjikstra.isInitialised() && !parent.spDjikstra.hasFinished())
+				{
+					if(true) //TODO: create dialog to ask user if wants to restart dijkstra
+					{
+						parent.spDjikstra.stepAll();
+						parent.clearSelectedObjects();						
+						btnDjikstra.click();
+						pnlToolsAlgsRun.setVisible(false);
+					}
+				}					
+				else
+				{
+					parent.dialogHelp.show("To run Djikstra's algorithm, you must have a start and end node selected.");
 				}
 				break;
 			case step:
-				pnlTools5.setVisible(true);
 				parent.spDjikstra.step();
 				EdgeDrawable ed;
 				VertexDrawable vd;
@@ -151,11 +187,10 @@ public class Toolbox extends Composite {
 					parent.selectedVertices.add(vd);
 				}
 				if(parent.spDjikstra.hasFinished()){
-					//TODO: bring up dialog
+					//TODO: bring up dialog, hide pnl of step and stepall In on dialog close unhighlight nodes.
 				}
 				break;
 			case stepAll:
-				pnlTools5.setVisible(true);
 				parent.spDjikstra.stepAll();
 				EdgeDrawable ed1;
 				VertexDrawable vd1;
@@ -170,7 +205,7 @@ public class Toolbox extends Composite {
 					vd1.setHilighted(true);
 					parent.selectedVertices.add(vd1);
 				}
-				//TODO: bring up dialog
+				//TODO: bring up dialog hide pnl of step and stepall. In on dialog close unhighlight nodes.
 				break;
 			case styleProcess:
 				parent.setSelectedSyle(VertexDrawable.STROKED_SQUARE_STYLE,
@@ -192,11 +227,58 @@ public class Toolbox extends Composite {
 				        Graphemeui.VERTEX_SIZE,Graphemeui.VERTEX_SIZE);
 				this.setTool(Tools.select);
 				break;
+			case shareGraph:
+				parent.dialogShareGraph.show("theiremail@example.com");
+				//TODO: implement
+				break;
+			case importGraph:
+				//TODO: implement
+				break;
+			case exportGraph:
+				//TODO: implement
+				break;
 		}
 	}
 	
 	public void showToolInfo(Tools tool)
 	{
 		parent.toolInfo.showTool(tool);
+	}
+	
+	public void updateVisibleTools()
+	{
+		pnlToolsFlowStyle.setVisible(false);
+		pnlToolsAlgs.setVisible(false);
+		pnlToolsAlgsRun.setVisible(false);
+		btnToggleEdgeDirection.setVisible(false);
+		btnDjikstra.setVisible(false);
+		
+		if (parent.drawing.isFlowChart())
+		{
+			pnlToolsFlowStyle.setVisible(true);
+			btnToggleEdgeDirection.setVisible(true);
+		}
+		else
+		{
+			if (parent.drawing.isDigraph() && parent.drawing.isWeighted())
+			{
+				btnToggleEdgeDirection.setVisible(true);
+				btnDjikstra.setVisible(true);
+				pnlToolsAlgs.setVisible(true);
+			}
+			else if (parent.drawing.isDigraph() && !parent.drawing.isWeighted())
+			{
+				btnToggleEdgeDirection.setVisible(true);
+				pnlToolsAlgs.setVisible(true);
+			}
+			else if (!parent.drawing.isDigraph() && parent.drawing.isWeighted())
+			{
+				pnlToolsAlgs.setVisible(true);
+			}
+			else
+			{
+				pnlToolsAlgs.setVisible(true);
+			}
+		}
 	}
 }

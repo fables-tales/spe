@@ -1,0 +1,32 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		.mainPanel {
+			
+		}
+		
+		.secPanel {
+			
+		}
+		
+		.openIdUrl {
+			
+		}
+		
+		.login {
+			
+		}
+		
+
+	</ui:style>
+	<g:VerticalPanel>
+		<g:VerticalPanel styleName='mainPanel' ui:field='mainPanel'>
+			<g:HorizontalPanel styleName='{style.secPanel}' ui:field='secPanel'>
+				<g:TextBox styleName='{style.openIdUrl}' ui:field='openIdUrl'></g:TextBox>
+				<g:Button styleName='{style.login}' ui:field='login'>Login</g:Button>
+			</g:HorizontalPanel>
+		</g:VerticalPanel>
+		<g:Button ui:field='btnChat' />
+	</g:VerticalPanel>
+</ui:UiBinder>
