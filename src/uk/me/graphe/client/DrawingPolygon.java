@@ -5,11 +5,12 @@ import java.util.ArrayList;
 public class DrawingPolygon {
 
     double mZoom = 1;
-    private int mOffsetX, mOffsetY;
-    private int[] mEdgeCoords = new int[4];
+    private int mOffsetX, mOffsetY = 0;
+    private double[] mEdgeCoords = new double[4];
 
     private ArrayList<Integer[]> polygonXList = new ArrayList<Integer[]>();
     private ArrayList<Integer[]> polygonYList = new ArrayList<Integer[]>();
+    private double[][] mSquareCoords;
     
     /**
      * Set the coordinates if this polygon represents an edge
@@ -18,12 +19,37 @@ public class DrawingPolygon {
      * @param endX
      * @param endY
      */
-    public void setEdge(int startX, int startY, int endX, int endY){
+    public void setEdgeCoords(double startX, double startY, double endX, double endY){
         mEdgeCoords[0] = startX;
-        mEdgeCoords[1] = endY;
-        mEdgeCoords[2] = startX;
+        mEdgeCoords[1] = startY;
+        mEdgeCoords[2] = endX;
         mEdgeCoords[3] = endY;
     }
+    
+    public double getZoom(){
+        return mZoom;
+    }
+    
+    public int getOffsetX(){
+        return mOffsetX;
+    }
+    
+    public int getOffsetY(){
+        return mOffsetY;
+    }
+    
+    public double[] getEdgeCoords(){
+        return mEdgeCoords;
+    }
+    
+    public void setSquareCoords(double[][] squareCoords){
+        mSquareCoords = squareCoords;
+    }
+
+    public double[][] getSquareCoords(){
+        return mSquareCoords;
+    }
+    
     
     /**
      * Set the polygon coordinates
