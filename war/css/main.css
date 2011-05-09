@@ -9,6 +9,13 @@
   user-select: none;
 }
 
+input {
+  -moz-user-select: text;
+  -khtml-user-select: text;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
 body {
   font-size: 100%;
   line-height: 1;
