@@ -106,7 +106,7 @@ public class VertexDialog extends PopupPanel
 				parent.addVertex(txtParam.getText());
 			}
 			
-			parent.tools.setTool(Tools.addVertex);
+			if (!isEdit) parent.tools.setTool(Tools.addVertex);
 			parent.isHotkeysEnabled = true;
 			super.hide();
 		}

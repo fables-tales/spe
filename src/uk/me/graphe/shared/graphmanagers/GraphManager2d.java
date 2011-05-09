@@ -186,4 +186,6 @@ public interface GraphManager2d {
     public void setEdgeWeight(EdgeDrawable ed, int weight);
 
     public void renameVertex(String label, String name);
+
+	public Edge getEdgeBetween(Vertex v1, Vertex v2);
 }

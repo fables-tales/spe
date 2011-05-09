@@ -2,6 +2,7 @@
 package uk.me.graphe.client.dialogs;
 
 import uk.me.graphe.client.Graphemeui;
+import uk.me.graphe.shared.Tools;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -110,14 +111,14 @@ public class GraphOptionsDialog extends PopupPanel
 	private void ok ()
 	{
 		parent.editGraphProperties(cbIsDigraph.getValue(), cbIsFlowChart.getValue(), cbIsWeighted.getValue());
-		parent.isHotkeysEnabled = true;
-		super.hide();
+		cancel(); //just close basically
 	}
 	
 	private void cancel ()
 	{
 		parent.isHotkeysEnabled = true;
 		super.hide();
+		parent.tools.setTool(Tools.select);
 	}
 	
 	public void show (String s)
